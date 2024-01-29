@@ -16,7 +16,7 @@ const App = () => {
     <ScrollView>
       <View style={{ backgroundColor: Color.black, flex: 1 }}>
         <Icon name="home" size={30} color="#900" onPress={() => console.log('icon')} />
-        <Text style={{ fontSize: 24, color: Color.white, fontFamily: FontFamily.black }}>Hello My app</Text>
+        <Text style={{ fontSize: 14, color: Color.white, fontFamily: FontFamily.black }}>Hello My app</Text>
         <Text style={{ fontSize: 24, color: Color.white, fontFamily: FontFamily.blackItalic }}>Hello My app</Text>
         <Text style={{ fontSize: 24, color: Color.white, fontFamily: FontFamily.bold }}>Hello My app</Text>
         <Text style={{ fontSize: 24, color: Color.white, fontFamily: FontFamily.boldItalic }}>Hello My app</Text>
