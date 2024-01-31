@@ -34,7 +34,7 @@ const FloatingTextInput = ({ label, password, inputMode, value, onChangeText, co
             inputRange: [0, 1],
             outputRange: [color, color],
         }),
-        borderBottomWidth: 0.8,
+        borderBottomWidth: 1,
     };
 
     const onFocus = () => {
@@ -86,7 +86,7 @@ const FloatingTextInput = ({ label, password, inputMode, value, onChangeText, co
 const styles = StyleSheet.create({
     subContainer: {
         paddingTop: 15,
-        marginHorizontal: 24,
+        marginHorizontal: 5,
     },
     textStyle: {
         paddingBottom: 10,

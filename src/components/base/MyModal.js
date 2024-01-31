@@ -26,8 +26,8 @@ const MyModal = ({ modalVisible, setModalVisible, heading, label, cancelBtnLabel
                         <Text style={[styles.text, { fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.bold }]}>{heading}</Text>
                         <Text style={[styles.text]}>{label}</Text>
                         <View style={styles.btnView}>
-                            <CustomButton title={cancelBtnLabel} btnstyle={{ paddingVertical: 1, backgroundColor: '#DDD' }} color={Color.text} onPress={toggleModal} />
-                            <CustomButton title={doneBtnLabel} btnstyle={{ paddingVertical: 1 }} onPress={handleDone} />
+                            <CustomButton title={cancelBtnLabel} btnstyle={{ paddingVertical: 2, backgroundColor: '#DDD' }} color={Color.text} onPress={toggleModal} />
+                            <CustomButton title={doneBtnLabel} btnstyle={{ paddingVertical: 2 }} onPress={handleDone} />
                         </View>
                     </View>
                     {/* Backdrop */}
