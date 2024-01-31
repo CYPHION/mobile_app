@@ -2,8 +2,9 @@ import React, { useRef, useState } from 'react';
 import { Animated, Easing, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Color } from '../../utils/colorPalette';
+import { FontSizes } from '../../utils/fontSizes';
 
-const FloatingTextInput = ({ label, password, inputMode, value, onChangeText }) => {
+const FloatingTextInput = ({ label, password, inputMode, value, onChangeText, color = Color.white, editable }) => {
     const [isPasswordVisible, setPasswordVisible] = useState(password);
     const animatedValue = useRef(new Animated.Value(0));
 
@@ -19,21 +20,21 @@ const FloatingTextInput = ({ label, password, inputMode, value, onChangeText }) 
         ],
         fontSize: animatedValue?.current?.interpolate({
             inputRange: [0, 1],
-            outputRange: [14, 12],
+            outputRange: [FontSizes.md, FontSizes.sm],
             extrapolate: 'clamp',
         }),
         color: animatedValue?.current?.interpolate({
             inputRange: [0, 1],
-            outputRange: [Color.white, Color.white],
+            outputRange: [color, color],
         }),
     };
 
     const viewStyles = {
         borderBottomColor: animatedValue?.current?.interpolate({
             inputRange: [0, 1],
-            outputRange: [Color.white, Color.white],
+            outputRange: [color, color],
         }),
-        borderBottomWidth: 0.8,
+        borderBottomWidth: 1,
     };
 
     const onFocus = () => {
@@ -65,16 +66,17 @@ const FloatingTextInput = ({ label, password, inputMode, value, onChangeText }) 
             <Animated.View style={[styles.subContainer, viewStyles, styles.mainView]}>
                 <Animated.Text style={[returnAnimatedTitleStyles]}>{label}</Animated.Text>
                 <TextInput
+                    editable={editable}
                     inputMode={inputMode ? inputMode : 'text'}
                     onChangeText={onChangeText}
                     secureTextEntry={isPasswordVisible}
                     value={value ? value : ''}
-                    style={styles.textStyle}
+                    style={[styles.textStyle, { color: color }]}
                     onBlur={onBlur}
                     onFocus={onFocus}
                 />
                 {password ? <TouchableOpacity style={styles.iconView} onPress={togglePasswordVisibility}>
-                    <Icon name={isPasswordVisible ? 'eye-off' : 'eye'} color={Color.white} size={18} />
+                    <Icon name={isPasswordVisible ? 'eye-off' : 'eye'} color={color} size={18} />
                 </TouchableOpacity> : ''}
             </Animated.View>
         </View>
@@ -84,15 +86,15 @@ const FloatingTextInput = ({ label, password, inputMode, value, onChangeText }) 
 const styles = StyleSheet.create({
     subContainer: {
         paddingTop: 15,
-        marginHorizontal: 24,
+        marginHorizontal: 5,
     },
     textStyle: {
         paddingBottom: 10,
-        paddingRight: 30,
-        fontSize: 16,
-        color: Color.white
+        paddingRight: 35,
+        fontSize: FontSizes.md,
     },
     iconView: {
+        padding: 5,
         position: 'absolute',
         right: 5,
         top: '60%',

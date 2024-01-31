@@ -3,29 +3,31 @@ import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Color } from '../../utils/colorPalette';
 import { FontFamily } from '../../utils/fontFamilies';
+import { FontSizes } from '../../utils/fontSizes';
 
-const CustomButton = ({ onPress, title, disabled, variant, width, padding }) => {
+const CustomButton = ({ onPress, title, disabled, color = Color.white, btnstyle }) => {
     return (
-        <TouchableOpacity disabled={disabled ? disabled : false} activeOpacity={10} style={[styles.buttonContainer, { backgroundColor: variant === 'filled' ? Color.primary : Color.white, width: width ? width : 'full', padding: padding ? padding : 15 }]} onPress={onPress}>
-            {disabled ? <ActivityIndicator size="small" color={variant === 'filled' ? Color.white : Color.primary} /> : ''}
-            <Text style={[styles.buttonText, { color: variant === 'filled' ? Color.white : Color.primary }]}>{title}</Text>
-        </TouchableOpacity>
+        <TouchableOpacity disabled={disabled ? disabled : false} activeOpacity={0.7} style={[styles.buttonContainer, { ...btnstyle }]} onPress={onPress} >
+            {disabled ? <ActivityIndicator size="small" color={color} /> : ''}
+            < Text style={[styles.buttonText, { color }]} > {title}</Text >
+        </TouchableOpacity >
     );
 };
 
 const styles = StyleSheet.create({
     buttonContainer: {
+        activeOpacity: 10,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         gap: 5,
         borderRadius: 4,
-        alignItems: 'center',
         margin: 10,
+        padding: 15,
+        backgroundColor: Color.primary
     },
     buttonText: {
-        fontSize: 14,
-        fontWeight: 400,
+        fontSize: FontSizes.md,
         fontFamily: FontFamily.regular
     },
 });
