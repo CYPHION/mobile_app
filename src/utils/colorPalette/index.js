@@ -3,5 +3,7 @@ export const Color = {
     white: '#FDFDFD',
     black: '#000000',
     text: '#181818',
-    textTwo: '#8D8D8D'
+    textTwo: '#8D8D8D',
+    borderColor: '#4F4F4F',
+    error: '#FF4C51'
 }

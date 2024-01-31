@@ -1,22 +1,25 @@
 import { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Color } from '../../utils/colorPalette';
 import { FontSizes } from '../../utils/fontSizes';
 import { screenDimensions } from '../../utils/helperFunctions';
 
 
 const { fontScale } = screenDimensions
-export default function InputField({ label = '', labelStyle, inputStyle, inputMode, value = '', onChangeText, secureTextEntry, multiline, editable }) {
+export default function InputField({ label = '', labelStyle, inputStyle, inputMode, value = '', onChangeText, secureTextEntry, multiline, editable, error, required }) {
     const [isPasswordVisible, setPasswordVisible] = useState(secureTextEntry);
+    const [isFocus, setIsFocus] = useState(false);
     const togglePasswordVisibility = () => {
         setPasswordVisible(!isPasswordVisible);
     };
+
     return (
         <View style={styles.container}>
             <Text
                 style={[styles.label, { ...labelStyle }]}
             >
-                {label}
+                {`${label} ${required ? '(Rquired)' : ''}`}
             </Text>
             <View
                 style={styles.iconView}
@@ -28,7 +31,13 @@ export default function InputField({ label = '', labelStyle, inputStyle, inputMo
                     value={value}
                     onChangeText={onChangeText}
                     inputMode={inputMode}
-                    style={[styles.inputField, { ...inputStyle }]}
+                    onFocus={() => setIsFocus(!isFocus)}
+                    onBlur={() => setIsFocus(!isFocus)}
+                    style={[
+                        styles.inputField,
+                        error ? { borderColor: Color.error } : ((isFocus || value) ? { borderColor: Color.primary } : { borderColor: Color.borderColor }),
+                        { ...inputStyle }
+                    ]}
                 />
                 {secureTextEntry ?
                     <TouchableOpacity
@@ -37,10 +46,15 @@ export default function InputField({ label = '', labelStyle, inputStyle, inputMo
                     >
                         <Icon
                             name={isPasswordVisible ? 'eye-off' : 'eye'}
-                            color={'white'} size={18}
+                            color={Color.black} size={18}
                         />
                     </TouchableOpacity> : ''}
             </View>
+            {error && <Text
+                style={[styles.error]}
+            >
+                {error}
+            </Text>}
         </View>
     );
 }
@@ -48,9 +62,11 @@ export default function InputField({ label = '', labelStyle, inputStyle, inputMo
 const styles = StyleSheet.create({
     container: {
         padding: 5,
-        gap: 10,
+        // gap: 10,
     },
     inputField: {
+        marginTop: 10,
+        color: Color.text,
         height: fontScale * 40,
         borderWidth: 1,
         borderRadius: 4,
@@ -67,11 +83,16 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
     icon: {
+        height: fontScale * 40,
         justifyContent: 'center',
-        height: '100%',
         position: 'absolute',
         right: 10,
+        bottom: 0,
         padding: 5,
         borderRadius: 4,
     },
+    error: {
+        marginTop: 4,
+        color: Color.error
+    }
 });

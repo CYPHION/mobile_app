@@ -1,18 +1,38 @@
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import CustomButton from './src/components/base/CustomButton';
-import FlaotingTextInput from './src/components/base/FlaotingTextInput';
-import InputField from './src/components/base/InputField';
-import MyModal from './src/components/base/MyModal';
-import { Color } from './src/utils/colorPalette';
-import { FontFamily } from './src/utils/fontFamilies';
-import { FontSizes } from './src/utils/fontSizes';
-import { screenDimensions } from './src/utils/helperFunctions';
+import React, { useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
+import CustomButton from "./src/components/base/CustomButton";
+import FlaotingTextInput from "./src/components/base/FlaotingTextInput";
+import InputField from "./src/components/base/InputField";
+import MyModal from "./src/components/base/MyModal";
+import DropdownComponent from "./src/components/base/customDropDown";
+import { Color } from "./src/utils/colorPalette";
+import { FontFamily } from "./src/utils/fontFamilies";
+import { FontSizes } from "./src/utils/fontSizes";
+import { screenDimensions } from "./src/utils/helperFunctions";
+
+const data = [
+  { name: "Item 1", value: "1" },
+  { name: "Item 2", value: "2" },
+  { name: "Item 3", value: "3" },
+  { name: "Item 4", value: "4" },
+  { name: "Item 5", value: "5" },
+  { name: "Item 6", value: "6" },
+  { name: "Item 7", value: "7" },
+  { name: "Item 8", value: "8" },
+];
+
 const App = () => {
-  const [inputValue, setInputValue] = useState('');
-  const [value, setValue] = useState('')
-  const [userName, setUserName] = useState('');
+  const [option, setOption] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  const [value, setValue] = useState("");
+  const [userName, setUserName] = useState("");
   const handleInputChange = (text) => {
     setInputValue(text);
   };
@@ -22,107 +42,217 @@ const App = () => {
   };
 
   const handleDone = () => {
-    console.log('log out')
-  }
+    console.log("log out");
+  };
 
   return (
     <ScrollView>
-      <MyModal handleDone={handleDone} setModalVisible={setModalVisible} modalVisible={modalVisible} doneBtnLabel={'Log Out'} heading={'Log Out?'} cancelBtnLabel={'cancel'} label={'Are fasfasasfsafsaf afastf ag agga hhe yhr aasfgagyhh gdsgasdgsdgasgsg you sure you want to logout?'} />
+      <MyModal
+        handleDone={handleDone}
+        setModalVisible={setModalVisible}
+        modalVisible={modalVisible}
+        doneBtnLabel={"Log Out"}
+        heading={"Log Out?"}
+        cancelBtnLabel={"cancel"}
+        label={
+          "Are fasfasasfsafsaf afastf ag agga hhe yhr aasfgagyhh gdsgasdgsdgasgsg you sure you want to logout?"
+        }
+      />
 
-      <View style={{ backgroundColor: Color.white, flex: 1, paddingHorizontal: 10 }}>
-        <View style={{ flexDirection: 'row', height: 90, width: '100%' }}>
-          <View style={{ flex: 1, backgroundColor: 'red', alignItems: 'center' }}>
-            <Icon name="home" size={30} color={Color.primary} />
-          </View>
-          <View style={{ flex: 6 }}>
-            <InputField
-              value={userName}
-              editable={false}
-              label={'Password'}
-              labelStyle={{ color: Color.black }}
-              inputStyle={{ borderColor: Color.black, color: Color.black, width: '70%', borderColor: 'transparent' }}
-              inputMode={'tel'}
-            />
-          </View>
-          <View style={{ flex: 1, backgroundColor: 'green' }}>
-            <Text>
-              Edit
-            </Text>
-          </View>
-        </View>
+      <View
+        style={{ backgroundColor: Color.white, flex: 1, paddingHorizontal: 10 }}
+      >
         <Icon name="home" size={30} color={Color.primary} />
+        <DropdownComponent
+          disable={false}
+          data={data}
+          placeHolderText={"Parent"}
+          value={option}
+          setValue={setOption}
+        />
+        <DropdownComponent
+          dropdownStyle={{ width: screenDimensions.width * 0.2 }}
+          disable={false}
+          data={data}
+          placeHolderText={"Parent"}
+          value={option}
+          setValue={setOption}
+        />
         <InputField
           secureTextEntry={true}
           onChangeText={(text) => setValue(text)}
           value={value}
-          label={'Password'}
+          label={"Password"}
           labelStyle={{ color: Color.black }}
-          inputStyle={{ borderColor: Color.black, color: Color.black, paddingRight: 40, }}
+          inputStyle={{ paddingRight: 40 }}
+          error={"Password is Required"}
         />
+        <Text>{option && option}</Text>
+
         <InputField
-          label={'Username'}
+          label={"Username"}
           labelStyle={{ color: Color.black }}
-          inputStyle={{ borderColor: Color.black, color: Color.black }}
-          inputMode={'tel'}
+          inputMode={"numeric"}
         />
         <InputField
           multiline
+          required
           onChangeText={(text) => setValue(text)}
           value={value}
-          label={'Password'}
+          label={"Password"}
           labelStyle={{ color: Color.black }}
-          inputStyle={{ borderColor: Color.black, color: Color.black, height: screenDimensions.height * 0.2, textAlignVertical: 'top', }}
+          inputStyle={{
+            height: screenDimensions.height * 0.2,
+            textAlignVertical: "top",
+          }}
+          error={"Password is Required"}
         />
         <TouchableOpacity onPress={toggleModal}>
           <Text style={{ color: Color.black }}>Show Modal</Text>
         </TouchableOpacity>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.black }}>black</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.blackItalic }}>blackItalic</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.bold }}>bold</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.boldItalic }}>boldItalic</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.extarBold }}>extarBold</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.extraBoldItalic }}>extraBoldItalic</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.extraLight }}>extraLight</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.extraLightItalic }}>extraLightItalic</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.italic }}>italic</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.light }}>light</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.lightItalic }}>lightItalic</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.medium }}>medium</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.mediumItalic }}>mediumItalic</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.regular }}>regular</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.semiBold }}>semiBold</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.semiBoldItalic }}>semiBoldItalic</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.thin }}>thin</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.thinItalic }}>thinItalic</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.interBlack }}>interBlack</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.interBold }}>interBold</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.interExtraBold }}>interExtraBold</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.interExtraLight }}>interExtraLight</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.interLight }}>interLight</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.interMedium }}>interMedium</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.interRegular }}>interRegular</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.interSemiBold }}>interSemiBold</Text>
-        <Text style={{ fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.interThin }}>interThin</Text>
+        <Text
+          style={{
+            fontSize: FontSizes.lg,
+            color: Color.text,
+            fontFamily: FontFamily.bold,
+          }}
+        >
+          BOLD
+        </Text>
+        <Text
+          style={{
+            fontSize: FontSizes.lg,
+            color: Color.text,
+            fontFamily: FontFamily.light,
+          }}
+        >
+          light
+        </Text>
+        <Text
+          style={{
+            fontSize: FontSizes.lg,
+            color: Color.text,
+            fontFamily: FontFamily.medium,
+          }}
+        >
+          medium
+        </Text>
+        <Text
+          style={{
+            fontSize: FontSizes.lg,
+            color: Color.text,
+            fontFamily: FontFamily.regular,
+          }}
+        >
+          regular
+        </Text>
+        <Text
+          style={{
+            fontSize: FontSizes.lg,
+            color: Color.text,
+            fontFamily: FontFamily.semiBold,
+          }}
+        >
+          semiBold
+        </Text>
+        <Text
+          style={{
+            fontSize: FontSizes.lg,
+            color: Color.text,
+            fontFamily: FontFamily.interBold,
+          }}
+        >
+          interBold
+        </Text>
+        <Text
+          style={{
+            fontSize: FontSizes.lg,
+            color: Color.text,
+            fontFamily: FontFamily.interLight,
+          }}
+        >
+          interLight
+        </Text>
+        <Text
+          style={{
+            fontSize: FontSizes.lg,
+            color: Color.text,
+            fontFamily: FontFamily.interMedium,
+          }}
+        >
+          interMedium
+        </Text>
+        <Text
+          style={{
+            fontSize: FontSizes.lg,
+            color: Color.text,
+            fontFamily: FontFamily.interRegular,
+          }}
+        >
+          interRegular
+        </Text>
+        <Text
+          style={{
+            fontSize: FontSizes.lg,
+            color: Color.text,
+            fontFamily: FontFamily.interSemiBold,
+          }}
+        >
+          interSemiBold
+        </Text>
 
-        <FlaotingTextInput color={Color.black} onChangeText={handleInputChange}
-          value={inputValue} password={true} label={'Password'} />
-        <FlaotingTextInput color={Color.black} value={userName} onChangeText={(e) => setUserName(e)} type={'text'} label={'username/email'} />
-        <CustomButton disabled={true} title={'click me'} onPress={() => console.log('cliked')} />
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ width: '50%' }}>
-            <CustomButton disabled={false} title={'click me'} onPress={() => console.log('cliked')} />
+        <FlaotingTextInput
+          color={Color.black}
+          onChangeText={handleInputChange}
+          value={inputValue}
+          password={true}
+          label={"Password"}
+        />
+        <FlaotingTextInput
+          color={Color.black}
+          value={userName}
+          onChangeText={(e) => setUserName(e)}
+          type={"text"}
+          label={"username/email"}
+        />
+        <CustomButton
+          disabled={true}
+          title={"click me"}
+          onPress={() => console.log("cliked")}
+        />
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ width: "50%" }}>
+            <CustomButton
+              disabled={false}
+              title={"click me"}
+              onPress={() => console.log("cliked")}
+            />
           </View>
-          <View style={{ width: '50%' }}>
-            <CustomButton disabled={false} title={'click me'} onPress={() => console.log('cliked')} />
+          <View style={{ width: "50%" }}>
+            <CustomButton
+              disabled={false}
+              title={"click me"}
+              onPress={() => console.log("cliked")}
+            />
           </View>
         </View>
-        <CustomButton color={Color.primary} btnstyle={{ backgroundColor: Color.white }} title={'click me'} onPress={() => console.log('cliked')} />
-        <CustomButton disabled={true} btnstyle={{ width: 150, padding: 5 }} title={'click me'} onPress={() => console.log('cliked')} />
+        <CustomButton
+          color={Color.primary}
+          btnstyle={{ backgroundColor: Color.white }}
+          title={"click me"}
+          onPress={() => console.log("cliked")}
+        />
+        <CustomButton
+          disabled={true}
+          btnstyle={{ width: 150, padding: 5 }}
+          title={"click me"}
+          onPress={() => console.log("cliked")}
+        />
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
-export default App
+export default App;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

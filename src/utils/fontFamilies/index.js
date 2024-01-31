@@ -1,30 +1,13 @@
 
 export const FontFamily = {
-    black: 'Poppins-Black',
-    blackItalic: 'Poppins-BlackItalic',
-    bold: 'Poppins-Bold',
-    boldItalic: 'Poppins-BoldItalic',
-    extarBold: 'Poppins-ExtraBold',
-    extraBoldItalic: 'Poppins-ExtraBoldItalic',
-    extraLight: 'Poppins-ExtraLight',
-    extraLightItalic: 'Poppins-ExtraLightItalic',
-    italic: 'Poppins-Italic',
-    light: 'Poppins-Light',
-    lightItalic: 'Poppins-LightItalic',
-    medium: 'Poppins-Medium',
-    mediumItalic: 'Poppins-MediumItalic',
-    regular: 'Poppins-Regular',
-    semiBold: 'Poppins-SemiBold',
-    semiBoldItalic: 'Poppins-SemiBoldItalic',
-    thin: 'Poppins-Thin',
-    thinItalic: 'Poppins-ThinItalic',
-    interBold: 'Inter-Bold',
-    interBlack: 'Inter-Black',
-    interExtraBold: 'Inter-ExtraBold',
-    interExtraLight: 'Inter-ExtraLight',
-    interLight: 'Inter-Light',
-    interMedium: 'Inter-Medium',
-    interRegular: 'Inter-Regular',
-    interSemiBold: 'Inter-SemiBold',
-    interThin: 'Inter-Thin',
+    light: 'Poppins-Light',//300
+    regular: 'Poppins-Regular',//400
+    medium: 'Poppins-Medium',//500
+    semiBold: 'Poppins-SemiBold',//600
+    bold: 'Poppins-Bold',//700
+    interLight: 'Inter-Light',//300
+    interRegular: 'Inter-Regular', //400
+    interMedium: 'Inter-Medium',//500
+    interSemiBold: 'Inter-SemiBold',// 600
+    interBold: 'Inter-Bold',//700
 }
