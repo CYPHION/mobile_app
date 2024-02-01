@@ -23,11 +23,11 @@ const MyModal = ({ modalVisible, setModalVisible, heading, label, cancelBtnLabel
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <Text style={[styles.text, { fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.bold }]}>{heading}</Text>
+                        <Text style={[styles.text, { fontSize: FontSizes.lg, color: Color.text, fontFamily: FontFamily.medium }]}>{heading}</Text>
                         <Text style={[styles.text]}>{label}</Text>
                         <View style={styles.btnView}>
-                            <CustomButton title={cancelBtnLabel} btnstyle={{ paddingVertical: 2, backgroundColor: '#DDD' }} color={Color.text} onPress={toggleModal} />
-                            <CustomButton title={doneBtnLabel} btnstyle={{ paddingVertical: 2 }} onPress={handleDone} />
+                            <CustomButton title={cancelBtnLabel} btnstyle={{ paddingVertical: 4, backgroundColor: '#DDD' }} color={Color.text} onPress={toggleModal} />
+                            <CustomButton title={doneBtnLabel} btnstyle={{ paddingVertical: 4 }} onPress={handleDone} />
                         </View>
                     </View>
                     {/* Backdrop */}
@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
     modalContent: {
         width: screenDimensions.width * 0.8,
         alignItems: 'center',
-        backgroundColor: 'white',
-        padding: 15,
+        backgroundColor: Color.pureWhite,
+        padding: 25,
         borderRadius: 10,
         elevation: 5, // Shadow on Android
         zIndex: 1000
@@ -66,11 +66,12 @@ const styles = StyleSheet.create({
         flex: 1,
         height: '100%',
         width: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black
+        backgroundColor: 'rgba(0, 0, 0, 0.7)', // Semi-transparent black
     },
     text: {
         fontSize: FontSizes.md,
-        color: Color.textTwo
+        color: Color.textTwo,
+        fontFamily: FontFamily.medium
     },
     btnView: {
         width: '100%',
