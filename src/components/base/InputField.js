@@ -7,7 +7,7 @@ import { screenDimensions } from '../../utils/helperFunctions';
 
 
 const { fontScale } = screenDimensions
-export default function InputField({ label = '', labelStyle, inputStyle, inputMode, value = '', onChangeText, secureTextEntry, multiline, editable, error, required }) {
+export default function InputField({ label = '', inputStyle, inputMode, value = '', onChangeText, secureTextEntry, multiline, editable, error, required }) {
     const [isPasswordVisible, setPasswordVisible] = useState(secureTextEntry);
     const [isFocus, setIsFocus] = useState(false);
     const togglePasswordVisibility = () => {
@@ -17,7 +17,7 @@ export default function InputField({ label = '', labelStyle, inputStyle, inputMo
     return (
         <View style={styles.container}>
             <Text
-                style={[styles.label, { ...labelStyle }]}
+                style={[styles.label]}
             >
                 {`${label} ${required ? '(Rquired)' : ''}`}
             </Text>
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: FontSizes.md,
-        color: 'white',
+        color: Color.text,
     },
     iconView: {
         position: 'relative',
