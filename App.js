@@ -7,6 +7,7 @@ import {
   View,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import AccordionItem from "./src/components/base/Accordion";
 import CustomButton from "./src/components/base/CustomButton";
 import FlaotingTextInput from "./src/components/base/FlaotingTextInput";
 import InputField from "./src/components/base/InputField";
@@ -28,6 +29,7 @@ const data = [
   { name: "Item 8", value: "8" },
 ];
 
+
 const App = () => {
   const [option, setOption] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -41,9 +43,54 @@ const App = () => {
     setModalVisible(!modalVisible);
   };
 
+
+  const [activeItem, setActiveItem] = useState(null); // Track the currently open item
+
+  const toggleItem = (index) => {
+    setActiveItem(activeItem === index ? null : index); // Toggle state based on click
+  };
+
+
+
   const handleDone = () => {
     console.log("log out");
   };
+
+  const items = [
+    {
+      date: "18 Jan - 20 Jan ",
+      studentName: "Abdullah Khan (Weekly)",
+      title: "£120",
+      data: [
+        { name: "Previous Dues", value: "£0" },
+        { name: "Book dues", value: "£78" },
+        { name: "Discount", value: "£10" },
+        { name: "Paid Amount", value: "£89" },
+      ],
+    },
+    {
+      date: "17 feb - 23 Mar ",
+      studentName: "Asad (Monthly)",
+      title: "£250",
+      data: [
+        { name: "Previous Dues", value: "£8" },
+        { name: "Book dues", value: "£158" },
+        { name: "Discount", value: "£152" },
+        { name: "Paid Amount", value: "£158" },
+      ],
+    },
+    {
+      date: "28 Mar - 30 Apr ",
+      studentName: "Hammad  (Weekly)",
+      title: "£1000",
+      data: [
+        { name: "Previous Dues", value: "£19" },
+        { name: "Book dues", value: "£952" },
+        { name: "Discount", value: "£185" },
+        { name: "Paid Amount", value: "£78" },
+      ],
+    },
+  ];
 
   return (
     <ScrollView>
@@ -55,7 +102,7 @@ const App = () => {
         heading={"Log Out?"}
         cancelBtnLabel={"cancel"}
         label={
-          "Are fasfasasfsafsaf afastf ag agga hhe yhr aasfgagyhh gdsgasdgsdgasgsg you sure you want to logout?"
+          "Are you sure you want to logout?"
         }
       />
 
@@ -83,15 +130,24 @@ const App = () => {
           onChangeText={(text) => setValue(text)}
           value={value}
           label={"Password"}
-          labelStyle={{ color: Color.black }}
           inputStyle={{ paddingRight: 40 }}
-          error={"Password is Required"}
         />
         <Text>{option && option}</Text>
-
+        <View >
+          {items.map((item, index) => (
+            <AccordionItem
+              key={index}
+              date={item.date}
+              studentName={item.studentName}
+              total={item.title}
+              data={item.data}
+              expanded={activeItem === index}
+              onToggle={() => toggleItem(index)} // Pass toggle function to each item
+            />
+          ))}
+        </View>
         <InputField
           label={"Username"}
-          labelStyle={{ color: Color.black }}
           inputMode={"numeric"}
         />
         <InputField
@@ -100,7 +156,6 @@ const App = () => {
           onChangeText={(text) => setValue(text)}
           value={value}
           label={"Password"}
-          labelStyle={{ color: Color.black }}
           inputStyle={{
             height: screenDimensions.height * 0.2,
             textAlignVertical: "top",

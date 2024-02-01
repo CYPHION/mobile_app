@@ -6,7 +6,9 @@ const helperFunction = (fontSize) => {
 };
 
 export const FontSizes = {
+    xs: helperFunction(10), // 10px
     sm: helperFunction(12), // 12px
     md: helperFunction(14), // 14px
     lg: helperFunction(15), // 15px
+    xl: helperFunction(24), // 24px
 }

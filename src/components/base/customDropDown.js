@@ -65,7 +65,7 @@ export default DropdownComponent;
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'transparent',
-        paddingVertical: 16,
+        paddingVertical: 10,
         paddingHorizontal: 5
     },
     dropdown: {
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 4,
         paddingHorizontal: 8,
-        // marginBottom: 5
+        color: Color.textThree
     },
     icon: {
         marginRight: 5,
@@ -90,10 +90,11 @@ const styles = StyleSheet.create({
     },
     placeholderStyle: {
         fontSize: FontSizes.md,
+        color: Color.textThree
     },
     selectedTextStyle: {
         fontSize: FontSizes.md,
-        color: Color.textTwo
+        color: Color.textThree
     },
     iconStyle: {
         width: 20,
@@ -108,6 +109,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     itemTextStyle: {
-        fontSize: FontSizes.sm
+        fontSize: FontSizes.sm,
+        color: Color.textThree
     }
 });
