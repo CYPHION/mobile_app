@@ -17,7 +17,7 @@ export default function InputField({ label = '', inputStyle, inputMode, value = 
     return (
         <View style={styles.container}>
             <Text
-                style={[styles.label]}
+                style={[styles.label, error ? { color: Color.error } : ((isFocus || value) ? { color: Color.primary } : { color: Color.borderColor })]}
             >
                 {`${label} ${required ? '(Rquired)' : ''}`}
             </Text>
@@ -36,6 +36,7 @@ export default function InputField({ label = '', inputStyle, inputMode, value = 
                     style={[
                         styles.inputField,
                         error ? { borderColor: Color.error } : ((isFocus || value) ? { borderColor: Color.primary } : { borderColor: Color.borderColor }),
+                        secureTextEntry && { paddingRight: 40 },
                         { ...inputStyle }
                     ]}
                 />

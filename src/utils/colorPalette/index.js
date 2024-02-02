@@ -1,5 +1,6 @@
 export const Color = {
     pureWhite: '#ffffff',
+    disable: '#f5f5f5',
     primary: '#4C6ED7',
     white: '#FDFDFD',
     black: '#000000',
