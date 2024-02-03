@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,7 +15,10 @@ import AccordionScreen from "./src/screens/AccordionScreen";
 import ButtonsScreen from "./src/screens/ButtonsScreen";
 import FontScreen from "./src/screens/FontScreen";
 import InputScreen from "./src/screens/InputScreen";
+import IntroSlider from "./src/screens/IntroSlider";
 import { Color } from "./src/utils/colorPalette";
+import { FontFamily } from "./src/utils/fontFamilies";
+import { FontSizes } from "./src/utils/fontSizes";
 
 const data = [
   { name: "Item 1", value: "1" },
@@ -33,6 +37,7 @@ const App = () => {
   const [opneDatePicker, setOpneDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState({})
   const [modalVisible, setModalVisible] = useState(false);
+  const [showApp, setShowapp] = useState(false);
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
@@ -41,55 +46,64 @@ const App = () => {
     console.log("log out");
   };
 
-  return (
-    <ScrollView>
-      <CustomDatePicker onToggle={() => setOpneDatePicker(!opneDatePicker)} isVisible={opneDatePicker} setSelectedDate={setSelectedDate} />
-      <MyModal
-        handleDone={handleDone}
-        setModalVisible={setModalVisible}
-        modalVisible={modalVisible}
-        doneBtnLabel={"Log Out"}
-        heading={"Log Out?"}
-        cancelBtnLabel={"cancel"}
-        label={
-          "Are you sure you want to logout?"
-        }
-      />
 
-      <View
-        style={{ backgroundColor: Color.white, flex: 1, paddingHorizontal: 10 }}
-      >
-        <Icon name="home" size={30} color={Color.primary} />
-        <DropdownComponent
-          disable={false}
-          data={data}
-          placeHolderText={"Parent"}
-          value={option}
-          setValue={setOption}
-        />
-        <View>
-          <InputScreen />
-        </View>
-        <View>
-          <AccordionScreen />
-        </View>
-        <CustomButton title="Open Modal" btnstyle={{ backgroundColor: Color.white }} textStyle={{ color: Color.primary }} onPress={toggleModal} />
-        <CustomButton title="Open Date Picker" onPress={() => setOpneDatePicker(true)} />
-        <Text>{selectedDate.startDate}</Text>
-        <Text>{selectedDate.endDate}</Text>
-        <View>
-          <FontScreen />
-        </View>
-        <View>
-          <ButtonsScreen />
-        </View>
-      </View>
-    </ScrollView>
-  );
+  if (showApp) {
+    return (
+      <SafeAreaView>
+        <ScrollView>
+          <CustomDatePicker onToggle={() => setOpneDatePicker(!opneDatePicker)} isVisible={opneDatePicker} setSelectedDate={setSelectedDate} />
+          <MyModal
+            handleDone={handleDone}
+            setModalVisible={setModalVisible}
+            modalVisible={modalVisible}
+            doneBtnLabel={"Log Out"}
+            heading={"Log Out?"}
+            cancelBtnLabel={"cancel"}
+            label={
+              "Are you sure you want to logout?"
+            }
+          />
+
+          <View
+            style={{ backgroundColor: Color.white, flex: 1, paddingHorizontal: 10 }}
+          >
+            <Icon name="home" size={30} color={Color.primary} />
+            <DropdownComponent
+              disable={false}
+              data={data}
+              placeHolderText={"Parent"}
+              value={option}
+              setValue={setOption}
+            />
+            <View>
+              <InputScreen />
+            </View>
+            <View>
+              <AccordionScreen />
+            </View>
+            <CustomButton title="Open Modal" btnstyle={{ backgroundColor: Color.white }} textStyle={{ color: Color.primary }} onPress={toggleModal} />
+            <CustomButton title="Open Date Picker" onPress={() => setOpneDatePicker(true)} />
+            <Text style={styles.dateText}>Start date: {selectedDate.startDate}</Text>
+            <Text style={styles.dateText}>End date: {selectedDate.endDate}</Text>
+            <View>
+              <FontScreen />
+            </View>
+            <View>
+              <ButtonsScreen />
+            </View>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  } else {
+    return <IntroSlider setShowapp={setShowapp} />
+  }
 
 
 };
 
 export default App;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  dateText: { fontSize: FontSizes.xl, fontFamily: FontFamily.light }
+});

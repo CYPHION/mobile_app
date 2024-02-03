@@ -10,5 +10,6 @@ export const Color = {
     borderColor: '#4F4F4F',
     borderColorTwo: '#d6d6d6',
     error: '#FF4C51',
-    grayBackground: '#f2f2f2'
+    grayBackground: '#f2f2f2',
+    primaryLight: '#8DA6F4'
 }

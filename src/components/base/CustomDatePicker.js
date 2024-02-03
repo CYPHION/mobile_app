@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-    Modal,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
-} from "react-native";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DatePicker from "react-native-date-picker";
 import { Color } from "../../utils/colorPalette";
 import { FontFamily } from "../../utils/fontFamilies";
@@ -14,11 +8,11 @@ import { formattedDate } from "../../utils/functions";
 import { screenDimensions } from "../../utils/helperFunctions";
 import CustomButton from "./CustomButton";
 
-const CustomDatePicker = ({ isVisible, onToggle, setSelectedDate }) => {
+const CustomDatePicker = (props) => {
+    const { isVisible, onToggle, setSelectedDate } = props;
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [selectedDateType, setSelectedDateType] = useState("startDate");
-
 
     const handleDateChange = (selectedDate) => {
         selectedDateType === "startDate"
@@ -68,7 +62,7 @@ const CustomDatePicker = ({ isVisible, onToggle, setSelectedDate }) => {
             startDate: formattedDate(startDate, "MMM dd yyyy"),
             endDate: formattedDate(endDate, "MMM dd yyyy"),
         });
-    }, [])
+    }, []);
 
     return (
         <>
@@ -96,7 +90,7 @@ const CustomDatePicker = ({ isVisible, onToggle, setSelectedDate }) => {
                             </View>
                             <View style={styles.btnView}>
                                 <CustomButton
-                                    textStyle={{ fontSize: FontSizes.sm }}
+                                    textStyle={{ fontSize: FontSizes.md }}
                                     color={Color.primary}
                                     title={"Cancel"}
                                     btnstyle={{
@@ -107,7 +101,7 @@ const CustomDatePicker = ({ isVisible, onToggle, setSelectedDate }) => {
                                     onPress={onToggle}
                                 />
                                 <CustomButton
-                                    textStyle={{ fontSize: FontSizes.sm }}
+                                    textStyle={{ fontSize: FontSizes.md }}
                                     title={"Select"}
                                     btnstyle={{ paddingVertical: 2 }}
                                     onPress={() => {
@@ -115,17 +109,13 @@ const CustomDatePicker = ({ isVisible, onToggle, setSelectedDate }) => {
                                             startDate: formattedDate(startDate, "MMM dd yyyy"),
                                             endDate: formattedDate(endDate, "MMM dd yyyy"),
                                         });
-                                        onToggle()
+                                        onToggle();
                                     }}
                                 />
                             </View>
-
                         </View>
                         {/* Backdrop */}
-                        <TouchableOpacity
-                            style={styles.backdrop}
-                            onPress={onToggle}
-                        />
+                        <TouchableOpacity style={styles.backdrop} onPress={onToggle} />
                     </View>
                 </Modal>
             </View>
@@ -179,12 +169,16 @@ const styles = StyleSheet.create({
     },
     datePicker: {
         paddingHorizontal: 15,
-        paddingVertical: 5,
+        paddingVertical: 6,
         backgroundColor: Color.primary,
         marginTop: 15,
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
     },
-    date: { fontFamily: FontFamily.semiBold, fontSize: FontSizes.sm },
+    date: {
+        fontFamily: FontFamily.semiBold,
+        fontSize: FontSizes.md
+    },
+
 });
