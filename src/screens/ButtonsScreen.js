@@ -1,43 +1,43 @@
 import React from 'react'
 import { View } from 'react-native'
 import CustomButton from '../components/base/CustomButton'
-import { Color } from '../utils/colorPalette'
 
 const ButtonsScreen = () => {
     return (
         <View>
             <CustomButton
+                variant={'fill'}
                 disabled={true}
                 title={"click me"}
-                onPress={() => console.log("cliked")}
+                onPress={() => alert("cliked")}
             />
             <View style={{ flexDirection: "row" }}>
                 <View style={{ width: "50%" }}>
                     <CustomButton
+                        variant={'fill'}
                         disabled={false}
                         title={"click me"}
-                        onPress={() => console.log("cliked")}
+                        onPress={() => alert("cliked")}
                     />
                 </View>
                 <View style={{ width: "50%" }}>
                     <CustomButton
                         disabled={false}
                         title={"click me"}
-                        onPress={() => console.log("cliked")}
+                        onPress={() => alert("cliked")}
                     />
                 </View>
             </View>
             <CustomButton
-                color={Color.primary}
-                btnstyle={{ backgroundColor: Color.white }}
+                variant={'fill'}
                 title={"click me"}
-                onPress={() => console.log("cliked")}
+                onPress={() => alert("cliked")}
             />
             <CustomButton
                 disabled={true}
                 btnstyle={{ width: 150, padding: 5 }}
                 title={"click me"}
-                onPress={() => console.log("cliked")}
+                onPress={() => alert("cliked")}
             />
         </View>
     )

@@ -1,12 +1,42 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, View } from 'react-native'
 import { Color } from '../utils/colorPalette'
 import { FontFamily } from '../utils/fontFamilies'
 import { FontSizes } from '../utils/fontSizes'
 
 const FontScreen = () => {
+    const [data, setData] = useState(null);
+
+
+    const getData = async () => {
+        let dataa = await fetch('https://jsonplaceholder.typicode.com/users')
+        dataa = await dataa.json()
+        setData(dataa)
+    }
+    useEffect(() => {
+
+        getData()
+    }, [])
+
     return (
         <View>
+            <View>
+                {/* Render your component with the fetched data */}
+                {data ?
+                    data.map(elem =>
+                        <Text
+                            style={{
+                                fontSize: FontSizes.lg,
+                                color: Color.text,
+                                // fontFamily: FontFamily.bold,
+                            }}
+                            key={elem.id}>{elem.name}</Text>
+                    )
+                    : (
+                        <Text>Loading...</Text>
+                    )}
+
+            </View>
             <Text
                 style={{
                     fontSize: FontSizes.lg,

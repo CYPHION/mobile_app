@@ -45,6 +45,7 @@ const InputScreen = () => {
             />
             <InputField
                 label={"Numaric Input Mode"}
+                maxLength={5}
                 inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
                 value={formData.numeric}
                 onChangeText={(text) => onChangeHandler('numeric', text)}

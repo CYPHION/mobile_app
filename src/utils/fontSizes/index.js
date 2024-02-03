@@ -10,5 +10,7 @@ export const FontSizes = {
     sm: helperFunction(12), // 12px
     md: helperFunction(14), // 14px
     lg: helperFunction(15), // 15px
-    xl: helperFunction(24), // 24px
+    xl: helperFunction(20), // 20px
+    xxl: helperFunction(24), // 24px
+    xxxl: helperFunction(30), // 30px
 }
