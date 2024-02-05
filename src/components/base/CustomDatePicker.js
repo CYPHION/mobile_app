@@ -103,6 +103,7 @@ const CustomDatePicker = (props) => {
                                 <CustomButton
                                     textStyle={{ fontSize: FontSizes.md }}
                                     title={"Select"}
+                                    variant={'fill'}
                                     btnstyle={{ paddingVertical: 2 }}
                                     onPress={() => {
                                         setSelectedDate({

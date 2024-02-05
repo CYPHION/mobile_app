@@ -47,11 +47,11 @@ const MyModal = (props) => {
                             <CustomButton
                                 title={cancelBtnLabel}
                                 btnstyle={{ paddingVertical: 4, backgroundColor: "#DDD" }}
-                                color={Color.text}
                                 onPress={toggleModal}
                             />
                             <CustomButton
                                 title={doneBtnLabel}
+                                variant={'fill'}
                                 btnstyle={{ paddingVertical: 4 }}
                                 onPress={handleDone}
                             />

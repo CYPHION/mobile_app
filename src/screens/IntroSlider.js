@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native'; // Import Image component
+import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native'; // Import Image component
 import AppIntroSlider from 'react-native-app-intro-slider';
 import { Color } from '../utils/colorPalette';
 import { FontFamily } from '../utils/fontFamilies';
@@ -40,7 +40,31 @@ const IntroSlider = (props) => {
 
     const renderItem = ({ item }) => {
         return (
-            
+            <SafeAreaView style={styles.flexOne}>
+                <View style={[styles.flexOne, { backgroundColor: Color.white, alignItems: 'center' }]}>
+                    <Image
+                        source={item.picture}
+                        style={[styles.absoluteImage]}
+                    />
+                    <View
+                        style={[styles.absoluteImage, { backgroundColor: 'rgba(0, 0, 0, 0.4)' }]}
+                    />
+                    <View style={[styles.logoDiv]} >
+                        <Image
+                            source={item.logo}
+                        />
+                    </View>
+                    <View style={[styles.logoDiv, { justifyContent: 'flex-start' }]}>
+                        <View style={[styles.flexClass, { position: 'absolute', top: screenDimensions.height * 0.04 }]}>
+                            <Text style={styles.itemText}>{item.text}</Text>
+                            <Text style={styles.itemTitle}>{item.title}</Text>
+                        </View>
+                        <View style={[styles.progressBar]}>
+                            <View style={[{ backgroundColor: Color.primary, height: '100%', width: `${progressWidth}%`, borderRadius: 10 }]}></View>
+                        </View>
+                    </View>
+                </View>
+            </SafeAreaView >
         );
     };
 

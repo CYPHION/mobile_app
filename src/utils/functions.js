@@ -40,3 +40,35 @@ export const formattedDate = (dateString, format) => {
         .replace('hh:mm:ss:s', formattedTimewithoutampm)
         .replace('hh:mm:ss a', formattedTime)
 }
+
+
+export const CheckForHttpErrors = error => {
+    const { response } = error
+
+    if (!response) {
+        toast.error('No response from server')
+
+        return 'Server not responding'
+    }
+
+    switch (response.status) {
+        case 401:
+            response.data.message
+                ? toast.error(response.data.message)
+                : toast.error('Your session is expired, please login again')
+            store.dispatch(logoutUser())
+            break
+        case 440:
+            response.data.message
+                ? toast.error(response.data.message)
+                : toast.error('Your session is expired, please login again')
+            store.dispatch(logoutUser())
+            break
+        default:
+            return {
+                message: response.data.message || 'No response from server',
+                status: response.status,
+                data: response.data
+            }
+    }
+}
