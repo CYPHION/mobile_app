@@ -4,7 +4,7 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import { Color } from '../utils/colorPalette';
 import { FontFamily } from '../utils/fontFamilies';
 import { FontSizes } from '../utils/fontSizes';
-import { screenDimensions } from '../utils/helperFunctions';
+import { screenDimensions } from '../utils/functions';
 
 const slides = [
     {

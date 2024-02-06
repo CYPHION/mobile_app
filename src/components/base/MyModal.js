@@ -3,7 +3,7 @@ import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Color } from "../../utils/colorPalette";
 import { FontFamily } from "../../utils/fontFamilies";
 import { FontSizes } from "../../utils/fontSizes";
-import { screenDimensions } from "../../utils/helperFunctions";
+import { screenDimensions } from "../../utils/functions";
 import CustomButton from "./CustomButton";
 
 const MyModal = (props) => {

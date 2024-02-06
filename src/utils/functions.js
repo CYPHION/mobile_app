@@ -1,3 +1,10 @@
+// import toast from 'react-hot-toast'
+import { Dimensions } from 'react-native'
+import Toast from 'react-native-toast-message'
+
+export const screenDimensions = Dimensions.get('window')
+
+
 export const formattedDate = (dateString, format) => {
     const date = new Date(dateString)
 
@@ -41,27 +48,38 @@ export const formattedDate = (dateString, format) => {
         .replace('hh:mm:ss a', formattedTime)
 }
 
+//Custom toast function
+
+export const customToast = (type, message) => { //type = error || success || info
+    Toast.show({
+        type: type,
+        text1: message,
+        position: 'top'
+    })
+}
+
 
 export const CheckForHttpErrors = error => {
     const { response } = error
 
     if (!response) {
-        toast.error('No response from server')
-
+        customToast('error', 'No response from server')
         return 'Server not responding'
     }
 
     switch (response.status) {
         case 401:
             response.data.message
-                ? toast.error(response.data.message)
-                : toast.error('Your session is expired, please login again')
+                ?
+                customToast('error', response.data.message)
+                :
+                customToast('error', 'Your session is expired, please login again')
             store.dispatch(logoutUser())
             break
         case 440:
             response.data.message
-                ? toast.error(response.data.message)
-                : toast.error('Your session is expired, please login again')
+                ? customToast('error', response.data.message)
+                : customToast('error', 'Your session is expired, please login again')
             store.dispatch(logoutUser())
             break
         default:

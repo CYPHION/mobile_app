@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { Color } from "../../utils/colorPalette";
 import { FontSizes } from "../../utils/fontSizes";
-import { screenDimensions } from "../../utils/helperFunctions";
+import { screenDimensions } from "../../utils/functions";
 const { fontScale, height } = screenDimensions;
 
 const DropdownComponent = (props) => {

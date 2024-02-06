@@ -1,4 +1,5 @@
-import { screenDimensions } from "../helperFunctions";
+import { screenDimensions } from "../functions";
+
 
 
 const helperFunction = (fontSize) => {

@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
-import globalData from '../thunk';
+import { globalData } from '../thunk/index';
 
 
 export const globalSlice = createSlice({
   name: 'global',
   initialState: {
-    data: {},
+    data: {
+      name: 'M.Owais'
+    },
   },
   reducers: {
 

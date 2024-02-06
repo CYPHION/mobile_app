@@ -1,8 +1,16 @@
 import React from 'react'
 import { View } from 'react-native'
 import CustomButton from '../components/base/CustomButton'
+import { API } from '../network/API'
+import { customToast } from '../utils/functions'
 
 const ButtonsScreen = () => {
+    const showToast = () => {
+        API.getGlobalData()
+            .then(res => console.log(res))
+            .catch(err => customToast('error', err))
+    }
+
     return (
         <View>
             <CustomButton
@@ -23,15 +31,15 @@ const ButtonsScreen = () => {
                 <View style={{ width: "50%" }}>
                     <CustomButton
                         disabled={false}
-                        title={"click me"}
-                        onPress={() => alert("cliked")}
+                        title={"toast"}
+                        onPress={() => customToast('success', "hello")}
                     />
                 </View>
             </View>
             <CustomButton
                 variant={'fill'}
-                title={"click me"}
-                onPress={() => alert("cliked")}
+                title={"Toast"}
+                onPress={showToast}
             />
             <CustomButton
                 disabled={true}
