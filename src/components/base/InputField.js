@@ -9,7 +9,7 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import { Color } from "../../utils/colorPalette";
 import { FontSizes } from "../../utils/fontSizes";
-import { screenDimensions } from "../../utils/helperFunctions";
+import { screenDimensions } from "../../utils/functions";
 
 const { fontScale } = screenDimensions;
 export default function InputField(props) {

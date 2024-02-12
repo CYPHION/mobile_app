@@ -3,7 +3,7 @@ import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Color } from "../../utils/colorPalette";
 import { FontFamily } from "../../utils/fontFamilies";
 import { FontSizes } from "../../utils/fontSizes";
-import { screenDimensions } from "../../utils/helperFunctions";
+import { screenDimensions } from "../../utils/functions";
 import CustomButton from "./CustomButton";
 
 const MyModal = (props) => {
@@ -47,11 +47,11 @@ const MyModal = (props) => {
                             <CustomButton
                                 title={cancelBtnLabel}
                                 btnstyle={{ paddingVertical: 4, backgroundColor: "#DDD" }}
-                                color={Color.text}
                                 onPress={toggleModal}
                             />
                             <CustomButton
                                 title={doneBtnLabel}
+                                variant={'fill'}
                                 btnstyle={{ paddingVertical: 4 }}
                                 onPress={handleDone}
                             />

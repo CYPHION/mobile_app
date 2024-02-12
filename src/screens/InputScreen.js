@@ -4,7 +4,7 @@ import CustomButton from '../components/base/CustomButton'
 import FlaotingTextInput from '../components/base/FlaotingTextInput'
 import InputField from '../components/base/InputField'
 import { Color } from '../utils/colorPalette'
-import { screenDimensions } from '../utils/helperFunctions'
+import { screenDimensions } from '../utils/functions'
 const InputScreen = () => {
     const [formData, setFormData] = useState({
         userName: '',

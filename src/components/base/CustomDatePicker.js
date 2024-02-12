@@ -4,8 +4,7 @@ import DatePicker from "react-native-date-picker";
 import { Color } from "../../utils/colorPalette";
 import { FontFamily } from "../../utils/fontFamilies";
 import { FontSizes } from "../../utils/fontSizes";
-import { formattedDate } from "../../utils/functions";
-import { screenDimensions } from "../../utils/helperFunctions";
+import { formattedDate, screenDimensions } from "../../utils/functions";
 import CustomButton from "./CustomButton";
 
 const CustomDatePicker = (props) => {
@@ -103,6 +102,7 @@ const CustomDatePicker = (props) => {
                                 <CustomButton
                                     textStyle={{ fontSize: FontSizes.md }}
                                     title={"Select"}
+                                    variant={'fill'}
                                     btnstyle={{ paddingVertical: 2 }}
                                     onPress={() => {
                                         setSelectedDate({

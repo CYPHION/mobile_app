@@ -3,6 +3,7 @@ import {
     Animated,
     Easing,
     StyleSheet,
+    Text,
     TextInput,
     TouchableOpacity,
     View,
@@ -13,16 +14,19 @@ import { FontSizes } from "../../utils/fontSizes";
 
 const FloatingTextInput = (props) => {
     const {
-        label,
+        label = '',
         password,
         inputMode,
-        value,
+        value = '',
         onChangeText,
-        color = Color.white,
+        // color,
         editable,
+        errorMcg
     } = props;
     const [isPasswordVisible, setPasswordVisible] = useState(password);
     const animatedValue = useRef(new Animated.Value(0));
+
+    const color = errorMcg ? Color.error : Color.white
 
     const returnAnimatedTitleStyles = {
         transform: [
@@ -36,7 +40,7 @@ const FloatingTextInput = (props) => {
         ],
         fontSize: animatedValue?.current?.interpolate({
             inputRange: [0, 1],
-            outputRange: [FontSizes.md, FontSizes.sm],
+            outputRange: [FontSizes.lg, FontSizes.md],
             extrapolate: "clamp",
         }),
         color: animatedValue?.current?.interpolate({
@@ -109,6 +113,7 @@ const FloatingTextInput = (props) => {
                     ""
                 )}
             </Animated.View>
+            {errorMcg ? <Text style={{ color: Color.error, marginTop: 5 }}>{errorMcg}</Text> : ''}
         </View>
     );
 };
