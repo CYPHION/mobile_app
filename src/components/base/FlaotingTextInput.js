@@ -1,12 +1,32 @@
-import React, { useRef, useState } from 'react';
-import { Animated, Easing, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { Color } from '../../utils/colorPalette';
-import { FontSizes } from '../../utils/fontSizes';
+import React, { useRef, useState } from "react";
+import {
+    Animated,
+    Easing,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+import { Color } from "../../utils/colorPalette";
+import { FontSizes } from "../../utils/fontSizes";
 
-const FloatingTextInput = ({ label, password, inputMode, value, onChangeText, color = Color.white, editable }) => {
+const FloatingTextInput = (props) => {
+    const {
+        label = '',
+        password,
+        inputMode,
+        value = '',
+        onChangeText,
+        // color,
+        editable,
+        errorMcg
+    } = props;
     const [isPasswordVisible, setPasswordVisible] = useState(password);
     const animatedValue = useRef(new Animated.Value(0));
+
+    const color = errorMcg ? Color.error : Color.white
 
     const returnAnimatedTitleStyles = {
         transform: [
@@ -14,14 +34,14 @@ const FloatingTextInput = ({ label, password, inputMode, value, onChangeText, co
                 translateY: animatedValue?.current?.interpolate({
                     inputRange: [0, 1],
                     outputRange: [22, -4],
-                    extrapolate: 'clamp',
+                    extrapolate: "clamp",
                 }),
             },
         ],
         fontSize: animatedValue?.current?.interpolate({
             inputRange: [0, 1],
-            outputRange: [FontSizes.md, FontSizes.sm],
-            extrapolate: 'clamp',
+            outputRange: [FontSizes.lg, FontSizes.md],
+            extrapolate: "clamp",
         }),
         color: animatedValue?.current?.interpolate({
             inputRange: [0, 1],
@@ -64,21 +84,36 @@ const FloatingTextInput = ({ label, password, inputMode, value, onChangeText, co
     return (
         <View style={styles.mainView}>
             <Animated.View style={[styles.subContainer, viewStyles, styles.mainView]}>
-                <Animated.Text style={[returnAnimatedTitleStyles]}>{label}</Animated.Text>
+                <Animated.Text style={[returnAnimatedTitleStyles]}>
+                    {label}
+                </Animated.Text>
                 <TextInput
+                    {...props}
                     editable={editable}
-                    inputMode={inputMode ? inputMode : 'text'}
+                    inputMode={inputMode ? inputMode : "text"}
                     onChangeText={onChangeText}
                     secureTextEntry={isPasswordVisible}
-                    value={value ? value : ''}
+                    value={value ? value : ""}
                     style={[styles.textStyle, { color: color }]}
                     onBlur={onBlur}
                     onFocus={onFocus}
                 />
-                {password ? <TouchableOpacity style={styles.iconView} onPress={togglePasswordVisibility}>
-                    <Icon name={isPasswordVisible ? 'eye-off' : 'eye'} color={color} size={18} />
-                </TouchableOpacity> : ''}
+                {password ? (
+                    <TouchableOpacity
+                        style={styles.iconView}
+                        onPress={togglePasswordVisibility}
+                    >
+                        <Icon
+                            name={isPasswordVisible ? "eye-off" : "eye"}
+                            color={color}
+                            size={18}
+                        />
+                    </TouchableOpacity>
+                ) : (
+                    ""
+                )}
             </Animated.View>
+            {errorMcg ? <Text style={{ color: Color.error, marginTop: 5 }}>{errorMcg}</Text> : ''}
         </View>
     );
 };
@@ -95,12 +130,12 @@ const styles = StyleSheet.create({
     },
     iconView: {
         padding: 5,
-        position: 'absolute',
+        position: "absolute",
         right: 5,
-        top: '60%',
+        top: "60%",
     },
     mainView: {
-        position: 'relative',
+        position: "relative",
     },
 });
 

@@ -1,9 +1,21 @@
 /**
  * @format
  */
-
-import {AppRegistry} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { AppRegistry } from 'react-native';
+import 'react-native-gesture-handler';
+import Toast from 'react-native-toast-message';
+import { Provider } from 'react-redux';
 import App from './App';
-import {name as appName} from './app.json';
+import { name as appName } from './app.json';
+import { store } from './src/store';
+const ReduxApp = () => (
+    <NavigationContainer>
+        <Provider store={store}>
+            <App />
+            <Toast />
+        </Provider>
+    </NavigationContainer>
+);
 
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(appName, () => ReduxApp);

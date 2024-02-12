@@ -1,61 +1,90 @@
-import { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { Color } from '../../utils/colorPalette';
-import { FontSizes } from '../../utils/fontSizes';
-import { screenDimensions } from '../../utils/helperFunctions';
+import { useState } from "react";
+import {
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+import { Color } from "../../utils/colorPalette";
+import { FontSizes } from "../../utils/fontSizes";
+import { screenDimensions } from "../../utils/functions";
 
-
-const { fontScale } = screenDimensions
-export default function InputField({ label = '', inputStyle, inputMode, value = '', onChangeText, secureTextEntry, multiline, editable, error, required }) {
+const { fontScale } = screenDimensions;
+export default function InputField(props) {
+    const {
+        label = "",
+        inputStyle,
+        inputMode,
+        value = "",
+        onChangeText,
+        secureTextEntry,
+        multiline,
+        editable,
+        error,
+        required,
+    } = props;
     const [isPasswordVisible, setPasswordVisible] = useState(secureTextEntry);
     const [isFocus, setIsFocus] = useState(false);
     const togglePasswordVisibility = () => {
         setPasswordVisible(!isPasswordVisible);
     };
-
     return (
-        <View style={styles.container}>
-            <Text
-                style={[styles.label]}
-            >
-                {`${label} ${required ? '(Rquired)' : ''}`}
-            </Text>
-            <View
-                style={styles.iconView}
-            >
-                <TextInput
-                    editable={editable}
-                    secureTextEntry={isPasswordVisible}
-                    multiline={multiline}
-                    value={value}
-                    onChangeText={onChangeText}
-                    inputMode={inputMode}
-                    onFocus={() => setIsFocus(!isFocus)}
-                    onBlur={() => setIsFocus(!isFocus)}
+        <>
+            <View style={styles.container}>
+                <Text
                     style={[
-                        styles.inputField,
-                        error ? { borderColor: Color.error } : ((isFocus || value) ? { borderColor: Color.primary } : { borderColor: Color.borderColor }),
-                        { ...inputStyle }
+                        styles.label,
+                        error
+                            ? { color: Color.error }
+                            : isFocus || value
+                                ? { color: Color.primary }
+                                : { color: Color.borderColor },
                     ]}
-                />
-                {secureTextEntry ?
-                    <TouchableOpacity
-                        style={styles.icon}
-                        onPress={togglePasswordVisibility}
-                    >
-                        <Icon
-                            name={isPasswordVisible ? 'eye-off' : 'eye'}
-                            color={Color.black} size={18}
-                        />
-                    </TouchableOpacity> : ''}
+                >
+                    {`${label} ${required ? "(Rquired)" : ""}`}
+                </Text>
+                <View style={styles.iconView}>
+                    <TextInput
+                        {...props}
+                        editable={editable}
+                        secureTextEntry={isPasswordVisible}
+                        multiline={multiline}
+                        value={value}
+                        onChangeText={onChangeText}
+                        inputMode={inputMode}
+                        onFocus={() => setIsFocus(!isFocus)}
+                        onBlur={() => setIsFocus(!isFocus)}
+                        style={[
+                            styles.inputField,
+                            error
+                                ? { borderColor: Color.error }
+                                : isFocus || value
+                                    ? { borderColor: Color.primary }
+                                    : { borderColor: Color.borderColor },
+                            secureTextEntry && { paddingRight: 40 },
+                            { ...inputStyle },
+                        ]}
+                    />
+                    {secureTextEntry ? (
+                        <TouchableOpacity
+                            style={styles.icon}
+                            onPress={togglePasswordVisibility}
+                        >
+                            <Icon
+                                name={isPasswordVisible ? "eye-off" : "eye"}
+                                color={Color.black}
+                                size={18}
+                            />
+                        </TouchableOpacity>
+                    ) : (
+                        ""
+                    )}
+                </View>
+                {error && <Text style={[styles.error]}>{error}</Text>}
             </View>
-            {error && <Text
-                style={[styles.error]}
-            >
-                {error}
-            </Text>}
-        </View>
+        </>
     );
 }
 
@@ -80,12 +109,12 @@ const styles = StyleSheet.create({
         color: Color.text,
     },
     iconView: {
-        position: 'relative',
+        position: "relative",
     },
     icon: {
         height: fontScale * 40,
-        justifyContent: 'center',
-        position: 'absolute',
+        justifyContent: "center",
+        position: "absolute",
         right: 10,
         bottom: 0,
         padding: 5,
@@ -93,6 +122,6 @@ const styles = StyleSheet.create({
     },
     error: {
         marginTop: 4,
-        color: Color.error
-    }
+        color: Color.error,
+    },
 });

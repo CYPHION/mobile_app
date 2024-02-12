@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
-import { Color } from '../../utils/colorPalette';
-import { FontSizes } from '../../utils/fontSizes';
-import { screenDimensions } from '../../utils/helperFunctions';
-const { fontScale, height } = screenDimensions
+import React, { useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { Dropdown } from "react-native-element-dropdown";
+import { Color } from "../../utils/colorPalette";
+import { FontSizes } from "../../utils/fontSizes";
+import { screenDimensions } from "../../utils/functions";
+const { fontScale, height } = screenDimensions;
 
-
-const DropdownComponent = ({ data, placeHolderText, label, value, setValue, disable, dropdownStyle }) => {
+const DropdownComponent = (props) => {
+    const {
+        data,
+        placeHolderText,
+        label,
+        value,
+        setValue,
+        disable,
+        dropdownStyle,
+    } = props;
     const [isFocus, setIsFocus] = useState(false);
 
     const renderLabel = () => {
         if (value || isFocus) {
             return (
-                <Text style={[styles.label, (isFocus || value) ? { color: Color.primary } : { color: Color.text }]}>
+                <Text
+                    style={[
+                        styles.label,
+                        isFocus || value ? { color: Color.primary } : { color: Color.text },
+                    ]}
+                >
                     {label}
                 </Text>
             );
@@ -25,10 +38,17 @@ const DropdownComponent = ({ data, placeHolderText, label, value, setValue, disa
         <View style={styles.container}>
             {/* {renderLabel()} */}
             <Dropdown
+                {...props}
                 disable={disable}
                 itemTextStyle={styles.itemTextStyle}
                 containerStyle={styles.itemsContainer}
-                style={[styles.dropdown, { ...dropdownStyle }, (isFocus || value) ? { borderColor: Color.primary } : { borderColor: Color.borderColor }]}
+                style={[
+                    styles.dropdown,
+                    { ...dropdownStyle },
+                    isFocus || value
+                        ? { borderColor: Color.primary }
+                        : { borderColor: Color.borderColor },
+                ]}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={[styles.selectedTextStyle]}
                 inputSearchStyle={styles.inputSearchStyle}
@@ -38,12 +58,12 @@ const DropdownComponent = ({ data, placeHolderText, label, value, setValue, disa
                 maxHeight={height * 0.3}
                 labelField="name"
                 valueField="value"
-                placeholder={!isFocus ? placeHolderText : '...'}
+                placeholder={!isFocus ? placeHolderText : "..."}
                 searchPlaceholder="Search..."
                 value={value}
                 onFocus={() => setIsFocus(true)}
                 onBlur={() => setIsFocus(false)}
-                onChange={item => {
+                onChange={(item) => {
                     setValue(item.value);
                     setIsFocus(false);
                 }}
@@ -64,9 +84,9 @@ export default DropdownComponent;
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'transparent',
+        backgroundColor: "transparent",
         paddingVertical: 10,
-        paddingHorizontal: 5
+        paddingHorizontal: 5,
     },
     dropdown: {
         height: fontScale * 40,
@@ -74,14 +94,14 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 4,
         paddingHorizontal: 8,
-        color: Color.textThree
+        color: Color.textThree,
     },
     icon: {
         marginRight: 5,
     },
     label: {
-        position: 'absolute',
-        backgroundColor: 'white',
+        position: "absolute",
+        backgroundColor: "white",
         left: 10,
         top: 8,
         zIndex: 999,
@@ -90,11 +110,11 @@ const styles = StyleSheet.create({
     },
     placeholderStyle: {
         fontSize: FontSizes.md,
-        color: Color.textThree
+        color: Color.textThree,
     },
     selectedTextStyle: {
         fontSize: FontSizes.md,
-        color: Color.textThree
+        color: Color.textThree,
     },
     iconStyle: {
         width: 20,
@@ -110,6 +130,6 @@ const styles = StyleSheet.create({
     },
     itemTextStyle: {
         fontSize: FontSizes.sm,
-        color: Color.textThree
-    }
+        color: Color.textThree,
+    },
 });

@@ -1,11 +1,19 @@
-import React, { useRef } from 'react';
-import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Or your preferred icon library
-import { Color } from '../../utils/colorPalette';
-import { FontFamily } from '../../utils/fontFamilies';
-import { FontSizes } from '../../utils/fontSizes';
+import React, { useRef } from "react";
+import {
+    Animated,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome"; // Or your preferred icon library
+import { Color } from "../../utils/colorPalette";
+import { FontFamily } from "../../utils/fontFamilies";
+import { FontSizes } from "../../utils/fontSizes";
 
-const AccordionItem = ({ total, data, expanded, onToggle, date, studentName }) => {
+const AccordionItem = (props) => {
+    const { total, data, expanded, onToggle, date, studentName } = props;
+
     const iconRotation = useRef(new Animated.Value(1)).current; // Initialize icon animation state
 
     // Handle icon rotation animation on expansion/collapse
@@ -19,8 +27,16 @@ const AccordionItem = ({ total, data, expanded, onToggle, date, studentName }) =
 
     return (
         <View style={styles.accordionItem}>
-            <TouchableOpacity activeOpacity={0.9} onPress={() => { onToggle(); rotateIcon(); }}>
-                <View style={[styles.accordionHeader, expanded && { borderBottomWidth: 1 }]}>
+            <TouchableOpacity
+                activeOpacity={0.9}
+                onPress={() => {
+                    onToggle();
+                    rotateIcon();
+                }}
+            >
+                <View
+                    style={[styles.accordionHeader, expanded && { borderBottomWidth: 1 }]}
+                >
                     <View>
                         <Text style={styles.accordionTitle}>{date}</Text>
                         <Text style={styles.accordionTitleHeading}>{total}</Text>
@@ -34,7 +50,7 @@ const AccordionItem = ({ total, data, expanded, onToggle, date, studentName }) =
                                     {
                                         rotate: iconRotation.interpolate({
                                             inputRange: [0, 1],
-                                            outputRange: ['180deg', '0deg'],
+                                            outputRange: ["180deg", "0deg"],
                                         }),
                                     },
                                 ],
@@ -51,7 +67,6 @@ const AccordionItem = ({ total, data, expanded, onToggle, date, studentName }) =
                         <View key={index} style={styles.contentView}>
                             <Text style={[styles.contentItem]}>{elem.name}</Text>
                             <Text style={[styles.contentItem]}>{elem.value}</Text>
-
                         </View>
                     ))}
                 </View>
@@ -72,9 +87,9 @@ const styles = StyleSheet.create({
         padding: 10,
         borderColor: Color.borderColorTwo,
         padding: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
     },
     accordionTitle: {
         color: Color.primary,
@@ -83,25 +98,24 @@ const styles = StyleSheet.create({
     },
     rotateIcon: {
         paddingEnd: 4,
-        transform: [{ rotate: '0deg' }], /* Initial icon rotation */
-        transition: 'transform 0.4s ease-in-out', /* Smooth animation */
+        transform: [{ rotate: "0deg" }] /* Initial icon rotation */,
+        transition: "transform 0.4s ease-in-out" /* Smooth animation */,
     },
     accordionContent: {
         gap: 5,
         padding: 10,
-
     },
     accordionTitleHeading: {
         color: Color.textThree,
         fontFamily: FontFamily.interMedium,
-        fontSize: FontSizes.xl
+        fontSize: FontSizes.xxl,
     },
     contentView: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+        flexDirection: "row",
+        justifyContent: "space-between",
     },
     contentItem: {
         fontSize: FontSizes.sm,
-        color: Color.textThree
-    }
+        color: Color.textThree,
+    },
 });
