@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import CustomButton from '../components/base/CustomButton'
 import FlaotingTextInput from '../components/base/FlaotingTextInput'
 import InputField from '../components/base/InputField'
-import { Color } from '../utils/colorPalette'
+import { Color } from '../utils/color'
 import { screenDimensions } from '../utils/functions'
 const InputScreen = () => {
     const [formData, setFormData] = useState({

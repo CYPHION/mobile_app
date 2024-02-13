@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import MyDrawer from "./src/myNavigations/drawer/Mydrawer";
+import MyDrawer from "./src/navigation/Drawer";
 import Main from "./src/screens/Main";
 
 
 const App = () => {
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(true)
 
   return (
     <>

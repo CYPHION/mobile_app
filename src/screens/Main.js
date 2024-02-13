@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { StyleSheet } from 'react-native'
-import IntroSlider from '../views/introSlider'
-import LoginScreen from './loginScreen/Login'
+import IntroSlider from '../components/widget/IntroSlider'
+import LoginScreen from './Login'
 
 const Main = (prop) => {
   const [showApp, setShowApp] = useState(false)
@@ -14,5 +13,3 @@ const Main = (prop) => {
 }
 
 export default Main
-
-const styles = StyleSheet.create({})
