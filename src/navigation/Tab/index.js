@@ -10,6 +10,7 @@ import Fee from '../../screens/Fee';
 import Home from '../../screens/Home';
 import Profile from '../../screens/Profile';
 import Receipt from '../../screens/Receipt';
+import ViewFeeReceipt from '../../screens/VIEW FEE RECEIPT/ViewFeeReceipt';
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +47,7 @@ const TabNavigation = () => {
                     ),
                 }}
             />
-            <Tab.Screen name="analytics" component={Analytics}
+            <Tab.Screen name="Analytics" component={ViewFeeReceipt}
                 options={{
                     tabBarLabel: 'Analytics',
                     tabBarIcon: ({ color, size }) => (
