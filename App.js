@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import MyDrawer from "./src/myNavigations/drawer/Mydrawer";
+import MyDrawer from "./src/myNavigations/Drawer";
 import Main from "./src/screens/Main";
 
 

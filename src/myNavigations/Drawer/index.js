@@ -1,7 +1,7 @@
 import { DrawerContentScrollView, DrawerItem, createDrawerNavigator } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
-import { MyStack } from '../stackNavigation/MyStackNavigation';
-import TabNavigation from '../tabNavigation';
+import { MyStack } from '../Stack';
+import TabNavigation from '../Tab';
 
 const Drawer = createDrawerNavigator();
 

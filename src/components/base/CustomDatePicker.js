@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DatePicker from "react-native-date-picker";
-import { Color } from "../../utils/colorPalette";
-import { FontFamily } from "../../utils/fontFamilies";
-import { FontSizes } from "../../utils/fontSizes";
+import { Color } from "../../utils/color";
+import { FontFamily, FontSizes } from "../../utils/font";
 import { formattedDate, screenDimensions } from "../../utils/functions";
 import CustomButton from "./CustomButton";
 

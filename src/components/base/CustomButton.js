@@ -6,9 +6,8 @@ import {
     Text,
     TouchableOpacity,
 } from "react-native";
-import { Color } from "../../utils/colorPalette";
-import { FontFamily } from "../../utils/fontFamilies";
-import { FontSizes } from "../../utils/fontSizes";
+import { Color } from "../../utils/color";
+import { FontFamily, FontSizes } from "../../utils/font";
 
 const CustomButton = (props) => {
     const {

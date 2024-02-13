@@ -2,9 +2,8 @@ import React, { useState } from 'react'
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import CustomButton from '../../components/base/CustomButton'
 import FlaotingTextInput from '../../components/base/FlaotingTextInput'
-import { Color } from '../../utils/colorPalette'
-import { FontFamily } from '../../utils/fontFamilies'
-import { FontSizes } from '../../utils/fontSizes'
+import { Color } from '../../utils/color'
+import { FontFamily, FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
 
 

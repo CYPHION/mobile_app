@@ -7,9 +7,8 @@ import {
     View,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome"; // Or your preferred icon library
-import { Color } from "../../utils/colorPalette";
-import { FontFamily } from "../../utils/fontFamilies";
-import { FontSizes } from "../../utils/fontSizes";
+import { Color } from "../../utils/color";
+import { FontFamily, FontSizes } from "../../utils/font";
 
 const AccordionItem = (props) => {
     const { total, data, expanded, onToggle, date, studentName } = props;

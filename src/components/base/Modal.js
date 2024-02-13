@@ -1,12 +1,12 @@
 import React from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Color } from "../../utils/colorPalette";
-import { FontFamily } from "../../utils/fontFamilies";
-import { FontSizes } from "../../utils/fontSizes";
+import { Color } from "../../utils/color";
+import { FontFamily } from "../../utils/font";
+import { FontSizes } from "../../utils/font";
 import { screenDimensions } from "../../utils/functions";
 import CustomButton from "./CustomButton";
 
-const MyModal = (props) => {
+const Modal = (props) => {
     const {
         modalVisible,
         setModalVisible,
@@ -105,4 +105,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MyModal;
+export default Modal;

@@ -5,11 +5,11 @@ import UserIcon from 'react-native-vector-icons/FontAwesome';
 import ReceiptIcon from 'react-native-vector-icons/FontAwesome6';
 import CardIcon from 'react-native-vector-icons/Ionicons';
 import AnalyticsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Analytics from '../../screens/analytics/Analytics';
-import Fee from '../../screens/fee/Fee';
-import Home from '../../screens/homeScreen/Home';
-import Profile from '../../screens/profile/Profile';
-import Receipt from '../../screens/receipt/Receipt';
+import Analytics from '../../screens/Analytics';
+import Fee from '../../screens/Fee';
+import Home from '../../screens/Home';
+import Profile from '../../screens/Profile';
+import Receipt from '../../screens/Receipt';
 
 const Tab = createBottomTabNavigator();
 

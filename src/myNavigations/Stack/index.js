@@ -1,10 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Compensation from '../../screens/compensation/Compensation';
-import Dashboard from '../../screens/dashboard/Dashboard';
-import LeaveApplication from '../../screens/leaveApplication/LeaveApplication';
-import Testimonials from '../../screens/testimonials/Testimonials';
-import ViewAppointment from '../../screens/viewAppointment/ViewAppointment';
-import ViewChildren from '../../screens/viewChildren/ViewChildren';
+import Compensation from '../../screens/Compensation';
+import Dashboard from '../../screens/Dashboard';
+import LeaveApplication from '../../screens/LeaveApplication';
+import Testimonials from '../../screens/Testimonials';
+import ViewAppointment from '../../screens/ViewAppointment';
+import ViewChildren from '../../screens/ViewChildren';
 
 const Stack = createNativeStackNavigator();
 

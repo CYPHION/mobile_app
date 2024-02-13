@@ -9,8 +9,8 @@ import {
     View,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import { Color } from "../../utils/colorPalette";
-import { FontSizes } from "../../utils/fontSizes";
+import { Color } from "../../utils/color";
+import { FontSizes } from "../../utils/font";
 
 const FloatingTextInput = (props) => {
     const {
