@@ -4,7 +4,7 @@ import Main from "./src/screens/Main";
 
 
 const App = () => {
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(true)
 
   return (
     <>
