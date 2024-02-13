@@ -4,7 +4,6 @@ import { Dropdown } from "react-native-element-dropdown";
 import { Color } from "../../utils/color";
 import { FontSizes } from "../../utils/font";
 import { screenDimensions } from "../../utils/functions";
-const { fontScale, height } = screenDimensions;
 
 const DropdownComponent = (props) => {
     const {
@@ -15,6 +14,7 @@ const DropdownComponent = (props) => {
         setValue,
         disable,
         dropdownStyle,
+        search = false
     } = props;
     const [isFocus, setIsFocus] = useState(false);
 
@@ -54,8 +54,8 @@ const DropdownComponent = (props) => {
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
                 data={data}
-                // search
-                maxHeight={height * 0.3}
+                search={search}
+                maxHeight={screenDimensions.height * 0.3}
                 labelField="name"
                 valueField="value"
                 placeholder={!isFocus ? placeHolderText : "..."}
@@ -89,11 +89,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
     },
     dropdown: {
-        height: fontScale * 40,
+        height: screenDimensions.fontScale * 40,
         borderColor: Color.borderColor,
         borderWidth: 1,
         borderRadius: 4,
         paddingHorizontal: 8,
+        backgroundColor: Color.white,
         color: Color.textThree,
     },
     icon: {
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
         height: 20,
     },
     inputSearchStyle: {
-        height: fontScale * 40,
+        height: screenDimensions.fontScale * 40,
         fontSize: FontSizes.md,
     },
     itemsContainer: {

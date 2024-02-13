@@ -1,13 +1,19 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import CustomIcon from '../../components/base/CustumIcon'
+import { ScrollView } from 'react-native-gesture-handler'
 
 const Profile = () => {
+
+
+
     return (
-        <View>
-            <Text>Profile Tab</Text>
-            <CustomIcon />
-        </View>
+        <ScrollView>
+
+            <View>
+                <Text>Profile Tab</Text>
+
+            </View>
+        </ScrollView>
     )
 }
 
