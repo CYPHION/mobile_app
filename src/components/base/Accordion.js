@@ -11,7 +11,7 @@ import { Color } from "../../utils/color";
 import { FontFamily, FontSizes } from "../../utils/font";
 
 const AccordionItem = (props) => {
-    const { total, data, expanded, onToggle, date, studentName } = props;
+    const { total, data, expanded, onToggle, date, studentName, children } = props;
 
     const iconRotation = useRef(new Animated.Value(1)).current; // Initialize icon animation state
 
@@ -62,12 +62,14 @@ const AccordionItem = (props) => {
             </TouchableOpacity>
             {expanded && (
                 <View style={styles.accordionContent}>
-                    {data?.map((elem, index) => (
+                    {/* {data && data?.map((elem, index) => (
                         <View key={index} style={styles.contentView}>
                             <Text style={[styles.contentItem]}>{elem.name}</Text>
                             <Text style={[styles.contentItem]}>{elem.value}</Text>
                         </View>
-                    ))}
+                    ))} */}
+                    {children}
+
                 </View>
             )}
         </View>
