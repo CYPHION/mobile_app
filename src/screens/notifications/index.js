@@ -75,7 +75,7 @@ const Notifications = () => {
         <>
             <ScrollView >
                 {Data.map((item, index) => (
-                    <View style={{ width: screenDimensions.width, padding: 5 }}>
+                    <View key={index} style={{ width: screenDimensions.width, padding: 5 }}>
                         <View key={index} style={styles.notificationContainer}>
                             <View style={styles.notificationContainers}>
                                 <View style={styles.bgIconColor}>

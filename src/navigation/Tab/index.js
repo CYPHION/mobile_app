@@ -9,8 +9,14 @@ import Fee from '../../screens/Fee';
 import Home from '../../screens/Home';
 import Profile from '../../screens/Profile';
 import Receipt from '../../screens/Receipt';
-import ViewFeeReceipt from '../../screens/VIEW FEE RECEIPT';
+import ViewFeeReceipt from '../../screens/viewFeesReceipt';
 import { Color } from '../../utils/color';
+import ViewChildren from '../../screens/ViewChildren';
+import StudentDetails from '../../screens/StudentDetails';
+import ViewSchedule from '../../screens/ViewSchedule';
+import ViewAllStudents from '../../screens/viewAllStudents';
+import ViewProgress from '../../screens/viewProgress';
+import HomeWork from '../../screens/HomeWork';
 
 const Tab = createBottomTabNavigator();
 
@@ -59,7 +65,7 @@ const TabNavigation = () => {
                     tabBarActiveTintColor: Color.iconColor
                 }}
             />
-            <Tab.Screen name="analytics" component={ViewFeeReceipt}
+            <Tab.Screen name="analytics" component={HomeWork}
                 options={{
                     tabBarLabel: 'Analytics',
                     tabBarIcon: ({ color, size, focused }) => (
