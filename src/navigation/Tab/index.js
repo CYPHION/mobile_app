@@ -11,6 +11,12 @@ import ViewAttendance from '../../screens/ViewAttendance';
 import ViewFeeReceipt from '../../screens/ViewFeeReceipt';
 import ViewFess from '../../screens/ViewFees';
 import { Color } from '../../utils/color';
+import ViewChildren from '../../screens/ViewChildren';
+import StudentDetails from '../../screens/StudentDetails';
+import ViewSchedule from '../../screens/ViewSchedule';
+import ViewAllStudents from '../../screens/viewAllStudents';
+import ViewProgress from '../../screens/viewProgress';
+import HomeWork from '../../screens/HomeWork';
 
 const Tab = createBottomTabNavigator();
 

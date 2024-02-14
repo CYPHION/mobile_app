@@ -14,5 +14,6 @@ export const Color = {
     primaryLight: '#8DA6F4',
     borderDivider: '#888888',
     success: '#95fd65',
-    iconColor: '#0f0f0f'
+    iconColor: '#0f0f0f',
+    btnDisable: "#a8a8a8"
 }
