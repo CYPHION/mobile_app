@@ -18,25 +18,17 @@ const DropdownComponent = (props) => {
     } = props;
     const [isFocus, setIsFocus] = useState(false);
 
-    const renderLabel = () => {
-        if (value || isFocus) {
-            return (
-                <Text
-                    style={[
-                        styles.label,
-                        isFocus || value ? { color: Color.primary } : { color: Color.text },
-                    ]}
-                >
-                    {label}
-                </Text>
-            );
-        }
-        return null;
-    };
 
     return (
         <View style={styles.container}>
-            {/* {renderLabel()} */}
+            {label ? <Text
+                style={[
+                    styles.label,
+                    isFocus || value ? { color: Color.primary } : { color: Color.text },
+                ]}
+            >
+                {label}
+            </Text> : null}
             <Dropdown
                 {...props}
                 disable={disable}
@@ -101,13 +93,8 @@ const styles = StyleSheet.create({
         marginRight: 5,
     },
     label: {
-        position: "absolute",
-        backgroundColor: "white",
-        left: 10,
-        top: 8,
-        zIndex: 999,
-        paddingHorizontal: 8,
-        fontSize: FontSizes.sm,
+        fontSize: FontSizes.md,
+        color: Color.text
     },
     placeholderStyle: {
         fontSize: FontSizes.md,

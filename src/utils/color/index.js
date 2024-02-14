@@ -13,5 +13,6 @@ export const Color = {
     grayBackground: '#f2f2f2',
     primaryLight: '#8DA6F4',
     borderDivider: '#888888',
-    success: '#95fd65'// use this color in GridTable for divider border color
+    success: '#95fd65',
+    iconColor: '#0f0f0f'
 }

@@ -24,6 +24,7 @@ export default function InputField(props) {
         editable,
         error,
         required,
+        labelStyle
     } = props;
     const [isPasswordVisible, setPasswordVisible] = useState(secureTextEntry);
     const [isFocus, setIsFocus] = useState(false);
@@ -35,12 +36,12 @@ export default function InputField(props) {
             <View style={styles.container}>
                 <Text
                     style={[
+
                         styles.label,
                         error
                             ? { color: Color.error }
-                            : isFocus || value
-                                ? { color: Color.primary }
-                                : { color: Color.borderColor },
+                            : { color: Color.text },
+                        { ...labelStyle },
                     ]}
                 >
                     {`${label} ${required ? "(Rquired)" : ""}`}
@@ -60,9 +61,7 @@ export default function InputField(props) {
                             styles.inputField,
                             error
                                 ? { borderColor: Color.error }
-                                : isFocus || value
-                                    ? { borderColor: Color.primary }
-                                    : { borderColor: Color.borderColor },
+                                : { borderColor: Color.borderColor },
                             secureTextEntry && { paddingRight: 40 },
                             { ...inputStyle },
                         ]}

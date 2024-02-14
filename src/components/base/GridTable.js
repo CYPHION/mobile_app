@@ -16,7 +16,7 @@ const GridTable = (props) => {
                 <View style={styles.innerView}>
                     {!!header && <View style={[styles.header, styles.headerStyle]}>
                         <Text style={styles.headingText}>{header}</Text>
-                        <Icon name='download' size={FontSizes.xxl} />
+                        <Icon name='download' color={Color.iconColor} size={FontSizes.xxl} />
                     </View>}
                     <View style={{ padding: 10 }}>
 
