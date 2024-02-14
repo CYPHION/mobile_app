@@ -4,7 +4,6 @@ import { Dropdown } from "react-native-element-dropdown";
 import { Color } from "../../utils/color";
 import { FontSizes } from "../../utils/font";
 import { screenDimensions } from "../../utils/functions";
-const { fontScale, height } = screenDimensions;
 
 const DropdownComponent = (props) => {
     const {
@@ -15,28 +14,21 @@ const DropdownComponent = (props) => {
         setValue,
         disable,
         dropdownStyle,
+        search = false
     } = props;
     const [isFocus, setIsFocus] = useState(false);
 
-    const renderLabel = () => {
-        if (value || isFocus) {
-            return (
-                <Text
-                    style={[
-                        styles.label,
-                        isFocus || value ? { color: Color.primary } : { color: Color.text },
-                    ]}
-                >
-                    {label}
-                </Text>
-            );
-        }
-        return null;
-    };
 
     return (
         <View style={styles.container}>
-            {/* {renderLabel()} */}
+            {label ? <Text
+                style={[
+                    styles.label,
+                    isFocus || value ? { color: Color.primary } : { color: Color.text },
+                ]}
+            >
+                {label}
+            </Text> : null}
             <Dropdown
                 {...props}
                 disable={disable}
@@ -54,8 +46,8 @@ const DropdownComponent = (props) => {
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
                 data={data}
-                // search
-                maxHeight={height * 0.3}
+                search={search}
+                maxHeight={screenDimensions.height * 0.3}
                 labelField="name"
                 valueField="value"
                 placeholder={!isFocus ? placeHolderText : "..."}
@@ -89,24 +81,20 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
     },
     dropdown: {
-        height: fontScale * 40,
+        height: screenDimensions.fontScale * 40,
         borderColor: Color.borderColor,
         borderWidth: 1,
         borderRadius: 4,
         paddingHorizontal: 8,
+        backgroundColor: Color.white,
         color: Color.textThree,
     },
     icon: {
         marginRight: 5,
     },
     label: {
-        position: "absolute",
-        backgroundColor: "white",
-        left: 10,
-        top: 8,
-        zIndex: 999,
-        paddingHorizontal: 8,
-        fontSize: FontSizes.sm,
+        fontSize: FontSizes.md,
+        color: Color.text
     },
     placeholderStyle: {
         fontSize: FontSizes.md,
@@ -121,7 +109,7 @@ const styles = StyleSheet.create({
         height: 20,
     },
     inputSearchStyle: {
-        height: fontScale * 40,
+        height: screenDimensions.fontScale * 40,
         fontSize: FontSizes.md,
     },
     itemsContainer: {

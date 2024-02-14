@@ -7,7 +7,7 @@ import { formattedDate, screenDimensions } from "../../utils/functions";
 import CustomButton from "./CustomButton";
 
 const CustomDatePicker = (props) => {
-    const { isVisible, onToggle, setSelectedDate } = props;
+    const { isVisible, onToggle, setSelectedDate, Children } = props;
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [selectedDateType, setSelectedDateType] = useState("startDate");
@@ -86,6 +86,9 @@ const CustomDatePicker = (props) => {
                                     onDateChange={(date) => handleDateChange(date)}
                                 />
                             </View>
+                            <View style={{ width: '90%' }}>
+                                {Children}
+                            </View>
                             <View style={styles.btnView}>
                                 <CustomButton
                                     textStyle={{ fontSize: FontSizes.md }}
@@ -146,9 +149,9 @@ const styles = StyleSheet.create({
     backdrop: {
         position: "absolute",
         flex: 1,
-        height: "100%",
-        width: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        height: screenDimensions.height,
+        width: screenDimensions.width,
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
     },
     text: {
         fontSize: FontSizes.md,

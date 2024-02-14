@@ -1,13 +1,12 @@
 
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import AccordionItem from '../../components/base/Accordion';
-import { GlobalStyles } from '../../utils/globalStyles';
-import { Color } from '../../utils/color';
 import DropdownComponent from '../../components/base/CustomDropDown';
-import { screenDimensions } from '../../utils/functions';
+import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
+import { screenDimensions } from '../../utils/functions';
+import { GlobalStyles } from '../../utils/globalStyles';
 
 const data = [
     { name: "2024", value: "1" },
@@ -32,6 +31,8 @@ const ViewFeeReceipt = ({ navigation }) => {
                 { name: "Previous Dues", value: "£0" },
                 { name: "Book dues", value: "£78" },
                 { name: "Discount", value: "£10" },
+                { name: "Paid Amount", value: "£89" },
+                { name: "Paid Amount", value: "£89" },
                 { name: "Paid Amount", value: "£89" },
             ],
         },
@@ -117,7 +118,6 @@ const ViewFeeReceipt = ({ navigation }) => {
                     <View>
                         <Text style={styles.fessYears}>Select Year</Text>
                     </View>
-
                     <View>
                         <DropdownComponent
                             dropdownStyle={{ width: screenDimensions.width * 0.25 }}
@@ -130,7 +130,6 @@ const ViewFeeReceipt = ({ navigation }) => {
                     </View>
                 </View>
                 <View>
-
                     {items.map((item, index) => (
                         <AccordionItem
                             children={item.data?.map((elem, index) => (
@@ -148,7 +147,6 @@ const ViewFeeReceipt = ({ navigation }) => {
                             onToggle={() => toggleItem(index)} // Pass toggle function to each item
                         />
                     ))}
-
                 </View>
             </View>
         </ScrollView>

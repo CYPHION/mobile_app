@@ -1,172 +1,189 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
-import Icon from "react-native-vector-icons/Ionicons";
-import CustomIcon from '../../components/base/CustumIcon'
-import DropdownComponent from '../../components/base/CustomDropDown';
-import { screenDimensions } from '../../utils/functions';
-import { FontFamily, FontSizes } from '../../utils/font';
+import React from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import FontAwsomeIcon from 'react-native-vector-icons/FontAwesome5';
+import MailIcon from 'react-native-vector-icons/Ionicons';
+import CustomButton from '../../components/base/CustomButton';
+import InputField from '../../components/base/InputField';
 import { Color } from '../../utils/color';
-
-const data = [
-    { name: "2024", value: "1" },
-    { name: "2023", value: "2" },
-    { name: " 2022", value: "3" },
-    { name: "2021", value: "4" },
-    { name: "2020", value: "5" },
-    { name: "2019 ", value: "6" },
-    { name: "2018 ", value: "7" },
-    { name: "2017 ", value: "8" },
-];
-
-const Data = [
-    {
-        image: require("../../images/hamza.png"),
-        name: "Abdullah",
-        date: "Year 2 - Weekly"
-    },
-    {
-        image: require("../../images/hamza.png"),
-        name: "Abdullah",
-        date: "Year 2 - Weekly"
-    },
-    {
-        image: require("../../images/hamza.png"),
-        name: "Abdullah",
-        date: "Year 2 - Weekly"
-    },
-    {
-        image: require("../../images/hamza.png"),
-        name: "Abdullah",
-        date: "Year 2 - Weekly"
-    },
-    {
-        image: require("../../images/hamza.png"),
-        name: "Abdullah",
-        date: "Year 2 - Weekly"
-    },
-
-]
+import { FontFamily, FontSizes } from '../../utils/font';
+import { screenDimensions } from '../../utils/functions';
 
 
-const renderItem = ({ item }) => (
-    <View style={styles.item}>
-        <Image source={item.image} style={styles.image} />
-        <Text style={styles.nameText} >{item.name}</Text>
-        <Text style={styles.dateText} >{item.date}</Text>
-    </View>
-);
 
-const Profile = () => {
-    const [option, setOption] = useState("");
+const Profile = ({ navigation }) => {
+
     return (
-        <>
-            <View style={styles.profileContainer}>
-                <View style={styles.ChilderRow}>
+        <ScrollView>
+            <View style={{ backgroundColor: Color.white, overflow: 'scroll' }}>
+                <View style={[styles.mainContainer]}>
                     <View>
-                        <Text style={styles.NameText}>Hi, Hamza</Text>
-                        <Text style={styles.CompText}>Welcome to Prime Tuition</Text>
+                        <Image resizeMode='contain' source={require('../../images/user.jpg')} style={[styles.profileImage]} />
                     </View>
-
                     <View>
-                        <Icon name="notifications-outline" size={FontSizes.xxxl} />
+
+                        <Text style={[styles.text, { color: Color.text, fontSize: FontSizes.xl }]}>Hamza Khan</Text>
+                        <Text style={[styles.text, { color: Color.textThree, fontSize: FontSizes.md }]}>@hamzakhan123</Text>
                     </View>
                 </View>
-
-                <View style={styles.ChilderRow}>
-                    <View>
-                        <Text>Enrolled Children (3)</Text>
-                    </View>
-                    <TouchableOpacity>
-                        <Text>see all</Text>
-                    </TouchableOpacity>
-
-                </View>
-
-
-
-                <FlatList
-                    data={Data}
-                    horizontal
-                    renderItem={renderItem}
-                    keyExtractor={(item, index) => index.toString()}
-                    contentContainerStyle={styles.flatListContainer}
-                />
-
-
-                <View style={styles.feesContainers}>
-                    <View style={styles.profileRowContainer}>
-                        <View>
-                            <Text style={styles.fessYears}>Fee Paid Per Month</Text>
+                <View >
+                    <View style={[styles.row]}>
+                        <View style={[styles.sideView]}>
+                            <View style={styles.bgIconColor}>
+                                <FontAwsomeIcon name="user-alt" size={FontSizes.xl} color={Color.text} />
+                            </View>
                         </View>
-
-                        <View>
-                            <DropdownComponent
-                                dropdownStyle={{ width: screenDimensions.width * 0.2 }}
-                                disable={false}
-                                data={data}
-                                placeHolderText={"2024"}
-                                value={option}
-                                setValue={setOption}
+                        <View style={[styles.middelView]}>
+                            <InputField
+                                label={"Text"}
+                                inputStyle={{
+                                    borderWidth: 0
+                                }}
+                                editable={false}
+                                // inputMode={"numeric"} // by default type is text
+                                value={'Hamza'}
+                            // onChangeText={(text) => onChangeHandler('text', text)}
                             />
                         </View>
+                        <View style={[styles.sideView]}>
+                            <TouchableOpacity activeOpacity={0.7} >
+                                <Text style={[styles.text, styles.textTwo]}>Edit</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-
+                    <View style={[styles.row]}>
+                        <View style={[styles.sideView]}>
+                            <View style={styles.bgIconColor}>
+                                <MailIcon name="mail" size={FontSizes.xl} color={Color.text} />
+                            </View>
+                        </View>
+                        <View style={[styles.middelView]}>
+                            <InputField
+                                label={"Text"}
+                                inputStyle={{
+                                    borderWidth: 0
+                                }}
+                                editable={false}
+                                // inputMode={"numeric"} // by default type is text
+                                value={'Hamza@gmail.com'}
+                            // onChangeText={(text) => onChangeHandler('text', text)}
+                            />
+                        </View>
+                        <View style={[styles.sideView]}>
+                            <TouchableOpacity activeOpacity={0.7} >
+                                <Text style={[styles.text, styles.textTwo]}>Edit</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={[styles.row]}>
+                        <View style={[styles.sideView]}>
+                            <View style={styles.bgIconColor}>
+                                <FontAwsomeIcon name="lock" size={FontSizes.xl} color={Color.text} />
+                            </View>
+                        </View>
+                        <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
+                            <Text style={[styles.textTwo]}>Password</Text>
+                            <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'changePassword' })}>
+                                <Text style={[styles.textTwo, { color: Color.textThree, paddingVertical: 10 }]}>
+                                    Tap to change password
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={[styles.sideView]}>
+                            <TouchableOpacity activeOpacity={0.7} >
+                                <Text style={[styles.text, styles.textTwo]}>Edit</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={[styles.row]}>
+                        <View style={[styles.sideView]}>
+                            <View style={styles.bgIconColor}>
+                                <FontAwsomeIcon name="mobile-alt" size={FontSizes.xl} color={Color.text} />
+                            </View>
+                        </View>
+                        <View style={[styles.middelView]}>
+                            <InputField
+                                label={"Text"}
+                                inputStyle={{
+                                    borderWidth: 0
+                                }}
+                                editable={false}
+                                // inputMode={"numeric"} // by default type is text
+                                value={'03795869366'}
+                            // onChangeText={(text) => onChangeHandler('text', text)}
+                            />
+                        </View>
+                        <View style={[styles.sideView]}>
+                            <TouchableOpacity activeOpacity={0.7} >
+                                <Text style={[styles.text, styles.textTwo]}>Edit</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
 
-
-                <View style={{ backgroundColor: 'red', width: 370, height: 250 }}>
-                    <Text style={{ color: 'white' }}>Map Area</Text>
+                <View style={{ alignItems: 'center', marginTop: 10 }}>
+                    <CustomButton
+                        title="Logout"
+                        variant='fill'
+                        btnstyle={{ width: screenDimensions.width * 0.85 }}
+                    />
                 </View>
+
             </View>
-        </>
+        </ScrollView >
     )
 }
 
 export default Profile
 
 const styles = StyleSheet.create({
-    profileContainer: {
-        paddingHorizontal: 10,
-        paddingVertical: 20
-    },
-    ChilderRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+    mainContainer: {
+        width: screenDimensions.width,
+        height: screenDimensions.height * 0.3,
+        gap: 15,
         alignItems: 'center',
-        paddingVertical: 10
+        justifyContent: 'flex-end'
     },
-    profileRowContainer: {
+    profileImage: {
+        width: screenDimensions.width * 0.25,
+        height: screenDimensions.width * 0.25,
+        borderRadius: screenDimensions.width * (0.25 * 0.5)
+    },
+    text: {
+        fontFamily: FontFamily.interRegular,
+        textAlign: 'center'
+    },
+    bgIconColor: {
+        width: 35,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: Color.white,
+        borderRadius: 8,
+        padding: 6,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1, // Set a lower opacity for a subtle shadow
+        shadowRadius: 2, // Set a lower radius for a less spread shadow
+    },
+    row: {
+        width: screenDimensions.width,
+        padding: 5,
+        paddingHorizontal: 10,
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'flex-start',
     },
-    flatListContainer: {
-        paddingHorizontal: 16, // Adjust as needed
-    },
-    item: {
-        marginHorizontal: 8, // Adjust as needed
-        textAlign: 'center',
-        justifyContent: 'center'
-    },
-    nameText: {
-        textAlign: 'center'
-    },
-    dateText: {
-        textAlign: 'center'
-    },
-    image: {
-        width: 100, // Adjust as needed
-        height: 100, // Adjust as needed
-        borderRadius: 50, // Assuming it's a circular image
-    },
-    NameText: {
-        fontFamily: FontFamily.interRegular,
-        fontSize: FontSizes.xxxl,
-        color: Color.textThree,
-    },
-    CompText: {
-        fontFamily: FontFamily.interRegular,
+    textTwo: {
         fontSize: FontSizes.md,
-        color: Color.textThree,
+        color: Color.text
+    },
+    sideView: {
+        width: '10%',
+    },
+    middelView: {
+        width: '75%'
+    },
+    btnView: {
+        width: '15%'
     }
 })

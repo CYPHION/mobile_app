@@ -1,41 +1,59 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import Icon from 'react-native-vector-icons/Feather'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import MyCheckBox from './CheckBox'
-
-const GridTable = (props) => {
-    const { data, heading, isChecked, onToggle, showCheckBox, header } = props
 
 
+const Table = (prop) => {
+    const { list, status } = prop
+
+    let bgColor;
+    let textColor;
+
+    switch (status) {
+        case 'Accepted':
+            bgColor = Color.success
+            textColor = Color.text
+            break;
+
+        case 'Rejected':
+            bgColor = Color.error
+            textColor = Color.white
+            break;
+
+
+        default:
+            bgColor = Color.white
+            textColor = Color.text
+            break;
+    }
 
     return (
         <>
+
             <View style={styles.container}>
                 <View style={styles.innerView}>
-                    {!!header && <View style={[styles.header, styles.headerStyle]}>
-                        <Text style={styles.headingText}>{header}</Text>
-                        <Icon name='download' color={Color.iconColor} size={FontSizes.xxl} />
-                    </View>}
                     <View style={{ padding: 10 }}>
-
-                        {showCheckBox && <MyCheckBox isChecked={isChecked} onToggle={onToggle} />}
-                        {heading && <Text style={styles.headingText}>{heading}</Text>}
-                        {data && data.map((elem, index) => (
+                        {list.map((elem, index) => (
                             <View key={index} style={[styles.rowStyle, styles.header]}>
-                                <Text style={styles.textStyle}>{elem.name}</Text>
-                                <Text style={styles.textStyle}>{elem.value}</Text>
+                                <View style={{ gap: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                                    {elem.icon && elem.icon}
+                                    <Text style={styles.textStyle}>{elem.name}</Text>
+                                </View>
+                                <Text style={[styles.textStyle, { color: Color.textThree }]}>{elem.value}</Text>
                             </View>
                         ))}
                     </View>
+                    {status && <Text style={{ backgroundColor: bgColor, padding: 10, textAlign: 'center', color: textColor }}>
+                        {status}
+                    </Text>}
                 </View>
             </View>
         </>
     )
 }
 
-export default GridTable
+export default Table
 
 const styles = StyleSheet.create({
     container: {
@@ -55,8 +73,6 @@ const styles = StyleSheet.create({
     },
     rowStyle: {
         paddingVertical: 10,
-        borderBottomColor: Color.borderDivider,
-        borderBottomWidth: 1
     },
     textStyle: {
         fontFamily: FontFamily.interRegular,
