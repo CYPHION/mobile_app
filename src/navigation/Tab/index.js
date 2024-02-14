@@ -5,11 +5,11 @@ import UserIcon from 'react-native-vector-icons/FontAwesome';
 import ReceiptIcon from 'react-native-vector-icons/FontAwesome6';
 import CardIcon from 'react-native-vector-icons/Ionicons';
 import AnalyticsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Fee from '../../screens/Fee';
 import Home from '../../screens/Home';
 import Profile from '../../screens/Profile';
-import Receipt from '../../screens/Receipt';
-import ViewFeeReceipt from '../../screens/VIEW FEE RECEIPT';
+import ViewAttendance from '../../screens/ViewAttendance';
+import ViewFeeReceipt from '../../screens/ViewFeeReceipt';
+import ViewFess from '../../screens/ViewFees';
 import { Color } from '../../utils/color';
 
 const Tab = createBottomTabNavigator();
@@ -23,7 +23,7 @@ const TabNavigation = () => {
                 headerShown: false, // Hide header for all screens
             }}
         >
-            <Tab.Screen name="receipt" component={Receipt}
+            <Tab.Screen name="receipt" component={ViewFeeReceipt}
                 options={{
                     tabBarLabel: 'Receipt',
                     tabBarIcon: ({ color, size, focused }) => (
@@ -35,7 +35,7 @@ const TabNavigation = () => {
                     tabBarActiveTintColor: Color.iconColor
                 }}
             />
-            <Tab.Screen name="fee" component={Fee}
+            <Tab.Screen name="fee" component={ViewAttendance}
                 options={{
                     tabBarLabel: 'Fee',
                     tabBarIcon: ({ color, size, focused }) => (
@@ -59,7 +59,7 @@ const TabNavigation = () => {
                     tabBarActiveTintColor: Color.iconColor
                 }}
             />
-            <Tab.Screen name="analytics" component={ViewFeeReceipt}
+            <Tab.Screen name="analytics" component={ViewFess}
                 options={{
                     tabBarLabel: 'Analytics',
                     tabBarIcon: ({ color, size, focused }) => (
