@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import BellIcon from "react-native-vector-icons/Ionicons";
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { screenDimensions } from '../../utils/functions';
-import { ScrollView } from 'react-native-gesture-handler';
 
 
 const Data = [
@@ -74,25 +74,27 @@ const Notifications = () => {
     return (
         <>
             <ScrollView >
-                {Data.map((item, index) => (
-                    <View style={{ width: screenDimensions.width, padding: 5 }}>
-                        <View key={index} style={styles.notificationContainer}>
-                            <View style={styles.notificationContainers}>
-                                <View style={styles.bgIconColor}>
-                                    <BellIcon name="notifications-outline" size={FontSizes.xxl} color={Color.text} />
-                                </View>
-                                <View >
-                                    <Text ellipsizeMode="tail" numberOfLines={1} style={styles.notificationFont}>{item.notification}</Text>
-                                    <Text style={styles.notificationNameFont}>{item.name}</Text>
-                                </View>
+                <View style={{ backgroundColor: Color.white }}>
+                    {Data.map((item, index) => (
+                        <View key={index} style={{ width: screenDimensions.width, padding: 5 }}>
+                            <View key={index} style={styles.notificationContainer}>
+                                <View style={styles.notificationContainers}>
+                                    <View style={styles.bgIconColor}>
+                                        <BellIcon name="notifications-outline" size={FontSizes.xxl} color={Color.text} />
+                                    </View>
+                                    <View >
+                                        <Text ellipsizeMode="tail" numberOfLines={1} style={styles.notificationFont}>{item.notification}</Text>
+                                        <Text style={styles.notificationNameFont}>{item.name}</Text>
+                                    </View>
 
-                            </View>
-                            <View>
-                                <Text style={styles.notificationTime}>  {item.time}</Text>
+                                </View>
+                                <View>
+                                    <Text style={styles.notificationTime}>  {item.time}</Text>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                ))}
+                    ))}
+                </View>
             </ScrollView>
 
         </>
@@ -106,7 +108,7 @@ const styles = StyleSheet.create({
         backgroundColor: Color.white,
         borderRadius: 8,
         padding: 6,
-        elevation: 8,
+        elevation: 1,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.1, // Set a lower opacity for a subtle shadow
@@ -119,8 +121,8 @@ const styles = StyleSheet.create({
         elevation: 1,
         padding: 10,
         shadowColor: 'black',
-        shadowOpacity: 10,
-        shadowOffset: 10,
+        shadowOpacity: 2,
+        shadowOffset: 2,
         borderRadius: 5,
         alignItems: 'center'
     },

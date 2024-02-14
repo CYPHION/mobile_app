@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import FontAwsomeIcon from 'react-native-vector-icons/FontAwesome5';
 import MailIcon from 'react-native-vector-icons/Ionicons';
 import CustomButton from '../../components/base/CustomButton';
 import InputField from '../../components/base/InputField';
+import MyModal from '../../components/base/Modal';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { screenDimensions } from '../../utils/functions';
@@ -12,7 +13,7 @@ import { screenDimensions } from '../../utils/functions';
 
 
 const Profile = ({ navigation }) => {
-
+    const [open, setOpen] = useState(false)
     return (
         <ScrollView>
             <View style={{ backgroundColor: Color.white, overflow: 'scroll' }}>
@@ -35,7 +36,7 @@ const Profile = ({ navigation }) => {
                         </View>
                         <View style={[styles.middelView]}>
                             <InputField
-                                label={"Text"}
+                                label={"User Name"}
                                 inputStyle={{
                                     borderWidth: 0
                                 }}
@@ -59,7 +60,7 @@ const Profile = ({ navigation }) => {
                         </View>
                         <View style={[styles.middelView]}>
                             <InputField
-                                label={"Text"}
+                                label={"Email"}
                                 inputStyle={{
                                     borderWidth: 0
                                 }}
@@ -83,7 +84,7 @@ const Profile = ({ navigation }) => {
                         </View>
                         <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
                             <Text style={[styles.textTwo]}>Password</Text>
-                            <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'changePassword' })}>
+                            <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.push('root', { screen: 'changePassword' })}>
                                 <Text style={[styles.textTwo, { color: Color.textThree, paddingVertical: 10 }]}>
                                     Tap to change password
                                 </Text>
@@ -103,7 +104,7 @@ const Profile = ({ navigation }) => {
                         </View>
                         <View style={[styles.middelView]}>
                             <InputField
-                                label={"Text"}
+                                label={"Phone Number"}
                                 inputStyle={{
                                     borderWidth: 0
                                 }}
@@ -123,6 +124,7 @@ const Profile = ({ navigation }) => {
 
                 <View style={{ alignItems: 'center', marginTop: 10 }}>
                     <CustomButton
+                        onPress={() => setOpen(true)}
                         title="Logout"
                         variant='fill'
                         btnstyle={{ width: screenDimensions.width * 0.85 }}
@@ -130,6 +132,41 @@ const Profile = ({ navigation }) => {
                 </View>
 
             </View>
+            <MyModal
+                modalVisible={open}
+                setModalVisible={setOpen}
+                children={
+                    <View style={{ gap: 10 }}>
+                        <Text
+                            style={[
+                                styles.text,
+                                {
+                                    fontSize: FontSizes.lg,
+                                    color: Color.text,
+                                    fontFamily: FontFamily.medium,
+                                },
+                            ]}
+                        >
+                            Log Out?
+                        </Text>
+                        <Text style={[styles.text]}>Are you sure you want to logout?</Text>
+                        <View style={styles.btnView}>
+                            <CustomButton
+                                title={'Cancel'}
+                                btnstyle={{ paddingVertical: 4, backgroundColor: "#DDD" }}
+                                onPress={() => setOpen(false)}
+                                textStyle={{ color: Color.text }}
+                            />
+                            <CustomButton
+                                title={'Log Out'}
+                                variant={'fill'}
+                                btnstyle={{ paddingVertical: 4 }}
+                                onPress={() => console.log('logout')}
+                            />
+                        </View>
+                    </View>
+                }
+            />
         </ScrollView >
     )
 }
@@ -185,5 +222,12 @@ const styles = StyleSheet.create({
     },
     btnView: {
         width: '15%'
-    }
+    },
+    btnView: {
+        // marginTop: 15,
+        width: "100%",
+        justifyContent: "space-between",
+        // backgroundColor: 'red',
+        flexDirection: "row",
+    },
 })

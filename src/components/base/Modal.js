@@ -1,12 +1,10 @@
 import React from "react";
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Color } from "../../utils/color";
-import { FontFamily } from "../../utils/font";
-import { FontSizes } from "../../utils/font";
+import { FontFamily, FontSizes } from "../../utils/font";
 import { screenDimensions } from "../../utils/functions";
-import CustomButton from "./CustomButton";
 
-const Modal = (props) => {
+const MyModal = (props) => {
     const {
         modalVisible,
         setModalVisible,
@@ -15,6 +13,7 @@ const Modal = (props) => {
         cancelBtnLabel,
         doneBtnLabel,
         handleDone,
+        children
     } = props;
     const toggleModal = () => {
         setModalVisible(!modalVisible);
@@ -30,7 +29,7 @@ const Modal = (props) => {
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <Text
+                        {/* <Text
                             style={[
                                 styles.text,
                                 {
@@ -55,7 +54,8 @@ const Modal = (props) => {
                                 btnstyle={{ paddingVertical: 4 }}
                                 onPress={handleDone}
                             />
-                        </View>
+                        </View> */}
+                        {children}
                     </View>
                     {/* Backdrop */}
                     <TouchableOpacity style={styles.backdrop} onPress={toggleModal} />
@@ -105,4 +105,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Modal;
+export default MyModal;

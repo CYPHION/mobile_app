@@ -37,7 +37,9 @@ const Table = (prop) => {
                         {list.map((elem, index) => (
                             <View key={index} style={[styles.rowStyle, styles.header]}>
                                 <View style={{ gap: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    {elem.icon && elem.icon}
+                                    <View style={[styles.bgIconColor]}>
+                                        {elem.icon && elem.icon}
+                                    </View>
                                     <Text style={styles.textStyle}>{elem.name}</Text>
                                 </View>
                                 <Text style={[styles.textStyle, { color: Color.textThree }]}>{elem.value}</Text>
@@ -98,6 +100,19 @@ const styles = StyleSheet.create({
         color: Color.text,
         fontFamily: FontFamily.interMedium,
         fontSize: FontSizes.xl
-    }
+    },
+    bgIconColor: {
+        width: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: Color.white,
+        borderRadius: 8,
+        padding: 6,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1, // Set a lower opacity for a subtle shadow
+        shadowRadius: 2, // Set a lower radius for a less spread shadow
+    },
 
 })

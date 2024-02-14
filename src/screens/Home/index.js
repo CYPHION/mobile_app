@@ -98,7 +98,7 @@ const Home = ({ navigation }) => {
                         setValue={setOption}
                     />
                 </View>
-                <View style={{ backgroundColor: 'red', width: 370, height: 250 }}>
+                <View style={{ backgroundColor: 'red', width: screenDimensions.width, height: screenDimensions.height * 0.4 }}>
                     <Text style={{ color: 'white' }}>Map Area</Text>
                 </View>
             </View>
@@ -110,11 +110,11 @@ export default Home
 
 const styles = StyleSheet.create({
     profileContainer: {
-        paddingHorizontal: 10,
+        // paddingHorizontal: 10,
         backgroundColor: Color.white
     },
     profileRowContainer: {
-        paddingVertical: 10,
+        padding: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         position: 'absolute',
         top: 0,
-        right: 2
+        right: 2,
+        zIndex: 100
     }
 })
