@@ -1,13 +1,19 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import CardIcon from "react-native-vector-icons/AntDesign"
 import FilterIcon from 'react-native-vector-icons/FontAwesome'
-import Icon from "react-native-vector-icons/Ionicons"
+import CapIcon from 'react-native-vector-icons/FontAwesome5'
+import { default as BookIcon } from 'react-native-vector-icons/FontAwesome6'
+import { default as GridIcon, default as Icon } from "react-native-vector-icons/Ionicons"
+import TimeIcon from 'react-native-vector-icons/MaterialIcons'
 import CustomDatePicker from '../../components/base/CustomDatePicker'
 import Table from '../../components/base/Table'
 import TopbarWithGraph from '../../components/widget/TopbarWithGraph'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
+
+
 
 const ViewAttendance = () => {
 
@@ -16,14 +22,14 @@ const ViewAttendance = () => {
     const navigation = useNavigation()
 
     const list = [
-        { name: ' Department Name', value: 'Maths', icon: <Icon color={Color.primary} name='home' size={FontSizes.xl} /> },
-        { name: ' Subject', value: 'Algebra', icon: <Icon color={Color.primary} name='home' size={FontSizes.xl} /> },
-        { name: ' Type', value: 'Present', icon: <Icon color={Color.primary} name='home' size={FontSizes.xl} /> },
-        { name: ' Category', value: 'Regular lesson', icon: <Icon color={Color.primary} name='home' size={FontSizes.xl} /> },
-        { name: ' Teacher Name', value: 'Ahsan Iqbal', icon: <Icon color={Color.primary} name='home' size={FontSizes.xl} /> },
-        { name: ' Day', value: 'Mon 1, jun-2024', icon: <Icon color={Color.primary} name='home' size={FontSizes.xl} /> },
-        { name: ' Time', value: '03:30 PM - 05:00 PM', icon: <Icon color={Color.primary} name='home' size={FontSizes.xl} /> },
-        { name: ' Marked At', value: '5:29:10 AM', icon: <Icon color={Color.primary} name='home' size={FontSizes.xl} /> },
+        { name: ' Department Name', value: 'Maths', icon: <CardIcon color={Color.primary} name='idcard' size={FontSizes.lg} /> },
+        { name: ' Subject', value: 'Algebra', icon: <BookIcon color={Color.primary} name='book' size={FontSizes.lg} /> },
+        { name: ' Type', value: 'Present', icon: <GridIcon color={Color.primary} name='grid' size={FontSizes.lg} /> },
+        { name: ' Category', value: 'Regular lesson', icon: <CapIcon color={Color.primary} name='graduation-cap' size={FontSizes.lg} /> },
+        { name: ' Teacher Name', value: 'Ahsan Iqbal', icon: <Icon color={Color.primary} name='home' size={FontSizes.lg} /> },
+        { name: ' Day', value: 'Mon 1, jun-2024', icon: <BookIcon color={Color.primary} name='book' size={FontSizes.lg} /> },
+        { name: ' Time', value: '03:30 PM - 05:00 PM', icon: <TimeIcon color={Color.primary} name='timelapse' size={FontSizes.lg} /> },
+        { name: ' Marked At', value: '5:29:10 AM', icon: <CardIcon color={Color.primary} name='idcard' size={FontSizes.lg} /> },
 
     ]
 
@@ -32,6 +38,9 @@ const ViewAttendance = () => {
         {
             list,
 
+        },
+        {
+            list
         },
         {
             list
