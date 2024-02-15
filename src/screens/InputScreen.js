@@ -4,7 +4,6 @@ import CustomButton from '../components/base/CustomButton'
 import FlaotingTextInput from '../components/base/FlaotingTextInput'
 import InputField from '../components/base/InputField'
 import { Color } from '../utils/color'
-import { screenDimensions } from '../utils/functions'
 const InputScreen = () => {
     const [formData, setFormData] = useState({
         userName: '',
@@ -78,10 +77,6 @@ const InputScreen = () => {
                 value={formData.remarks}
                 label={"Remarks"}
                 multiline // if you want to use as a textArea, you can pass multiline=true
-                inputStyle={{ // here you can define styles of input field
-                    height: screenDimensions.height * 0.2, // its compulsory to give height and textAlignVertical : 'top' when you pass multiline true
-                    textAlignVertical: "top",
-                }}
                 error={"Password is Required"} // is you pass error msg it change its color to red
             />
             <InputField
@@ -90,10 +85,6 @@ const InputScreen = () => {
                 onChangeText={(text) => onChangeHandler('remarksTwo', text)}
                 value={formData.remarksTwo}
                 label={"Remarks"}
-                inputStyle={{
-                    height: screenDimensions.height * 0.2,
-                    textAlignVertical: "top",
-                }}
             />
         </View>
     )

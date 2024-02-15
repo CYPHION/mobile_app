@@ -34,7 +34,7 @@ export default function InputField(props) {
     return (
         <>
             <View style={styles.container}>
-                <Text
+                {label ? <Text
                     style={[
 
                         styles.label,
@@ -45,7 +45,7 @@ export default function InputField(props) {
                     ]}
                 >
                     {`${label} ${required ? "(Rquired)" : ""}`}
-                </Text>
+                </Text> : null}
                 <View style={styles.iconView}>
                     <TextInput
                         {...props}
@@ -63,6 +63,7 @@ export default function InputField(props) {
                                 ? { borderColor: Color.error }
                                 : { borderColor: Color.borderColor },
                             secureTextEntry && { paddingRight: 40 },
+                            multiline && { height: screenDimensions.height * 0.2, textAlignVertical: "top" },
                             { ...inputStyle },
                         ]}
                     />

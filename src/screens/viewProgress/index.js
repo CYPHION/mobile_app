@@ -1,15 +1,31 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { FontFamily, FontSizes } from '../../utils/font'
-import { Color } from '../../utils/color'
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FilterIcon from "react-native-vector-icons/FontAwesome";
+import CustomDatePicker from '../../components/base/CustomDatePicker';
+import DropdownComponent from '../../components/base/CustomDropDown';
 import GridTable from '../../components/base/GridTable';
+import { Color } from '../../utils/color';
+import { FontFamily, FontSizes } from '../../utils/font';
 
 
 
 const ViewProgress = () => {
 
-    const Data = [
+    const [open, setOpen] = useState(false);
+    const [selectedDate, setSelectedDate] = useState('');
+    const [option, setOption] = useState("");
+    const data = [
+        { name: "Item 1", value: "1" },
+        { name: "Item 2", value: "2" },
+        { name: "Item 3", value: "3" },
+        { name: "Item 4", value: "4" },
+        { name: "Item 5", value: "5" },
+        { name: "Item 6", value: "6" },
+        { name: "Item 7", value: "7" },
+        { name: "Item 8", value: "8" },
+    ];
+
+    const nestedArray = [
         {
             name: 'Year',
             value: 'Year 2'
@@ -55,43 +71,64 @@ const ViewProgress = () => {
     const items = [
         {
             header: 'test 1',
-            data: Data
+            data: nestedArray
         },
         {
             header: 'test 2 ',
-            data: Data
+            data: nestedArray
         },
 
     ]
 
+    const onDownloadClick = () => {
+        //when user click on download button
+        console.log('first')
+    }
+
+
     return (
         <ScrollView>
-
-            <View style={styles.viewChildrenContainer}>
-                <View style={{ paddingHorizontal: 10 }}>
-                    <Text style={[styles.NameText, styles.textFontFamily]}>Abdullah Khan</Text>
-                    <Text style={[styles.CompText, styles.textFontFamily]}>Year 2 - Weekly</Text>
-                </View>
-
-            </View>
-
-            <View style={styles.bgColor}>
-                <View>
-                    <Text style={styles.detailText}>Progress Report</Text>
-                </View>
-                <TouchableOpacity>
-                    <View>
-                        <FilterIcon name='filter' size={FontSizes.xl} color={Color.iconColor} />
-                    </View>
-                </TouchableOpacity>
-
-            </View>
-
             <View>
 
-                {items.map((elem, index) => (
-                    <GridTable header={elem.header} key={index} data={elem.data} />
-                ))}
+                <CustomDatePicker
+                    setSelectedDate={setSelectedDate}
+                    onToggle={() => setOpen(false)}
+                    isVisible={open}
+                    onDone={(date) => console.log(date)}
+                    Children={<DropdownComponent
+                        label={'Select Department'}
+                        disable={false}
+                        data={data}
+                        placeHolderText={"Parent"}
+                        value={option}
+                        setValue={setOption}
+                    />}
+                />
+
+                <View style={styles.viewChildrenContainer}>
+                    <View style={{ paddingHorizontal: 10 }}>
+                        <Text style={[styles.NameText, styles.textFontFamily]}>Abdullah Khan</Text>
+                        <Text style={[styles.CompText, styles.textFontFamily]}>Year 2 - Weekly</Text>
+                    </View>
+
+                </View>
+
+                <View style={[styles.bgColor, styles.container]}>
+                    <Text style={styles.detailText}>Student Details</Text>
+                    <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
+                        <View style={[styles.iconView]}>
+                            <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
+                        </View>
+                        <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View>
+
+                    {items.map((elem, index) => (
+                        <GridTable onDownloadClick={onDownloadClick} header={elem.header} key={index} data={elem.data} />
+                    ))}
+                </View>
             </View>
 
         </ScrollView>
@@ -119,13 +156,24 @@ const styles = StyleSheet.create({
     bgColor: {
         backgroundColor: Color.grayBackground,
         padding: 10,
+
+    },
+    container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
     },
     detailText: {
-        fontSize: FontSizes.lg,
+        fontSize: FontSizes.xl,
         color: Color.textThree,
         fontFamily: FontFamily.medium
-    }
+    },
+    iconView: {
+        backgroundColor: Color.primary,
+        padding: 5,
+        borderRadius: 4
+    },
+    textFontFamily: {
+        fontFamily: FontFamily.interRegular,
+    },
 })

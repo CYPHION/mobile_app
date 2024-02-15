@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DatePicker from "react-native-date-picker";
 import { Color } from "../../utils/color";
@@ -7,7 +7,7 @@ import { formattedDate, screenDimensions } from "../../utils/functions";
 import CustomButton from "./CustomButton";
 
 const CustomDatePicker = (props) => {
-    const { isVisible, onToggle, setSelectedDate, Children } = props;
+    const { isVisible, onToggle, Children, onDone } = props;
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [selectedDateType, setSelectedDateType] = useState("startDate");
@@ -55,12 +55,12 @@ const CustomDatePicker = (props) => {
         </TouchableOpacity>
     );
 
-    useEffect(() => {
-        setSelectedDate({
-            startDate: formattedDate(startDate, "MMM dd yyyy"),
-            endDate: formattedDate(endDate, "MMM dd yyyy"),
-        });
-    }, []);
+    // useEffect(() => {
+    //     setSelectedDate({
+    //         startDate: formattedDate(startDate, "MMM dd yyyy"),
+    //         endDate: formattedDate(endDate, "MMM dd yyyy"),
+    //     });
+    // }, []);
 
     return (
         <>
@@ -107,10 +107,10 @@ const CustomDatePicker = (props) => {
                                     variant={'fill'}
                                     btnstyle={{ paddingVertical: 2 }}
                                     onPress={() => {
-                                        setSelectedDate({
+                                        onDone({
                                             startDate: formattedDate(startDate, "MMM dd yyyy"),
                                             endDate: formattedDate(endDate, "MMM dd yyyy"),
-                                        });
+                                        })
                                         onToggle();
                                     }}
                                 />

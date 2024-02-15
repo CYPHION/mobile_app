@@ -1,7 +1,7 @@
+import React from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
-import { FontFamily, FontSizes } from '../../utils/font'
 import { Color } from '../../utils/color'
+import { FontFamily, FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
 
 const ViewAllStudents = () => {
@@ -62,8 +62,7 @@ const ViewAllStudents = () => {
                             <View style={styles.allStudentContainer}>
                                 <View style={styles.allStudentContainers}>
                                     <View >
-                                        {/* <Image resizeMode='contain' source={require('../../images/hamza.png')} style={styles.image} /> */}
-                                        <Image resizeMode='contain' source={elem.image} />
+                                        <Image resizeMode='contain' source={elem.image} style={styles.image} />
                                     </View>
                                     <View>
                                         <Text style={styles.nameFont}>{elem.name}</Text>

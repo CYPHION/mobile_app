@@ -1,81 +1,82 @@
-import { Button, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { FontFamily, FontSizes } from '../../utils/font'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import Idcard from "react-native-vector-icons/AntDesign"
+import Download from 'react-native-vector-icons/Feather'
+import BookIcon from "react-native-vector-icons/FontAwesome5"
+import CustomButton from '../../components/base/CustomButton'
 import { Color } from '../../utils/color'
-import { screenDimensions } from '../../utils/functions'
-
+import { FontFamily, FontSizes } from '../../utils/font'
 const HomeWork = () => {
 
     const Data = [
         {
-            name: "Homework Title ",
-            duration: 'Maths',
-            status: 'Active',
-
+            homeworkTitle: 'Maths',
+            expiryDate: '06-08-2024'
         },
         {
-            name: "Expiry Date",
-            duration: '06-02-2024',
-            status: 'Active',
-
+            homeworkTitle: 'Maths',
+            expiryDate: '06-08-2024',
+            url: 'jdhakjaskjf'
         },
         {
-            name: "Hassan Khan",
-            duration: 'Weekly',
-            status: 'Inactive',
-
+            homeworkTitle: 'Maths',
+            expiryDate: '06-08-2024'
         },
+
+
 
     ]
 
     return (
 
         <ScrollView>
-
-            <View style={styles.viewChildrenContainer}>
-                <View style={{ paddingHorizontal: 10 }}>
+            <View style={{ paddingBottom: 10, backgroundColor: Color.white }}>
+                <View style={styles.viewChildrenContainer}>
                     <Text style={[styles.NameText, styles.textFontFamily]}>Abdullah Khan</Text>
-                </View>
-
-                <View>
                     <Text style={[styles.CompText, styles.textFontFamily]}>(3)</Text>
                 </View>
-
-
+                <View style={{ paddingHorizontal: 10, gap: 10, marginTop: 10 }}>
+                    {
+                        Data.map((elem, index) => (
+                            <View key={index} style={styles.allStudentContainer}>
+                                <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
+                                    <View style={[styles.allStudentContainers, { gap: 15 }]} >
+                                        <View style={[styles.bgIconColor]}>
+                                            <Idcard name="idcard" size={FontSizes.xl} color={Color.iconColor} />
+                                        </View>
+                                        <Text style={styles.nameFont}>Homework Title</Text>
+                                    </View>
+                                    <Text style={styles.nameFont}>{elem.homeworkTitle}</Text>
+                                </View>
+                                <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
+                                    <View style={[styles.allStudentContainers, { gap: 15 }]} >
+                                        <View style={[styles.bgIconColor]}>
+                                            <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />
+                                        </View>
+                                        <Text style={styles.nameFont}>Expiry Date</Text>
+                                    </View>
+                                    <Text style={styles.nameFont}>{elem.expiryDate}</Text>
+                                </View>
+                                <View style={styles.btnStyle}>
+                                    {elem.url ?
+                                        <CustomButton
+                                            title="Open Link"
+                                            variant='fill'
+                                            rightIcon={<Download name='link' size={FontSizes.lg} color={Color.white} />}
+                                        />
+                                        :
+                                        <CustomButton
+                                            title="Download"
+                                            rightIcon={<Download name='download' size={FontSizes.lg} color={Color.white} />}
+                                            variant='fill'
+                                        />
+                                    }
+                                </View>
+                            </View>
+                        ))
+                    }
+                </View>
             </View>
-
-            {
-                Data.map((elem, index) => (
-                    <TouchableOpacity activeOpacity={0.9} key={index}>
-                        <View style={styles.allStudentContainer}>
-                            <View style={styles.allStudentContainers}>
-                                <View >
-                                    {/* <Image resizeMode='contain' source={require('../../images/hamza.png')} style={styles.image} /> */}
-                                    <Image resizeMode='contain' source={elem.image} />
-                                </View>
-                                <View>
-                                    <Text style={styles.nameFont}>{elem.name}</Text>
-                                    <Text style={styles.yearFont}> {elem.year}</Text>
-                                </View>
-                            </View>
-
-                            <View >
-                                <Text style={styles.weeklyText}> {elem.duration}</Text>
-                            </View>
-
-                            <View style={{ width: 130 }}>
-                                <Button title='Send' />
-                            </View>
-
-                        </View>
-
-
-                    </TouchableOpacity>
-                ))
-            }
-
-
-
         </ScrollView >
     )
 }
@@ -88,7 +89,8 @@ const styles = StyleSheet.create({
         padding: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: Color.grayBackground
     },
     textFontFamily: {
         fontFamily: FontFamily.interRegular,
@@ -102,15 +104,18 @@ const styles = StyleSheet.create({
         color: Color.text,
     },
     allStudentContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-        padding: 10,
-        elevation: 2,  // off set dena hai yahan 
+        padding: 15,
+        paddingVertical: 15,
+        elevation: 3,  // off set dena hai yahan 
         borderRadius: 10,
         borderColor: "black",
-        backgroundColor: Color.pureWhite,
-        marginTop: 10,
+        backgroundColor: Color.grayBackground,
+        // marginTop: 10,
+    },
+    allStudentContainers: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     nameFont: {
         fontFamily: FontFamily.interMedium,
@@ -122,25 +127,24 @@ const styles = StyleSheet.create({
         fontSize: FontSizes.md,
         color: Color.textThree
     },
-    activeStatus: {
-        paddingVertical: 2,
-        borderRadius: 12,
-        width: 90
+    btnStyle: {
+        paddingTop: 15,
+
     },
-    activeStatusText: {
-        textAlign: 'center',
-        fontFamily: FontFamily.interRegular,
-        fontSize: FontSizes.md,
-        color: Color.pureWhite
+
+    bgIconColor: {
+        width: 35,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: Color.white,
+        borderRadius: 8,
+        padding: 6,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1, // Set a lower opacity for a subtle shadow
+        shadowRadius: 2, // Set a lower radius for a less spread shadow
     },
-    weeklyText: {
-        fontFamily: FontFamily.interRegular,
-        fontSize: FontSizes.md,
-        color: Color.text,
-    },
-    image: {
-        width: screenDimensions.width * 0.18,
-        height: screenDimensions.width * 0.18,
-        borderRadius: screenDimensions.width * 0.18 * 0.5
-    }
+
+
 })

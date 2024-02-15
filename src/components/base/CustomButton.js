@@ -17,6 +17,8 @@ const CustomButton = (props) => {
         variant,
         btnstyle,
         textStyle,
+        leftIcon,
+        rightIcon
     } = props;
 
     return (
@@ -28,10 +30,12 @@ const CustomButton = (props) => {
             onPress={onPress}
         >
             {disabled ? <ActivityIndicator size="small" color={variant === 'fill' ? Color.white : Color.primary} /> : ""}
+            {leftIcon}
             <Text style={[styles.buttonText, variant === 'fill' ? { color: Color.white } : { color: Color.primary }, { ...textStyle }]}>
                 {" "}
                 {title}
             </Text>
+            {rightIcon}
         </TouchableOpacity>
     );
 };
@@ -45,7 +49,7 @@ const styles = StyleSheet.create({
         gap: 5,
         borderRadius: 4,
         margin: 5,
-        padding: 15,
+        padding: 10,
     },
     buttonText: {
         fontSize: FontSizes.md,

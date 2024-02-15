@@ -6,7 +6,7 @@ import { FontFamily, FontSizes } from '../../utils/font'
 import MyCheckBox from './CheckBox'
 
 const GridTable = (props) => {
-    const { data, heading, isChecked, onToggle, showCheckBox, header } = props
+    const { data, heading, isChecked, onToggle, showCheckBox, header, onDownloadClick } = props
 
 
 
@@ -15,8 +15,8 @@ const GridTable = (props) => {
             <View style={styles.container}>
                 <View style={styles.innerView}>
                     {!!header && <View style={[styles.header, styles.headerStyle]}>
-                        <Text style={styles.headingText}>{header}</Text>
-                        <Icon name='download' color={Color.iconColor} size={FontSizes.xxl} />
+                        <Text style={[styles.headingText, { color: Color.white }]}>{header}</Text>
+                        <Icon name='download' onPress={onDownloadClick} color={Color.white} size={FontSizes.xxl} />
                     </View>}
                     <View style={{ padding: 10 }}>
 
