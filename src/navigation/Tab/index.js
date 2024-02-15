@@ -5,8 +5,8 @@ import UserIcon from 'react-native-vector-icons/FontAwesome';
 import ReceiptIcon from 'react-native-vector-icons/FontAwesome6';
 import CardIcon from 'react-native-vector-icons/Ionicons';
 import AnalyticsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Analytics from '../../screens/Analytics';
 import Home from '../../screens/Home';
-import HomeWork from '../../screens/HomeWork';
 import Profile from '../../screens/Profile';
 import Receipt from '../../screens/Receipt';
 import ViewAttendance from '../../screens/ViewAttendance';
@@ -59,7 +59,7 @@ const TabNavigation = () => {
                     tabBarActiveTintColor: Color.iconColor
                 }}
             />
-            <Tab.Screen name="analytics" component={HomeWork}
+            <Tab.Screen name="analytics" component={Analytics}
                 options={{
                     tabBarLabel: 'Analytics',
                     tabBarIcon: ({ color, size, focused }) => (

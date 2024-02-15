@@ -1,12 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ChangePasswordScreen from '../../screens/ChangePassword';
 import Compensation from '../../screens/Compensation';
 import Dashboard from '../../screens/Dashboard';
 import LeaveApplication from '../../screens/LeaveApplication';
-import Notifications from '../../screens/Notifications';
 import Testimonials from '../../screens/Testimonials';
 import ViewAppointment from '../../screens/ViewAppointment';
 import ViewChildren from '../../screens/ViewChildren';
+import ChangePasswordScreen from '../../screens/changePassword';
+import Notifications from '../../screens/notifications';
 const Stack = createNativeStackNavigator();
 
 export function MyStack() {
