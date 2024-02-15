@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Icon from "react-native-vector-icons/Ionicons"
@@ -5,6 +6,9 @@ import { Color } from '../../../utils/color'
 import { FontFamily, FontSizes } from '../../../utils/font'
 import { screenDimensions } from '../../../utils/functions'
 const TopbarWithGraph = () => {
+    const navigation = useNavigation()
+
+
     return (
         <>
             <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between' }}>

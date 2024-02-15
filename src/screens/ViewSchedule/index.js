@@ -1,16 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { ScrollView } from 'react-native'
-import { FontFamily, FontSizes } from '../../utils/font'
-import { Color } from '../../utils/color'
+import { ScrollView, StyleSheet, View } from 'react-native'
+import Idcard from "react-native-vector-icons/AntDesign"
+import CalendarTimeIcon from "react-native-vector-icons/FontAwesome"
+import BookIcon from "react-native-vector-icons/FontAwesome5"
+import CalendarIcon from "react-native-vector-icons/FontAwesome6"
+import GridIcon from "react-native-vector-icons/Ionicons"
+import CalendarCheckIcon from "react-native-vector-icons/MaterialCommunityIcons"
+import TimeIcon from "react-native-vector-icons/MaterialIcons"
 import Table from '../../components/base/Table'
-import BookIcon from "react-native-vector-icons/FontAwesome5";
-import Idcard from "react-native-vector-icons/AntDesign";
-import CalendarIcon from "react-native-vector-icons/FontAwesome6";
-import TimeIcon from "react-native-vector-icons/MaterialIcons";
-import CalendarCheckIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import CalendarTimeIcon from "react-native-vector-icons/FontAwesome";
-import GridIcon from "react-native-vector-icons/Ionicons";
+import TopbarWithGraph from '../../components/widget/TopbarWithGraph'
+import { Color } from '../../utils/color'
+import { FontSizes } from '../../utils/font'
 
 
 
@@ -69,26 +69,20 @@ const ViewSchedule = () => {
     ]
     return (
         <ScrollView>
-
-            <View style={styles.viewChildrenContainer}>
-                <View>
-                    <Text style={[styles.NameText, styles.textFontFamily]}>Abdullah Khan</Text>
-                    <Text style={[styles.CompText, styles.textFontFamily]}>Year 2 - Weekly</Text>
-                </View>
-
-                <View style={{ backgroundColor: Color.primary, marginTop: 20, width: 370, height: 180, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ color: "black", fontSize: 20, }}>Map Area</Text>
-                </View>
-            </View>
-
-
             <View>
-                {item.map((elem, index) => (
-                    <Table
-                        key={index}
-                        list={elem.list}
-                    />
-                ))}
+
+
+                <TopbarWithGraph />
+
+
+                <View>
+                    {item.map((elem, index) => (
+                        <Table
+                            key={index}
+                            list={elem.list}
+                        />
+                    ))}
+                </View>
             </View>
         </ScrollView>
     )
@@ -101,16 +95,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 10,
     },
-    textFontFamily: {
-        fontFamily: FontFamily.interRegular,
-    },
-    NameText: {
-        fontSize: FontSizes.xxl,
-        color: Color.text,
-    },
-    CompText: {
-        fontSize: FontSizes.md,
-        color: Color.text,
-    },
+
 
 })

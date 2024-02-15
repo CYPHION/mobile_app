@@ -63,6 +63,7 @@ export default function InputField(props) {
                                 ? { borderColor: Color.error }
                                 : { borderColor: Color.borderColor },
                             secureTextEntry && { paddingRight: 40 },
+                            multiline && { height: screenDimensions.height * 0.2, textAlignVertical: "top" },
                             { ...inputStyle },
                         ]}
                     />

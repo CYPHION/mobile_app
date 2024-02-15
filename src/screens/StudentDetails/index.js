@@ -1,9 +1,9 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { FontFamily, FontSizes } from '../../utils/font'
-import { Color } from '../../utils/color'
-import { screenDimensions } from '../../utils/functions'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import GridTable from '../../components/base/GridTable'
+import TopbarWithGraph from '../../components/widget/TopbarWithGraph'
+import { Color } from '../../utils/color'
+import { FontFamily, FontSizes } from '../../utils/font'
 
 
 
@@ -67,14 +67,7 @@ const StudentDetails = () => {
         <ScrollView>
 
             <View style={styles.viewChildrenContainer}>
-                <View style={{ paddingHorizontal: 10 }}>
-                    <Text style={[styles.NameText, styles.textFontFamily]}>Abdullah Khan</Text>
-                    <Text style={[styles.CompText, styles.textFontFamily]}>Year 2 - Weekly</Text>
-                </View>
-
-                <View style={{ backgroundColor: Color.primary, marginTop: 20, width: screenDimensions.width, height: 180, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ color: "black", fontSize: 20, }}>Map Area</Text>
-                </View>
+                <TopbarWithGraph />
 
                 <View style={styles.bgColor}>
                     <Text style={styles.detailText}>Student Details</Text>
@@ -98,17 +91,6 @@ const styles = StyleSheet.create({
     viewChildrenContainer: {
         // paddingHorizontal: 10,
         paddingVertical: 10,
-    },
-    textFontFamily: {
-        fontFamily: FontFamily.interRegular,
-    },
-    NameText: {
-        fontSize: FontSizes.xxl,
-        color: Color.text,
-    },
-    CompText: {
-        fontSize: FontSizes.md,
-        color: Color.text,
     },
     bgColor: {
         backgroundColor: Color.grayBackground,

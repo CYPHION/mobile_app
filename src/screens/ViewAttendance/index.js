@@ -12,7 +12,6 @@ import { FontFamily, FontSizes } from '../../utils/font'
 const ViewAttendance = () => {
 
 
-    const [selectedDate, setSelectedDate] = useState('')
     const [open, setOpen] = useState(false)
     const navigation = useNavigation()
 
@@ -44,20 +43,6 @@ const ViewAttendance = () => {
     return (
         <ScrollView>
             <View style={styles.viewChildrenContainer}>
-                {/* <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <View>
-                        <Text style={[styles.NameText, styles.textFontFamily]}>Abdullah Khan</Text>
-                        <Text style={[styles.CompText, styles.textFontFamily]}>Year 2 - Weekly</Text>
-                    </View>
-                    <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
-                        <View style={styles.badge}></View>
-                        <Icon name="notifications-outline" size={FontSizes.xxxl} />
-                    </TouchableOpacity>
-                </View>
-
-                <View style={{ backgroundColor: Color.primary, marginTop: 20, width: screenDimensions.width, height: 180, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ color: "black", fontSize: 20, }}>Map Area</Text>
-                </View> */}
                 <TopbarWithGraph />
 
                 <View style={[styles.bgColor, styles.container]}>
@@ -79,7 +64,7 @@ const ViewAttendance = () => {
             <CustomDatePicker
                 isVisible={open}
                 onToggle={() => setOpen(false)}
-                setSelectedDate={setSelectedDate}
+                onDone={(date) => console.log(date)}
             />
         </ScrollView>
     )
@@ -110,7 +95,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     bgColor: {
-        backgroundColor: Color.backgroundColor,
+        backgroundColor: Color.grayBackground,
         padding: 10,
 
     },
