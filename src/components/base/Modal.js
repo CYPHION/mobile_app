@@ -8,11 +8,6 @@ const MyModal = (props) => {
     const {
         modalVisible,
         setModalVisible,
-        heading,
-        label,
-        cancelBtnLabel,
-        doneBtnLabel,
-        handleDone,
         children
     } = props;
     const toggleModal = () => {
@@ -29,32 +24,6 @@ const MyModal = (props) => {
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        {/* <Text
-                            style={[
-                                styles.text,
-                                {
-                                    fontSize: FontSizes.lg,
-                                    color: Color.text,
-                                    fontFamily: FontFamily.medium,
-                                },
-                            ]}
-                        >
-                            {heading}
-                        </Text>
-                        <Text style={[styles.text]}>{label}</Text>
-                        <View style={styles.btnView}>
-                            <CustomButton
-                                title={cancelBtnLabel}
-                                btnstyle={{ paddingVertical: 4, backgroundColor: "#DDD" }}
-                                onPress={toggleModal}
-                            />
-                            <CustomButton
-                                title={doneBtnLabel}
-                                variant={'fill'}
-                                btnstyle={{ paddingVertical: 4 }}
-                                onPress={handleDone}
-                            />
-                        </View> */}
                         {children}
                     </View>
                     {/* Backdrop */}

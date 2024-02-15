@@ -1,14 +1,11 @@
-import { Button, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { FontFamily, FontSizes } from '../../utils/font'
-import { Color } from '../../utils/color'
-import Icon from "react-native-vector-icons/Ionicons"
-import { screenDimensions } from '../../utils/functions'
-import DownloadIcon from 'react-native-vector-icons/AntDesign';
-import BookIcon from "react-native-vector-icons/FontAwesome5";
-import Idcard from "react-native-vector-icons/AntDesign";
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import Idcard from "react-native-vector-icons/AntDesign"
+import Download from 'react-native-vector-icons/Feather'
+import BookIcon from "react-native-vector-icons/FontAwesome5"
 import CustomButton from '../../components/base/CustomButton'
-
+import { Color } from '../../utils/color'
+import { FontFamily, FontSizes } from '../../utils/font'
 const HomeWork = () => {
 
     const Data = [
@@ -18,7 +15,8 @@ const HomeWork = () => {
         },
         {
             homeworkTitle: 'Maths',
-            expiryDate: '06-08-2024'
+            expiryDate: '06-08-2024',
+            url: 'jdhakjaskjf'
         },
         {
             homeworkTitle: 'Maths',
@@ -60,7 +58,19 @@ const HomeWork = () => {
                                     <Text style={styles.nameFont}>{elem.expiryDate}</Text>
                                 </View>
                                 <View style={styles.btnStyle}>
-                                    <CustomButton btnstyle={{ paddingVertical: 10 }} title="Download" variant='fill' />
+                                    {elem.url ?
+                                        <CustomButton
+                                            title="Open Link"
+                                            variant='fill'
+                                            rightIcon={<Download name='link' size={FontSizes.lg} color={Color.white} />}
+                                        />
+                                        :
+                                        <CustomButton
+                                            title="Download"
+                                            rightIcon={<Download name='download' size={FontSizes.lg} color={Color.white} />}
+                                            variant='fill'
+                                        />
+                                    }
                                 </View>
                             </View>
                         ))

@@ -34,7 +34,7 @@ export default function InputField(props) {
     return (
         <>
             <View style={styles.container}>
-                <Text
+                {label ? <Text
                     style={[
 
                         styles.label,
@@ -45,7 +45,7 @@ export default function InputField(props) {
                     ]}
                 >
                     {`${label} ${required ? "(Rquired)" : ""}`}
-                </Text>
+                </Text> : null}
                 <View style={styles.iconView}>
                     <TextInput
                         {...props}
