@@ -3,10 +3,9 @@ import { StyleSheet, Text, View } from 'react-native'
 import Icon from 'react-native-vector-icons/Feather'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import MyCheckBox from './CheckBox'
 
 const GridTable = (props) => {
-    const { data, heading, isChecked, onToggle, showCheckBox, header, onDownloadClick } = props
+    const { data, heading, CheckboxChild, header, onDownloadClick } = props
 
 
 
@@ -20,7 +19,8 @@ const GridTable = (props) => {
                     </View>}
                     <View style={{ padding: 10 }}>
 
-                        {showCheckBox && <MyCheckBox isChecked={isChecked} onToggle={onToggle} />}
+                        {/* {showCheckBox && <MyCheckBox isChecked={isChecked} onToggle={onToggle} />} */}
+                        {CheckboxChild && CheckboxChild}
                         {heading && <Text style={styles.headingText}>{heading}</Text>}
                         {data && data.map((elem, index) => (
                             <View key={index} style={[styles.rowStyle, styles.header]}>
