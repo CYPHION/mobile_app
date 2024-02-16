@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/Ionicons"
 import { Color } from '../../../utils/color'
 import { FontFamily, FontSizes } from '../../../utils/font'
 import { screenDimensions } from '../../../utils/functions'
+import Graph from '../../base/GraphComponent'
 const TopbarWithGraph = () => {
     const navigation = useNavigation()
 
@@ -23,7 +24,7 @@ const TopbarWithGraph = () => {
             </View>
 
             <View style={{ backgroundColor: Color.primary, marginTop: 20, width: screenDimensions.width, height: 180, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ color: "black", fontSize: 20, }}>Map Area</Text>
+                <Graph />
             </View>
         </>
     )
