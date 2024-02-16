@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { StatusBar } from "react-native";
 import MyDrawer from "./src/navigation/Drawer";
 import Main from "./src/screens/Main";
+import { Color } from "./src/utils/color";
 
 
 const App = () => {
@@ -8,6 +10,11 @@ const App = () => {
 
   return (
     <>
+      <StatusBar
+        animated={true}
+        backgroundColor={Color.white}
+        barStyle={'dark-content'}
+      />
       {show ? <MyDrawer /> : <Main setShow={setShow} />}
     </>
   )

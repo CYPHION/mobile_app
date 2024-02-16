@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ChangePasswordScreen from '../../screens/ChangePassword';
 import Compensation from '../../screens/Compensation';
-import Dashboard from '../../screens/Dashboard';
+import Home from '../../screens/Home';
 import LeaveApplication from '../../screens/LeaveApplication';
 import Notifications from '../../screens/Notifications';
 import Testimonials from '../../screens/Testimonials';
@@ -17,7 +17,7 @@ export function MyStack() {
             }}
         >
             {/* <Stack.Screen name="tabs" component={TabNavigation} /> */}
-            <Stack.Screen name="dashboard" component={Dashboard} />
+            <Stack.Screen name="home" component={Home} />
             <Stack.Screen name="viewChildren" component={ViewChildren} />
             <Stack.Screen name="viewAppointment" component={ViewAppointment} />
             <Stack.Screen name="leaveApplication" component={LeaveApplication} />
