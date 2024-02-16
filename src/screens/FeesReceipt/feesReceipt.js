@@ -4,7 +4,7 @@ import GridTable from '../../components/base/GridTable'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 
-const ViewFeeReceipt = () => {
+const FeesReceipt = () => {
 
     const items = [
         { name: 'Receipt No.', value: 55 },
@@ -17,9 +17,10 @@ const ViewFeeReceipt = () => {
 
     return (
         <ScrollView>
-            <View style={{ paddingHorizontal: 10, backgroundColor: Color.white }}>
+            <View style={{ paddingHorizontal: 10 }}>
                 <View style={[styles.bgColor, styles.container]}>
                     <Text style={styles.detailText}>Student Fee Receipt </Text>
+
                 </View>
                 <View>
                     <GridTable data={items}
@@ -56,7 +57,7 @@ const ViewFeeReceipt = () => {
     )
 }
 
-export default ViewFeeReceipt
+export default FeesReceipt
 
 const styles = StyleSheet.create({
     container: {

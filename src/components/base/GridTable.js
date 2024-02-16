@@ -23,7 +23,8 @@ const GridTable = (props) => {
                         {showCheckBox && <MyCheckBox isChecked={isChecked} onToggle={onToggle} />}
                         {heading && <Text style={styles.headingText}>{heading}</Text>}
                         {data && data.map((elem, index) => (
-                            <View key={index} style={[styles.rowStyle, styles.header]}>
+                            <View key={index} style={[styles.rowStyle, styles.header,
+                            { borderBottomWidth: index === data.length - 1 ? 0 : 1 }]}>
                                 <Text style={styles.textStyle}>{elem.name}</Text>
                                 <Text style={styles.textStyle}>{elem.value}</Text>
                             </View>
