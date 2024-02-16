@@ -23,11 +23,11 @@ const LeaveApplication = () => {
             value: "10/8/2024",
         },
         {
-            name: "agblsuyuil syufy sfap",
-            value: "jfksafh.ajkkflas;jk",
+            name: "Subject",
+            value: "Subject Value ",
         },
         {
-            name: "hfsgksabjhfuklagklsakfa",
+            name: "Fees",
             value: "10/8/2024",
         },
         {
@@ -59,8 +59,6 @@ const LeaveApplication = () => {
             item,
         },
     ]
-
-
 
     const renderScreen = () => (
         <View>
