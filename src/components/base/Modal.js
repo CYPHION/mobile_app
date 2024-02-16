@@ -8,7 +8,8 @@ const MyModal = (props) => {
     const {
         modalVisible,
         setModalVisible,
-        children
+        children,
+        modalStyles
     } = props;
     const toggleModal = () => {
         setModalVisible(!modalVisible);
@@ -23,7 +24,7 @@ const MyModal = (props) => {
                 onRequestClose={toggleModal}
             >
                 <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
+                    <View style={[styles.modalContent, { ...modalStyles }]}>
                         {children}
                     </View>
                     {/* Backdrop */}

@@ -21,7 +21,7 @@ const Analytics = () => {
                     </View>
                     <TouchableOpacity activeOpacity={0.7}>
                         <View style={styles.badge}></View>
-                        <Icon name="notifications" color={Color.textTwo} size={FontSizes.xxxl} />
+                        <Icon name="bell" color={Color.textTwo} size={FontSizes.xxxl} />
                     </TouchableOpacity>
                 </View>
 

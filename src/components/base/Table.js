@@ -37,9 +37,11 @@ const Table = (prop) => {
                         {list.map((elem, index) => (
                             <View key={index} style={[styles.rowStyle, styles.header]}>
                                 <View style={{ gap: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    <View style={[styles.bgIconColor]}>
-                                        {elem.icon && elem.icon}
-                                    </View>
+                                    {elem.icon &&
+                                        <View style={[styles.bgIconColor]}>
+                                            {elem.icon}
+                                        </View>
+                                    }
                                     <Text style={styles.textStyle}>{elem.name}</Text>
                                 </View>
                                 <Text style={[styles.textStyle, { color: Color.textThree }]}>{elem.value}</Text>
