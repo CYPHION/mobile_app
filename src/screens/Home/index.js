@@ -63,10 +63,7 @@ const Home = ({ navigation }) => {
             <View style={styles.profileContainer}>
                 <View style={[styles.profileRowContainer]}>
                     <View>
-                        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.openDrawer()} style={{ position: 'relative' }}>
-                            <Icon name="home" color="black" size={224} />
 
-                        </TouchableOpacity>
                         <Text style={[styles.NameText, styles.textFontFamily]}>Hi, Hamza</Text>
                         <Text style={[styles.CompText, styles.textFontFamily]}>Welcome to Prime Tuition</Text>
                     </View>
@@ -79,7 +76,7 @@ const Home = ({ navigation }) => {
                     <View>
                         <Text style={[styles.CompText]}>Enrolled Children (3)</Text>
                     </View>
-                    <TouchableOpacity activeOpacity={0.7}>
+                    <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'children' })}>
                         <Text style={[styles.CompText]}>see all</Text>
                     </TouchableOpacity>
                 </View>

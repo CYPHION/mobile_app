@@ -17,10 +17,10 @@ const Drawer = createDrawerNavigator();
 const DrawerList = [
     { label: 'Home', navigateTo: 'home', icon: 'right', mainRoute: 'tabs' },
     { label: 'My Profile', navigateTo: 'profile', icon: 'right', mainRoute: 'tabs' },
-    { label: 'View Children', navigateTo: 'viewChildren', icon: 'right', mainRoute: 'root' },
+    { label: 'View Children', navigateTo: 'children', icon: 'right', mainRoute: 'root' },
     { label: 'View Appointment', navigateTo: 'viewAppointment', icon: 'right', mainRoute: 'root' },
     { label: 'Leave Application', navigateTo: 'leaveApplication', icon: 'right', mainRoute: 'root' },
-    { label: 'Pay Fee', navigateTo: '', icon: 'right', mainRoute: 'root' },
+    { label: 'Pay Fee', navigateTo: 'payFees', icon: 'right', mainRoute: 'root' },
     { label: 'Compensation', navigateTo: 'compensation', icon: 'right', mainRoute: 'root' },
     { label: 'Testimonials', navigateTo: 'testimonials', icon: 'right', mainRoute: 'root' },
     { label: 'Logout', navigateTo: '', icon: 'right' },
