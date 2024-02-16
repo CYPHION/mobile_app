@@ -36,7 +36,7 @@ const GridTable = (props) => {
     )
 }
 
-export default GridTable
+export default GridTable;
 
 const styles = StyleSheet.create({
     container: {

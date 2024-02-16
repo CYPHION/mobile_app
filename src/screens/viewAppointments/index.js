@@ -42,7 +42,7 @@ const ViewAppointments = () => {
                     <View style={[styles.iconView]}>
                         <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
                     </View>
-                    <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
+                    <Text style={[styles.CompText, styles.textFontFamily,]}>Select Date</Text>
                 </TouchableOpacity>
             </View>
 
@@ -83,6 +83,9 @@ const styles = StyleSheet.create({
     textFontFamily: {
         fontFamily: FontFamily.interRegular,
     },
+    CompText: {
+        color: Color.text
+    }
 
 
 })

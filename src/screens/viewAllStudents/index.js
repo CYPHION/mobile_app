@@ -4,14 +4,15 @@ import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
 
-const ViewAllStudents = () => {
+const ViewAllStudents = ({ navigation }) => {
     const Data = [
         {
             name: "Abdullah Khan",
             year: 'Year 2',
             duration: 'Weekly',
             status: 'Active',
-            image: require('../../images/hamza.png')
+            image: require('../../images/hamza.png'),
+            navigateTo: 'viewStudent'
         },
         {
             name: "Abdullah Khan",
@@ -19,6 +20,7 @@ const ViewAllStudents = () => {
             duration: 'Monthly',
             status: 'Active',
             image: require("../../images/hamza.png"),
+            navigateTo: 'viewStudent'
         },
         {
             name: "Hassan Khan",
@@ -26,6 +28,7 @@ const ViewAllStudents = () => {
             duration: 'Weekly',
             status: 'Inactive',
             image: require("../../images/hamza.png"),
+            navigateTo: 'viewStudent'
         },
 
     ]
@@ -58,7 +61,7 @@ const ViewAllStudents = () => {
 
                 {
                     Data.map((elem, index) => (
-                        <TouchableOpacity activeOpacity={0.9} key={index}>
+                        <TouchableOpacity activeOpacity={0.9} key={index} onPress={() => navigation.navigate(elem.navigateTo)}>
                             <View style={styles.allStudentContainer}>
                                 <View style={styles.allStudentContainers}>
                                     <View >
@@ -127,6 +130,7 @@ const styles = StyleSheet.create({
         borderColor: "black",
         backgroundColor: Color.pureWhite,
         marginTop: 10,
+        marginBottom: 5
     },
     nameFont: {
         fontFamily: FontFamily.interMedium,

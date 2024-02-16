@@ -3,6 +3,7 @@ import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from "react-native-vector-icons/Ionicons";
 import DropdownComponent from '../../components/base/CustomDropDown';
+import Graph from '../../components/base/GraphComponent';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { screenDimensions } from '../../utils/functions';
@@ -63,6 +64,7 @@ const Home = ({ navigation }) => {
             <View style={styles.profileContainer}>
                 <View style={[styles.profileRowContainer]}>
                     <View>
+
                         <Text style={[styles.NameText, styles.textFontFamily]}>Hi, Hamza</Text>
                         <Text style={[styles.CompText, styles.textFontFamily]}>Welcome to Prime Tuition</Text>
                     </View>
@@ -75,7 +77,7 @@ const Home = ({ navigation }) => {
                     <View>
                         <Text style={[styles.CompText]}>Enrolled Children (3)</Text>
                     </View>
-                    <TouchableOpacity activeOpacity={0.7}>
+                    <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'children' })}>
                         <Text style={[styles.CompText]}>see all</Text>
                     </TouchableOpacity>
                 </View>
@@ -98,8 +100,8 @@ const Home = ({ navigation }) => {
                         setValue={setOption}
                     />
                 </View>
-                <View style={{ backgroundColor: 'red', width: screenDimensions.width, height: screenDimensions.height * 0.4 }}>
-                    <Text style={{ color: 'white' }}>Map Area</Text>
+                <View style={{ width: screenDimensions.width, height: screenDimensions.height * 0.4 }}>
+                    <Graph />
                 </View>
             </View>
         </ScrollView>

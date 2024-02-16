@@ -9,39 +9,39 @@ import TopbarWithGraph from '../../components/widget/TopbarWithGraph';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 
-const ViewChildren = () => {
+const ViewChildren = ({ navigation }) => {
 
 
     const items = [
         {
             label: 'View Student Details',
             icon: <DetaiIcon name="insert-chart-outlined" size={FontSizes.xl} color={Color.iconColor} />,
-            path: ''
+            path: 'studentDetail'
         },
         {
             label: 'View Shedule ',
             icon: <CalendarIcon name="calendar-month" size={FontSizes.xl} color={Color.iconColor} />,
-            path: ''
+            path: 'studentSchedule'
         },
         {
             label: 'View Attendace',
             icon: <CardIcon name="idcard" size={FontSizes.xl} color={Color.iconColor} />,
-            path: ''
+            path: 'studentAttendance'
         },
         {
             label: 'View Fees',
             icon: <CreditCardIcon name="credit-card-multiple-outline" size={FontSizes.xl} color={Color.iconColor} />,
-            path: ''
+            path: 'studentFee'
         },
         {
             label: 'Homework',
             icon: <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />,
-            path: ''
+            path: 'studentHomework'
         },
         {
             label: 'Progress Report ',
             icon: <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />,
-            path: ''
+            path: 'studentReport'
         },
     ]
 
@@ -55,7 +55,7 @@ const ViewChildren = () => {
                 <View style={{ gap: 30, marginTop: 10, paddingHorizontal: 10 }}>
 
                     {items.map((elem, index) => (
-                        <TouchableOpacity key={index} activeOpacity={0.7}>
+                        <TouchableOpacity key={index} activeOpacity={0.7} onPress={() => navigation.navigate(elem.path)}>
                             <View style={[styles.viewChildernStaclList, { paddingVertical: 10 }]}>
                                 <View style={styles.viewChildernStaclList}>
                                     <View>
