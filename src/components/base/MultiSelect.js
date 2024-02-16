@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
     },
     dropdown: {
+        marginTop: 10,
         height: screenDimensions.fontScale * 40,
         borderColor: Color.borderColor,
         borderWidth: 1,
