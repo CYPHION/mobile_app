@@ -3,6 +3,7 @@ import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from "react-native-vector-icons/Ionicons";
 import DropdownComponent from '../../components/base/CustomDropDown';
+import Graph from '../../components/base/GraphComponent';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { screenDimensions } from '../../utils/functions';
@@ -99,8 +100,8 @@ const Home = ({ navigation }) => {
                         setValue={setOption}
                     />
                 </View>
-                <View style={{ backgroundColor: 'red', width: screenDimensions.width, height: screenDimensions.height * 0.4 }}>
-                    <Text style={{ color: 'white' }}>Map Area</Text>
+                <View style={{ width: screenDimensions.width, height: screenDimensions.height * 0.4 }}>
+                    <Graph />
                 </View>
             </View>
         </ScrollView>

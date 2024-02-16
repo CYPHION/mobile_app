@@ -5,11 +5,11 @@ import UserIcon from 'react-native-vector-icons/FontAwesome';
 import ReceiptIcon from 'react-native-vector-icons/FontAwesome6';
 import CardIcon from 'react-native-vector-icons/Ionicons';
 import AnalyticsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Graph from '../../components/base/GraphComponent';
 import Analytics from '../../screens/Analytics';
+import FeeCollection from '../../screens/FeeCollection';
+import Home from '../../screens/Home';
 import Profile from '../../screens/Profile';
 import Receipt from '../../screens/Receipt';
-import ViewSchedule from '../../screens/ViewSchedule';
 import { Color } from '../../utils/color';
 
 const Tab = createBottomTabNavigator();
@@ -35,7 +35,7 @@ const TabNavigation = () => {
                     tabBarActiveTintColor: Color.iconColor
                 }}
             />
-            <Tab.Screen name="fee" component={Graph}
+            <Tab.Screen name="fee" component={FeeCollection}
                 options={{
                     tabBarLabel: 'Fee',
                     tabBarIcon: ({ color, size, focused }) => (
@@ -47,7 +47,7 @@ const TabNavigation = () => {
                     tabBarActiveTintColor: Color.iconColor
                 }}
             />
-            <Tab.Screen name="home" component={ViewSchedule}
+            <Tab.Screen name="home" component={Home}
                 options={{
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ color, size, focused }) => (
