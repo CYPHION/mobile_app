@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { useDispatch } from 'react-redux'
 import CustomButton from '../../components/base/CustomButton'
 import FlaotingTextInput from '../../components/base/FlaotingTextInput'
+import { handleLogin } from '../../store/slice/user'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
@@ -14,10 +16,14 @@ const LoginScreen = (prop) => {
         password: ''
     })
 
+    const [isLoading, setIsLoading] = useState(false)
+
     const [error, setError] = useState({
         username: '',
         password: '',
     })
+
+    const dipatch = useDispatch()
 
     const onChangeHandler = (name, text) => {
         setFormData(prevFormData => ({
@@ -33,18 +39,24 @@ const LoginScreen = (prop) => {
     };
 
     const handleSubmit = () => {
+        setIsLoading(true)
         if (formData.username.toLowerCase().trim() !== '' && formData.username.toLowerCase() === 'admin@gmail.com') {
-            console.log('correct email')
             if (formData.password.trim() == '123456') {
-                prop.setShow(true)
+                const userData = {
+                    email: formData.username,
+                }
+                dipatch(handleLogin(userData))
+                setIsLoading(false)
             } else {
-                console.log('passwordError')
                 setError(prev => ({ ...prev, password: "Incorrect Password" }))
+                setIsLoading(false)
+
             }
         } else {
-            console.log('error')
             setError(prev => ({ ...prev, username: "Incorrect username" }))
             setError(prev => ({ ...prev, password: "Enter Password" }))
+            setIsLoading(false)
+
         }
     }
 
@@ -135,7 +147,7 @@ const LoginScreen = (prop) => {
                             <CustomButton
                                 btnstyle={{ width: screenDimensions.width * 0.8 }}
                                 variant={"fill"}
-                                disabled={false}
+                                disabled={isLoading}
                                 title={"Login"}
                                 onPress={() => handleSubmit()}
                             />

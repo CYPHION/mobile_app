@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useRef, useState } from 'react';
 import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native'; // Import Image component
 import AppIntroSlider from 'react-native-app-intro-slider';
@@ -34,8 +35,9 @@ const IntroSlider = (props) => {
     const sliderRef = useRef(null);
     const onSlideChange = (index, num) => {
         setProgressWidth(33.3 * (index + 1))
-        console.log(index + 1, num)
     }
+
+
 
     const renderItem = ({ item }) => {
         return (
@@ -76,7 +78,7 @@ const IntroSlider = (props) => {
     )
 
     const renderDoneButton = () => (
-        <View style={[styles.flexClass, { margin: 5, backgroundColor: Color.primary, borderRadius: 6, padding: 15 }]}>
+        <View style={[styles.flexClass, { margin: 5, backgroundColor: Color.primary, borderRadius: 6, padding: 15 }]} >
             <Text style={{ fontFamily: FontFamily.interSemiBold, fontSize: FontSizes.md, color: Color.white }} >
                 Done
             </Text>
@@ -114,7 +116,10 @@ const IntroSlider = (props) => {
                 renderNextButton={renderNextButton}
                 renderSkipButton={renderSkipButton}
                 renderDoneButton={renderDoneButton}
-                onDone={() => props.setShowApp(true)}
+                onDone={() => {
+                    props.setShowApp(true)
+                    AsyncStorage.setItem('intro', JSON.stringify(true));
+                }}
                 onSlideChange={onSlideChange}
             />
         </>

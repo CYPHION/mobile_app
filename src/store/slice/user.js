@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createSlice } from '@reduxjs/toolkit';
 import { logoutUser } from '../thunk';
 
@@ -12,14 +13,17 @@ export const appUsersSlice = createSlice({
   reducers: {
     handleLogin: (state, action) => {
       state.data = action.payload
+      AsyncStorage.setItem('userData', JSON.stringify(action.payload));
     },
     handleLogout: (state, action) => {
       state.data = initialState.data;
-    }
+      AsyncStorage.removeItem('userData');
+    },
   },
   extraReducers: builder => {
     builder.addCase(logoutUser.fulfilled, (state, _action) => {
       state.data = initialState.data;
+      AsyncStorage.removeItem('userData');
     })
   }
 })
