@@ -21,7 +21,8 @@ const Graph = () => {
                                     Math.random() * 100,
                                     Math.random() * 100
                                 ],
-                                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,  // Custom color for the line
+                                strokeWidth: 2,
+                                color: (opacity = 1) => `rgba(18, 55, 42, 1)`,
                             },
                             {
                                 data: [
@@ -34,10 +35,10 @@ const Graph = () => {
                                     Math.random() * 80,
 
                                 ],
-                                strokeWidth: 3,
+                                strokeWidth: 2,
                                 r: "7",
-                                stroke: Color.error,
-                                color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`,  // Custom color for the line
+                                stroke: Color.primary,
+                                color: (opacity = 1) => `rgba(13, 146, 118, 1)`,
 
                             },
                             // Add more datasets for additional lines if needed
@@ -45,6 +46,7 @@ const Graph = () => {
                     }}
                     width={Dimensions.get("window").width} // from react-native
                     height={200}
+                    withShadow={false}
                     yAxisLabel="£"
                     yAxisSuffix="k"
                     yAxisInterval={2} // optional, defaults to 1
@@ -56,18 +58,18 @@ const Graph = () => {
                         backgroundGradientToOpacity: 0.5,
                         fillShadowGradientFrom: 'transparent', // Turn off shadows by setting to transparent
                         decimalPlaces: 2,
-                        color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`, // Default color for the lines
+                        color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`, // Default color for the lines
                         labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                         style: {
                             borderRadius: 16
                         },
-                        // propsForDots: {
-                        //     r: "4",
-                        //     strokeWidth: "1",
-                        //     stroke: Color.error,
-                        //     fill: 'transparent',
+                        propsForDots: {
+                            r: "3.5",
+                            strokeWidth: "0.5",
+                            stroke: Color.black,
+                            fill: 'white',
 
-                        // }
+                        }
                     }}
                     // bezier
                     style={{

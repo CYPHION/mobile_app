@@ -70,7 +70,7 @@ const Home = ({ navigation }) => {
                     </View>
                     <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
                         <View style={styles.badge}></View>
-                        <Icon name="notifications-outline" size={FontSizes.xxxl} />
+                        <Icon name="notifications-outline" size={FontSizes.xxxl} color={Color.black} />
                     </TouchableOpacity>
                 </View>
                 <View style={[styles.profileRowContainer]}>

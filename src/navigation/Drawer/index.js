@@ -1,6 +1,6 @@
 import { DrawerContentScrollView, createDrawerNavigator } from '@react-navigation/drawer';
-import { DrawerActions, useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
+import { CommonActions, DrawerActions, useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AntIcon from 'react-native-vector-icons/AntDesign';
@@ -20,7 +20,7 @@ const DrawerList = [
     { label: 'View Children', navigateTo: 'children', icon: 'right', mainRoute: 'root' },
     { label: 'View Appointment', navigateTo: 'viewAppointment', icon: 'right', mainRoute: 'root' },
     { label: 'Leave Application', navigateTo: 'leaveApplication', icon: 'right', mainRoute: 'root' },
-    { label: 'Pay Fee', navigateTo: 'payFees', icon: 'right', mainRoute: 'root' },
+    { label: 'Pay Fee', navigateTo: 'fee', icon: 'right', mainRoute: 'tabs' },
     { label: 'Compensation', navigateTo: 'compensation', icon: 'right', mainRoute: 'root' },
     { label: 'Testimonials', navigateTo: 'testimonials', icon: 'right', mainRoute: 'root' },
     { label: 'Logout', navigateTo: '', icon: 'right' },
@@ -127,7 +127,20 @@ function CustomDrawerContent(props) {
 }
 
 
-function MyDrawer() {
+function MyDrawer({ old }) {
+    const navigation = useNavigation();
+
+
+
+    useEffect(() => {
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'tabs', params: { screen: 'home' } }],
+            }),
+        );
+    }, [old]);
+
     return (
 
         <Drawer.Navigator
