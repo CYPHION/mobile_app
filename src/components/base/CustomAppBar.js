@@ -3,7 +3,7 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { Color } from '../../utils/color';
-import { FontSizes } from '../../utils/font';
+import { FontFamily, FontSizes } from '../../utils/font';
 
 const CustomAppBar = ({ title }) => {
     const navigation = useNavigation();
@@ -14,10 +14,10 @@ const CustomAppBar = ({ title }) => {
 
     return (
         <View style={{ flexDirection: 'row', height: 60, alignItems: 'center', }}>
-            <TouchableOpacity onPress={handleGoBack} style={{ paddingHorizontal: 5 }}>
-                <Icon name="left" size={20} color={Color.black} />
+            <TouchableOpacity onPress={handleGoBack} style={{ paddingHorizontal: 15 }}>
+                <Icon name="arrowleft" size={22} color={Color.black} />
             </TouchableOpacity>
-            <Text style={{ color: Color.black, fontSize: FontSizes.xl }}>{title}</Text>
+            <Text style={{ color: Color.black, fontSize: FontSizes.xl, fontFamily: FontFamily.interMedium, paddingLeft: 18 }}>{title}</Text>
         </View>
     );
 };

@@ -29,8 +29,16 @@ const ChildrenStack = () => {
         initialRouteName='childrenView'
         screenOptions={screenOptionss}
     >
-        <Stack.Screen name="childrenView" component={ViewAllStudents} />
-        <Stack.Screen name="viewStudent" component={ViewChildren} />
+        <Stack.Screen name="childrenView" component={ViewAllStudents} options={{
+            headerShown: true,
+            header: () => <CustomAppBar title={'Childrens'} />
+
+        }} />
+        <Stack.Screen name="viewStudent" component={ViewChildren} options={{
+            headerShown: true,
+            header: () => <CustomAppBar title={'Abdullah Khan'} />
+
+        }} />
         <Stack.Screen name="studentDetail" component={StudentDetails} options={{
             headerShown: true,
             headerTitle: 'View Student Detail',

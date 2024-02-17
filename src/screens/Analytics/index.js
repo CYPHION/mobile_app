@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import FilterIcon from 'react-native-vector-icons/FontAwesome'
 import Pound from "react-native-vector-icons/FontAwesome5"
 import Icon from "react-native-vector-icons/Fontisto"
+import CustomDatePicker from '../../components/base/CustomDatePicker'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
@@ -10,6 +11,10 @@ import { screenDimensions } from '../../utils/functions'
 
 
 const Analytics = () => {
+
+    const [open, setOpen] = useState(false)
+
+
     return (
         <ScrollView>
             <View style={styles.viewChildrenContainer}>
@@ -27,6 +32,7 @@ const Analytics = () => {
 
                 <View style={[styles.bgColor, styles.container]}>
                     <Text style={styles.detailText}>Analytics</Text>
+
                     <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
                         <View style={[styles.iconView]}>
                             <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
@@ -95,6 +101,12 @@ const Analytics = () => {
                 </View>
 
             </View>
+
+            <CustomDatePicker
+                isVisible={open}
+                onToggle={() => setOpen(false)}
+                onDone={(date) => console.log(date)}
+            />
 
         </ScrollView>
     )

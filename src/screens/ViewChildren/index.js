@@ -3,7 +3,9 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import CardIcon from "react-native-vector-icons/AntDesign";
 import BookIcon from "react-native-vector-icons/FontAwesome5";
-import { default as CreditCardIcon, default as StackIcon } from "react-native-vector-icons/MaterialCommunityIcons";
+
+import StackIcon from "react-native-vector-icons/AntDesign";
+import { default as CreditCardIcon } from "react-native-vector-icons/MaterialCommunityIcons";
 import { default as CalendarIcon, default as DetaiIcon } from "react-native-vector-icons/MaterialIcons";
 import TopbarWithGraph from '../../components/widget/TopbarWithGraph';
 import { Color } from '../../utils/color';
@@ -67,7 +69,7 @@ const ViewChildren = ({ navigation }) => {
                                     </View>
                                 </View>
                                 <View>
-                                    <StackIcon name="greater-than" size={FontSizes.lg} color={Color.iconColor} />
+                                    <StackIcon name="right" size={FontSizes.xl} color={Color.iconColor} />
                                 </View>
                             </View>
                         </TouchableOpacity>
