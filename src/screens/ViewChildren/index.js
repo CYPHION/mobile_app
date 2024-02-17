@@ -31,7 +31,8 @@ const ViewChildren = ({ navigation }) => {
         {
             label: 'View Fees',
             icon: <CreditCardIcon name="credit-card-multiple-outline" size={FontSizes.xl} color={Color.iconColor} />,
-            path: 'studentFee'
+            path: 'fee',
+            mainRoute: 'tabs'
         },
         {
             label: 'Homework',

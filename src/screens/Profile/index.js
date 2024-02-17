@@ -84,7 +84,7 @@ const Profile = ({ navigation }) => {
                         </View>
                         <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
                             <Text style={[styles.textTwo]}>Password</Text>
-                            <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'changePassword' })}>
+                            <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('changePassword')}>
                                 <Text style={[styles.textTwo, { color: Color.textThree, paddingVertical: 10 }]}>
                                     Tap to change password
                                 </Text>
