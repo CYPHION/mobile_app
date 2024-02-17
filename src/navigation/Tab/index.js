@@ -125,18 +125,18 @@ const TabNavigation = ({ old }) => {
                 }}
             />
             <Tab.Screen
-                name="profile"
+                name="profiles"
                 component={ProfileStack}
                 options={{
                     tabBarLabel: 'Profile',
                     tabBarIcon: ({ color, size, focused }) => (
                         <UserIcon
                             name="user-circle"
-                            color={focused ? Color.iconColor : color}
+                            color={focused ? Color.primary : color}
                             size={size}
                         />
                     ),
-                    tabBarActiveTintColor: Color.iconColor,
+                    tabBarActiveTintColor: Color.primary,
 
                 }}
             />

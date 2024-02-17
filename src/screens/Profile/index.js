@@ -3,9 +3,11 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import FontAwsomeIcon from 'react-native-vector-icons/FontAwesome5';
 import MailIcon from 'react-native-vector-icons/Ionicons';
+import { useDispatch } from 'react-redux';
 import CustomButton from '../../components/base/CustomButton';
 import InputField from '../../components/base/InputField';
 import MyModal from '../../components/base/Modal';
+import { handleLogout } from '../../store/slice/user';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { screenDimensions } from '../../utils/functions';
@@ -14,6 +16,8 @@ import { screenDimensions } from '../../utils/functions';
 
 const Profile = ({ navigation }) => {
     const [open, setOpen] = useState(false)
+    const dipatch = useDispatch()
+
     return (
         <ScrollView>
             <View style={{ backgroundColor: Color.white, overflow: 'scroll' }}>
@@ -164,7 +168,10 @@ const Profile = ({ navigation }) => {
                                 title={'Log Out'}
                                 variant={'fill'}
                                 btnstyle={{ paddingVertical: 4 }}
-                                onPress={() => console.log('logout')}
+                                onPress={() => {
+                                    dipatch(handleLogout())
+                                    setOpen(!open)
+                                }}
                             />
                         </View>
                     </View>
