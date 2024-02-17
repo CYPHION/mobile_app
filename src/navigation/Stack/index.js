@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AddTestimonial from '../../screens/AddTestimonial';
 import ChangePasswordScreen from '../../screens/ChangePassword';
 import Compensation from '../../screens/Compensation';
 import Fee from '../../screens/Fee';
@@ -34,6 +35,11 @@ export function MyStack() {
             <Stack.Screen name="studentDetail" component={StudentDetails} options={{
                 headerShown: true,
                 headerTitle: 'View Student Detail',
+
+            }} />
+            <Stack.Screen name="addTestimonial" component={AddTestimonial} options={{
+                headerShown: true,
+                headerTitle: 'Testimonials',
 
             }} />
             <Stack.Screen name="studentSchedule" component={ViewSchedule} options={{

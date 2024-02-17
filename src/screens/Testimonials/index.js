@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -9,7 +10,7 @@ import { screenDimensions } from '../../utils/functions'
 
 
 const Testimonials = () => {
-
+    const navigation = useNavigation()
     const data = [
         {
             name: 'Helena Moore',
@@ -75,6 +76,7 @@ const Testimonials = () => {
                 variant='fill'
                 btnstyle={styles.btnStyle}
                 leftIcon={<Icon name='pencil' color={Color.white} size={FontSizes.md} />}
+                onPress={() => navigation.navigate('root', { screen: 'addTestimonial' })}
             />
             <ScrollView>
                 <View style={{ zIndex: 1 }}>
