@@ -72,10 +72,10 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <ReceiptIcon
                             name="receipt"
-                            color={focused ? Color.iconColor : color}
+                            color={focused ? Color.primary : color}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.iconColor,
+                    tabBarActiveTintColor: Color.primary,
                     headerShown: true,
                     headerTitle: 'View Fee Receipt'
                 }}
@@ -86,10 +86,10 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <CardIcon
                             name="card"
-                            color={focused ? Color.iconColor : color}
+                            color={focused ? Color.primary : color}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.iconColor,
+                    tabBarActiveTintColor: Color.primary,
                     headerShown: true,
                     headerTitle: 'Student Fees'
 
@@ -101,10 +101,10 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <Icon
                             name="home"
-                            color={focused ? Color.iconColor : color}
+                            color={focused ? Color.primary : color}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.iconColor
+                    tabBarActiveTintColor: Color.primary
                 }}
             />
             <Tab.Screen name="analytics" component={Analytics}
@@ -113,10 +113,10 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <AnalyticsIcon
                             name="signal-cellular-3"
-                            color={focused ? Color.iconColor : color}
+                            color={focused ? Color.primary : color}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.iconColor,
+                    tabBarActiveTintColor: Color.primary,
 
                 }}
             />
@@ -126,10 +126,10 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <UserIcon
                             name="user-circle"
-                            color={focused ? Color.iconColor : color}
+                            color={focused ? Color.primary : color}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.iconColor
+                    tabBarActiveTintColor: Color.primary
                 }}
             />
         </Tab.Navigator>

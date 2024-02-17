@@ -3,7 +3,6 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Color } from '../../../utils/color'
 import { FontFamily, FontSizes } from '../../../utils/font'
-import { screenDimensions } from '../../../utils/functions'
 import Graph from '../../base/GraphComponent'
 const TopbarWithGraph = () => {
     const navigation = useNavigation()
@@ -21,10 +20,7 @@ const TopbarWithGraph = () => {
                     <Icon name="notifications" color={Color.textTwo} size={FontSizes.xxxl} />
                 </TouchableOpacity> */}
             </View>
-
-            <View style={{ backgroundColor: Color.primary, marginTop: 20, width: screenDimensions.width, height: 180, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                <Graph />
-            </View>
+            <Graph />
         </>
     )
 }
@@ -53,5 +49,5 @@ const styles = StyleSheet.create({
         top: 0,
         right: 2,
         zIndex: 100
-    }
+    },
 })

@@ -9,6 +9,7 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome"; // Or your preferred icon library
 import { Color } from "../../utils/color";
 import { FontFamily, FontSizes } from "../../utils/font";
+import { GlobalStyles } from "../../utils/globalStyles";
 
 const AccordionItem = (props) => {
     const { total, data, expanded, onToggle, date, studentName, children } = props;
@@ -34,7 +35,7 @@ const AccordionItem = (props) => {
                 }}
             >
                 <View
-                    style={[styles.accordionHeader, expanded && { borderBottomWidth: 1 }]}
+                    style={[styles.accordionHeader, GlobalStyles.p_10, expanded && { borderBottomWidth: 1 }]}
                 >
                     <View>
                         <Text style={styles.accordionTitle}>{date}</Text>
@@ -61,7 +62,7 @@ const AccordionItem = (props) => {
                 </View>
             </TouchableOpacity>
             {expanded && (
-                <View style={styles.accordionContent}>
+                <View style={[styles.accordionContent, GlobalStyles.p_10]}>
                     {/* {data && data?.map((elem, index) => (
                         <View key={index} style={styles.contentView}>
                             <Text style={[styles.contentItem]}>{elem.name}</Text>
@@ -85,9 +86,7 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
     accordionHeader: {
-        padding: 10,
         borderColor: Color.borderColorTwo,
-        padding: 10,
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
@@ -104,7 +103,6 @@ const styles = StyleSheet.create({
     },
     accordionContent: {
         gap: 5,
-        padding: 10,
     },
     accordionTitleHeading: {
         color: Color.textThree,

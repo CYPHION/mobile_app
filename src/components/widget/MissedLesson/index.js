@@ -4,6 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { Color } from '../../../utils/color'
 import { FontFamily, FontSizes } from '../../../utils/font'
 import { screenDimensions } from '../../../utils/functions'
+import { GlobalStyles } from '../../../utils/globalStyles'
 import CustomButton from '../../base/CustomButton'
 import InputField from '../../base/InputField'
 import MyModal from '../../base/Modal'
@@ -59,7 +60,7 @@ const MissedLesson = () => {
                 children={ModalContent()}
             />
             {activeScreen ?
-                <View style={{ padding: 10 }}>
+                <View style={GlobalStyles.p_10}>
                     {/* <InputField
                         label={"Main Id"}
                         inputMode={"numeric"}

@@ -7,6 +7,7 @@ import CustomButton from '../../components/base/CustomButton'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
+import { GlobalStyles } from '../../utils/globalStyles'
 
 
 const Testimonials = () => {
@@ -81,13 +82,13 @@ const Testimonials = () => {
             <ScrollView>
                 <View style={{ zIndex: 1 }}>
 
-                    <View style={[styles.bgColor, styles.container]}>
-                        <Text style={styles.detailText}>Availible Reviews</Text>
+                    <View style={[GlobalStyles.headerStyles]}>
+                        <Text style={GlobalStyles.headerTextStyle}>Availible Reviews</Text>
                     </View>
 
-                    <View style={{ padding: 10, gap: 15 }}>
+                    <View style={[GlobalStyles.p_10, { gap: 15 }]}>
                         {data.map((elem, index) => (
-                            <View key={index} style={styles.card}>
+                            <View key={index} style={[styles.card, GlobalStyles.p_10]}>
                                 <Text style={[styles.nameText]}>{elem.name}</Text>
                                 <View style={{ flexDirection: 'row', gap: 6 }}>
                                     <Text style={styles.textTwo}>({elem.type})</Text>
@@ -109,25 +110,8 @@ const styles = StyleSheet.create({
     main: {
         backgroundColor: Color.white,
     },
-    container: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        // backgroundColor: 'pink'
-    },
-    bgColor: {
-        backgroundColor: Color.grayBackground,
-        padding: 10,
-
-    },
-    detailText: {
-        fontSize: FontSizes.xl,
-        color: Color.text,
-        fontFamily: FontFamily.medium
-    },
     card: {
         backgroundColor: Color.grayBackground,
-        padding: 10,
         borderRadius: 10,
     },
     nameText: {

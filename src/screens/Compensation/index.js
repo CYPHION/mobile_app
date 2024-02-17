@@ -48,7 +48,6 @@ export default Compensation
 const styles = StyleSheet.create({
     main: {
         backgroundColor: Color.white,
-        // padding: 10
     },
     tabBtn: {
         paddingVertical: 10,

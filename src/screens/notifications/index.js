@@ -5,6 +5,7 @@ import BellIcon from "react-native-vector-icons/Ionicons";
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { screenDimensions } from '../../utils/functions';
+import { GlobalStyles } from '../../utils/globalStyles';
 
 
 const Data = [
@@ -74,10 +75,10 @@ const Notifications = () => {
     return (
         <>
             <ScrollView >
-                <View style={{ backgroundColor: Color.white }}>
+                <View style={GlobalStyles.p_10}>
                     {Data.map((item, index) => (
-                        <View key={index} style={{ width: screenDimensions.width, padding: 5 }}>
-                            <View key={index} style={styles.notificationContainer}>
+                        <View key={index} style={{ width: '100%', padding: 5 }}>
+                            <View key={index} style={[styles.notificationContainer, GlobalStyles.p_10]}>
                                 <View style={styles.notificationContainers}>
                                     <View style={styles.bgIconColor}>
                                         <BellIcon name="notifications-outline" size={FontSizes.xxl} color={Color.text} />
@@ -119,7 +120,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: Color.white,
         elevation: 1,
-        padding: 10,
         shadowColor: 'black',
         shadowOpacity: 2,
         shadowOffset: 2,

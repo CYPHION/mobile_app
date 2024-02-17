@@ -7,8 +7,9 @@ import GridTable from '../../components/base/GridTable'
 import InputField from '../../components/base/InputField'
 import TopbarWithGraph from '../../components/widget/TopbarWithGraph'
 import { Color } from '../../utils/color'
-import { FontFamily, FontSizes } from '../../utils/font'
+import { FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
+import { GlobalStyles } from '../../utils/globalStyles'
 
 const ViewFess = () => {
     const [formData, setFormData] = useState({
@@ -48,11 +49,11 @@ const ViewFess = () => {
         <ScrollView>
             <View style={{ paddingVertical: 10, backgroundColor: Color.white }}>
                 <TopbarWithGraph />
-                <View style={[styles.bgColor, styles.container]}>
-                    <Text style={styles.detailText}>Student Details</Text>
+                <View style={[GlobalStyles.headerStyles]}>
+                    <Text style={GlobalStyles.headerTextStyle}>Student Details</Text>
                 </View>
                 {isActive ? <>
-                    <View style={[styles.inputView]}>
+                    <View style={[GlobalStyles.p_10]}>
                         <InputField
                             label={"Payment type"}
                             inputMode={"text"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
@@ -81,16 +82,16 @@ const ViewFess = () => {
                             onChangeText={(text) => onChangeHandler('remarks', text)}
                         />
                     </View>
-                    <View style={[styles.bgColor, styles.container]}>
-                        <Text style={styles.detailText}>Charges</Text>
-                        <Text style={styles.detailText}>Total</Text>
+                    <View style={[GlobalStyles.headerStyles]}>
+                        <Text style={GlobalStyles.headerTextStyle}>Charges</Text>
+                        <Text style={GlobalStyles.headerTextStyle}>Total</Text>
                     </View>
                     <View>
                         <GridTable data={items} />
                     </View>
-                    <View style={[styles.bgColor, styles.container]}>
-                        <Text style={styles.detailText}>Total Charges</Text>
-                        <Text style={styles.detailText}>&pound;528</Text>
+                    <View style={[GlobalStyles.headerStyles]}>
+                        <Text style={GlobalStyles.headerTextStyle}>Total Charges</Text>
+                        <Text style={GlobalStyles.headerTextStyle}>&pound;528</Text>
                     </View>
                     <View style={[styles.btnView]}>
 
@@ -118,25 +119,7 @@ const ViewFess = () => {
 export default ViewFess
 
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        // backgroundColor: 'pink'
-    },
-    bgColor: {
-        backgroundColor: Color.grayBackground,
-        padding: 10,
 
-    },
-    detailText: {
-        fontSize: FontSizes.xl,
-        color: Color.text,
-        fontFamily: FontFamily.medium
-    },
-    inputView: {
-        padding: 10
-    },
     btnView: {
         paddingHorizontal: 10,
         paddingVertical: 15,

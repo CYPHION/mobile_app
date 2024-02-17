@@ -8,6 +8,7 @@ import TimeIcon from 'react-native-vector-icons/MaterialIcons';
 import Table from '../../components/base/Table';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
+import { GlobalStyles } from '../../utils/globalStyles';
 
 
 const ViewAppointments = () => {
@@ -36,16 +37,16 @@ const ViewAppointments = () => {
 
     return (
         <ScrollView>
-            <View style={[styles.bgColor, styles.container]}>
-                <Text style={styles.detailText}>Appointment</Text>
+
+            <View style={[GlobalStyles.headerStyles]}>
+                <Text style={GlobalStyles.headerTextStyle}>Analytics</Text>
                 <TouchableOpacity activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
                     <View style={[styles.iconView]}>
                         <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
                     </View>
-                    <Text style={[styles.CompText, styles.textFontFamily,]}>Select Date</Text>
+                    <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
                 </TouchableOpacity>
             </View>
-
             <View>
                 {items.map((elem, index) => (
                     <Table key={index} status={elem.status} list={elem.list} />

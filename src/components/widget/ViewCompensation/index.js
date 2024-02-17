@@ -1,8 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { Color } from '../../../utils/color'
-import { FontFamily, FontSizes } from '../../../utils/font'
+import { GlobalStyles } from '../../../utils/globalStyles'
 import GridTable from '../../base/GridTable'
 
 
@@ -54,10 +53,10 @@ const ViewCompensation = () => {
 
     return (
         <ScrollView>
-            <View style={[styles.bgColor, styles.container]}>
-                <Text style={styles.detailText}>Abdullah Khan </Text>
+            <View style={[GlobalStyles.headerStyles]}>
+                <Text style={GlobalStyles.headerTextStyle}>Abdullah Khan </Text>
             </View>
-            <View style={{ padding: 10 }}>
+            <View style={GlobalStyles.p_10}>
                 {tableData.map((elem, index) => (
                     <GridTable
                         data={elem.item}
@@ -72,20 +71,5 @@ const ViewCompensation = () => {
 export default ViewCompensation
 
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: 10
-    },
-    detailText: {
-        fontSize: FontSizes.xl,
-        color: Color.text,
-        fontFamily: FontFamily.medium
-    },
-    bgColor: {
-        backgroundColor: Color.grayBackground,
-        padding: 10,
 
-    },
 })

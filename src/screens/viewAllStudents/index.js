@@ -121,10 +121,12 @@ const styles = StyleSheet.create({
         gap: 20,
     },
     allStudentContainer: {
+        paddingVertical: 10,
+        paddingHorizontal: 15,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-end',
-        padding: 10,
+        // padding: 10,
         elevation: 2,  // off set dena hai yahan 
         borderRadius: 10,
         borderColor: "black",

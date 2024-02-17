@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
+import { GlobalStyles } from '../../utils/globalStyles'
 
 
 const Table = (prop) => {
@@ -33,7 +34,7 @@ const Table = (prop) => {
 
             <View style={styles.container}>
                 <View style={styles.innerView}>
-                    <View style={{ padding: 10 }}>
+                    <View style={[GlobalStyles.p_10]}>
                         {list.map((elem, index) => (
                             <View key={index} style={[styles.rowStyle, styles.header]}>
                                 <View style={{ gap: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
@@ -48,7 +49,7 @@ const Table = (prop) => {
                             </View>
                         ))}
                     </View>
-                    {status && <Text style={{ backgroundColor: bgColor, padding: 10, textAlign: 'center', color: textColor }}>
+                    {status && <Text style={[{ backgroundColor: bgColor, textAlign: 'center', color: textColor }, GlobalStyles.p_10]}>
                         {status}
                     </Text>}
                 </View>
@@ -92,11 +93,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
-    },
-    headerStyle: {
-        backgroundColor: Color.primary,
-        width: '100%',
-        padding: 10
     },
     headingText: {
         color: Color.text,

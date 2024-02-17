@@ -4,6 +4,7 @@ import DatePicker from "react-native-date-picker";
 import { Color } from "../../utils/color";
 import { FontFamily, FontSizes } from "../../utils/font";
 import { formattedDate, screenDimensions } from "../../utils/functions";
+import { GlobalStyles } from "../../utils/globalStyles";
 import CustomButton from "./CustomButton";
 
 const CustomDatePicker = (props) => {
@@ -89,7 +90,7 @@ const CustomDatePicker = (props) => {
                             <View style={{ width: '90%' }}>
                                 {Children}
                             </View>
-                            <View style={styles.btnView}>
+                            <View style={[styles.btnView, GlobalStyles.p_10]}>
                                 <CustomButton
                                     textStyle={{ fontSize: FontSizes.md }}
                                     color={Color.primary}
@@ -162,8 +163,6 @@ const styles = StyleSheet.create({
         width: "100%",
         justifyContent: "space-between",
         flexDirection: "row",
-        padding: 10,
-        // backgroundColor: 'red',
     },
     dateSelectors: {
         // backgroundColor: 'red',

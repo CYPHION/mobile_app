@@ -6,6 +6,7 @@ import CrossIcon from 'react-native-vector-icons/MaterialIcons'
 import { Color } from '../../../utils/color'
 import { FontFamily, FontSizes } from '../../../utils/font'
 import { screenDimensions } from '../../../utils/functions'
+import { GlobalStyles } from '../../../utils/globalStyles'
 import MyCheckBox from '../../base/CheckBox'
 import CustomButton from '../../base/CustomButton'
 import DropdownComponent from '../../base/CustomDropDown'
@@ -132,7 +133,7 @@ const SelectedStudents = (props) => {
                                         <View style={[styles.bgColor, styles.container]}>
                                             <Text style={styles.detailText}>{elem.name} </Text>
                                         </View>
-                                        <View style={{ padding: 10 }}>
+                                        <View style={GlobalStyles.p_10}>
                                             <DropdownComponent
 
                                                 disable={false}
@@ -199,13 +200,13 @@ const SelectedStudents = (props) => {
                         </>
                         :
                         <>
-                            <View style={[styles.bgColor, styles.container]}>
+                            <View style={[styles.bgColor, styles.container, GlobalStyles.p_10]}>
                                 <TouchableOpacity onPress={() => setActiveStudent(true)} activeOpacity={0.7} style={[styles.iconButton]}>
                                     <BackIcon name='left' color={Color.text} size={FontSizes.xl} />
                                     <Text style={styles.detailText}>Abdullah Khan </Text>
                                 </TouchableOpacity>
                             </View>
-                            <View style={{ padding: 10 }}>
+                            <View style={GlobalStyles.p_10}>
                                 {tableData.map((elem, index) => (
                                     <GridTable
                                         data={elem.item}
@@ -247,7 +248,6 @@ const styles = StyleSheet.create({
     },
     bgColor: {
         backgroundColor: Color.grayBackground,
-        padding: 10,
 
     },
     btnContainer: {

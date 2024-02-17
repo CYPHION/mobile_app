@@ -2,7 +2,7 @@ import React from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import GridTable from '../../components/base/GridTable'
 import { Color } from '../../utils/color'
-import { FontFamily, FontSizes } from '../../utils/font'
+import { GlobalStyles } from '../../utils/globalStyles'
 
 const ViewFeeReceipt = () => {
 
@@ -18,32 +18,32 @@ const ViewFeeReceipt = () => {
     return (
         <ScrollView>
             <View style={{ paddingHorizontal: 10, backgroundColor: Color.white }}>
-                <View style={[styles.bgColor, styles.container]}>
-                    <Text style={styles.detailText}>Student Fee Receipt </Text>
+                <View style={[GlobalStyles.headerStyles]}>
+                    <Text style={GlobalStyles.headerTextStyle}>Student Fee Receipt </Text>
                 </View>
                 <View>
                     <GridTable data={items}
                     />
                 </View>
 
-                <View style={[styles.bgColor, styles.container]}>
-                    <Text style={styles.detailText}> Abdullah Khan (Weekly)  </Text>
+                <View style={[GlobalStyles.headerStyles]}>
+                    <Text style={GlobalStyles.headerTextStyle}> Abdullah Khan (Weekly)  </Text>
 
                 </View>
                 <View>
                     <GridTable data={items} />
                 </View>
 
-                <View style={[styles.bgColor, styles.container]}>
-                    <Text style={styles.detailText}> Sami Khan (Weekly)  </Text>
+                <View style={[GlobalStyles.headerStyles]}>
+                    <Text style={GlobalStyles.headerTextStyle}> Sami Khan (Weekly)  </Text>
 
                 </View>
                 <View>
                     <GridTable data={items} />
                 </View>
 
-                <View style={[styles.bgColor, styles.container]}>
-                    <Text style={styles.detailText}> Sami Khan (Weekly)  </Text>
+                <View style={[GlobalStyles.headerStyles]}>
+                    <Text style={GlobalStyles.headerTextStyle}> Sami Khan (Weekly)  </Text>
 
                 </View>
                 <View>
@@ -59,20 +59,5 @@ const ViewFeeReceipt = () => {
 export default ViewFeeReceipt
 
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: 10
-    },
-    detailText: {
-        fontSize: FontSizes.xl,
-        color: Color.text,
-        fontFamily: FontFamily.medium
-    },
-    bgColor: {
-        backgroundColor: Color.grayBackground,
-        padding: 10,
 
-    },
 })

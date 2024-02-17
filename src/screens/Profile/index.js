@@ -37,6 +37,7 @@ const Profile = ({ navigation }) => {
                         <View style={[styles.middelView]}>
                             <InputField
                                 label={"User Name"}
+                                labelStyle={{ paddingHorizontal: 15 }}
                                 inputStyle={{
                                     borderWidth: 0
                                 }}
@@ -61,6 +62,7 @@ const Profile = ({ navigation }) => {
                         <View style={[styles.middelView]}>
                             <InputField
                                 label={"Email"}
+                                labelStyle={{ paddingHorizontal: 15 }}
                                 inputStyle={{
                                     borderWidth: 0
                                 }}
@@ -83,9 +85,9 @@ const Profile = ({ navigation }) => {
                             </View>
                         </View>
                         <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
-                            <Text style={[styles.textTwo]}>Password</Text>
+                            <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>Password</Text>
                             <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('changePassword')}>
-                                <Text style={[styles.textTwo, { color: Color.textThree, paddingVertical: 10 }]}>
+                                <Text style={[styles.textTwo, { color: Color.textThree, padding: 10 }]}>
                                     Tap to change password
                                 </Text>
                             </TouchableOpacity>
@@ -105,6 +107,7 @@ const Profile = ({ navigation }) => {
                         <View style={[styles.middelView]}>
                             <InputField
                                 label={"Phone Number"}
+                                labelStyle={{ paddingHorizontal: 15 }}
                                 inputStyle={{
                                     borderWidth: 0
                                 }}
