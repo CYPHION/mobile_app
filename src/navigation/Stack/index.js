@@ -69,7 +69,6 @@ export function MyStack({ old }) {
     // console.log(old)
     const route = useRoute()
     const routerName = getFocusedRouteNameFromRoute(route)
-    console.log('routerName', routerName)
 
     const navigation = useNavigation();
 
