@@ -23,7 +23,11 @@ const ProfileStack = () => {
     return <StackProfile.Navigator
         initialRouteName='profile'
     >
-        <StackProfile.Screen name="profile" component={Profile} />
+        <StackProfile.Screen name="profile" component={Profile}
+            options={{
+                headerShown: false,
+
+            }} />
         <StackProfile.Screen name="changePassword" component={ChangePasswordScreen}
             options={{
                 headerShown: true,
@@ -120,16 +124,20 @@ const TabNavigation = ({ old }) => {
 
                 }}
             />
-            <Tab.Screen name="profile" component={ProfileStack}
+            <Tab.Screen
+                name="profile"
+                component={ProfileStack}
                 options={{
                     tabBarLabel: 'Profile',
                     tabBarIcon: ({ color, size, focused }) => (
                         <UserIcon
                             name="user-circle"
-                            color={focused ? Color.primary : color}
-                            size={size} />
+                            color={focused ? Color.iconColor : color}
+                            size={size}
+                        />
                     ),
-                    tabBarActiveTintColor: Color.primary
+                    tabBarActiveTintColor: Color.iconColor,
+
                 }}
             />
         </Tab.Navigator>
@@ -137,3 +145,4 @@ const TabNavigation = ({ old }) => {
 }
 
 export default TabNavigation
+
