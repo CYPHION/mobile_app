@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from "react-native-vector-icons/Ionicons";
 import { useSelector } from 'react-redux';
 import DropdownComponent from '../../components/base/CustomDropDown';
 import Graph from '../../components/base/GraphComponent';
-import LoadingScreen from '../../components/base/LoadingScreen';
-import { API } from '../../network/API';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { getImage, screenDimensions } from '../../utils/functions';
@@ -28,7 +26,7 @@ const dorp = [
 const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
 
 const renderItem = ({ item }) => {
-    const src = item?.picture ? { uri: getImage(item?.picture) } : require("../../images/profile.png");
+    const src = item?.picture ? { uri: getImage(item?.picture) } : require("../../images/profileAvatar.png");
 
     return (<View style={styles.item}>
         <Image resizeMode='contain' source={src} style={styles.image} />
@@ -39,37 +37,13 @@ const renderItem = ({ item }) => {
 
 const Home = ({ navigation }) => {
     const [option, setOption] = useState("");
-    const [data, setData] = useState([])
-    const [loading, setLoading] = useState(true)
 
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
-    console.log(user)
-
-    const getStudents = () => {
-        API.getStudentByParentId(29)
-            .then(res => {
-                setData(res?.data);  // Assuming `setData` is a state updating function
-            })
-            .catch(err => {
-                customToast('error', err);
-            })
-            .finally(() => {
-                setLoading(false)
-                // Any code you want to run after the promise is settled (either resolved or rejected)
-            });
-
-    }
-
-    useEffect(() => {
-        getStudents();
-    }, []);
-
-    console.log(data)
 
     return (
         <>
-            <LoadingScreen loading={loading} />
+            {/* <LoadingScreen loading={loading} /> */}
             <ScrollView>
                 <View style={styles.profileContainer}>
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
@@ -84,7 +58,7 @@ const Home = ({ navigation }) => {
                     </View>
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
                         <View>
-                            <Text style={[styles.CompText]}>Enrolled Children ({data.length})</Text>
+                            <Text style={[styles.CompText]}>Enrolled Children ({globaldata?.students?.length})</Text>
                         </View>
                         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'children' })}>
                             <Text style={[styles.CompText]}>see all</Text>
@@ -93,7 +67,7 @@ const Home = ({ navigation }) => {
                     <View>
                         <FlatList
                             showsHorizontalScrollIndicator={false}
-                            data={data}
+                            data={globaldata?.students}
                             horizontal
                             renderItem={renderItem}
                             keyExtractor={(item, index) => index.toString()}
@@ -140,12 +114,13 @@ const styles = StyleSheet.create({
     },
     nameText: {
         fontSize: FontSizes.md,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: Color.text
     },
     image: {
         backgroundColor: Color.disable,
-        borderColor: Color.borderColor,
-        borderWidth: 0.3,
+        // borderColor: Color.borderColor,
+        // borderWidth: 0.3,
         width: screenDimensions.width * 0.25,
         height: screenDimensions.width * 0.25,
         borderRadius: screenDimensions.width * 0.25 * 0.5,

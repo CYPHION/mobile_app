@@ -46,11 +46,9 @@ const LoginScreen = (prop) => {
         try {
             const res = await API.login(email, password)
             saveDataToredux(res?.data)
-            console.log(res)
         } catch (error) {
             console.log(error)
         } finally {
-            console.log('finally')
             setIsLoading(false)
         }
 

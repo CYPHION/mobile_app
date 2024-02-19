@@ -5,11 +5,11 @@ import { screenDimensions } from '../../utils/functions'
 
 const LoadingScreen = ({ loading }) => {
     return (
-        <>
-            {loading ? <View style={styles.main}>
-                <ActivityIndicator size={'large'} color={Color.primary} />
-            </View> : null}
-        </>
+
+        loading && <View style={styles.main}>
+            <ActivityIndicator size={'large'} color={Color.primary} />
+        </View>
+
     )
 }
 
