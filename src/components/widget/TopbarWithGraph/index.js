@@ -7,6 +7,7 @@ import Graph from '../../base/GraphComponent'
 const TopbarWithGraph = () => {
     const navigation = useNavigation()
 
+    const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
 
     return (
         <>
@@ -20,7 +21,7 @@ const TopbarWithGraph = () => {
                     <Icon name="notifications" color={Color.textTwo} size={FontSizes.xxxl} />
                 </TouchableOpacity> */}
             </View>
-            <Graph />
+            <Graph labels={labels} dataOne={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9]} dataTwo={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9].reverse()} />
         </>
     )
 }

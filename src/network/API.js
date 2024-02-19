@@ -6,6 +6,10 @@ export class API {
         return await HttpService.POST('/auth/login', { email, password })
     }
 
+    static async getStudentByParentId(id) {
+        return await HttpService.GET(`/student/${id}`)
+    }
+
     static async getGlobalData() {
         return HttpService.GET('/global/dropdown')
     }

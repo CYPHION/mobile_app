@@ -3,27 +3,32 @@ import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-n
 import { useDispatch } from 'react-redux'
 import CustomButton from '../../components/base/CustomButton'
 import FlaotingTextInput from '../../components/base/FlaotingTextInput'
+import { API } from '../../network/API'
 import { handleLogin } from '../../store/slice/user'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { screenDimensions } from '../../utils/functions'
+import { customToast, removeError, screenDimensions } from '../../utils/functions'
 
 
 const LoginScreen = (prop) => {
 
     const [formData, setFormData] = useState({
-        username: '',
+        email: '',
         password: ''
     })
 
     const [isLoading, setIsLoading] = useState(false)
 
     const [error, setError] = useState({
-        username: '',
-        password: '',
+        // username: '',
+        // password: '',
     })
 
-    const dipatch = useDispatch()
+    const dispatch = useDispatch()
+
+    const saveDataToredux = (data) => {
+        dispatch(handleLogin(data))
+    }
 
     const onChangeHandler = (name, text) => {
         setFormData(prevFormData => ({
@@ -31,33 +36,43 @@ const LoginScreen = (prop) => {
             [name]: text
         }));
 
-        setError(prev => ({
-            ...prev,
-            [name]: ''
-        }))
+        setError(removeError(name, error))
 
     };
 
     const handleSubmit = () => {
         setIsLoading(true)
-        if (formData.username.toLowerCase().trim() !== '' && formData.username.toLowerCase() === 'admin@gmail.com') {
-            if (formData.password.trim() == '123456') {
-                const userData = {
-                    email: formData.username,
-                }
-                dipatch(handleLogin(userData))
+        const { email, password } = formData
+        API.login(email, password)
+            .then(res => {
+                saveDataToredux(res?.data);
+                console.log('login', res)
+            })
+            .catch(err => {
+                customToast('error', err.message)
+            })
+            .finally(() => {
+                console.log('finnaly')
                 setIsLoading(false)
-            } else {
-                setError(prev => ({ ...prev, password: "Incorrect Password" }))
-                setIsLoading(false)
+            })
+        // if (formData.username.toLowerCase().trim() !== '' && formData.username.toLowerCase() === 'admin@gmail.com') {
+        //     if (formData.password.trim() == '123456') {
+        //         const userData = {
+        //             email: formData.username,
+        //         }
+        //         dipatch(handleLogin(userData))
+        //         setIsLoading(false)
+        //     } else {
+        //         setError(prev => ({ ...prev, password: "Incorrect Password" }))
+        //         setIsLoading(false)
 
-            }
-        } else {
-            setError(prev => ({ ...prev, username: "Incorrect username" }))
-            setError(prev => ({ ...prev, password: "Enter Password" }))
-            setIsLoading(false)
+        //     }
+        // } else {
+        //     setError(prev => ({ ...prev, username: "Incorrect username" }))
+        //     setError(prev => ({ ...prev, password: "Enter Password" }))
+        //     setIsLoading(false)
 
-        }
+        // }
     }
 
 
@@ -115,10 +130,10 @@ const LoginScreen = (prop) => {
                             }}
                         >
                             <FlaotingTextInput
-                                value={formData.username}
-                                onChangeText={(text) => onChangeHandler("username", text)}
+                                value={formData.email}
+                                onChangeText={(text) => onChangeHandler("email", text)}
                                 label={"Username/Email"}
-                                errorMcg={error.username}
+                                errorMcg={error.email}
                             />
                             <FlaotingTextInput
                                 errorMcg={error.password}
