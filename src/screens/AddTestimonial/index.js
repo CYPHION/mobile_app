@@ -8,6 +8,7 @@ import MyModal from '../../components/base/Modal'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
+import { GlobalStyles } from '../../utils/globalStyles'
 
 const AddTestimonial = () => {
 
@@ -39,10 +40,10 @@ const AddTestimonial = () => {
                 setModalVisible={setOpen}
             />
             <View style={styles.main}>
-                <View style={[styles.bgColor, styles.container]}>
+                <View style={[styles.bgColor, styles.container, GlobalStyles.p_10]}>
                     <Text style={styles.detailText}>Review - Abdullah Khan</Text>
                 </View>
-                <View style={{ padding: 10 }}>
+                <View style={GlobalStyles.p_10}>
                     <InputField
                         label={""}
                         multiline
@@ -75,7 +76,6 @@ const styles = StyleSheet.create({
     },
     bgColor: {
         backgroundColor: Color.grayBackground,
-        padding: 10,
 
     },
     detailText: {

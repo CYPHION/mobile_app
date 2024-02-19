@@ -1,14 +1,13 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import Icon from "react-native-vector-icons/Ionicons"
+import { StyleSheet, Text, View } from 'react-native'
 import { Color } from '../../../utils/color'
 import { FontFamily, FontSizes } from '../../../utils/font'
-import { screenDimensions } from '../../../utils/functions'
 import Graph from '../../base/GraphComponent'
 const TopbarWithGraph = () => {
     const navigation = useNavigation()
 
+    const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
 
     return (
         <>
@@ -17,15 +16,12 @@ const TopbarWithGraph = () => {
                     <Text style={[styles.NameText, styles.textFontFamily]}>Abdullah Khan</Text>
                     <Text style={[styles.CompText, styles.textFontFamily]}>Year 2 - Weekly</Text>
                 </View>
-                <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
+                {/* <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
                     <View style={styles.badge}></View>
                     <Icon name="notifications" color={Color.textTwo} size={FontSizes.xxxl} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
-
-            <View style={{ backgroundColor: Color.primary, marginTop: 20, width: screenDimensions.width, height: 180, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                <Graph />
-            </View>
+            <Graph labels={labels} dataOne={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9]} dataTwo={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9].reverse()} />
         </>
     )
 }
@@ -54,5 +50,5 @@ const styles = StyleSheet.create({
         top: 0,
         right: 2,
         zIndex: 100
-    }
+    },
 })

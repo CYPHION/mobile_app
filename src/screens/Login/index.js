@@ -1,23 +1,34 @@
 import React, { useState } from 'react'
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { useDispatch } from 'react-redux'
 import CustomButton from '../../components/base/CustomButton'
 import FlaotingTextInput from '../../components/base/FlaotingTextInput'
+import { API } from '../../network/API'
+import { handleLogin } from '../../store/slice/user'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { screenDimensions } from '../../utils/functions'
+import { customToast, removeError, screenDimensions } from '../../utils/functions'
 
 
 const LoginScreen = (prop) => {
 
     const [formData, setFormData] = useState({
-        username: '',
+        email: '',
         password: ''
     })
 
+    const [isLoading, setIsLoading] = useState(false)
+
     const [error, setError] = useState({
-        username: '',
-        password: '',
+        // username: '',
+        // password: '',
     })
+
+    const dispatch = useDispatch()
+
+    const saveDataToredux = (data) => {
+        dispatch(handleLogin(data))
+    }
 
     const onChangeHandler = (name, text) => {
         setFormData(prevFormData => ({
@@ -25,27 +36,43 @@ const LoginScreen = (prop) => {
             [name]: text
         }));
 
-        setError(prev => ({
-            ...prev,
-            [name]: ''
-        }))
+        setError(removeError(name, error))
 
     };
 
     const handleSubmit = () => {
-        if (formData.username.toLowerCase().trim() !== '' && formData.username.toLowerCase() === 'admin@gmail.com') {
-            console.log('correct email')
-            if (formData.password.trim() == '123456') {
-                prop.setShow(true)
-            } else {
-                console.log('passwordError')
-                setError(prev => ({ ...prev, password: "Incorrect Password" }))
-            }
-        } else {
-            console.log('error')
-            setError(prev => ({ ...prev, username: "Incorrect username" }))
-            setError(prev => ({ ...prev, password: "Enter Password" }))
-        }
+        setIsLoading(true)
+        const { email, password } = formData
+        API.login(email, password)
+            .then(res => {
+                saveDataToredux(res?.data);
+                console.log('login', res)
+            })
+            .catch(err => {
+                customToast('error', err.message)
+            })
+            .finally(() => {
+                console.log('finnaly')
+                setIsLoading(false)
+            })
+        // if (formData.username.toLowerCase().trim() !== '' && formData.username.toLowerCase() === 'admin@gmail.com') {
+        //     if (formData.password.trim() == '123456') {
+        //         const userData = {
+        //             email: formData.username,
+        //         }
+        //         dipatch(handleLogin(userData))
+        //         setIsLoading(false)
+        //     } else {
+        //         setError(prev => ({ ...prev, password: "Incorrect Password" }))
+        //         setIsLoading(false)
+
+        //     }
+        // } else {
+        //     setError(prev => ({ ...prev, username: "Incorrect username" }))
+        //     setError(prev => ({ ...prev, password: "Enter Password" }))
+        //     setIsLoading(false)
+
+        // }
     }
 
 
@@ -53,7 +80,7 @@ const LoginScreen = (prop) => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View>
+                <View style={{ alignItems: 'center' }}>
                     <Image
                         style={[styles.picture]}
                         resizeMode="cover"
@@ -84,14 +111,13 @@ const LoginScreen = (prop) => {
                     </View>
                     <View
                         style={[
-                            { gap: 20, alignItems: "center", height: screenDimensions.height * 0.65 },
+                            { gap: 10, height: screenDimensions.height * 0.65, width: screenDimensions.width * 0.9 },
                         ]}
                     >
                         <Text
                             style={{
                                 marginTop: 20,
                                 color: Color.white,
-                                width: screenDimensions.width * 0.9,
                                 fontFamily: FontFamily.interRegular,
                                 fontSize: FontSizes.xl,
                             }}
@@ -100,17 +126,14 @@ const LoginScreen = (prop) => {
                         </Text>
                         <View
                             style={{
-                                position: "relative",
                                 gap: 10,
-                                width: screenDimensions.width * 0.9,
-                                height: screenDimensions.height * 0.3,
                             }}
                         >
                             <FlaotingTextInput
-                                value={formData.username}
-                                onChangeText={(text) => onChangeHandler("username", text)}
-                                label={"username/email"}
-                                errorMcg={error.username}
+                                value={formData.email}
+                                onChangeText={(text) => onChangeHandler("email", text)}
+                                label={"Username/Email"}
+                                errorMcg={error.email}
                             />
                             <FlaotingTextInput
                                 errorMcg={error.password}
@@ -131,31 +154,20 @@ const LoginScreen = (prop) => {
                                 Forgot Password?
                             </Text>
                         </View>
-                        <View style={{ gap: 15 }}>
+                        <View style={{ gap: 15, alignItems: 'center' }}>
                             <CustomButton
                                 btnstyle={{ width: screenDimensions.width * 0.8 }}
                                 variant={"fill"}
-                                disabled={false}
+                                disabled={isLoading}
                                 title={"Login"}
                                 onPress={() => handleSubmit()}
                             />
-                            <Text
-                                style={{
-                                    color: Color.white,
-                                    width: screenDimensions.width * 0.8,
-                                    fontFamily: FontFamily.interRegular,
-                                    fontSize: FontSizes.md,
-                                    textAlign: "center",
-                                }}
-                            >
-                                Dont have an account? Register
-                            </Text>
                         </View>
                     </View>
 
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
 
     )
 }
@@ -177,7 +189,7 @@ const styles = StyleSheet.create({
         width: screenDimensions.width * 0.4
     },
     logoView: {
-        gap: 20,
+        gap: 15,
         width: screenDimensions.width,
         height: screenDimensions.height * 0.35,
         // backgroundColor: 'pink',

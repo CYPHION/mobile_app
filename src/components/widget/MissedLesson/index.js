@@ -4,6 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { Color } from '../../../utils/color'
 import { FontFamily, FontSizes } from '../../../utils/font'
 import { screenDimensions } from '../../../utils/functions'
+import { GlobalStyles } from '../../../utils/globalStyles'
 import CustomButton from '../../base/CustomButton'
 import InputField from '../../base/InputField'
 import MyModal from '../../base/Modal'
@@ -15,19 +16,15 @@ const MissedLesson = () => {
     const [activeScreen, setActiveScreen] = useState(true)
     const [formData, setFormData] = useState({
         mainId: '',
-        dateRange: '',
+        dateRange: '17/12/2023 - 17/5/2024',
         Student: []
     })
     const [selectedValues, setSelectedValues] = useState([])
     const data = [
-        { name: "Item 1", value: "1" },
-        { name: "Item 2", value: "2" },
-        { name: "Item 3", value: "3" },
-        { name: "Item 4", value: "4" },
-        { name: "Item 5", value: "5" },
-        { name: "Item 6", value: "6" },
-        { name: "Item 7", value: "7" },
-        { name: "Item 8", value: "8" },
+        { name: "Abdullah ", value: "1" },
+        { name: "Fawad Khan", value: "2" },
+        { name: "Jawad Ali", value: "3" },
+        { name: "Sami Khan", value: "4" },
     ];
 
     const onChangeHandler = (name, text) => {
@@ -63,16 +60,17 @@ const MissedLesson = () => {
                 children={ModalContent()}
             />
             {activeScreen ?
-                <View style={{ padding: 10 }}>
-                    <InputField
+                <View style={GlobalStyles.p_10}>
+                    {/* <InputField
                         label={"Main Id"}
                         inputMode={"numeric"}
                         value={formData.mainId}
                         onChangeText={(text) => onChangeHandler('numeric', text)}
-                    />
+                    /> */}
                     <InputField
                         label={"Date Range"}
                         value={formData.dateRange}
+                        editable={false}
                         onChangeText={(text) => onChangeHandler('numeric', text)}
                     />
                     <MultiSelectComponent
@@ -87,16 +85,19 @@ const MissedLesson = () => {
                             title={'Submit'}
                             variant='fill'
                             btnstyle={styles.btnStyle}
-                            onPress={() => setOpen(true)}
+                            onPress={() => setActiveScreen(false)}
                         />
                         <CustomButton
                             title={'Reset'}
                             btnstyle={styles.btnStyle}
-                            onPress={() => setActiveScreen(false)}
+                            onPress={() => {
+                                setSelectedValues([])
+                                setOpen(true)
+                            }}
                         />
                     </View>
                 </View> :
-                <SelectedStudents />
+                <SelectedStudents setActiveScreen={setActiveScreen} selectedValues={selectedValues} />
             }
         </ScrollView>
     )

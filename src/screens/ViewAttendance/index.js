@@ -12,6 +12,7 @@ import Table from '../../components/base/Table'
 import TopbarWithGraph from '../../components/widget/TopbarWithGraph'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
+import { GlobalStyles } from '../../utils/globalStyles'
 
 
 
@@ -54,8 +55,8 @@ const ViewAttendance = () => {
             <View style={styles.viewChildrenContainer}>
                 <TopbarWithGraph />
 
-                <View style={[styles.bgColor, styles.container]}>
-                    <Text style={styles.detailText}>Student Details</Text>
+                <View style={[GlobalStyles.headerStyles]}>
+                    <Text style={GlobalStyles.headerTextStyle}>Student Details</Text>
                     <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
                         <View style={[styles.iconView]}>
                             <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
@@ -105,13 +106,7 @@ const styles = StyleSheet.create({
     },
     bgColor: {
         backgroundColor: Color.grayBackground,
-        padding: 10,
 
-    },
-    detailText: {
-        fontSize: FontSizes.xl,
-        color: Color.textThree,
-        fontFamily: FontFamily.medium
     },
     iconView: {
         backgroundColor: Color.primary,

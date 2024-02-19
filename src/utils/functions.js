@@ -1,6 +1,8 @@
 // import toast from 'react-hot-toast'
 import { Dimensions } from 'react-native'
 import Toast from 'react-native-toast-message'
+import { URL } from '../network/httpService'
+import { handleLogout } from '../store/slice/user'
 
 export const screenDimensions = Dimensions.get('window')
 
@@ -74,13 +76,13 @@ export const CheckForHttpErrors = error => {
                 customToast('error', response.data.message)
                 :
                 customToast('error', 'Your session is expired, please login again')
-            store.dispatch(logoutUser())
+            store.dispatch(handleLogout())
             break
         case 440:
             response.data.message
                 ? customToast('error', response.data.message)
                 : customToast('error', 'Your session is expired, please login again')
-            store.dispatch(logoutUser())
+            store.dispatch(handleLogout())
             break
         default:
             return {
@@ -88,5 +90,19 @@ export const CheckForHttpErrors = error => {
                 status: response.status,
                 data: response.data
             }
+    }
+}
+
+export const removeError = (err, property) => {
+    // console.log("-=", { ...err, [property]: "" })
+    return { ...err, [property]: "" }
+}
+
+export function getImage(file) {
+    if (file) {
+        const image = `${URL}/upload/${file}`
+        return image
+    } else {
+        return null
     }
 }

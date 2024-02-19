@@ -1,11 +1,16 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import { StyleSheet, View } from 'react-native'
+import { Color } from '../../../utils/color'
+import { screenDimensions } from '../../../utils/functions'
 import { GlobalStyles } from '../../../utils/globalStyles'
+import CustomButton from '../../base/CustomButton'
 import GridTable from '../../base/GridTable'
 
 
-const ViewCompensation = () => {
+const ProceedCompensation = (props) => {
+
+
+    const { setActiveStudent, setProcess } = props
 
     const item = [
         {
@@ -33,8 +38,6 @@ const ViewCompensation = () => {
             value: "10/8/2024",
         },
     ]
-
-
     const tableData = [
         {
             item,
@@ -52,24 +55,40 @@ const ViewCompensation = () => {
 
 
     return (
-        <ScrollView>
-            <View style={[GlobalStyles.headerStyles]}>
-                <Text style={GlobalStyles.headerTextStyle}>Abdullah Khan </Text>
-            </View>
+        <View>
             <View style={GlobalStyles.p_10}>
                 {tableData.map((elem, index) => (
                     <GridTable
                         data={elem.item}
                         key={index}
+
                     />
                 ))}
             </View>
-        </ScrollView>
+            <View style={{ width: screenDimensions.width, alignItems: 'center' }}>
+
+                <CustomButton
+                    title='Create All'
+                    variant='fill'
+                    btnstyle={{ width: '90%' }}
+                    onPress={() => alert('Compensation Created!')}
+                />
+            </View>
+            <View style={{ width: screenDimensions.width, alignItems: 'center' }}>
+
+                <CustomButton
+                    title='Go Back'
+                    btnstyle={{ width: '90%', borderWidth: 1, borderColor: Color.primary }}
+                    onPress={() => {
+                        setProcess(false)
+                        setActiveStudent(true);
+                    }}
+                />
+            </View>
+        </View>
     )
 }
 
-export default ViewCompensation
+export default ProceedCompensation
 
-const styles = StyleSheet.create({
-
-})
+const styles = StyleSheet.create({})

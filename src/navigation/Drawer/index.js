@@ -1,11 +1,13 @@
 import { DrawerContentScrollView, createDrawerNavigator } from '@react-navigation/drawer';
-import { DrawerActions, useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
+import { CommonActions, DrawerActions, useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AntIcon from 'react-native-vector-icons/AntDesign';
+import { useDispatch } from 'react-redux';
 import CustomButton from '../../components/base/CustomButton';
 import MyModal from '../../components/base/Modal';
+import { handleLogout } from '../../store/slice/user';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { screenDimensions } from '../../utils/functions';
@@ -20,7 +22,7 @@ const DrawerList = [
     { label: 'View Children', navigateTo: 'children', icon: 'right', mainRoute: 'root' },
     { label: 'View Appointment', navigateTo: 'viewAppointment', icon: 'right', mainRoute: 'root' },
     { label: 'Leave Application', navigateTo: 'leaveApplication', icon: 'right', mainRoute: 'root' },
-    { label: 'Pay Fee', navigateTo: 'payFees', icon: 'right', mainRoute: 'root' },
+    { label: 'Pay Fee', navigateTo: 'fee', icon: 'right', mainRoute: 'tabs' },
     { label: 'Compensation', navigateTo: 'compensation', icon: 'right', mainRoute: 'root' },
     { label: 'Testimonials', navigateTo: 'testimonials', icon: 'right', mainRoute: 'root' },
     { label: 'Logout', navigateTo: '', icon: 'right' },
@@ -28,11 +30,17 @@ const DrawerList = [
 
 const DrawerLayout = ({ icon, label, navigateTo, setOpen, mainRoute }) => {
     const navigation = useNavigation();
-    const isActiveScreen = navigation.canGoBack() ? navigation.getCurrentRoute().name === navigateTo : navigation.isFocused();
+    const routeName = navigation.getCurrentRoute()?.name; // Get current route name
+
+    // Check if the route name exists and matches navigateTo
+    const isActiveScreen = routeName && routeName === navigateTo;
 
 
     return (
-        <TouchableOpacity activeOpacity={0.7} style={[isActiveScreen && styles.activeDrawerItem]} onPress={() => {
+        <TouchableOpacity activeOpacity={0.7} style={isActiveScreen && {
+            backgroundColor: `rgba(255,255,255,0.2)`, borderTopEndRadius: 50,
+            borderBottomEndRadius: 50,
+        }} onPress={() => {
             if (label === "Logout") {
                 navigation.dispatch(DrawerActions.closeDrawer());
                 setOpen(true)
@@ -54,6 +62,8 @@ const DrawerLayout = ({ icon, label, navigateTo, setOpen, mainRoute }) => {
 function CustomDrawerContent(props) {
     const navigation = useNavigation();
     const [open, setOpen] = useState(false)
+    const dipatch = useDispatch()
+
 
     return (
         <DrawerContentScrollView {...props}>
@@ -114,7 +124,10 @@ function CustomDrawerContent(props) {
                                 title={'Log Out'}
                                 variant={'fill'}
                                 btnstyle={{ paddingVertical: 4 }}
-                                onPress={() => console.log('logout')}
+                                onPress={() => {
+                                    dipatch(handleLogout())
+                                    setOpen(!open)
+                                }}
                             />
                         </View>
                     </View>
@@ -127,7 +140,20 @@ function CustomDrawerContent(props) {
 }
 
 
-function MyDrawer() {
+function MyDrawer({ old }) {
+    const navigation = useNavigation();
+
+
+
+    useEffect(() => {
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'tabs', params: { screen: 'home' } }],
+            }),
+        );
+    }, [old]);
+
     return (
 
         <Drawer.Navigator
@@ -198,9 +224,4 @@ const styles = StyleSheet.create({
         // backgroundColor: 'red',
         flexDirection: "row",
     },
-    activeDrawerItem: {
-        backgroundColor: `rgba(255,255,255,0.2)`,
-        borderTopEndRadius: 50,
-        borderBottomEndRadius: 50,
-    }
 });

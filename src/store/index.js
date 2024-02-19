@@ -2,14 +2,21 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 // ** Reducers
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { persistReducer, persistStore } from 'redux-persist';
 import global from './slice/global';
 import user from './slice/user';
 
 
+const userConfig = {
+  key: 'user',
+  storage: AsyncStorage
+}
+
 
 export const store = configureStore({
   reducer: {
-    user: user,
+    user: persistReducer(userConfig, user),
     global: global,
   },
   middleware: getDefaultMiddleware =>
@@ -19,4 +26,4 @@ export const store = configureStore({
 })
 
 // Create the persistor
-// export const persistor = persistStore(store);
+export const persistor = persistStore(store);

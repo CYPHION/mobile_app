@@ -4,6 +4,7 @@ import GridTable from '../../components/base/GridTable'
 import TopbarWithGraph from '../../components/widget/TopbarWithGraph'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
+import { GlobalStyles } from '../../utils/globalStyles'
 
 
 
@@ -69,7 +70,7 @@ const StudentDetails = () => {
             <View style={styles.viewChildrenContainer}>
                 <TopbarWithGraph />
 
-                <View style={styles.bgColor}>
+                <View style={[styles.bgColor, GlobalStyles.p_10]}>
                     <Text style={styles.detailText}>Student Details</Text>
                 </View>
 
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     },
     bgColor: {
         backgroundColor: Color.grayBackground,
-        padding: 10
+
     },
     detailText: {
         fontSize: FontSizes.xl,

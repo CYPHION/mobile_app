@@ -4,7 +4,7 @@ import { screenDimensions } from '../../../utils/functions'
 import AccordionItem from '../../base/Accordion'
 import MyCheckBox from '../../base/CheckBox'
 import CustomButton from '../../base/CustomButton'
-import GridTabel from '../../base/GridTable'
+import GridTable from '../../base/GridTable'
 
 
 const StudentsAccordion = (props) => {
@@ -95,7 +95,7 @@ const StudentsAccordion = (props) => {
                     onPress={() => { setNextScreen(true); toggleItem(index) }}
                 />
                 {tableData.map((elem, index) => (
-                    <GridTabel
+                    <GridTable
                         data={elem.item}
                         key={index}
                         CheckboxChild={<MyCheckBox isChecked={checkedItems[index]} onToggle={() => handleCheckbox(index)} />}

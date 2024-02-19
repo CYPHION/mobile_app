@@ -5,9 +5,7 @@ import { globalData } from '../thunk/index';
 export const globalSlice = createSlice({
   name: 'global',
   initialState: {
-    data: {
-      name: 'M.Owais'
-    },
+    data: {},
   },
   reducers: {
 
