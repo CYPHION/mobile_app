@@ -5,13 +5,14 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useSelector } from 'react-redux';
 import DropdownComponent from '../../components/base/CustomDropDown';
 import Graph from '../../components/base/GraphComponent';
+import LoadingScreen from '../../components/base/LoadingScreen';
 import { API } from '../../network/API';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { getImage, screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
 
-const data = [
+const dorp = [
     { name: "2024", value: "1" },
     { name: "2023", value: "2" },
     { name: " 2022", value: "3" },
@@ -22,52 +23,28 @@ const data = [
     { name: "2017 ", value: "8" },
 ];
 
-// const Data = [
-//     {
-//         image: require("../../images/hamza.png"),
-//         name: "Abdullah",
-//         date: "Year 2 - Weekly"
-//     },
-//     {
-//         image: require("../../images/hamza.png"),
-//         name: "Abdullah",
-//         date: "Year 2 - Weekly"
-//     },
-//     {
-//         image: require("../../images/hamza.png"),
-//         name: "Abdullah",
-//         date: "Year 2 - Weekly"
-//     },
-//     {
-//         image: require("../../images/hamza.png"),
-//         name: "Abdullah",
-//         date: "Year 2 - Weekly"
-//     },
-//     {
-//         image: require("../../images/hamza.png"),
-//         name: "Abdullah",
-//         date: "Year 2 - Weekly"
-//     },
 
-// ]
 
 const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
 
-const renderItem = ({ item }) => (
-    <View style={styles.item}>
-        <Image resizeMode='contain' source={{ uri: getImage(item?.picture) }} style={styles.image} />
+const renderItem = ({ item }) => {
+    const src = item?.picture ? { uri: getImage(item?.picture) } : require("../../images/profile.png");
+
+    return (<View style={styles.item}>
+        <Image resizeMode='contain' source={src} style={styles.image} />
         <Text style={[styles.nameText, { fontFamily: FontFamily.interSemiBold }]} >{item.fullName}</Text>
         <Text style={[styles.nameText, { fontFamily: FontFamily.interRegular, fontSize: FontSizes.sm }]} >{item.StudentYear.name} - {item.feeChargedBy}</Text>
-    </View>
-);
+    </View>)
+};
 
 const Home = ({ navigation }) => {
     const [option, setOption] = useState("");
     const [data, setData] = useState([])
+    const [loading, setLoading] = useState(true)
 
     const globaldata = useSelector(state => state?.global?.data)
-    console.log('globalData', globaldata)
-
+    const user = useSelector(state => state?.user?.data)
+    console.log(user)
 
     const getStudents = () => {
         API.getStudentByParentId(29)
@@ -78,70 +55,66 @@ const Home = ({ navigation }) => {
                 customToast('error', err);
             })
             .finally(() => {
+                setLoading(false)
                 // Any code you want to run after the promise is settled (either resolved or rejected)
             });
-        API.getGlobalData()
-            .then(res => {
-                console.log(res?.data);  // Assuming `setData` is a state updating function
-            })
-            .catch(err => {
-                customToast('error', err);
-            })
-            .finally(() => {
-                // Any code you want to run after the promise is settled (either resolved or rejected)
-            });
+
     }
 
     useEffect(() => {
-        // useEffect runs when the component mounts (empty dependency array [])
         getStudents();
     }, []);
 
     console.log(data)
 
     return (
-        <ScrollView>
-            <View style={styles.profileContainer}>
-                <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
-                    <View>
-                        <Text style={[styles.NameText, styles.textFontFamily]}>Hi, Hamza</Text>
-                        <Text style={[styles.CompText, styles.textFontFamily]}>Welcome to Prime Tuition</Text>
+        <>
+            <LoadingScreen loading={loading} />
+            <ScrollView>
+                <View style={styles.profileContainer}>
+                    <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
+                        <View>
+                            <Text style={[styles.NameText, styles.textFontFamily]}>Hi, {user.firstName} {user.lastName}</Text>
+                            <Text style={[styles.CompText, styles.textFontFamily]}>Welcome to Prime Tuition</Text>
+                        </View>
+                        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
+                            <View style={styles.badge}></View>
+                            <Icon name="notifications-outline" size={FontSizes.xxxl} color={Color.black} />
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
-                        <View style={styles.badge}></View>
-                        <Icon name="notifications-outline" size={FontSizes.xxxl} color={Color.black} />
-                    </TouchableOpacity>
-                </View>
-                <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
-                    <View>
-                        <Text style={[styles.CompText]}>Enrolled Children (3)</Text>
+                    <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
+                        <View>
+                            <Text style={[styles.CompText]}>Enrolled Children ({data.length})</Text>
+                        </View>
+                        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'children' })}>
+                            <Text style={[styles.CompText]}>see all</Text>
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'children' })}>
-                        <Text style={[styles.CompText]}>see all</Text>
-                    </TouchableOpacity>
+                    <View>
+                        <FlatList
+                            showsHorizontalScrollIndicator={false}
+                            data={data}
+                            horizontal
+                            renderItem={renderItem}
+                            keyExtractor={(item, index) => index.toString()}
+                            contentContainerStyle={styles.flatListContainer}
+                        />
+                    </View>
+                    <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
+                        <Text style={[styles.CompText]}>Fee Paid Per Month</Text>
+                        <DropdownComponent
+                            dropdownStyle={{ width: screenDimensions.width * 0.2 }}
+                            disable={false}
+                            data={dorp}
+                            placeHolderText={"2024"}
+                            value={option}
+                            setValue={setOption}
+                        />
+                    </View>
+                    <Graph labels={labels} dataOne={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9]} dataTwo={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9].reverse()} />
                 </View>
-                <FlatList
-                    showsHorizontalScrollIndicator={false}
-                    data={data}
-                    horizontal
-                    renderItem={renderItem}
-                    keyExtractor={(item, index) => index.toString()}
-                    contentContainerStyle={styles.flatListContainer}
-                />
-                <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
-                    <Text style={[styles.CompText]}>Fee Paid Per Month</Text>
-                    <DropdownComponent
-                        dropdownStyle={{ width: screenDimensions.width * 0.2 }}
-                        disable={false}
-                        data={data}
-                        placeHolderText={"2024"}
-                        value={option}
-                        setValue={setOption}
-                    />
-                </View>
-                <Graph labels={labels} dataOne={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9]} dataTwo={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9].reverse()} />
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </>
     )
 }
 
@@ -170,7 +143,9 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     image: {
-        backgroundColor: Color.grayBackground,
+        backgroundColor: Color.disable,
+        borderColor: Color.borderColor,
+        borderWidth: 0.3,
         width: screenDimensions.width * 0.25,
         height: screenDimensions.width * 0.25,
         borderRadius: screenDimensions.width * 0.25 * 0.5,

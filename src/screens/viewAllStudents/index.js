@@ -1,93 +1,96 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useSelector } from 'react-redux'
+import LoadingScreen from '../../components/base/LoadingScreen'
+import { API } from '../../network/API'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { screenDimensions } from '../../utils/functions'
+import { getImage, screenDimensions } from '../../utils/functions'
 
 const ViewAllStudents = ({ navigation }) => {
-    const Data = [
-        {
-            name: "Abdullah Khan",
-            year: 'Year 2',
-            duration: 'Weekly',
-            status: 'Active',
-            image: require('../../images/hamza.png'),
-            navigateTo: 'viewStudent'
-        },
-        {
-            name: "Abdullah Khan",
-            year: 'Year 3',
-            duration: 'Monthly',
-            status: 'Active',
-            image: require("../../images/hamza.png"),
-            navigateTo: 'viewStudent'
-        },
-        {
-            name: "Hassan Khan",
-            year: 'Year 4',
-            duration: 'Weekly',
-            status: 'Inactive',
-            image: require("../../images/hamza.png"),
-            navigateTo: 'viewStudent'
-        },
+    const user = useSelector(state => state?.user?.data)
+    const [data, setData] = useState([])
+    const [loading, setLoading] = useState(true)
 
-    ]
 
     const bgColor = {
-        Active: Color.primary,
-        Inactive: Color.btnDisable
+        active: Color.primary,
+        inactive: Color.btnDisable
     }
+
+    const getStudents = () => {
+        API.getStudentByParentId(29)
+            .then(res => {
+                setData(res?.data);  // Assuming `setData` is a state updating function
+            })
+            .catch(err => {
+                customToast('error', err);
+            })
+            .finally(() => {
+                setLoading(false)
+                // Any code you want to run after the promise is settled (either resolved or rejected)
+            });
+
+    }
+
+    useEffect(() => {
+        getStudents();
+    }, []);
+
 
     return (
 
-        <ScrollView>
-            <View style={styles.profileContainer}>
-                <View style={[styles.profileRowContainer]}>
-                    <View>
-                        <Text style={[styles.NameText, styles.textFontFamily]}>Hi, Hamza</Text>
-                        <Text style={[styles.CompText, styles.textFontFamily]}>Welcome to Prime Tuition</Text>
+        <>
+            <LoadingScreen loading={loading} />
+            <ScrollView>
+                <View style={styles.profileContainer}>
+                    <View style={[styles.profileRowContainer]}>
+                        <View>
+                            <Text style={[styles.NameText, styles.textFontFamily]}>Hi, {user?.firstName} {user?.lastName}</Text>
+                            <Text style={[styles.CompText, styles.textFontFamily]}>Welcome to Prime Tuition</Text>
+                        </View>
+                        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
+                            <View style={styles.badge}></View>
+
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
-                        <View style={styles.badge}></View>
-
-                    </TouchableOpacity>
-                </View>
-                <View style={[styles.profileRowContainer]}>
-                    <View>
-                        <Text style={[styles.CompText]}>Enrolled Children (3)</Text>
+                    <View style={[styles.profileRowContainer]}>
+                        <View>
+                            <Text style={[styles.CompText]}>Enrolled Children ({data.length})</Text>
+                        </View>
                     </View>
-                </View>
 
 
-                {
-                    Data.map((elem, index) => (
-                        <TouchableOpacity activeOpacity={0.9} key={index} onPress={() => navigation.navigate(elem.navigateTo)}>
-                            <View style={styles.allStudentContainer}>
-                                <View style={styles.allStudentContainers}>
-                                    <View >
-                                        <Image resizeMode='contain' source={elem.image} style={styles.image} />
-                                    </View>
-                                    <View>
-                                        <Text style={styles.nameFont}>{elem.name}</Text>
-                                        <Text style={styles.yearFont}> {elem.year}</Text>
-                                        <View style={[styles.activeStatus, { backgroundColor: bgColor[elem.status] }]}>
-                                            <Text style={styles.activeStatusText}>{elem.status}</Text>
+                    {
+                        data.map((elem, index) => (
+                            <TouchableOpacity activeOpacity={0.9} key={index} onPress={() => navigation.navigate(elem.navigateTo)}>
+                                <View style={styles.allStudentContainer}>
+                                    <View style={styles.allStudentContainers}>
+                                        <View >
+                                            <Image resizeMode='contain' source={elem?.picture ? { uri: getImage(elem?.picture) } : require("../../images/profile.png")} style={styles.image} />
+                                        </View>
+                                        <View>
+                                            <Text style={styles.nameFont}>{elem?.fullName}</Text>
+                                            <Text style={styles.yearFont}> {elem?.StudentYear?.name}</Text>
+                                            <View style={[styles.activeStatus, { backgroundColor: bgColor[elem?.status] }]}>
+                                                <Text style={styles.activeStatusText}>{elem?.status}</Text>
+                                            </View>
                                         </View>
                                     </View>
+
+                                    <View >
+                                        <Text style={styles.weeklyText}> {elem?.feeChargedBy}</Text>
+                                    </View>
                                 </View>
-
-                                <View >
-                                    <Text style={styles.weeklyText}> {elem.duration}</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    ))
-                }
+                            </TouchableOpacity>
+                        ))
+                    }
 
 
 
-            </View>
-        </ScrollView>
+                </View>
+            </ScrollView>
+        </>
     )
 }
 
@@ -163,6 +166,9 @@ const styles = StyleSheet.create({
     image: {
         width: screenDimensions.width * 0.18,
         height: screenDimensions.width * 0.18,
-        borderRadius: screenDimensions.width * 0.18 * 0.5
+        borderRadius: screenDimensions.width * 0.18 * 0.5,
+        backgroundColor: Color.disable,
+        borderColor: Color.borderColor,
+        borderWidth: 0.3,
     }
 })

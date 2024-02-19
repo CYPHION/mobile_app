@@ -7,7 +7,7 @@ import { API } from '../../network/API'
 import { handleLogin } from '../../store/slice/user'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { customToast, removeError, screenDimensions } from '../../utils/functions'
+import { removeError, screenDimensions } from '../../utils/functions'
 
 
 const LoginScreen = (prop) => {
@@ -40,21 +40,32 @@ const LoginScreen = (prop) => {
 
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setIsLoading(true)
         const { email, password } = formData
-        API.login(email, password)
-            .then(res => {
-                saveDataToredux(res?.data);
-                console.log('login', res)
-            })
-            .catch(err => {
-                customToast('error', err.message)
-            })
-            .finally(() => {
-                console.log('finnaly')
-                setIsLoading(false)
-            })
+        try {
+            const res = await API.login(email, password)
+            saveDataToredux(res?.data)
+            console.log(res)
+        } catch (error) {
+            console.log(error)
+        } finally {
+            console.log('finally')
+            setIsLoading(false)
+        }
+
+        // .then(res => {
+        //     saveDataToredux(res?.data);
+        //     console.log('login', res)
+        // })
+        // .catch(err => {
+        //     customToast('success', err)
+        //     console.log('error', err)
+        // })
+        // .finally(() => {
+        //     console.log('finnaly')
+        //     setIsLoading(false)
+        // })
         // if (formData.username.toLowerCase().trim() !== '' && formData.username.toLowerCase() === 'admin@gmail.com') {
         //     if (formData.password.trim() == '123456') {
         //         const userData = {
@@ -158,7 +169,7 @@ const LoginScreen = (prop) => {
                             <CustomButton
                                 btnstyle={{ width: screenDimensions.width * 0.8 }}
                                 variant={"fill"}
-                                disabled={isLoading}
+                                // disabled={isLoading}
                                 title={"Login"}
                                 onPress={() => handleSubmit()}
                             />
