@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -14,10 +15,10 @@ import { screenDimensions } from '../../utils/functions';
 
 
 
-const Profile = ({ navigation }) => {
+const Profile = () => {
     const [open, setOpen] = useState(false)
     const dipatch = useDispatch()
-
+    const navigation = useNavigation()
     return (
         <ScrollView>
             <View style={{ backgroundColor: Color.white, overflow: 'scroll' }}>
@@ -171,6 +172,7 @@ const Profile = ({ navigation }) => {
                                 onPress={() => {
                                     dipatch(handleLogout())
                                     setOpen(!open)
+
                                 }}
                             />
                         </View>

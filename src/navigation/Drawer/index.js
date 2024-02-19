@@ -1,12 +1,16 @@
 import { DrawerContentScrollView, createDrawerNavigator } from '@react-navigation/drawer';
 import { CommonActions, DrawerActions, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AntIcon from 'react-native-vector-icons/AntDesign';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../components/base/CustomButton';
 import MyModal from '../../components/base/Modal';
+import ConfirmResetPassword from '../../screens/ConfirmResetPassword';
+import LoginScreen from '../../screens/Login';
+import ResetPassword from '../../screens/ResetPassword';
 import { handleLogout } from '../../store/slice/user';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
@@ -138,11 +142,27 @@ function CustomDrawerContent(props) {
 
     );
 }
+const Stack = createNativeStackNavigator();
+
+function AuthSTack() {
+    return (
+        <Stack.Navigator
+            screenOptions={{
+                headerShown: false
+            }}
+        >
+            <Stack.Screen name='login' component={LoginScreen} />
+            <Stack.Screen name='forgetPassword' component={ResetPassword} />
+            <Stack.Screen name='confirmPassword' component={ConfirmResetPassword} />
+        </Stack.Navigator>
+    )
+}
 
 
 function MyDrawer({ old }) {
     const navigation = useNavigation();
-
+    const userData = useSelector(state => state.user.data);
+    const [show, setShow] = useState(false)
 
 
     useEffect(() => {
@@ -154,9 +174,18 @@ function MyDrawer({ old }) {
         );
     }, [old]);
 
+    useEffect(() => {
+        if (userData?.email) {
+            setShow(true)
+        } else {
+            setShow(false)
+        }
+    }, [userData])
+
     return (
 
         <Drawer.Navigator
+            initialRouteName='root'
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={{
                 headerShown: false, // Hide header for all screens
@@ -167,8 +196,13 @@ function MyDrawer({ old }) {
             }}
 
         >
-            <Drawer.Screen name="tabs" component={TabNavigation} />
-            <Drawer.Screen name="root" component={MyStack} />
+            {show ? <>
+                <Drawer.Screen name="tabs" component={TabNavigation} />
+                <Drawer.Screen name="root" component={MyStack} />
+            </> :
+                <>
+                    <Drawer.Screen name="auth" component={AuthSTack} />
+                </>}
 
         </Drawer.Navigator>
 
