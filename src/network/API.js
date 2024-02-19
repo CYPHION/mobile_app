@@ -10,8 +10,8 @@ export class API {
         return await HttpService.GET(`/student/${id}`)
     }
 
-    static async getGlobalData() {
-        return HttpService.GET('/global/dropdown')
+    static async getGlobalData(id) {
+        return HttpService.GET(`/global/mobile/${id}`)
     }
 
 

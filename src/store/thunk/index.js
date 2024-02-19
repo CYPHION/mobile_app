@@ -14,8 +14,7 @@ export const logoutUser = createAsyncThunk("logoutUser", () => {
 
 });
 
-export const globalData = createAsyncThunk("globalData", async () => {
-      const res = await API.getGlobalData()
-
+export const globalData = createAsyncThunk("globalData", async (id) => {
+      const res = await API.getGlobalData(id)
       return res.data
 });

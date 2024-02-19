@@ -2,7 +2,8 @@
 import { Dimensions } from 'react-native'
 import Toast from 'react-native-toast-message'
 import { URL } from '../network/httpService'
-import { handleLogout } from '../store/slice/user'
+import { store } from '../store'
+import { logoutUser } from '../store/thunk'
 
 export const screenDimensions = Dimensions.get('window')
 
@@ -64,6 +65,8 @@ export const customToast = (type, message) => { //type = error || success || inf
 export const CheckForHttpErrors = error => {
     const { response } = error
 
+
+
     if (!response) {
         customToast('error', 'No response from server')
         return 'Server not responding'
@@ -76,13 +79,13 @@ export const CheckForHttpErrors = error => {
                 customToast('error', response.data.message)
                 :
                 customToast('error', 'Your session is expired, please login again')
-            store.dispatch(handleLogout())
+            store.dispatch(logoutUser())
             break
         case 440:
             response.data.message
                 ? customToast('error', response.data.message)
                 : customToast('error', 'Your session is expired, please login again')
-            store.dispatch(handleLogout())
+            store.dispatch(logoutUser())
             break
         default:
             return {
