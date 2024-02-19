@@ -12,14 +12,13 @@ const ViewAllStudents = ({ navigation }) => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
 
-
     const bgColor = {
         active: Color.primary,
         inactive: Color.btnDisable
     }
 
     const getStudents = () => {
-        API.getStudentByParentId(29)
+        API.getStudentByParentId(user?.id)
             .then(res => {
                 setData(res?.data);  // Assuming `setData` is a state updating function
             })

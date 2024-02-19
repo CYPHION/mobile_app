@@ -1,18 +1,17 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import CustomButton from '../../components/base/CustomButton'
 import FlaotingTextInput from '../../components/base/FlaotingTextInput'
-import { API } from '../../network/API'
 import { handleLogin } from '../../store/slice/user'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { removeError, screenDimensions } from '../../utils/functions'
 
 
-const LoginScreen = (prop) => {
-    const navigation = useNavigation()
+const ResetPassword = (prop) => {
+
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -43,16 +42,11 @@ const LoginScreen = (prop) => {
 
     const handleSubmit = () => {
         // setIsLoading(true)
-        const { email, password } = formData
-
-        API.login(email.toLowerCase(), password)
-            .then((res) => saveDataToredux(res?.data))
-            .catch(err => console.log('errrr', err))
-            .finally(() => console.log('finnalau'))
-
 
     };
 
+
+    const navigation = useNavigation()
 
     return (
         <SafeAreaView>
@@ -99,7 +93,7 @@ const LoginScreen = (prop) => {
                                 fontSize: FontSizes.xl,
                             }}
                         >
-                            Login
+                            Reset Password
                         </Text>
                         <View
                             style={{
@@ -109,39 +103,19 @@ const LoginScreen = (prop) => {
                             <FlaotingTextInput
                                 value={formData.email}
                                 onChangeText={(text) => onChangeHandler("email", text)}
-                                label={"Username/Email"}
+                                label={"Enter Email"}
                                 errorMcg={error.email}
                             />
-                            <FlaotingTextInput
-                                errorMcg={error.password}
-                                password={true}
-                                value={formData.password}
-                                onChangeText={(text) => onChangeHandler("password", text)}
-                                label={"Password"}
-                            />
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate('forgetPassword')}>
-                                <Text
-                                    style={{
-                                        color: Color.white,
-                                        width: screenDimensions.width * 0.9,
-                                        fontFamily: FontFamily.interRegular,
-                                        fontSize: FontSizes.md,
-                                        textAlign: "right",
-                                    }}
-                                >
-                                    Forgot Password?
-                                </Text>
-                            </TouchableOpacity>
 
                         </View>
-                        <View style={{ gap: 15, alignItems: 'center' }}>
+                        <View style={{ gap: 15, alignItems: 'center', marginTop: 20 }}>
                             <CustomButton
                                 btnstyle={{ width: screenDimensions.width * 0.8 }}
                                 variant={"fill"}
                                 // disabled={isLoading}
-                                title={"Login"}
-                                onPress={() => handleSubmit()}
+                                title={"Continue"}
+                                onPress={() => navigation.navigate('confirmPassword')}
+
                             />
                         </View>
                     </View>
@@ -153,7 +127,7 @@ const LoginScreen = (prop) => {
     )
 }
 
-export default LoginScreen
+export default ResetPassword
 
 const styles = StyleSheet.create({
     picture: {

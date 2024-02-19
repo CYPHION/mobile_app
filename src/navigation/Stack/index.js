@@ -3,10 +3,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CustomAppBar from '../../components/base/CustomAppBar';
 import AddTestimonial from '../../screens/AddTestimonial';
 import Compensation from '../../screens/Compensation';
+import ConfirmResetPassword from '../../screens/ConfirmResetPassword';
 import FeeCollection from '../../screens/FeeCollection';
 import HomeWork from '../../screens/HomeWork';
 import LeaveApplication from '../../screens/LeaveApplication';
+import LoginScreen from '../../screens/Login';
 import Notifications from '../../screens/Notifications';
+import ResetPassword from '../../screens/ResetPassword';
 import StudentDetails from '../../screens/StudentDetails';
 import Testimonials from '../../screens/Testimonials';
 import ViewAttendance from '../../screens/ViewAttendance';
@@ -78,7 +81,6 @@ export function MyStack({ old }) {
     // console.log(old)
     const route = useRoute()
     const routerName = getFocusedRouteNameFromRoute(route)
-
     const navigation = useNavigation();
 
     // useEffect(() => {
@@ -95,6 +97,11 @@ export function MyStack({ old }) {
             screenOptions={screenOptionss}
         >
             {/* <Stack.Screen name="tabs" component={TabNavigation} /> */}
+
+            <Stack.Screen name='login' component={LoginScreen} />
+            <Stack.Screen name='forgetPassword' component={ResetPassword} />
+            <Stack.Screen name='confirmPassword' component={ConfirmResetPassword} />
+
             <Stack.Screen name="home" component={TabNavigation} />
             <Stack.Screen name="children" component={ChildrenStack} />
             <Stack.Screen name="addTestimonial" component={AddTestimonial} options={{
@@ -121,6 +128,7 @@ export function MyStack({ old }) {
 
                 }}
             />
+
 
         </Stack.Navigator>
     );

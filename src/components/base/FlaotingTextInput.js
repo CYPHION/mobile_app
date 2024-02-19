@@ -97,6 +97,7 @@ const FloatingTextInput = (props) => {
                     style={[styles.textStyle, { color: color }]}
                     onBlur={onBlur}
                     onFocus={onFocus}
+
                 />
                 {password ? (
                     <TouchableOpacity

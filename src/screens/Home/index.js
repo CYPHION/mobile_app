@@ -41,6 +41,7 @@ const Home = ({ navigation }) => {
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
 
+
     return (
         <>
             {/* <LoadingScreen loading={loading} /> */}
