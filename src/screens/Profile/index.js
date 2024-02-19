@@ -15,7 +15,7 @@ import { getImage, screenDimensions } from '../../utils/functions';
 
 
 
-const Profile = ({ navigation }) => {
+const Profile = () => {
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
