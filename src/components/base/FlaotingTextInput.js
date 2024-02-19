@@ -120,7 +120,7 @@ const FloatingTextInput = (props) => {
 
 const styles = StyleSheet.create({
     subContainer: {
-        paddingTop: 15,
+        paddingTop: 10,
         marginHorizontal: 5,
     },
     textStyle: {

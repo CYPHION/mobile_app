@@ -65,7 +65,7 @@ const LoginScreen = (prop) => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View>
+                <View style={{ alignItems: 'center' }}>
                     <Image
                         style={[styles.picture]}
                         resizeMode="cover"
@@ -96,14 +96,13 @@ const LoginScreen = (prop) => {
                     </View>
                     <View
                         style={[
-                            { gap: 20, alignItems: "center", height: screenDimensions.height * 0.65 },
+                            { gap: 10, height: screenDimensions.height * 0.65, width: screenDimensions.width * 0.9 },
                         ]}
                     >
                         <Text
                             style={{
                                 marginTop: 20,
                                 color: Color.white,
-                                width: screenDimensions.width * 0.9,
                                 fontFamily: FontFamily.interRegular,
                                 fontSize: FontSizes.xl,
                             }}
@@ -112,16 +111,13 @@ const LoginScreen = (prop) => {
                         </Text>
                         <View
                             style={{
-                                position: "relative",
                                 gap: 10,
-                                width: screenDimensions.width * 0.9,
-                                height: screenDimensions.height * 0.3,
                             }}
                         >
                             <FlaotingTextInput
                                 value={formData.username}
                                 onChangeText={(text) => onChangeHandler("username", text)}
-                                label={"username/email"}
+                                label={"Username/Email"}
                                 errorMcg={error.username}
                             />
                             <FlaotingTextInput
@@ -143,7 +139,7 @@ const LoginScreen = (prop) => {
                                 Forgot Password?
                             </Text>
                         </View>
-                        <View style={{ gap: 15 }}>
+                        <View style={{ gap: 15, alignItems: 'center' }}>
                             <CustomButton
                                 btnstyle={{ width: screenDimensions.width * 0.8 }}
                                 variant={"fill"}
@@ -151,23 +147,12 @@ const LoginScreen = (prop) => {
                                 title={"Login"}
                                 onPress={() => handleSubmit()}
                             />
-                            <Text
-                                style={{
-                                    color: Color.white,
-                                    width: screenDimensions.width * 0.8,
-                                    fontFamily: FontFamily.interRegular,
-                                    fontSize: FontSizes.md,
-                                    textAlign: "center",
-                                }}
-                            >
-                                Dont have an account? Register
-                            </Text>
                         </View>
                     </View>
 
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
 
     )
 }
@@ -189,7 +174,7 @@ const styles = StyleSheet.create({
         width: screenDimensions.width * 0.4
     },
     logoView: {
-        gap: 20,
+        gap: 15,
         width: screenDimensions.width,
         height: screenDimensions.height * 0.35,
         // backgroundColor: 'pink',
