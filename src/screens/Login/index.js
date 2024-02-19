@@ -41,49 +41,12 @@ const LoginScreen = (prop) => {
     };
 
     const handleSubmit = async () => {
-        setIsLoading(true)
         const { email, password } = formData
-        try {
-            const res = await API.login(email, password)
-            saveDataToredux(res?.data)
-            console.log(res)
-        } catch (error) {
-            console.log(error)
-        } finally {
-            console.log('finally')
-            setIsLoading(false)
-        }
 
-        // .then(res => {
-        //     saveDataToredux(res?.data);
-        //     console.log('login', res)
-        // })
-        // .catch(err => {
-        //     customToast('success', err)
-        //     console.log('error', err)
-        // })
-        // .finally(() => {
-        //     console.log('finnaly')
-        //     setIsLoading(false)
-        // })
-        // if (formData.username.toLowerCase().trim() !== '' && formData.username.toLowerCase() === 'admin@gmail.com') {
-        //     if (formData.password.trim() == '123456') {
-        //         const userData = {
-        //             email: formData.username,
-        //         }
-        //         dipatch(handleLogin(userData))
-        //         setIsLoading(false)
-        //     } else {
-        //         setError(prev => ({ ...prev, password: "Incorrect Password" }))
-        //         setIsLoading(false)
-
-        //     }
-        // } else {
-        //     setError(prev => ({ ...prev, username: "Incorrect username" }))
-        //     setError(prev => ({ ...prev, password: "Enter Password" }))
-        //     setIsLoading(false)
-
-        // }
+        API.login(email.toLowerCase(), password)
+            .then((res) => saveDataToredux(res?.data))
+            .catch(err => console.log('errrr', err))
+            .finally(() => console.log('finnalau'))
     }
 
 
@@ -169,7 +132,7 @@ const LoginScreen = (prop) => {
                             <CustomButton
                                 btnstyle={{ width: screenDimensions.width * 0.8 }}
                                 variant={"fill"}
-                                // disabled={isLoading}
+                                disabled={isLoading}
                                 title={"Login"}
                                 onPress={() => handleSubmit()}
                             />

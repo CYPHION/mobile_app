@@ -44,15 +44,15 @@ const Home = ({ navigation }) => {
 
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
-    console.log(user)
 
     const getStudents = () => {
-        API.getStudentByParentId(29)
+        API.getStudentByParentId(user?.id)
             .then(res => {
                 setData(res?.data);  // Assuming `setData` is a state updating function
             })
             .catch(err => {
                 customToast('error', err);
+                console.log('cathc', err)
             })
             .finally(() => {
                 setLoading(false)
@@ -65,7 +65,6 @@ const Home = ({ navigation }) => {
         getStudents();
     }, []);
 
-    console.log(data)
 
     return (
         <>
