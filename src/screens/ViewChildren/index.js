@@ -3,11 +3,14 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import CardIcon from "react-native-vector-icons/AntDesign";
 import BookIcon from "react-native-vector-icons/FontAwesome5";
-import { default as CreditCardIcon, default as StackIcon } from "react-native-vector-icons/MaterialCommunityIcons";
+
+import StackIcon from "react-native-vector-icons/AntDesign";
+import { default as CreditCardIcon } from "react-native-vector-icons/MaterialCommunityIcons";
 import { default as CalendarIcon, default as DetaiIcon } from "react-native-vector-icons/MaterialIcons";
 import TopbarWithGraph from '../../components/widget/TopbarWithGraph';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
+import { GlobalStyles } from '../../utils/globalStyles';
 
 const ViewChildren = ({ navigation }) => {
 
@@ -53,13 +56,13 @@ const ViewChildren = ({ navigation }) => {
             <View style={styles.viewChildrenContainer}>
                 <TopbarWithGraph />
 
-                <View style={{ gap: 30, marginTop: 10, paddingHorizontal: 10 }}>
+                <View style={{ gap: 10, marginTop: 10, paddingHorizontal: 10 }}>
 
                     {items.map((elem, index) => (
-                        <TouchableOpacity key={index} activeOpacity={0.7} onPress={() => navigation.navigate(elem.path)}>
-                            <View style={[styles.viewChildernStaclList, { paddingVertical: 10 }]}>
+                        <TouchableOpacity style={[GlobalStyles.r_10, GlobalStyles.p_10,]} key={index} activeOpacity={0.7} onPress={() => navigation.navigate(elem.path)}>
+                            <View style={[styles.viewChildernStaclList]}>
                                 <View style={styles.viewChildernStaclList}>
-                                    <View>
+                                    <View style={[styles.bgIconColor]}>
                                         {elem.icon}
                                     </View>
                                     <View>
@@ -67,7 +70,7 @@ const ViewChildren = ({ navigation }) => {
                                     </View>
                                 </View>
                                 <View>
-                                    <StackIcon name="greater-than" size={FontSizes.lg} color={Color.iconColor} />
+                                    <StackIcon name="right" size={FontSizes.xl} color={Color.iconColor} />
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -98,8 +101,24 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.regular,
         fontSize: FontSizes.lg,
         color: Color.textThree,
+    },
+    bgIconColor: {
+        width: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: Color.white,
+        borderRadius: 8,
+        padding: 5,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1, // Set a lower opacity for a subtle shadow
+        shadowRadius: 2, // Set a lower radius for a less spread shadow
+    },
+    borderStyle: {
+        borderWidth: 1,
+        borderColor: Color.textThree
     }
-
 
 
 })

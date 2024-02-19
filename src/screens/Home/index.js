@@ -7,6 +7,7 @@ import Graph from '../../components/base/GraphComponent';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { screenDimensions } from '../../utils/functions';
+import { GlobalStyles } from '../../utils/globalStyles';
 
 const data = [
     { name: "2024", value: "1" },
@@ -62,7 +63,7 @@ const Home = ({ navigation }) => {
     return (
         <ScrollView>
             <View style={styles.profileContainer}>
-                <View style={[styles.profileRowContainer]}>
+                <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
                     <View>
 
                         <Text style={[styles.NameText, styles.textFontFamily]}>Hi, Hamza</Text>
@@ -73,7 +74,7 @@ const Home = ({ navigation }) => {
                         <Icon name="notifications-outline" size={FontSizes.xxxl} color={Color.black} />
                     </TouchableOpacity>
                 </View>
-                <View style={[styles.profileRowContainer]}>
+                <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
                     <View>
                         <Text style={[styles.CompText]}>Enrolled Children (3)</Text>
                     </View>
@@ -89,7 +90,7 @@ const Home = ({ navigation }) => {
                     keyExtractor={(item, index) => index.toString()}
                     contentContainerStyle={styles.flatListContainer}
                 />
-                <View style={styles.profileRowContainer}>
+                <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
                     <Text style={[styles.CompText]}>Fee Paid Per Month</Text>
                     <DropdownComponent
                         dropdownStyle={{ width: screenDimensions.width * 0.2 }}
@@ -100,9 +101,7 @@ const Home = ({ navigation }) => {
                         setValue={setOption}
                     />
                 </View>
-                <View style={{ width: screenDimensions.width, height: screenDimensions.height * 0.4 }}>
-                    <Graph />
-                </View>
+                <Graph />
             </View>
         </ScrollView>
     )
@@ -116,7 +115,6 @@ const styles = StyleSheet.create({
         backgroundColor: Color.white
     },
     profileRowContainer: {
-        padding: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'

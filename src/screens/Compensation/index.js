@@ -8,7 +8,7 @@ import { FontFamily, FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
 
 const Compensation = () => {
-    const [active, setActive] = useState(false)
+    const [active, setActive] = useState(true)
 
     return (
         <View>
@@ -19,28 +19,22 @@ const Compensation = () => {
                         <CustomButton
                             title='Missed Lesson'
                             btnstyle={styles.btnStyle}
-                            variant={active ? '' : 'fill'}
-                            onPress={() => setActive(prev => !prev)}
+                            variant={active ? 'fill' : ''}
+                            onPress={() => {
+                                setActive(prev => !prev)
+                            }}
                         />
                         <CustomButton
                             btnstyle={styles.btnStyle}
                             title='Compensation Status'
-                            variant={active ? 'fill' : ''}
+                            variant={active ? '' : 'fill'}
                             onPress={() => {
-                                // setNextScreen(false)
                                 setActive(prev => !prev)
                             }}
                         />
                     </View>
                     <View style={styles.body}>
-                        {active ?
-                            <ViewCompensation />
-                            :
-                            <>
-                                <MissedLesson />
-                                {/* {nextScreen ? renderScreen() : <CreateAppliction setNextScreen={setNextScreen} />} */}
-                            </>
-                        }
+                        {active ? <MissedLesson /> : <ViewCompensation />}
                     </View>
                 </ScrollView>
             </View>
@@ -54,7 +48,6 @@ export default Compensation
 const styles = StyleSheet.create({
     main: {
         backgroundColor: Color.white,
-        // padding: 10
     },
     tabBtn: {
         paddingVertical: 10,

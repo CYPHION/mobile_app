@@ -9,6 +9,7 @@ import ViewApplication from '../../components/widget/ViewApplication';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { screenDimensions } from '../../utils/functions';
+import { GlobalStyles } from '../../utils/globalStyles';
 
 const LeaveApplication = () => {
 
@@ -131,7 +132,7 @@ const LeaveApplication = () => {
                             }}
                         />
                     </View>
-                    <View style={styles.body}>
+                    <View style={[GlobalStyles.p_10]}>
                         {active ? <ViewApplication /> :
                             <>
                                 {nextScreen ? renderScreen() : <CreateAppliction setNextScreen={setNextScreen} />}
@@ -150,7 +151,6 @@ export default LeaveApplication;
 const styles = StyleSheet.create({
     main: {
         backgroundColor: Color.white,
-        // padding: 10
     },
     tabBtn: {
         paddingVertical: 10,
@@ -160,9 +160,6 @@ const styles = StyleSheet.create({
     },
     btnStyle: {
         width: screenDimensions.width * 0.47,
-    },
-    body: {
-        padding: 10
     },
     textHeading: {
         color: Color.text,

@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Color } from "../../utils/color";
 import { FontFamily, FontSizes } from "../../utils/font";
+import { GlobalStyles } from "../../utils/globalStyles";
 
 const CustomButton = (props) => {
     const {
@@ -26,7 +27,7 @@ const CustomButton = (props) => {
             {...props}
             disabled={disabled ? disabled : false}
             activeOpacity={0.7}
-            style={[styles.buttonContainer, variant === 'fill' ? { backgroundColor: Color.primary } : { backgroundColor: Color.white }, { ...btnstyle }]}
+            style={[styles.buttonContainer, GlobalStyles.p_10, variant === 'fill' ? { backgroundColor: Color.primary } : { backgroundColor: Color.white }, { ...btnstyle }]}
             onPress={onPress}
         >
             {disabled ? <ActivityIndicator size="small" color={variant === 'fill' ? Color.white : Color.primary} /> : ""}
@@ -49,7 +50,6 @@ const styles = StyleSheet.create({
         gap: 5,
         borderRadius: 4,
         margin: 5,
-        padding: 10,
     },
     buttonText: {
         fontSize: FontSizes.md,

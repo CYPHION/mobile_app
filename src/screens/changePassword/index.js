@@ -73,7 +73,6 @@ const ChangePasswordScreen = () => {
 
                             />
                             <CustomButton
-                                btnstyle={styles.modalButton}
                                 title={'Confirm'}
                                 variant='fill'
                             />
@@ -92,9 +91,6 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.interRegular,
         color: Color.text,
         fontSize: FontSizes.xl
-    },
-    modalButton: {
-        padding: 10
     },
     modalText: {
         textAlign: 'center',

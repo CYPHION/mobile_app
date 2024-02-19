@@ -6,6 +6,7 @@ import BookIcon from "react-native-vector-icons/FontAwesome5"
 import CustomButton from '../../components/base/CustomButton'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
+import { GlobalStyles } from '../../utils/globalStyles'
 const HomeWork = () => {
 
     const Data = [
@@ -31,7 +32,7 @@ const HomeWork = () => {
 
         <ScrollView>
             <View style={{ paddingBottom: 10, backgroundColor: Color.white }}>
-                <View style={styles.viewChildrenContainer}>
+                <View style={[styles.viewChildrenContainer, GlobalStyles.p_10]}>
                     <Text style={[styles.NameText, styles.textFontFamily]}>Abdullah Khan</Text>
                     <Text style={[styles.CompText, styles.textFontFamily]}>(3)</Text>
                 </View>
@@ -86,7 +87,6 @@ export default HomeWork
 const styles = StyleSheet.create({
 
     viewChildrenContainer: {
-        padding: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

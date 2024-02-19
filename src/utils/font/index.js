@@ -1,4 +1,3 @@
-import { screenDimensions } from "../functions";
 
 export const FontFamily = {
     light: 'Poppins-Light',//300
@@ -15,7 +14,8 @@ export const FontFamily = {
 
 
 const helperFunction = (fontSize) => {
-    return Number(fontSize) * screenDimensions.fontScale
+    return fontSize
+    // return Number(fontSize) * screenDimensions.fontScale
 };
 
 export const FontSizes = {

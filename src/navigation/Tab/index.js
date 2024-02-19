@@ -23,7 +23,11 @@ const ProfileStack = () => {
     return <StackProfile.Navigator
         initialRouteName='profile'
     >
-        <StackProfile.Screen name="profile" component={Profile} />
+        <StackProfile.Screen name="profile" component={Profile}
+            options={{
+                headerShown: false,
+
+            }} />
         <StackProfile.Screen name="changePassword" component={ChangePasswordScreen}
             options={{
                 headerShown: true,
@@ -57,6 +61,8 @@ const TabNavigation = ({ old }) => {
     }, [navigation]);
 
 
+
+
     return (
         <Tab.Navigator
             initialRouteName="home"
@@ -70,10 +76,10 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <ReceiptIcon
                             name="receipt"
-                            color={focused ? Color.iconColor : color}
+                            color={focused ? Color.primary : color}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.iconColor,
+                    tabBarActiveTintColor: Color.primary,
                     headerShown: true,
                     headerTitle: 'View Fee Receipt'
                 }}
@@ -84,10 +90,10 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <CardIcon
                             name="card"
-                            color={focused ? Color.iconColor : color}
+                            color={focused ? Color.primary : color}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.iconColor,
+                    tabBarActiveTintColor: Color.primary,
                     headerShown: true,
                     headerTitle: 'Student Fees'
 
@@ -99,10 +105,10 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <Icon
                             name="home"
-                            color={focused ? Color.iconColor : color}
+                            color={focused ? Color.primary : color}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.iconColor
+                    tabBarActiveTintColor: Color.primary
                 }}
             />
             <Tab.Screen name="analytics" component={Analytics}
@@ -111,23 +117,27 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <AnalyticsIcon
                             name="signal-cellular-3"
-                            color={focused ? Color.iconColor : color}
+                            color={focused ? Color.primary : color}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.iconColor,
+                    tabBarActiveTintColor: Color.primary,
 
                 }}
             />
-            <Tab.Screen name="profile" component={ProfileStack}
+            <Tab.Screen
+                name="profiles"
+                component={ProfileStack}
                 options={{
                     tabBarLabel: 'Profile',
                     tabBarIcon: ({ color, size, focused }) => (
                         <UserIcon
                             name="user-circle"
-                            color={focused ? Color.iconColor : color}
-                            size={size} />
+                            color={focused ? Color.primary : color}
+                            size={size}
+                        />
                     ),
-                    tabBarActiveTintColor: Color.iconColor
+                    tabBarActiveTintColor: Color.primary,
+
                 }}
             />
         </Tab.Navigator>
@@ -135,3 +145,4 @@ const TabNavigation = ({ old }) => {
 }
 
 export default TabNavigation
+

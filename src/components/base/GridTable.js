@@ -1,8 +1,9 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/Feather'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
+import { GlobalStyles } from '../../utils/globalStyles'
 
 const GridTable = (props) => {
     const { data, heading, CheckboxChild, header, onDownloadClick } = props
@@ -13,11 +14,14 @@ const GridTable = (props) => {
         <>
             <View style={styles.container}>
                 <View style={styles.innerView}>
-                    {!!header && <View style={[styles.header, styles.headerStyle]}>
+                    {!!header && <View style={[styles.header, styles.headerStyle, GlobalStyles.p_10]}>
                         <Text style={[styles.headingText, { color: Color.white }]}>{header}</Text>
-                        <Icon name='download' onPress={onDownloadClick} color={Color.white} size={FontSizes.xxl} />
+                        <TouchableOpacity onPress={onDownloadClick} >
+                            <Icon name='download' color={Color.white} size={FontSizes.xxl} />
+                        </TouchableOpacity>
+
                     </View>}
-                    <View style={{ padding: 10 }}>
+                    <View style={GlobalStyles.p_10}>
 
                         {/* {showCheckBox && <MyCheckBox isChecked={isChecked} onToggle={onToggle} />} */}
                         {CheckboxChild && CheckboxChild}
@@ -31,7 +35,7 @@ const GridTable = (props) => {
                         ))}
                     </View>
                 </View>
-            </View>
+            </View >
         </>
     )
 }
@@ -77,7 +81,6 @@ const styles = StyleSheet.create({
     headerStyle: {
         backgroundColor: Color.primary,
         width: '100%',
-        padding: 10
     },
     headingText: {
         color: Color.text,

@@ -1,6 +1,7 @@
 import { getFocusedRouteNameFromRoute, useNavigation, useRoute } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CustomAppBar from '../../components/base/CustomAppBar';
+import AddTestimonial from '../../screens/AddTestimonial';
 import Compensation from '../../screens/Compensation';
 import FeeCollection from '../../screens/FeeCollection';
 import HomeWork from '../../screens/HomeWork';
@@ -28,8 +29,16 @@ const ChildrenStack = () => {
         initialRouteName='childrenView'
         screenOptions={screenOptionss}
     >
-        <Stack.Screen name="childrenView" component={ViewAllStudents} />
-        <Stack.Screen name="viewStudent" component={ViewChildren} />
+        <Stack.Screen name="childrenView" component={ViewAllStudents} options={{
+            headerShown: true,
+            header: () => <CustomAppBar title={'Childrens'} />
+
+        }} />
+        <Stack.Screen name="viewStudent" component={ViewChildren} options={{
+            headerShown: true,
+            header: () => <CustomAppBar title={'Abdullah Khan'} />
+
+        }} />
         <Stack.Screen name="studentDetail" component={StudentDetails} options={{
             headerShown: true,
             headerTitle: 'View Student Detail',
@@ -88,6 +97,11 @@ export function MyStack({ old }) {
             {/* <Stack.Screen name="tabs" component={TabNavigation} /> */}
             <Stack.Screen name="home" component={TabNavigation} />
             <Stack.Screen name="children" component={ChildrenStack} />
+            <Stack.Screen name="addTestimonial" component={AddTestimonial} options={{
+                headerShown: true,
+                headerTitle: 'Testimonials',
+
+            }} />
             <Stack.Screen name="viewAppointment" component={ViewAppointments} />
             <Stack.Screen name="leaveApplication" component={LeaveApplication} options={{
                 headerShown: true,

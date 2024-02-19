@@ -1,15 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import FilterIcon from 'react-native-vector-icons/FontAwesome'
 import Pound from "react-native-vector-icons/FontAwesome5"
 import Icon from "react-native-vector-icons/Fontisto"
+import CustomDatePicker from '../../components/base/CustomDatePicker'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
+import { GlobalStyles } from '../../utils/globalStyles'
 
 
 
 const Analytics = () => {
+
+    const [open, setOpen] = useState(false)
+
+
     return (
         <ScrollView>
             <View style={styles.viewChildrenContainer}>
@@ -24,9 +30,8 @@ const Analytics = () => {
                         <Icon name="bell" color={Color.textTwo} size={FontSizes.xxxl} />
                     </TouchableOpacity>
                 </View>
-
-                <View style={[styles.bgColor, styles.container]}>
-                    <Text style={styles.detailText}>Analytics</Text>
+                <View style={[GlobalStyles.headerStyles]}>
+                    <Text style={GlobalStyles.headerTextStyle}>Analytics</Text>
                     <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
                         <View style={[styles.iconView]}>
                             <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
@@ -35,13 +40,13 @@ const Analytics = () => {
                     </TouchableOpacity>
                 </View>
 
-                <View style={{ alignItems: 'center', gap: 15, paddingVertical: 15 }}>
+                <View style={{ alignItems: 'center', gap: 10, paddingVertical: 10 }}>
 
                     <View style={styles.analyticBox}>
                         <View style={{ backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', width: '25%' }}>
                             <Icon name='clock' color={Color.white} size={screenDimensions.width * 0.12} />
                         </View>
-                        <View style={{ padding: 10, width: '75%' }} >
+                        <View style={[GlobalStyles.p_10, { width: '75%' }]} >
                             <Text style={styles.attendeceFont}>Attendance</Text>
                             <Text style={[styles.totalFont]}>Total : 3</Text>
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
@@ -55,7 +60,7 @@ const Analytics = () => {
                         <View style={{ backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', width: '25%' }}>
                             <Pound name='pound-sign' color={Color.white} size={screenDimensions.width * 0.12} />
                         </View>
-                        <View style={{ padding: 10, width: '75%' }} >
+                        <View style={[GlobalStyles.p_10, { width: '75%' }]} >
                             <Text style={styles.attendeceFont}>Attendance</Text>
                             <Text style={[styles.totalFont]}>Total : 3</Text>
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
@@ -70,7 +75,7 @@ const Analytics = () => {
                         <View style={{ backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', width: '25%' }}>
                             <Pound name='pound-sign' color={Color.white} size={screenDimensions.width * 0.12} />
                         </View>
-                        <View style={{ padding: 10, width: '75%' }} >
+                        <View style={[GlobalStyles.p_10, { width: '75%' }]} >
                             <Text style={styles.attendeceFont}>Attendance</Text>
                             <Text style={[styles.totalFont]}>Total : 3</Text>
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
@@ -81,7 +86,7 @@ const Analytics = () => {
                         <View style={{ backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', width: '25%' }}>
                             <Icon name='clock' color={Color.white} size={screenDimensions.width * 0.12} />
                         </View>
-                        <View style={{ padding: 10, width: '75%' }} >
+                        <View style={[GlobalStyles.p_10, { width: '75%' }]} >
                             <Text style={styles.attendeceFont}>Attendance</Text>
                             <Text style={[styles.totalFont]}>Total : 3</Text>
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
@@ -96,6 +101,12 @@ const Analytics = () => {
 
             </View>
 
+            <CustomDatePicker
+                isVisible={open}
+                onToggle={() => setOpen(false)}
+                onDone={(date) => console.log(date)}
+            />
+
         </ScrollView>
     )
 }
@@ -105,7 +116,6 @@ export default Analytics
 const styles = StyleSheet.create({
     viewChildrenContainer: {
         backgroundColor: Color.white,
-        paddingVertical: 10,
     },
     textFontFamily: {
         fontFamily: FontFamily.interRegular,
@@ -151,14 +161,13 @@ const styles = StyleSheet.create({
     analyticBox: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        width: screenDimensions.width * 0.95,
+        width: screenDimensions.width * 0.92,
         // backgroundColor: 'pink',
         elevation: 5,
         shadowOffset: {
             width: 0,
             height: 5,
         },
-
         backgroundColor: Color.white,
         borderRadius: 10,
         height: screenDimensions.fontScale * 110,
