@@ -108,6 +108,7 @@ const LoginScreen = (prop) => {
                         >
                             <FlaotingTextInput
                                 value={formData.email}
+                                inputMode={'email'}
                                 onChangeText={(text) => onChangeHandler("email", text)}
                                 label={"Username/Email"}
                                 errorMcg={error.email}

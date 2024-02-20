@@ -1,39 +1,82 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import CardIcon from "react-native-vector-icons/AntDesign";
 import FilterIcon from "react-native-vector-icons/FontAwesome";
 import BookIcon, { default as CalendarIcon, default as CapIcon } from 'react-native-vector-icons/FontAwesome5';
 import GridIcon from 'react-native-vector-icons/Ionicons';
 import TimeIcon from 'react-native-vector-icons/MaterialIcons';
+import { useSelector } from 'react-redux';
 import Table from '../../components/base/Table';
+import { API } from '../../network/API';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
+import { customToast, formattedDate } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
 
 
 const ViewAppointments = () => {
-    const list = [
-        { name: ' Title', value: 'Meeting One', icon: <CardIcon color={Color.primary} name='idcard' size={FontSizes.lg} /> },
-        { name: ' Department', value: 'English', icon: <BookIcon color={Color.primary} name='book' size={FontSizes.lg} /> },
-        { name: ' Date', value: '04-02-2024 lesson', icon: <TimeIcon color={Color.primary} name='timelapse' size={FontSizes.lg} /> },
-        { name: ' Time', value: '3:30 PM', icon: <GridIcon color={Color.primary} name='grid' size={FontSizes.lg} /> },
-        { name: ' Status', value: 'Pending', icon: <CapIcon color={Color.primary} name='graduation-cap' size={FontSizes.lg} /> },
-        { name: ' Remarks', value: 'These are the Remarks...', icon: <CalendarIcon color={Color.primary} name='calendar-check' size={FontSizes.lg} /> },
-
-    ]
-
-
-
-    const items = [
+    const userData = useSelector(state => state.user.data);
+    const [data, setData] = useState([])
+    const list = (elem) => [
         {
-            list,
-
+            name: " Title",
+            value: `${elem?.subject}`,
+            icon: <CardIcon color={Color.primary} name="idcard" size={FontSizes.lg} />,
         },
         {
-            list
+            name: " Department",
+            value: `${elem?.DepartmentAppointments.map(
+                (elem) => elem?.Department?.name
+            ).join("\n")}`,
+            icon: <BookIcon color={Color.primary} name="book" size={FontSizes.lg} />,
         },
+        {
+            name: " Date",
+            value: `${elem?.appointDate}`,
+            icon: (
+                <TimeIcon color={Color.primary} name="timelapse" size={FontSizes.lg} />
+            ),
+        },
+        {
+            name: " Time",
+            value: `${formattedDate(
+                `${elem.appointDate}T${elem.startTime}`,
+                "hh:mm:z"
+            )} to ${formattedDate(`${elem.appointDate}T${elem.endTime}`, "hh:mm:z")}`,
+            icon: <GridIcon color={Color.primary} name="grid" size={FontSizes.lg} />,
+        },
+        {
+            name: " Status",
+            value: `${elem?.status}`,
+            icon: (
+                <CapIcon
+                    color={Color.primary}
+                    name="graduation-cap"
+                    size={FontSizes.lg}
+                />
+            ),
+        },
+        {
+            name: " Remarks",
+            value: `${elem?.remarks}`,
+            icon: (
+                <CalendarIcon
+                    color={Color.primary}
+                    name="calendar-check"
+                    size={FontSizes.lg}
+                />
+            ),
+        },
+    ];
 
-    ]
+    const getData = () => {
+        API.getAllApointment(userData?.id)
+            .then(res => setData(res?.data))
+            .catch(err => customToast('error', err))
+    }
+    useEffect(() => {
+        getData()
+    }, [])
 
     return (
         <ScrollView>
@@ -48,8 +91,8 @@ const ViewAppointments = () => {
                 </TouchableOpacity>
             </View>
             <View>
-                {items.map((elem, index) => (
-                    <Table key={index} status={elem.status} list={elem.list} />
+                {data.length > 0 && data.map((elem, index) => (
+                    <Table key={index} list={list(elem)} />
                 ))}
 
             </View>

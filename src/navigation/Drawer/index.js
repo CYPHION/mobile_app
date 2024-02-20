@@ -1,6 +1,5 @@
 import { DrawerContentScrollView, createDrawerNavigator } from '@react-navigation/drawer';
 import { CommonActions, DrawerActions, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -8,22 +7,18 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../components/base/CustomButton';
 import MyModal from '../../components/base/Modal';
-import ConfirmResetPassword from '../../screens/ConfirmResetPassword';
-import LoginScreen from '../../screens/Login';
-import ResetPassword from '../../screens/ResetPassword';
 import { handleLogout } from '../../store/slice/user';
-import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
-import { screenDimensions } from '../../utils/functions';
+import { getImage, screenDimensions } from '../../utils/functions';
 import { MyStack } from '../Stack';
 import TabNavigation from '../Tab';
 
 const Drawer = createDrawerNavigator();
 
 const DrawerList = [
-    { label: 'Home', navigateTo: 'home', icon: 'right', mainRoute: 'tabs' },
-    { label: 'My Profile', navigateTo: 'profile', icon: 'right', mainRoute: 'tabs' },
+    { label: 'Home', navigateTo: 'main', icon: 'right', mainRoute: 'tabs' },
+    { label: 'My Profile', navigateTo: 'profiles', icon: 'right', mainRoute: 'tabs' },
     { label: 'View Children', navigateTo: 'children', icon: 'right', mainRoute: 'root' },
     { label: 'View Appointment', navigateTo: 'viewAppointment', icon: 'right', mainRoute: 'root' },
     { label: 'Leave Application', navigateTo: 'leaveApplication', icon: 'right', mainRoute: 'root' },
@@ -68,7 +63,8 @@ function CustomDrawerContent(props) {
     const navigation = useNavigation();
     const [open, setOpen] = useState(false)
     const dipatch = useDispatch()
-
+    const user = useSelector(state => state?.user?.data)
+    const src = user?.picture ? { uri: getImage(user?.picture) } : require("../../images/profileAvatar.png");
 
     return (
         <DrawerContentScrollView {...props}>
@@ -76,9 +72,9 @@ function CustomDrawerContent(props) {
                 <TouchableOpacity activeOpacity={0.8}>
                     <View style={styles.userInfoSection}>
                         <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
-                            <Image resizeMode='contain' source={require("../../images/hamza.png")} style={styles.image} />
+                            <Image resizeMode='contain' source={src} style={styles.image} />
                             <View style={{ flexDirection: 'column' }}>
-                                <Text style={styles.title}>Hamza Khan</Text>
+                                <Text style={styles.title}>{user?.firstName} {user?.lastName}</Text>
                             </View>
                         </View>
                     </View>
@@ -143,28 +139,11 @@ function CustomDrawerContent(props) {
 
     );
 }
-const Stack = createNativeStackNavigator();
-
-function AuthSTack() {
-    return (
-        <Stack.Navigator
-            screenOptions={{
-                headerShown: false
-            }}
-        >
-            <Stack.Screen name='login' component={LoginScreen} />
-            <Stack.Screen name='forgetPassword' component={ResetPassword} />
-            <Stack.Screen name='confirmPassword' component={ConfirmResetPassword} />
-        </Stack.Navigator>
-    )
-}
 
 
 function MyDrawer({ old }) {
     const navigation = useNavigation();
-    const userData = useSelector(state => state?.user?.data);
-    const dispatch = useDispatch()
-    const [show, setShow] = useState(false)
+
 
 
     useEffect(() => {
@@ -176,14 +155,7 @@ function MyDrawer({ old }) {
         );
     }, [old]);
 
-    useEffect(() => {
-        if (userData?.email) {
-            dispatch(globalData(userData?.id))
-            setShow(true)
-        } else {
-            setShow(false)
-        }
-    }, [userData])
+
 
     return (
 
@@ -199,13 +171,8 @@ function MyDrawer({ old }) {
             }}
 
         >
-            {show ? <>
-                <Drawer.Screen name="tabs" component={TabNavigation} />
-                <Drawer.Screen name="root" component={MyStack} />
-            </> :
-                <>
-                    <Drawer.Screen name="auth" component={AuthSTack} />
-                </>}
+            <Drawer.Screen name="tabs" component={TabNavigation} />
+            <Drawer.Screen name="root" component={MyStack} />
 
         </Drawer.Navigator>
 

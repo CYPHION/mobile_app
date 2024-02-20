@@ -15,7 +15,7 @@ import { getImage, screenDimensions } from '../../utils/functions';
 
 
 
-const Profile = () => {
+const Profile = ({ navigation }) => {
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
@@ -116,7 +116,7 @@ const Profile = () => {
                             </View>
                             <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
                                 <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>Password</Text>
-                                <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('changePassword')}>
+                                <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('profiles', { screen: 'changePassword' })}>
                                     <Text style={[styles.textTwo, { color: Color.textThree, padding: 10 }]}>
                                         Tap to change password
                                     </Text>

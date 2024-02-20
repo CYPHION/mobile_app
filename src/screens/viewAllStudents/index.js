@@ -62,7 +62,7 @@ const ViewAllStudents = ({ navigation }) => {
 
                     {
                         data.map((elem, index) => (
-                            <TouchableOpacity activeOpacity={0.9} key={index} onPress={() => navigation.navigate(elem.navigateTo)}>
+                            <TouchableOpacity activeOpacity={0.9} key={index} onPress={() => navigation.navigate('viewStudent')}>
                                 <View style={styles.allStudentContainer}>
                                     <View style={styles.allStudentContainers}>
                                         <View >
