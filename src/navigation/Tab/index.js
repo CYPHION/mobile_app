@@ -9,10 +9,10 @@ import ReceiptIcon from 'react-native-vector-icons/FontAwesome6';
 import CardIcon from 'react-native-vector-icons/Ionicons';
 import AnalyticsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ChangePasswordScreen from '../../screens/ChangePassword';
+import Home from '../../screens/Home';
 import HomeWorkSkeleton from '../../screens/HomeWork/HomeWorkSkeleton';
 import Profile from '../../screens/Profile';
 import ViewAllStudents from '../../screens/viewAllStudents';
-import ViewAllStudentsSkeleton from '../../screens/viewAllStudents/viewAllStudentSkeleton';
 import ViewProgress from '../../screens/viewProgress';
 import { Color } from '../../utils/color';
 
@@ -99,7 +99,7 @@ const TabNavigation = ({ old }) => {
 
                 }}
             />
-            <Tab.Screen name="home" component={ViewAllStudentsSkeleton}
+            <Tab.Screen name="home" component={Home}
                 options={{
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ color, size, focused }) => (
