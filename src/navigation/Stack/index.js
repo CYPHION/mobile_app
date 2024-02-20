@@ -4,7 +4,6 @@ import CustomAppBar from '../../components/base/CustomAppBar';
 import AddTestimonial from '../../screens/AddTestimonial';
 import Compensation from '../../screens/Compensation';
 import ConfirmResetPassword from '../../screens/ConfirmResetPassword';
-import FeeCollection from '../../screens/FeeCollection';
 import HomeWork from '../../screens/HomeWork';
 import LeaveApplication from '../../screens/LeaveApplication';
 import LoginScreen from '../../screens/Login';
@@ -14,6 +13,7 @@ import StudentDetails from '../../screens/StudentDetails';
 import Testimonials from '../../screens/Testimonials';
 import ViewAttendance from '../../screens/ViewAttendance';
 import ViewChildren from '../../screens/ViewChildren';
+import ViewFess from '../../screens/ViewFees';
 import ViewSchedule from '../../screens/ViewSchedule';
 import ViewAllStudents from '../../screens/viewAllStudents';
 import ViewAppointments from '../../screens/viewAppointments';
@@ -37,11 +37,10 @@ const ChildrenStack = () => {
             header: () => <CustomAppBar title={'Childrens'} />
 
         }} />
-        <Stack.Screen name="viewStudent" component={ViewChildren} options={{
+        <Stack.Screen name="viewStudent" component={ViewChildren} options={({ route, navigation }) => ({
             headerShown: true,
-            header: () => <CustomAppBar title={'Abdullah Khan'} />
-
-        }} />
+            header: () => <CustomAppBar title={route.params.title} />
+        })} />
         <Stack.Screen name="studentDetail" component={StudentDetails} options={{
             headerShown: true,
             headerTitle: 'View Student Detail',
@@ -57,7 +56,7 @@ const ChildrenStack = () => {
             headerTitle: 'View Attendance',
 
         }} />
-        <Stack.Screen name="fee" component={FeeCollection} options={{
+        <Stack.Screen name="fee" component={ViewFess} options={{
             headerShown: true,
             headerTitle: 'View Fees',
 

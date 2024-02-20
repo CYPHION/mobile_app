@@ -65,7 +65,7 @@ const Home = ({ navigation }) => {
                             <Text style={[styles.CompText]}>see all</Text>
                         </TouchableOpacity>
                     </View>
-                    <View>
+                    <View style={{ backgroundColor: Color.grayBackground, padding: 3 }}>
                         <FlatList
                             showsHorizontalScrollIndicator={false}
                             data={globaldata?.students}

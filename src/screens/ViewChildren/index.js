@@ -1,65 +1,86 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import CardIcon from "react-native-vector-icons/AntDesign";
 import BookIcon from "react-native-vector-icons/FontAwesome5";
 
+import { useRoute } from '@react-navigation/native';
 import StackIcon from "react-native-vector-icons/AntDesign";
 import { default as CreditCardIcon } from "react-native-vector-icons/MaterialCommunityIcons";
 import { default as CalendarIcon, default as DetaiIcon } from "react-native-vector-icons/MaterialIcons";
+import { useSelector } from 'react-redux';
 import TopbarWithGraph from '../../components/widget/TopbarWithGraph';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { GlobalStyles } from '../../utils/globalStyles';
 
+const items = [
+    {
+        label: 'View Student Details',
+        icon: <DetaiIcon name="insert-chart-outlined" size={FontSizes.xl} color={Color.iconColor} />,
+        path: 'studentDetail'
+    },
+    {
+        label: 'View Shedule ',
+        icon: <CalendarIcon name="calendar-month" size={FontSizes.xl} color={Color.iconColor} />,
+        path: 'studentSchedule'
+    },
+    {
+        label: 'View Attendace',
+        icon: <CardIcon name="idcard" size={FontSizes.xl} color={Color.iconColor} />,
+        path: 'studentAttendance'
+    },
+    {
+        label: 'View Fees',
+        icon: <CreditCardIcon name="credit-card-multiple-outline" size={FontSizes.xl} color={Color.iconColor} />,
+        path: 'fee',
+        mainRoute: 'tabs'
+    },
+    {
+        label: 'Homework',
+        icon: <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />,
+        path: 'studentHomework'
+    },
+    {
+        label: 'Progress Report ',
+        icon: <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />,
+        path: 'studentReport'
+    },
+]
+
 const ViewChildren = ({ navigation }) => {
 
+    const router = useRoute()
+    const globalData = useSelector(state => state?.global?.data)
 
-    const items = [
-        {
-            label: 'View Student Details',
-            icon: <DetaiIcon name="insert-chart-outlined" size={FontSizes.xl} color={Color.iconColor} />,
-            path: 'studentDetail'
-        },
-        {
-            label: 'View Shedule ',
-            icon: <CalendarIcon name="calendar-month" size={FontSizes.xl} color={Color.iconColor} />,
-            path: 'studentSchedule'
-        },
-        {
-            label: 'View Attendace',
-            icon: <CardIcon name="idcard" size={FontSizes.xl} color={Color.iconColor} />,
-            path: 'studentAttendance'
-        },
-        {
-            label: 'View Fees',
-            icon: <CreditCardIcon name="credit-card-multiple-outline" size={FontSizes.xl} color={Color.iconColor} />,
-            path: 'fee',
-            mainRoute: 'tabs'
-        },
-        {
-            label: 'Homework',
-            icon: <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />,
-            path: 'studentHomework'
-        },
-        {
-            label: 'Progress Report ',
-            icon: <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />,
-            path: 'studentReport'
-        },
-    ]
+    const { id } = router.params
+
+    const studentObj = globalData?.students?.find(elem => elem.id === id)
+
+    const selectedAttributes = studentObj ? studentObj
+        : null;
+
+    const studentName = studentObj ? studentObj?.fullName : ''
+
+
+
+
+    useEffect(() => {
+        navigation.setParams({ title: studentName })
+    }, [navigation, studentName]);
+
 
 
     return (
         <ScrollView>
 
             <View style={styles.viewChildrenContainer}>
-                <TopbarWithGraph />
+                <TopbarWithGraph student={selectedAttributes} />
 
                 <View style={{ gap: 10, marginTop: 10, paddingHorizontal: 10 }}>
 
                     {items.map((elem, index) => (
-                        <TouchableOpacity style={[GlobalStyles.r_10, GlobalStyles.p_10,]} key={index} activeOpacity={0.7} onPress={() => navigation.navigate(elem.path)}>
+                        <TouchableOpacity style={[GlobalStyles.r_10, GlobalStyles.p_10,]} key={index} activeOpacity={0.7} onPress={() => navigation.navigate(elem.path, { student: selectedAttributes })}>
                             <View style={[styles.viewChildernStaclList]}>
                                 <View style={styles.viewChildernStaclList}>
                                     <View style={[styles.bgIconColor]}>

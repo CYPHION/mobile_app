@@ -19,6 +19,7 @@ const CustomButton = (props) => {
         btnstyle,
         textStyle,
         leftIcon,
+        isLoading,
         rightIcon
     } = props;
 
@@ -27,10 +28,10 @@ const CustomButton = (props) => {
             {...props}
             disabled={disabled ? disabled : false}
             activeOpacity={0.7}
-            style={[styles.buttonContainer, GlobalStyles.p_10, variant === 'fill' ? { backgroundColor: Color.primary } : { backgroundColor: Color.white }, { ...btnstyle }]}
+            style={[styles.buttonContainer, GlobalStyles.p_10, variant === 'fill' ? { backgroundColor: disabled ? Color.primaryLight : Color.primary } : { backgroundColor: Color.white }, { ...btnstyle }]}
             onPress={onPress}
         >
-            {disabled ? <ActivityIndicator size="small" color={variant === 'fill' ? Color.white : Color.primary} /> : ""}
+            {isLoading ? <ActivityIndicator size="small" color={variant === 'fill' ? Color.white : Color.primary} /> : ""}
             {leftIcon}
             <Text style={[styles.buttonText, variant === 'fill' ? { color: Color.white } : { color: Color.primary }, { ...textStyle }]}>
                 {" "}

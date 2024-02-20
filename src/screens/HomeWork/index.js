@@ -1,13 +1,28 @@
+import { useRoute } from '@react-navigation/native'
 import React from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import Idcard from "react-native-vector-icons/AntDesign"
 import Download from 'react-native-vector-icons/Feather'
 import BookIcon from "react-native-vector-icons/FontAwesome5"
+import NoHomework from "react-native-vector-icons/MaterialCommunityIcons"
+import { useSelector } from 'react-redux'
 import CustomButton from '../../components/base/CustomButton'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
+import { formattedDate, screenDimensions } from '../../utils/functions'
 import { GlobalStyles } from '../../utils/globalStyles'
+
 const HomeWork = () => {
+    const router = useRoute()
+    const { student } = router.params
+    const globalData = useSelector(state => state?.global?.data)
+
+
+    const filterHomework = globalData?.homeworks?.filter(item => {
+        const studentIds = JSON.parse(item.studentId);
+        return studentIds.some(id => id === student?.id);
+    });
+
 
     const Data = [
         {
@@ -32,51 +47,62 @@ const HomeWork = () => {
 
         <ScrollView>
             <View style={{ paddingBottom: 10, backgroundColor: Color.white }}>
-                <View style={[styles.viewChildrenContainer, GlobalStyles.p_10]}>
-                    <Text style={[styles.NameText, styles.textFontFamily]}>Abdullah Khan</Text>
-                    <Text style={[styles.CompText, styles.textFontFamily]}>(3)</Text>
-                </View>
-                <View style={{ paddingHorizontal: 10, gap: 10, marginTop: 10 }}>
-                    {
-                        Data.map((elem, index) => (
-                            <View key={index} style={styles.allStudentContainer}>
-                                <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
-                                    <View style={[styles.allStudentContainers, { gap: 15 }]} >
-                                        <View style={[styles.bgIconColor]}>
-                                            <Idcard name="idcard" size={FontSizes.xl} color={Color.iconColor} />
+                {
+                    filterHomework?.length > 0 ? <>
+                        <View style={[styles.viewChildrenContainer, GlobalStyles.p_10]}>
+                            <Text style={[styles.NameText, styles.textFontFamily]}>{student?.fullName}</Text>
+                            <Text style={[styles.CompText, styles.textFontFamily]}>({filterHomework?.length})</Text>
+                        </View>
+                        <View style={{ paddingHorizontal: 10, gap: 10, marginTop: 10 }}>
+                            {
+                                filterHomework?.map((elem, index) => (
+                                    <View key={index} style={styles.allStudentContainer}>
+                                        <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
+                                            <View style={[styles.allStudentContainers, { gap: 15 }]} >
+                                                <View style={[styles.bgIconColor]}>
+                                                    <Idcard name="idcard" size={FontSizes.xl} color={Color.iconColor} />
+                                                </View>
+                                                <Text style={styles.nameFont}>Homework Title</Text>
+                                            </View>
+                                            <Text style={styles.nameFont}>{elem.name}</Text>
                                         </View>
-                                        <Text style={styles.nameFont}>Homework Title</Text>
-                                    </View>
-                                    <Text style={styles.nameFont}>{elem.homeworkTitle}</Text>
-                                </View>
-                                <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
-                                    <View style={[styles.allStudentContainers, { gap: 15 }]} >
-                                        <View style={[styles.bgIconColor]}>
-                                            <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />
+                                        <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
+                                            <View style={[styles.allStudentContainers, { gap: 15 }]} >
+                                                <View style={[styles.bgIconColor]}>
+                                                    <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />
+                                                </View>
+                                                <Text style={styles.nameFont}>Expiry Date</Text>
+                                            </View>
+                                            <Text style={styles.nameFont}>{elem.expiryDate ? formattedDate(elem.expiryDate, 'dd-MM-yyyy') : ''}</Text>
                                         </View>
-                                        <Text style={styles.nameFont}>Expiry Date</Text>
+                                        <View style={styles.btnStyle}>
+                                            {elem.fileType === "link" ?
+                                                <CustomButton
+                                                    title="Open Link"
+                                                    variant='fill'
+                                                    rightIcon={<Download name='link' size={FontSizes.lg} color={Color.white} />}
+                                                />
+                                                :
+                                                <CustomButton
+                                                    title="Download"
+                                                    rightIcon={<Download name='download' size={FontSizes.lg} color={Color.white} />}
+                                                    variant='fill'
+                                                />
+                                            }
+                                        </View>
                                     </View>
-                                    <Text style={styles.nameFont}>{elem.expiryDate}</Text>
-                                </View>
-                                <View style={styles.btnStyle}>
-                                    {elem.url ?
-                                        <CustomButton
-                                            title="Open Link"
-                                            variant='fill'
-                                            rightIcon={<Download name='link' size={FontSizes.lg} color={Color.white} />}
-                                        />
-                                        :
-                                        <CustomButton
-                                            title="Download"
-                                            rightIcon={<Download name='download' size={FontSizes.lg} color={Color.white} />}
-                                            variant='fill'
-                                        />
-                                    }
-                                </View>
-                            </View>
-                        ))
-                    }
-                </View>
+                                ))
+                            }
+                        </View>
+
+                    </> : <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
+                        <View>
+                            <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                            <Text style={styles.inactivetext}>No Homework</Text>
+                        </View>
+                    </View>
+                }
+
             </View>
         </ScrollView >
     )
@@ -145,6 +171,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1, // Set a lower opacity for a subtle shadow
         shadowRadius: 2, // Set a lower radius for a less spread shadow
     },
+    inactivetext: {
+        textAlign: 'center',
+        color: Color.textTwo,
+        fontSize: FontSizes.lg
+    }
 
 
 })

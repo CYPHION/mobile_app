@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import LoadingScreen from '../../components/base/LoadingScreen'
-import { API } from '../../network/API'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { getImage, screenDimensions } from '../../utils/functions'
 
 const ViewAllStudents = ({ navigation }) => {
     const user = useSelector(state => state?.user?.data)
+    const globalData = useSelector(state => state?.global?.data)
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
 
@@ -17,24 +17,9 @@ const ViewAllStudents = ({ navigation }) => {
         inactive: Color.btnDisable
     }
 
-    const getStudents = () => {
-        API.getStudentByParentId(user?.id)
-            .then(res => {
-                setData(res?.data);  // Assuming `setData` is a state updating function
-            })
-            .catch(err => {
-                customToast('error', err);
-            })
-            .finally(() => {
-                setLoading(false)
-                // Any code you want to run after the promise is settled (either resolved or rejected)
-            });
-
-    }
-
     useEffect(() => {
-        getStudents();
-    }, []);
+        setLoading(false)
+    }, [globalData])
 
 
     return (
@@ -55,18 +40,18 @@ const ViewAllStudents = ({ navigation }) => {
                     </View>
                     <View style={[styles.profileRowContainer]}>
                         <View>
-                            <Text style={[styles.CompText]}>Enrolled Children ({data.length})</Text>
+                            <Text style={[styles.CompText]}>Enrolled Children ({globalData?.students.length})</Text>
                         </View>
                     </View>
 
 
                     {
-                        data.map((elem, index) => (
-                            <TouchableOpacity activeOpacity={0.9} key={index} onPress={() => navigation.navigate(elem.navigateTo)}>
+                        globalData?.students?.map((elem, index) => (
+                            <TouchableOpacity activeOpacity={0.9} key={index} onPress={() => navigation.navigate('viewStudent', { id: elem.id })}>
                                 <View style={styles.allStudentContainer}>
                                     <View style={styles.allStudentContainers}>
                                         <View >
-                                            <Image resizeMode='contain' source={elem?.picture ? { uri: getImage(elem?.picture) } : require("../../images/profile.png")} style={styles.image} />
+                                            <Image resizeMode='contain' source={elem?.picture ? { uri: getImage(elem?.picture) } : require("../../images/profileAvatar.png")} style={styles.image} />
                                         </View>
                                         <View>
                                             <Text style={styles.nameFont}>{elem?.fullName}</Text>

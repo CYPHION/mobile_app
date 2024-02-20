@@ -4,24 +4,26 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Color } from '../../../utils/color'
 import { FontFamily, FontSizes } from '../../../utils/font'
 import Graph from '../../base/GraphComponent'
-const TopbarWithGraph = () => {
+const TopbarWithGraph = ({ student, isGraph = true }) => {
     const navigation = useNavigation()
 
     const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
 
+    const isBooster = student?.BoosterStudents?.length > 0 ? true : false
+
     return (
         <>
             <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <View>
-                    <Text style={[styles.NameText, styles.textFontFamily]}>Abdullah Khan</Text>
-                    <Text style={[styles.CompText, styles.textFontFamily]}>Year 2 - Weekly</Text>
+                <View style={{ marginBottom: 7 }}>
+                    <Text style={[styles.NameText, styles.textFontFamily]}>{student?.fullName} </Text>
+                    <Text style={[styles.CompText, styles.textFontFamily]}>{student?.StudentYear?.name} - {student?.feeChargedBy} {isBooster ? '(Booster Student)' : ''}</Text>
                 </View>
                 {/* <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
                     <View style={styles.badge}></View>
                     <Icon name="notifications" color={Color.textTwo} size={FontSizes.xxxl} />
                 </TouchableOpacity> */}
             </View>
-            <Graph labels={labels} dataOne={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9]} dataTwo={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9].reverse()} />
+            {isGraph && <Graph labels={labels} dataOne={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9]} dataTwo={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9].reverse()} />}
         </>
     )
 }

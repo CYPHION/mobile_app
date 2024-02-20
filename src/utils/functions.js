@@ -109,3 +109,27 @@ export function getImage(file) {
         return null
     }
 }
+
+export const getDepartmentDropdown = list => {
+    return (
+        list?.map(elem => ({
+            value: elem.id,
+            name: elem.name || elem.fullName
+        })) || []
+    )
+}
+
+export const getParentDropdown = (list, isDisable) => {
+    return isDisable ? list?.map(elem => ({
+        value: elem.id,
+        name: `${elem.mainId ? `${elem.mainId} -` : ''}  ${elem.name} `,
+        disable: elem.disable
+    })) : list?.map(elem => {
+        const isBooster = elem?.BoosterStudents?.length > 0 ? true : false
+        return {
+            value: elem.id,
+            name: `${elem.mainId ? `${elem.mainId} -` : ''}  ${elem.name || elem?.fullName} ${isBooster ? '(Booster)' : ''}`,
+
+        }
+    })
+}

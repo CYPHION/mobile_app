@@ -1,144 +1,115 @@
 import React, { useState } from 'react'
-import { Modal, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { screenDimensions } from '../../../utils/functions'
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useSelector } from 'react-redux'
+import { Color } from '../../../utils/color'
+import { FontSizes } from '../../../utils/font'
+import { formattedDate, screenDimensions } from '../../../utils/functions'
 import AccordionItem from '../../base/Accordion'
 import MyCheckBox from '../../base/CheckBox'
 import CustomButton from '../../base/CustomButton'
 import GridTable from '../../base/GridTable'
 
 
+const item = (item) => [
+    {
+        name: "Subject",
+        value: item?.Subject?.name,
+    },
+    {
+        name: "Schedule ID",
+        value: item?.id,
+    },
+    {
+        name: "Hours Per Week",
+        value: item?.LessonTiming?.hours,
+    },
+    {
+        name: "Day",
+        value: item?.days,
+    },
+    {
+        name: "Time",
+        value: item?.LessonTiming?.time,
+    },
+]
+
+
+
+
 const StudentsAccordion = (props) => {
 
-    const { open, setOpen, setNextScreen } = props
+    const { open, setOpen, setNextScreen, date, selectedStudent } = props
     const [activeItem, setActiveItem] = useState(null);
     const toggleItem = (index) => {
         setActiveItem(activeItem === index ? null : index); // Toggle state based on click
     };
-    const items = [
-        {
-            date: "18 Jan - 20 Jan ",
-            studentName: "Abdullah Khan (Weekly)",
-            title: "£120",
-        },
-        {
-            date: "28 Mar - 30 Apr ",
-            studentName: "Hammad  (Weekly)",
-            title: "£1000",
+    const [checkedItems, setCheckedItems] = useState([]);
+    const [selectedData, setSelectedData] = useState([]);
+    const globalData = useSelector(state => state?.global?.data)
+
+
+    const handleCheckbox = (scheduleId) => {
+        const index = globalData?.schedules.findIndex(item => item.id === scheduleId);
+        if (index === -1) {
+            return; // Schedule item not found, handle error or return
         }
-    ];
+
+        // Create a new array of checked items to toggle the checkbox for the specific schedule
+        const newCheckedItems = { ...checkedItems };
+
+        // Toggle the checkbox for the specific schedule ID
+        newCheckedItems[scheduleId] = !newCheckedItems[scheduleId];
+
+        // Update the state with the new checked items
+        setCheckedItems(newCheckedItems);
+
+        // Get the data associated with the clicked schedule
+        const newData = globalData?.schedules[index];
+
+        setSelectedData(prev => {
+            // If the checkbox is checked, add the schedule data to the selected data
+            if (newCheckedItems[index]) {
+                return [...prev, { ...newData }];
+            } else {
+                // If the checkbox is unchecked, remove the schedule data from the selected data
+                return prev.filter(item => item.id !== scheduleId);
+            }
+        });
+    };
 
 
-    const item = [
-        {
-            name: "Enrollment date",
-            value: "10/8/2024",
-        },
-        {
-            name: "agblsuyuil syufy sfap",
-            value: "jfksafh.ajkkflas;jk",
-        },
-        {
-            name: "hfsgksabjhfuklagklsakfa",
-            value: "10/8/2024",
-        },
-        {
-            name: "date",
-            value: "10/8/2024",
-        },
-        {
-            name: "name",
-            value: "M.Owais",
-        },
-        {
-            name: "Enrollment date",
-            value: "10/8/2024",
-        },
-    ]
-
-
-    const tableData = [
-        {
-            item,
-        },
-        {
-            item,
-        },
-        {
-            item,
-        },
-        {
-            item,
-        },
-    ]
-
-
-
-    const InnerTables = (index) => {
-        const [checkedItems, setCheckedItems] = useState(Array(tableData.length).fill(false));
-        const [selectedData, setSelectedData] = useState([]);
-
-        const handleCheckbox = (index) => {
-            const newCheckedItems = [...checkedItems];
-            newCheckedItems[index] = !newCheckedItems[index];
-            setCheckedItems(newCheckedItems);
-
-            // Update selectedData based on the checked status
-            const newData = tableData[index].item
-            setSelectedData((prev) => [...prev, { ...newData }]);
-        };
-
-        return (
-            <>
-                <CustomButton
-                    variant='fill'
-                    title='Done'
-                    onPress={() => { setNextScreen(true); toggleItem(index) }}
-                />
-                {tableData.map((elem, index) => (
-                    <GridTable
-                        data={elem.item}
-                        key={index}
-                        CheckboxChild={<MyCheckBox isChecked={checkedItems[index]} onToggle={() => handleCheckbox(index)} />}
-                    />
-                ))}
-            </>
-        )
-    }
-
-
-
-
-    const rednderComponent = () => (
-        <>
-            <ScrollView>
-                <View style={{ width: screenDimensions.width * 0.90 }}>
-
-
-                    {items.map((item, index) => (
-                        <AccordionItem
-                            children={InnerTables(index)}
-                            key={index}
-                            date={item.date}
-                            studentName={item.studentName}
-                            total={item.title}
-                            data={item.data}
-                            expanded={activeItem === index}
-                            onToggle={() => toggleItem(index)} // Pass toggle function to each item
-                        />
-                    ))}
-                </View>
-            </ScrollView>
-        </>
-    )
 
     const toggleModal = () => {
         setOpen(!open);
     };
 
+    const getSelectedStudentSchedule = (studentId) => {
+
+        const day = formattedDate(date, 'EEEE')
+        const getStudentSchedules = globalData?.schedules?.filter(elem => elem?.studentId === studentId && elem.days === day && !elem.isComp && !elem.isBooster)
+
+        console.log({ checkedItems, selectedData })
+        return <>
+            <CustomButton
+                variant='fill'
+                title='Done'
+                onPress={() => { setNextScreen(true); toggleModal() }}
+            />
+            {getStudentSchedules?.map((elem, index) => (
+                <GridTable
+                    data={item(elem)}
+                    key={index}
+                    CheckboxChild={<MyCheckBox isChecked={checkedItems[elem.id]} onToggle={() => handleCheckbox(elem.id)} />}
+                />
+            ))}
+        </>
+
+    }
+
+
     return (
 
         <View>
-
             <View style={styles.container}>
                 <Modal
                     transparent={true}
@@ -148,9 +119,30 @@ const StudentsAccordion = (props) => {
                 >
                     <View style={styles.modalContainer}>
                         <View style={[styles.modalContent]}>
-                            {rednderComponent()}
+                            {selectedStudent?.length > 0 ? <>
+                                <ScrollView>
+                                    <View style={{ width: screenDimensions.width * 0.95 }}>
+                                        {globalData?.students?.map((item, index) => {
+                                            if (selectedStudent?.includes(item?.id)) {
+                                                return <AccordionItem
+                                                    children={getSelectedStudentSchedule(item?.id)}
+                                                    key={index}
+                                                    date={`Main ID : ${item?.mainId}`}
+                                                    studentName={`Year in School- ${item?.StudentYear?.name}`}
+                                                    total={item?.fullName}
+                                                    // data={item.data}
+                                                    expanded={activeItem === index}
+                                                    onToggle={() => toggleItem(index)} // Pass toggle function to each item
+                                                />
+                                            }
+                                        }
+                                        )}
+                                    </View>
+                                </ScrollView>
+                            </> : <View style={{ width: screenDimensions.width * 0.95, height: screenDimensions.height * 0.3, backgroundColor: Color.white, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }}>
+                                <Text style={{ color: Color.black, fontSize: FontSizes.xl }}>Please Select Date </Text>
+                            </View>}
                         </View>
-                        {/* Backdrop */}
                         <TouchableOpacity style={styles.backdrop} onPress={toggleModal} />
                     </View>
                 </Modal>
