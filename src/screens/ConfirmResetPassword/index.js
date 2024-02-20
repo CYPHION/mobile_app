@@ -13,9 +13,9 @@ import { removeError, screenDimensions } from '../../utils/functions'
 const ConfirmResetPassword = (prop) => {
 
     const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-        code: ''
+        code: '',
+        Newpassword: '',
+        Confirmpassword: ''
     })
 
     const [isLoading, setIsLoading] = useState(false)
@@ -43,6 +43,11 @@ const ConfirmResetPassword = (prop) => {
 
     const handleSubmit = () => {
         // setIsLoading(true)
+        console.log("Input Value:", formData.code);
+        console.log("Input Value:", formData.Newpassword);
+
+        console.log("Input Value:", formData.Confirmpassword);
+
 
     };
 
@@ -103,25 +108,25 @@ const ConfirmResetPassword = (prop) => {
                             }}
                         >
                             <FlaotingTextInput
-                                value={formData.email}
+                                value={formData.code}
                                 inputMode={'numeric'}
-                                onChangeText={(text) => onChangeHandler("email", text)}
+                                onChangeText={(text) => onChangeHandler("code", text)}
                                 label={"Enter Code"}
                                 errorMcg={error.email}
                             />
                             <FlaotingTextInput
                                 errorMcg={error.password}
                                 password={true}
-                                value={formData.password}
-                                onChangeText={(text) => onChangeHandler("password", text)}
+                                value={formData.Newpassword}
+                                onChangeText={(text) => onChangeHandler("Newpassword", text)}
                                 label={"New Password"}
                             />
 
                             <FlaotingTextInput
                                 errorMcg={error.password}
                                 password={true}
-                                value={formData.password}
-                                onChangeText={(text) => onChangeHandler("password", text)}
+                                value={formData.Confirmpassword}
+                                onChangeText={(text) => onChangeHandler("Confirmpassword", text)}
                                 label={"Confirm Password"}
                             />
 
