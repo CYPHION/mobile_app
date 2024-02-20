@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { useSelector } from 'react-redux'
-import LoadingScreen from '../../components/base/LoadingScreen'
-import { API } from '../../network/API'
-import { Color } from '../../utils/color'
-import { FontFamily, FontSizes } from '../../utils/font'
-import { getImage, screenDimensions } from '../../utils/functions'
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
+import { useSelector } from 'react-redux';
+import { API } from '../../network/API';
+import { Color } from '../../utils/color';
+import { FontFamily, FontSizes } from '../../utils/font';
+import { screenDimensions } from '../../utils/functions';
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
 
-const ViewAllStudents = ({ navigation }) => {
+const ViewAllStudentsSkeleton = ({ navigation }) => {
     const user = useSelector(state => state?.user?.data)
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
@@ -40,13 +42,13 @@ const ViewAllStudents = ({ navigation }) => {
     return (
 
         <>
-            <LoadingScreen loading={loading} />
+            {/* <LoadingScreen loading={loading} /> */}
             <ScrollView>
                 <View style={styles.profileContainer}>
                     <View style={[styles.profileRowContainer]}>
                         <View>
-                            <Text style={[styles.NameText, styles.textFontFamily]}>Hi, {user?.firstName} {user?.lastName}</Text>
-                            <Text style={[styles.CompText, styles.textFontFamily]}>Welcome to Prime Tuition</Text>
+                            <ShimmerPlaceholder style={[styles.NameText, styles.textFontFamily]} />
+                            <ShimmerPlaceholder style={[styles.CompText, styles.textFontFamily]} />
                         </View>
                         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
                             <View style={styles.badge}></View>
@@ -55,7 +57,7 @@ const ViewAllStudents = ({ navigation }) => {
                     </View>
                     <View style={[styles.profileRowContainer]}>
                         <View>
-                            <Text style={[styles.CompText]}>Enrolled Children ({data.length})</Text>
+                            <ShimmerPlaceholder style={[styles.CompText]} />
                         </View>
                     </View>
 
@@ -66,11 +68,11 @@ const ViewAllStudents = ({ navigation }) => {
                                 <View style={styles.allStudentContainer}>
                                     <View style={styles.allStudentContainers}>
                                         <View >
-                                            <Image resizeMode='contain' source={elem?.picture ? { uri: getImage(elem?.picture) } : require("../../images/profile.png")} style={styles.image} />
+                                            <ShimmerPlaceholder style={styles.image} />
                                         </View>
                                         <View>
-                                            <Text style={styles.nameFont}>{elem?.fullName}</Text>
-                                            <Text style={styles.yearFont}> {elem?.StudentYear?.name}</Text>
+                                            <ShimmerPlaceholder style={styles.nameFont} />
+                                            <ShimmerPlaceholder style={styles.yearFont} />
                                             <View style={[styles.activeStatus, { backgroundColor: bgColor[elem?.status] }]}>
                                                 <Text style={styles.activeStatusText}>{elem?.status}</Text>
                                             </View>
@@ -78,7 +80,7 @@ const ViewAllStudents = ({ navigation }) => {
                                     </View>
 
                                     <View >
-                                        <Text style={styles.weeklyText}> {elem?.feeChargedBy}</Text>
+                                        <ShimmerPlaceholder style={styles.weeklyText} />
                                     </View>
                                 </View>
                             </TouchableOpacity>
@@ -93,7 +95,7 @@ const ViewAllStudents = ({ navigation }) => {
     )
 }
 
-export default ViewAllStudents
+export default ViewAllStudentsSkeleton
 
 const styles = StyleSheet.create({
     profileContainer: {
@@ -140,11 +142,13 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.interMedium,
         fontSize: FontSizes.lg,
         color: Color.text,
+        width: 100
     },
     yearFont: {
         fontFamily: FontFamily.regular,
         fontSize: FontSizes.md,
-        color: Color.textThree
+        color: Color.textThree,
+        width: 100
     },
     activeStatus: {
         paddingVertical: 2,
@@ -161,13 +165,12 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.interRegular,
         fontSize: FontSizes.md,
         color: Color.text,
+        width: 100
     },
     image: {
         width: screenDimensions.width * 0.18,
         height: screenDimensions.width * 0.18,
         borderRadius: screenDimensions.width * 0.18 * 0.5,
-        backgroundColor: Color.disable,
-        borderColor: Color.borderColor,
-        borderWidth: 0.3,
+
     }
 })

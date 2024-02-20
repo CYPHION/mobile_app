@@ -30,7 +30,7 @@ const Graph = (prop) => {
                     ]
                 }}
                 width={screenDimensions.width * 0.92} // from react-native
-                height={250}
+                height={220}
                 withShadow={false}
                 yAxisLabel="£"
                 yAxisSuffix="k"

@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import Icon from "react-native-vector-icons/Ionicons";
-import { useSelector } from 'react-redux';
-import DropdownComponent from '../../components/base/CustomDropDown';
-import Graph from '../../components/base/GraphComponent';
+import LinearGradient from 'react-native-linear-gradient';
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
-import { getImage, screenDimensions } from '../../utils/functions';
+import { screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
-import HomeSkeleton from './HomeSkeleton';
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
 
 const dorp = [
     { name: "2024", value: "1" },
@@ -27,68 +25,76 @@ const dorp = [
 const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
 
 const renderItem = ({ item }) => {
-    const src = item?.picture ? { uri: getImage(item?.picture) } : require("../../images/profileAvatar.png");
 
-    return (<View style={styles.item}>
-        <Image resizeMode='contain' source={src} style={styles.image} />
-        <Text style={[styles.nameText, { fontFamily: FontFamily.interSemiBold }]} >{item.fullName}</Text>
-        <Text style={[styles.nameText, { fontFamily: FontFamily.interRegular, fontSize: FontSizes.sm }]} >{item.StudentYear.name} - {item.feeChargedBy}</Text>
-    </View>)
+    return (
+        <View style={styles.item}>
+            <ShimmerPlaceholder style={styles.image} />
+            <ShimmerPlaceholder style={[styles.nameText]} />
+            <ShimmerPlaceholder style={[styles.nameText]} />
+        </View >
+    )
 };
 
 const Home = ({ navigation }) => {
     const [option, setOption] = useState("");
 
-    const globaldata = useSelector(state => state?.global?.data)
-    const user = useSelector(state => state?.user?.data)
-
     return (
         <>
             {/* <LoadingScreen loading={loading} /> */}
-            {(!!globaldata && !!user) ? <ScrollView>
+            <ScrollView>
                 <View style={styles.profileContainer}>
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
                         <View>
-                            <Text style={[styles.NameText, styles.textFontFamily]}>Hi, {user.firstName} {user.lastName}</Text>
-                            <Text style={[styles.CompText, styles.textFontFamily]}>Welcome to Prime Tuition</Text>
+                            <ShimmerPlaceholder style={[styles.NameText, styles.textFontFamily]} />
+                            <ShimmerPlaceholder style={[styles.CompText, styles.textFontFamily]} />
                         </View>
                         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
-                            <View style={styles.badge}></View>
-                            <Icon name="notifications-outline" size={FontSizes.xxxl} color={Color.black} />
+                            {/* <View style={styles.badge}></View> */}
+                            <ShimmerPlaceholder style={[styles.NameNot]} />
+
                         </TouchableOpacity>
                     </View>
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
                         <View>
-                            <Text style={[styles.CompText]}>Enrolled Children ({globaldata?.students?.length})</Text>
+                            <ShimmerPlaceholder style={[styles.CompText]} />
                         </View>
                         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'children' })}>
-                            <Text style={[styles.CompText]}>see all</Text>
+                            <ShimmerPlaceholder style={[styles.CompText]} />
                         </TouchableOpacity>
                     </View>
                     <View>
                         <FlatList
                             showsHorizontalScrollIndicator={false}
-                            data={globaldata?.students}
+                            data={[1, 2, 3]}
                             horizontal
                             renderItem={renderItem}
                             keyExtractor={(item, index) => index.toString()}
                             contentContainerStyle={styles.flatListContainer}
                         />
                     </View>
+
+                    {/* <ShimmerPlaceholder style={{ width: 150, height: 20 }} /> */}
+
+
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
-                        <Text style={[styles.CompText]}>Fee Paid Per Month</Text>
-                        <DropdownComponent
-                            dropdownStyle={{ width: screenDimensions.width * 0.2 }}
-                            disable={false}
-                            data={dorp}
-                            placeHolderText={"2024"}
-                            value={option}
-                            setValue={setOption}
-                        />
+                        <ShimmerPlaceholder style={[styles.CompText]} />
+                        <View>
+                            <ShimmerPlaceholder style={[styles.DropDown]} />
+                        </View>
+
                     </View>
-                    <Graph labels={labels} dataOne={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9]} dataTwo={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9].reverse()} />
+
+                    <View style={styles.GraphContainer} >
+                        <ShimmerPlaceholder style={styles.GraphContainers} >
+
+                        </ShimmerPlaceholder>
+                    </View>
+
+
                 </View>
-            </ScrollView> : <HomeSkeleton />}
+
+
+            </ScrollView>
         </>
     )
 }
@@ -97,16 +103,12 @@ export default Home
 
 const styles = StyleSheet.create({
     profileContainer: {
-        // paddingHorizontal: 10,
         backgroundColor: Color.white
     },
     profileRowContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
-    },
-    flatListContainer: {
-        // paddingHorizontal: 16, 
     },
     item: {
         marginHorizontal: 8,
@@ -116,12 +118,14 @@ const styles = StyleSheet.create({
     nameText: {
         fontSize: FontSizes.md,
         textAlign: 'center',
-        color: Color.text
+        color: Color.text,
+        marginTop: 3,
+        borderRadius: 8,
+        width: 100,
+        backgroundColor: Color.error
     },
     image: {
-        backgroundColor: Color.disable,
-        // borderColor: Color.borderColor,
-        // borderWidth: 0.3,
+        backgroundColor: Color.error,
         width: screenDimensions.width * 0.25,
         height: screenDimensions.width * 0.25,
         borderRadius: screenDimensions.width * 0.25 * 0.5,
@@ -132,10 +136,18 @@ const styles = StyleSheet.create({
     NameText: {
         fontSize: FontSizes.xxl,
         color: Color.text,
+        borderRadius: 8,
+        width: 50,
+        marginBottom: 5,
+        backgroundColor: Color.error
     },
     CompText: {
         fontSize: FontSizes.md,
         color: Color.textThree,
+        borderRadius: 8,
+        width: 150,
+        height: 25,
+        backgroundColor: Color.error
     },
     badge: {
         height: 10,
@@ -146,5 +158,25 @@ const styles = StyleSheet.create({
         top: 0,
         right: 2,
         zIndex: 100
+    },
+    GraphContainer: {
+        marginTop: 15,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    GraphContainers: {
+        borderRadius: 8,
+        width: 350,
+        height: 300,
+        backgroundColor: Color.error,
+    },
+    DropDown: {
+        width: 95,
+        height: 35,
+        backgroundColor: Color.error,
+    },
+    NameNot: {
+        height: 30,
+        width: 60,
     }
 })

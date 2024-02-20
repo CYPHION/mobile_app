@@ -8,6 +8,7 @@ import GridIcon from "react-native-vector-icons/Ionicons"
 import CalendarCheckIcon from "react-native-vector-icons/MaterialCommunityIcons"
 import TimeIcon from "react-native-vector-icons/MaterialIcons"
 import Table from '../../components/base/Table'
+import TableSkeleton from '../../components/base/TableSkeleton'
 import TopbarWithGraph from '../../components/widget/TopbarWithGraph'
 import { Color } from '../../utils/color'
 import { FontSizes } from '../../utils/font'
@@ -76,6 +77,13 @@ const ViewSchedule = () => {
 
 
                 <View>
+                    {item.map((elem, index) => (
+                        <TableSkeleton
+                            key={index}
+                            list={elem.list}
+                        />
+                    ))}
+
                     {item.map((elem, index) => (
                         <Table
                             key={index}
