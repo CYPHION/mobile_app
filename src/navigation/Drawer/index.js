@@ -17,7 +17,7 @@ import TabNavigation from '../Tab';
 const Drawer = createDrawerNavigator();
 
 const DrawerList = [
-    { label: 'Home', navigateTo: 'main', icon: 'right', mainRoute: 'tabs' },
+    { label: 'Home', navigateTo: 'home', icon: 'right', mainRoute: 'tabs' },
     { label: 'My Profile', navigateTo: 'profiles', icon: 'right', mainRoute: 'tabs' },
     { label: 'View Children', navigateTo: 'children', icon: 'right', mainRoute: 'root' },
     { label: 'View Appointment', navigateTo: 'viewAppointment', icon: 'right', mainRoute: 'root' },
@@ -34,7 +34,6 @@ const DrawerLayout = ({ icon, label, navigateTo, setOpen, mainRoute }) => {
 
     // Check if the route name exists and matches navigateTo
     const isActiveScreen = routeName && routeName === navigateTo;
-
 
     return (
         <TouchableOpacity activeOpacity={0.7} style={isActiveScreen && {
@@ -60,7 +59,6 @@ const DrawerLayout = ({ icon, label, navigateTo, setOpen, mainRoute }) => {
 
 
 function CustomDrawerContent(props) {
-    const navigation = useNavigation();
     const [open, setOpen] = useState(false)
     const dipatch = useDispatch()
     const user = useSelector(state => state?.user?.data)
