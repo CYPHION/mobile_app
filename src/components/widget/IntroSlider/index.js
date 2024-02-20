@@ -30,7 +30,7 @@ const slides = [
     },
 ];
 
-const IntroSlider = (props) => {
+const IntroSlider = ({ setIsIntro }) => {
     const [progressWidth, setProgressWidth] = useState(33.3)
     const sliderRef = useRef(null);
     const onSlideChange = (index, num) => {
@@ -117,7 +117,7 @@ const IntroSlider = (props) => {
                 renderSkipButton={renderSkipButton}
                 renderDoneButton={renderDoneButton}
                 onDone={() => {
-                    props.setShowApp(true)
+                    setIsIntro(true)
                     AsyncStorage.setItem('intro', JSON.stringify(true));
                 }}
                 onSlideChange={onSlideChange}

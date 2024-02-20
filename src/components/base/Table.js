@@ -82,7 +82,8 @@ const styles = StyleSheet.create({
     textStyle: {
         fontFamily: FontFamily.interRegular,
         fontSize: FontSizes.md,
-        color: Color.text
+        color: Color.text,
+        textAlign: 'center'
     },
     headingText: {
         fontSize: FontSizes.xl,

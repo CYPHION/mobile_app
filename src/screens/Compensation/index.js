@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
+import CustomAppBar from '../../components/base/CustomAppBar'
 import CustomButton from '../../components/base/CustomButton'
 import MissedLesson from '../../components/widget/MissedLesson'
 import ViewCompensation from '../../components/widget/ViewCompensation'
@@ -12,7 +13,7 @@ const Compensation = () => {
 
     return (
         <View>
-
+            <CustomAppBar title='Compensation' />
             <View style={[styles.main]}>
                 <ScrollView>
                     <View style={[styles.tabBtn]}>

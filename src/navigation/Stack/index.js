@@ -1,14 +1,11 @@
-import { getFocusedRouteNameFromRoute, useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CustomAppBar from '../../components/base/CustomAppBar';
 import AddTestimonial from '../../screens/AddTestimonial';
 import Compensation from '../../screens/Compensation';
-import ConfirmResetPassword from '../../screens/ConfirmResetPassword';
 import HomeWork from '../../screens/HomeWork';
 import LeaveApplication from '../../screens/LeaveApplication';
-import LoginScreen from '../../screens/Login';
 import Notifications from '../../screens/Notifications';
-import ResetPassword from '../../screens/ResetPassword';
 import StudentDetails from '../../screens/StudentDetails';
 import Testimonials from '../../screens/Testimonials';
 import ViewAttendance from '../../screens/ViewAttendance';
@@ -76,32 +73,15 @@ const ChildrenStack = () => {
 
 
 
-export function MyStack({ old }) {
-    // console.log(old)
+export function MyStack() {
     const route = useRoute()
-    const routerName = getFocusedRouteNameFromRoute(route)
-    const navigation = useNavigation();
-
-    // useEffect(() => {
-    //     navigation.dispatch(
-    //         CommonActions.reset({
-    //             index: 0,
-    //             routes: [{ name: 'tabs', params: { screen: 'home' } }],
-    //         }),
-    //     );
-    // }, []);
 
     return (
         <Stack.Navigator
             screenOptions={screenOptionss}
         >
-            {/* <Stack.Screen name="tabs" component={TabNavigation} /> */}
 
-            <Stack.Screen name='login' component={LoginScreen} />
-            <Stack.Screen name='forgetPassword' component={ResetPassword} />
-            <Stack.Screen name='confirmPassword' component={ConfirmResetPassword} />
-
-            <Stack.Screen name="home" component={TabNavigation} />
+            <Stack.Screen name="main" component={TabNavigation} />
             <Stack.Screen name="children" component={ChildrenStack} />
             <Stack.Screen name="addTestimonial" component={AddTestimonial} options={{
                 headerShown: true,

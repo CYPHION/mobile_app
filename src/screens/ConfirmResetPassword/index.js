@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useDispatch } from 'react-redux'
+import CustomAppBar from '../../components/base/CustomAppBar'
 import CustomButton from '../../components/base/CustomButton'
 import FlaotingTextInput from '../../components/base/FlaotingTextInput'
 import { handleLogin } from '../../store/slice/user'
@@ -57,6 +58,9 @@ const ConfirmResetPassword = (prop) => {
                     />
                     <View style={[styles.absoluteImage, styles.picture]} />
                     <View style={[styles.logoView]}>
+                        <View style={{ width: screenDimensions.width, position: 'absolute', top: 0 }}>
+                            <CustomAppBar color={Color.white} />
+                        </View>
                         <Image
                             resizeMode="contain"
                             style={[styles.logo]}
