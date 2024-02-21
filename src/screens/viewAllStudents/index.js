@@ -40,7 +40,7 @@ const ViewAllStudents = ({ navigation }) => {
                     </View>
                     <View style={[styles.profileRowContainer]}>
                         <View>
-                            <Text style={[styles.CompText]}>Enrolled Children ({globalData?.students.length})</Text>
+                            <Text style={[styles.CompText]}>Enrolled Children ({globalData?.students?.length ? globalData?.students?.length : 0})</Text>
                         </View>
                     </View>
 

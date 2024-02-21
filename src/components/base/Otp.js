@@ -1,7 +1,5 @@
 import React, { useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
-import OTPTextView from 'react-native-otp-textinput';
-import { Color } from '../../utils/color';
 
 const Otp = ({ handleTextChange }) => {
     let otpInput = useRef(null);
@@ -16,7 +14,7 @@ const Otp = ({ handleTextChange }) => {
 
     return (
         <View style={styles.otpContainer}>
-            <OTPTextView
+            {/* <OTPTextView
                 keyboardType='numeric'
                 ref={e => (otpInput = e)}
                 inputCount={5}
@@ -24,7 +22,7 @@ const Otp = ({ handleTextChange }) => {
                 textInputStyle={styles.otpBox}
                 handleTextChange={(text) => handleTextChange(text)}
                 tintColor={Color.primary}
-            />
+            /> */}
         </View>
     );
 };
