@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native'
 import React from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import Idcard from "react-native-vector-icons/AntDesign"
 import CalendarTimeIcon from "react-native-vector-icons/FontAwesome"
 import BookIcon from "react-native-vector-icons/FontAwesome5"
@@ -44,12 +44,12 @@ const list = (schedule) => [
     },
     {
         name: "End Date",
-        value: schedule?.endDate ? formattedDate(schedule?.endDate, 'MMM-dd,yyyy') : '',
+        value: schedule?.endDate && !isNaN(new Date(schedule?.endDate)) ? formattedDate(schedule?.endDate, 'MMM-dd,yyyy') : '',
         icon: <CalendarTimeIcon name="calendar-times-o" size={FontSizes.xl} color={Color.iconColor} />,
     },
     {
         name: "Category",
-        value: schedule?.isComp ? 'Compensation Schedule' : schedule?.isBooster ? "Booster Schedule" : 'Regular Schedule',
+        value: schedule?.isComp ? 'Compensation Schedule' : schedule?.isBooster ? "Booster Lesson" : 'Regular Lesson',
         icon: <GridIcon name="grid" size={FontSizes.xl} color={Color.iconColor} />,
     },
 
@@ -58,10 +58,9 @@ const list = (schedule) => [
 const ViewSchedule = () => {
 
     const router = useRoute()
-    const { student } = router.params
     const globalData = useSelector(state => state?.global?.data)
 
-    const Schedules = globalData?.schedules?.filter(elem => elem.studentId === student?.id)
+    const Schedules = globalData?.schedules?.filter(elem => elem.studentId === router.params?.id)
 
 
     return (

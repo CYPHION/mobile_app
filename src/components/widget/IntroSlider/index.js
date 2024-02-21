@@ -80,7 +80,7 @@ const IntroSlider = ({ setIsIntro }) => {
     const renderDoneButton = () => (
         <View style={[styles.flexClass, { margin: 5, backgroundColor: Color.primary, borderRadius: 6, padding: 15 }]} >
             <Text style={{ fontFamily: FontFamily.interSemiBold, fontSize: FontSizes.md, color: Color.white }} >
-                Done
+                Login
             </Text>
         </View >
     )

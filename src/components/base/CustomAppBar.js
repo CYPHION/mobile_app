@@ -13,7 +13,6 @@ const CustomAppBar = ({ title, color }) => {
         navigation.goBack();
     };
 
-    console.log(active)
 
     return (
         <View style={{ flexDirection: 'row', height: 60, alignItems: 'center', }}>

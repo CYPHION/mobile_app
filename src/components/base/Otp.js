@@ -1,46 +1,64 @@
-import React, { useRef } from 'react';
-import { StyleSheet, View } from 'react-native';
-import OTPTextView from 'react-native-otp-textinput';
-import { Color } from '../../utils/color';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, TextInput, View } from 'react-native';
 
 const Otp = ({ handleTextChange }) => {
-    let otpInput = useRef(null);
+    const [otpValue, setOtpValue] = useState('');
+    const inputRefs = useRef(Array(5).fill(null));
 
-    const clearText = () => {
-        otpInput.current.clear();
-    }
+    const handleInputChange = (index, txt) => {
+        // Update OTP value
+        const newValue = otpValue.substring(0, index) + txt + otpValue.substring(index + 1);
+        setOtpValue(newValue);
 
-    const setText = () => {
-        otpInput.current.setValue("1234");
-    }
+        // Handle navigation and focus based on input and index
+        if (txt.length === 1 && index < inputRefs.current.length - 1) {
+            inputRefs.current[index + 1].focus(); // Move to next field
+        } else if (txt.length === 0 && index > 0) {
+            inputRefs.current[index - 1].focus(); // Move to previous field
+        }
+    };
+
+    // const nextRefIndexes = [1, 2, 3, 4, 4];
+
+    useEffect(() => {
+        handleTextChange(otpValue);
+    }, [otpValue]);
 
     return (
         <View style={styles.otpContainer}>
-            <OTPTextView
-                keyboardType='numeric'
-                ref={e => (otpInput = e)}
-                inputCount={5}
-                autoFocus={true}
-                textInputStyle={styles.otpBox}
-                handleTextChange={(text) => handleTextChange(text)}
-                tintColor={Color.primary}
-            />
+            {inputRefs.current.map((_, index) => (
+                <TextInput
+                    key={index}
+                    ref={ref => (inputRefs.current[index] = ref)}
+                    style={styles.inputView}
+                    keyboardType="number-pad"
+                    maxLength={1}
+                    onChangeText={(txt) => handleInputChange(index, txt)}
+                    // Handle Backspace key press for proper navigation
+                    onKeyDown={({ nativeEvent: { key } }) => {
+                        if (key === 'Backspace' && index > 0) {
+                            handleInputChange(index, ''); // Clear digit and focus previous field
+                        }
+                    }}
+                />
+            ))}
         </View>
     );
 };
 
-export default Otp;
+export default Otp
 
 const styles = StyleSheet.create({
     otpContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        gap: 7,
     },
-    otpBox: {
-        width: 50,
-        height: 50,
+    inputView: {
+        width: 45,
+        height: 45,
         borderWidth: 1,
-        borderRadius: 4,
+        borderRadius: 5,
         borderColor: '#ccc',
         textAlign: 'center',
         fontSize: 18,

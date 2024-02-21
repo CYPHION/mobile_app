@@ -54,9 +54,9 @@ const nestedArray = (item) => [
 const ViewProgress = () => {
 
     const router = useRoute()
-    const { student } = router.params
+
     const globalData = useSelector(state => state?.global?.data)
-    const filterReport = globalData?.reports?.filter(elem => elem.studentId === student?.id)
+    const filterReport = globalData?.reports?.filter(elem => elem.studentId === router.params.student?.id)
 
     const [open, setOpen] = useState(false);
     const [selectedDate, setSelectedDate] = useState('');
@@ -88,7 +88,7 @@ const ViewProgress = () => {
                         />}
                     />
 
-                    <TopbarWithGraph student={student} isGraph={false} />
+                    <TopbarWithGraph student={router.params.student} isGraph={false} />
 
                     <View style={[GlobalStyles.headerStyles]}>
                         <Text style={GlobalStyles.headerTextStyle}>Report Details</Text>

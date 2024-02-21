@@ -12,7 +12,7 @@ import { FontFamily, FontSizes } from "../../utils/font";
 import { GlobalStyles } from "../../utils/globalStyles";
 
 const AccordionItem = (props) => {
-    const { total, data, expanded, onToggle, date, studentName, children } = props;
+    const { total, expanded, onToggle, date, studentName, children } = props;
 
     const iconRotation = useRef(new Animated.Value(1)).current; // Initialize icon animation state
 

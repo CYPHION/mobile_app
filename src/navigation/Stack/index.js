@@ -88,7 +88,11 @@ export function MyStack() {
                 headerTitle: 'Testimonials',
 
             }} />
-            <Stack.Screen name="viewAppointment" component={ViewAppointments} />
+            <Stack.Screen name="viewAppointment" component={ViewAppointments} options={{
+                headerShown: true,
+                headerTitle: 'View Appointments ',
+
+            }} />
             <Stack.Screen name="leaveApplication" component={LeaveApplication} options={{
                 headerShown: true,
                 headerTitle: 'Leave Application ',

@@ -214,7 +214,8 @@ const styles = StyleSheet.create({
     },
     text: {
         fontFamily: FontFamily.interRegular,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: Color.text
     },
     btnView: {
         width: '15%'

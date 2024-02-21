@@ -42,13 +42,13 @@ const LoginScreen = (prop) => {
     };
 
     const handleSubmit = () => {
-        // setIsLoading(true)
+        setIsLoading(true)
         const { email, password } = formData
 
         API.login(email.toLowerCase(), password)
             .then((res) => saveDataToredux(res?.data))
             .catch(err => console.log('errrr', err))
-            .finally(() => console.log('finnalau'))
+            .finally(() => setIsLoading(false))
 
 
     };
@@ -110,7 +110,7 @@ const LoginScreen = (prop) => {
                                 value={formData.email}
                                 inputMode={'email'}
                                 onChangeText={(text) => onChangeHandler("email", text)}
-                                label={"Username/Email"}
+                                label={"Email"}
                                 errorMcg={error.email}
                             />
                             <FlaotingTextInput
@@ -140,9 +140,10 @@ const LoginScreen = (prop) => {
                             <CustomButton
                                 btnstyle={{ width: screenDimensions.width * 0.8 }}
                                 variant={"fill"}
-                                // disabled={isLoading}
+                                disabled={isLoading}
                                 title={"Login"}
                                 onPress={() => handleSubmit()}
+                                isLoading={isLoading}
                             />
                         </View>
                     </View>

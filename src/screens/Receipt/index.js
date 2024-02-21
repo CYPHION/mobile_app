@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import AccordionItem from '../../components/base/Accordion';
 import DropdownComponent from '../../components/base/CustomDropDown';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
-import { screenDimensions } from '../../utils/functions';
+import { formattedDate, screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
 
 
@@ -23,94 +24,17 @@ const data = [
 const Receipt = () => {
     const [activeItem, setActiveItem] = useState(null);
     const [option, setOption] = useState("");
-    const items = [
-        {
-            date: "18 Jan - 20 Jan ",
-            studentName: "Abdullah Khan (Weekly)",
-            title: "£120",
-            data: [
-                { name: "Previous Dues", value: "£0" },
-                { name: "Book dues", value: "£78" },
-                { name: "Discount", value: "£10" },
-                { name: "Paid Amount", value: "£89" },
-                { name: "Paid Amount", value: "£89" },
-                { name: "Paid Amount", value: "£89" },
-            ],
-        },
-        {
-            date: "28 Mar - 30 Apr ",
-            studentName: "Hammad  (Weekly)",
-            title: "£1000",
-            data: [
-                { name: "Previous Dues", value: "£19" },
-                { name: "Book dues", value: "£952" },
-                { name: "Discount", value: "£185" },
-                { name: "Paid Amount", value: "£78" },
-            ],
-        },
-        {
-            date: "28 Mar - 30 Apr ",
-            studentName: "Hammad  (Weekly)",
-            title: "£1000",
-            data: [
-                { name: "Previous Dues", value: "£19" },
-                { name: "Book dues", value: "£952" },
-                { name: "Discount", value: "£185" },
-                { name: "Paid Amount", value: "£78" },
-            ],
-        },
-        {
-            date: "28 Mar - 30 Apr ",
-            studentName: "Hammad  (Weekly)",
-            title: "£1000",
-            data: [
-                { name: "Previous Dues", value: "£19" },
-                { name: "Book dues", value: "£952" },
-                { name: "Discount", value: "£185" },
-                { name: "Paid Amount", value: "£78" },
-            ],
-        },
-        {
-            date: "28 Mar - 30 Apr ",
-            studentName: "Hammad  (Weekly)",
-            title: "£1000",
-            data: [
-                { name: "Previous Dues", value: "£19" },
-                { name: "Book dues", value: "£952" },
-                { name: "Discount", value: "£185" },
-                { name: "Paid Amount", value: "£78" },
-            ],
-        },
-        {
-            date: "28 Mar - 30 Apr ",
-            studentName: "Hammad  (Weekly)",
-            title: "£1000",
-            data: [
-                { name: "Previous Dues", value: "£19" },
-                { name: "Book dues", value: "£952" },
-                { name: "Discount", value: "£185" },
-                { name: "Paid Amount", value: "£78" },
-            ],
-        },
-        {
-            date: "28 Mar - 30 Apr ",
-            studentName: "Hammad  (Weekly)",
-            title: "£1000",
-            data: [
-                { name: "Previous Dues", value: "£19" },
-                { name: "Book dues", value: "£952" },
-                { name: "Discount", value: "£185" },
-                { name: "Paid Amount", value: "£78" },
-            ],
-        },
-    ];
+    const globaldata = useSelector(state => state?.global?.data)
+
+    const ineerList = (item) => [
+        { name: "Previous Dues", value: `£${item?.totalDues}` },
+        { name: "Book dues", value: `£${item?.bookDues}` },
+        { name: "Paid Amount", value: `£${item?.amountPaid}` },
+    ]
+
     const toggleItem = (index) => {
         setActiveItem(activeItem === index ? null : index); // Toggle state based on click
     };
-
-
-
-
 
     return (
         <ScrollView>
@@ -131,19 +55,18 @@ const Receipt = () => {
                     </View>
                 </View>
                 <View>
-                    {items.map((item, index) => (
+                    {globaldata?.fees.map((item, index) => (
                         <AccordionItem
-                            children={item.data?.map((elem, index) => (
+                            children={ineerList(item).map((elem, index) => (
                                 <View key={index} style={GlobalStyles.contentView}>
                                     <Text style={[GlobalStyles.contentItem]}>{elem.name}</Text>
                                     <Text style={[GlobalStyles.contentItem]}>{elem.value}</Text>
                                 </View>
                             ))}
                             key={index}
-                            date={item.date}
-                            studentName={item.studentName}
-                            total={item.title}
-                            data={item.data}
+                            date={`${item.payType} (${item.payBy})`}
+                            studentName={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
+                            total={`£${item.amountPaid}`}
                             expanded={activeItem === index}
                             onToggle={() => toggleItem(index)} // Pass toggle function to each item
                         />

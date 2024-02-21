@@ -4,13 +4,13 @@ import CardIcon from "react-native-vector-icons/AntDesign";
 import FilterIcon from "react-native-vector-icons/FontAwesome";
 import BookIcon, { default as CalendarIcon, default as CapIcon } from 'react-native-vector-icons/FontAwesome5';
 import GridIcon from 'react-native-vector-icons/Ionicons';
+import { default as NoHomework } from "react-native-vector-icons/MaterialCommunityIcons";
 import TimeIcon from 'react-native-vector-icons/MaterialIcons';
 import { useSelector } from 'react-redux';
-import Table from '../../components/base/Table';
 import { API } from '../../network/API';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
-import { customToast, formattedDate } from '../../utils/functions';
+import { customToast, formattedDate, screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
 
 
@@ -81,21 +81,31 @@ const ViewAppointments = () => {
     return (
         <ScrollView>
 
-            <View style={[GlobalStyles.headerStyles]}>
-                <Text style={GlobalStyles.headerTextStyle}>Analytics</Text>
-                <TouchableOpacity activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
-                    <View style={[styles.iconView]}>
-                        <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
+            {data.length > 0 ?
+                <>
+                    <View style={[GlobalStyles.headerStyles]}>
+                        <Text style={GlobalStyles.headerTextStyle}>Analytics</Text>
+                        <TouchableOpacity activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
+                            <View style={[styles.iconView]}>
+                                <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
+                            </View>
+                            <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
+                        </TouchableOpacity>
                     </View>
-                    <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
-                </TouchableOpacity>
-            </View>
-            <View>
-                {data.length > 0 && data.map((elem, index) => (
-                    <Table key={index} list={list(elem)} />
-                ))}
+                    <View>
+                        {data.length > 0 && data.map((elem, index) => (
+                            <Table key={index} list={list(elem)} />
+                        ))}
 
-            </View>
+                    </View>
+                </>
+                :
+                <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
+                    <View>
+                        <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                        <Text style={styles.inactivetext}>No Appointment found</Text>
+                    </View>
+                </View>}
 
         </ScrollView >
     )
@@ -129,6 +139,11 @@ const styles = StyleSheet.create({
     },
     CompText: {
         color: Color.text
+    },
+    inactivetext: {
+        textAlign: 'center',
+        color: Color.textTwo,
+        fontSize: FontSizes.lg
     }
 
 

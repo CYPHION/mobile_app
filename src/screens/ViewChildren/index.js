@@ -79,7 +79,7 @@ const ViewChildren = ({ navigation }) => {
 
                 <View style={{ gap: 10, marginTop: 10, paddingHorizontal: 10 }}>
 
-                    {items.map((elem, index) => (
+                    {items?.map((elem, index) => (
                         <TouchableOpacity style={[GlobalStyles.r_10, GlobalStyles.p_10,]} key={index} activeOpacity={0.7} onPress={() => navigation.navigate(elem.path, { student: selectedAttributes })}>
                             <View style={[styles.viewChildernStaclList]}>
                                 <View style={styles.viewChildernStaclList}>

@@ -14,13 +14,14 @@ const ViewAllStudents = ({ navigation }) => {
 
     const bgColor = {
         active: Color.primary,
-        inactive: Color.btnDisable
+        inactive: Color.error,
+        pending: Color.btnDisable,
+        freeze: Color.warning
     }
 
     useEffect(() => {
         setLoading(false)
     }, [globalData])
-
 
     return (
 
@@ -28,7 +29,7 @@ const ViewAllStudents = ({ navigation }) => {
             <LoadingScreen loading={loading} />
             <ScrollView>
                 <View style={styles.profileContainer}>
-                    <View style={[styles.profileRowContainer]}>
+                    {/* <View style={[styles.profileRowContainer]}>
                         <View>
                             <Text style={[styles.NameText, styles.textFontFamily]}>Hi, {user?.firstName} {user?.lastName}</Text>
                             <Text style={[styles.CompText, styles.textFontFamily]}>Welcome to Prime Tuition</Text>
@@ -37,10 +38,10 @@ const ViewAllStudents = ({ navigation }) => {
                             <View style={styles.badge}></View>
 
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
                     <View style={[styles.profileRowContainer]}>
                         <View>
-                            <Text style={[styles.CompText]}>Enrolled Children ({globalData?.students.length})</Text>
+                            <Text style={[styles.CompText]}>Enrolled Children ({globalData?.students ? globalData?.students?.length : 0})</Text>
                         </View>
                     </View>
 
@@ -50,12 +51,12 @@ const ViewAllStudents = ({ navigation }) => {
                             <TouchableOpacity activeOpacity={0.9} key={index} onPress={() => navigation.navigate('viewStudent', { id: elem.id })}>
                                 <View style={styles.allStudentContainer}>
                                     <View style={styles.allStudentContainers}>
-                                        <View >
+                                        <View>
                                             <Image resizeMode='contain' source={elem?.picture ? { uri: getImage(elem?.picture) } : require("../../images/profileAvatar.png")} style={styles.image} />
                                         </View>
                                         <View>
-                                            <Text style={styles.nameFont}>{elem?.fullName}</Text>
-                                            <Text style={styles.yearFont}> {elem?.StudentYear?.name}</Text>
+                                            <Text style={[styles.nameFont]}>{elem?.fullName}</Text>
+                                            <Text style={[styles.yearFont]}>{elem?.StudentYear?.name}</Text>
                                             <View style={[styles.activeStatus, { backgroundColor: bgColor[elem?.status] }]}>
                                                 <Text style={styles.activeStatusText}>{elem?.status}</Text>
                                             </View>
@@ -73,7 +74,7 @@ const ViewAllStudents = ({ navigation }) => {
 
 
                 </View>
-            </ScrollView>
+            </ScrollView >
         </>
     )
 }
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
     },
     allStudentContainers: {
         flexDirection: 'row',
-        gap: 20,
+        gap: 15,
     },
     allStudentContainer: {
         paddingVertical: 10,
@@ -127,6 +128,7 @@ const styles = StyleSheet.create({
         color: Color.text,
     },
     yearFont: {
+        textAlign: 'left',
         fontFamily: FontFamily.regular,
         fontSize: FontSizes.md,
         color: Color.textThree
@@ -143,7 +145,7 @@ const styles = StyleSheet.create({
         color: Color.pureWhite
     },
     weeklyText: {
-        fontFamily: FontFamily.interRegular,
+        fontFamily: FontFamily.interBold,
         fontSize: FontSizes.md,
         color: Color.text,
     },

@@ -8,13 +8,14 @@ import UserIcon from 'react-native-vector-icons/FontAwesome';
 import ReceiptIcon from 'react-native-vector-icons/FontAwesome6';
 import CardIcon from 'react-native-vector-icons/Ionicons';
 import AnalyticsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Analytics from '../../screens/Analytics';
 import ChangePasswordScreen from '../../screens/ChangePassword';
+import FeeCollection from '../../screens/FeeCollection';
 import Home from '../../screens/Home';
-import HomeWorkSkeleton from '../../screens/HomeWork/HomeWorkSkeleton';
 import Profile from '../../screens/Profile';
-import ViewAllStudents from '../../screens/viewAllStudents';
-import ViewProgress from '../../screens/viewProgress';
+import Receipt from '../../screens/Receipt';
 import { Color } from '../../utils/color';
+import { FontSizes } from '../../utils/font';
 
 const Tab = createBottomTabNavigator();
 
@@ -68,11 +69,20 @@ const TabNavigation = ({ old }) => {
             initialRouteName="home"
             screenOptions={{
                 headerShown: false, // Hide header for all screens
+                tabBarStyle: {
+                    height: 60,
+                    paddingBottom: 5
+                },
+                tabBarLabelStyle: {
+                    fontSize: FontSizes.sm
+                },
+
             }}
         >
-            <Tab.Screen name="receipt" component={ViewProgress}
+            <Tab.Screen name="receipt" component={Receipt}
                 options={{
                     tabBarLabel: 'Receipt',
+
                     tabBarIcon: ({ color, size, focused }) => (
                         <ReceiptIcon
                             name="receipt"
@@ -84,7 +94,7 @@ const TabNavigation = ({ old }) => {
                     headerTitle: 'View Fee Receipt'
                 }}
             />
-            <Tab.Screen name="fee" component={HomeWorkSkeleton}
+            <Tab.Screen name="fee" component={FeeCollection}
                 options={{
                     tabBarLabel: 'Fee',
                     tabBarIcon: ({ color, size, focused }) => (
@@ -111,7 +121,7 @@ const TabNavigation = ({ old }) => {
                     tabBarActiveTintColor: Color.primary
                 }}
             />
-            <Tab.Screen name="analytics" component={ViewAllStudents}
+            <Tab.Screen name="analytics" component={Analytics}
                 options={{
                     tabBarLabel: 'Analytics',
                     tabBarIcon: ({ color, size, focused }) => (

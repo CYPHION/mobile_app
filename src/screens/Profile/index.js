@@ -227,7 +227,8 @@ const styles = StyleSheet.create({
     },
     text: {
         fontFamily: FontFamily.interRegular,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: Color.textThree
     },
     bgIconColor: {
         width: 35,
