@@ -1,70 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
-import { useSelector } from 'react-redux';
-import { API } from '../../network/API';
+import Filter from "../../components/SVGS/Filter.svg";
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { screenDimensions } from '../../utils/functions';
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
 
-const ViewAllStudentsSkeleton = ({ navigation }) => {
-    const user = useSelector(state => state?.user?.data)
-    const [data, setData] = useState([])
-    const [loading, setLoading] = useState(true)
+const ViewAllStudentsSkeleton = () => {
 
-    const bgColor = {
-        active: Color.primary,
-        inactive: Color.btnDisable
-    }
 
-    const getStudents = () => {
-        API.getStudentByParentId(user?.id)
-            .then(res => {
-                setData(res?.data);  // Assuming `setData` is a state updating function
-            })
-            .catch(err => {
-                customToast('error', err);
-            })
-            .finally(() => {
-                setLoading(false)
-                // Any code you want to run after the promise is settled (either resolved or rejected)
-            });
-
-    }
-
-    useEffect(() => {
-        getStudents();
-    }, []);
-
+    let list = [1, 2, 3, 4]
 
     return (
 
         <>
-            {/* <LoadingScreen loading={loading} /> */}
             <ScrollView>
+
+                <Filter width={60} height={20} fill={"red"} />
+
                 <View style={styles.profileContainer}>
                     <View style={[styles.profileRowContainer]}>
                         <View>
                             <ShimmerPlaceholder style={[styles.NameText, styles.textFontFamily]} />
                             <ShimmerPlaceholder style={[styles.CompText, styles.textFontFamily]} />
                         </View>
-                        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
+                        {/* <TouchableOpacity  >
                             <View style={styles.badge}></View>
 
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                     <View style={[styles.profileRowContainer]}>
                         <View>
-                            <ShimmerPlaceholder style={[styles.CompText]} />
+                            <ShimmerPlaceholder style={[styles.CompTextt]} />
                         </View>
                     </View>
 
 
                     {
-                        data.map((elem, index) => (
-                            <TouchableOpacity activeOpacity={0.9} key={index} onPress={() => navigation.navigate('viewStudent')}>
+                        list.map((elem, index) => (
+                            <View key={index} >
                                 <View style={styles.allStudentContainer}>
                                     <View style={styles.allStudentContainers}>
                                         <View >
@@ -73,8 +49,8 @@ const ViewAllStudentsSkeleton = ({ navigation }) => {
                                         <View>
                                             <ShimmerPlaceholder style={styles.nameFont} />
                                             <ShimmerPlaceholder style={styles.yearFont} />
-                                            <View style={[styles.activeStatus, { backgroundColor: bgColor[elem?.status] }]}>
-                                                <Text style={styles.activeStatusText}>{elem?.status}</Text>
+                                            <View style={[styles.activeStatus,]}>
+                                                <ShimmerPlaceholder style={styles.activeStatusText} />
                                             </View>
                                         </View>
                                     </View>
@@ -83,7 +59,7 @@ const ViewAllStudentsSkeleton = ({ navigation }) => {
                                         <ShimmerPlaceholder style={styles.weeklyText} />
                                     </View>
                                 </View>
-                            </TouchableOpacity>
+                            </View>
                         ))
                     }
 
@@ -110,6 +86,7 @@ const styles = StyleSheet.create({
     },
     textFontFamily: {
         fontFamily: FontFamily.interRegular,
+        marginBottom: 3
     },
     NameText: {
         fontSize: FontSizes.xxl,
@@ -119,6 +96,9 @@ const styles = StyleSheet.create({
         fontSize: FontSizes.lg,
         color: Color.textThree,
         fontFamily: FontFamily.interRegular,
+    },
+    CompTextt: {
+        width: screenDimensions.width * .3
     },
     allStudentContainers: {
         flexDirection: 'row',
@@ -135,31 +115,26 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderColor: "black",
         backgroundColor: Color.pureWhite,
-        marginTop: 10,
+        marginTop: 15,
         marginBottom: 5
     },
     nameFont: {
-        fontFamily: FontFamily.interMedium,
-        fontSize: FontSizes.lg,
-        color: Color.text,
-        width: 100
+        width: screenDimensions.width * 0.25
     },
     yearFont: {
-        fontFamily: FontFamily.regular,
-        fontSize: FontSizes.md,
-        color: Color.textThree,
-        width: 100
+        width: screenDimensions.width * 0.25,
+        marginTop: 5
     },
     activeStatus: {
-        paddingVertical: 2,
-        borderRadius: 12,
-        width: 90
+        width: screenDimensions.width * 0.18,
+        marginTop: 3
     },
     activeStatusText: {
         textAlign: 'center',
         fontFamily: FontFamily.interRegular,
         fontSize: FontSizes.md,
-        color: Color.pureWhite
+        color: Color.pureWhite,
+        width: 90
     },
     weeklyText: {
         fontFamily: FontFamily.interRegular,
@@ -171,6 +146,5 @@ const styles = StyleSheet.create({
         width: screenDimensions.width * 0.18,
         height: screenDimensions.width * 0.18,
         borderRadius: screenDimensions.width * 0.18 * 0.5,
-
     }
 })
