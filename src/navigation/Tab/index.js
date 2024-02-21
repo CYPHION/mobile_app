@@ -9,11 +9,11 @@ import ReceiptIcon from 'react-native-vector-icons/FontAwesome6';
 import CardIcon from 'react-native-vector-icons/Ionicons';
 import AnalyticsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ChangePasswordScreen from '../../screens/ChangePassword';
+import FeeCollection from '../../screens/FeeCollection';
 import Home from '../../screens/Home';
-import HomeWorkSkeleton from '../../screens/HomeWork/HomeWorkSkeleton';
 import Profile from '../../screens/Profile';
+import Receipt from '../../screens/Receipt';
 import ViewAllStudents from '../../screens/viewAllStudents';
-import ViewProgress from '../../screens/viewProgress';
 import { Color } from '../../utils/color';
 
 const Tab = createBottomTabNavigator();
@@ -70,7 +70,7 @@ const TabNavigation = ({ old }) => {
                 headerShown: false, // Hide header for all screens
             }}
         >
-            <Tab.Screen name="receipt" component={ViewProgress}
+            <Tab.Screen name="receipt" component={Receipt}
                 options={{
                     tabBarLabel: 'Receipt',
                     tabBarIcon: ({ color, size, focused }) => (
@@ -84,7 +84,7 @@ const TabNavigation = ({ old }) => {
                     headerTitle: 'View Fee Receipt'
                 }}
             />
-            <Tab.Screen name="fee" component={HomeWorkSkeleton}
+            <Tab.Screen name="fee" component={FeeCollection}
                 options={{
                     tabBarLabel: 'Fee',
                     tabBarIcon: ({ color, size, focused }) => (

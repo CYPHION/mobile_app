@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import { useSelector } from 'react-redux';
@@ -73,8 +73,8 @@ const ViewAllStudentsSkeleton = ({ navigation }) => {
                                         <View>
                                             <ShimmerPlaceholder style={styles.nameFont} />
                                             <ShimmerPlaceholder style={styles.yearFont} />
-                                            <View style={[styles.activeStatus, { backgroundColor: bgColor[elem?.status] }]}>
-                                                <Text style={styles.activeStatusText}>{elem?.status}</Text>
+                                            <View style={[styles.activeStatus,]}>
+                                                <ShimmerPlaceholder style={styles.activeStatusText} />
                                             </View>
                                         </View>
                                     </View>
@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
     },
     textFontFamily: {
         fontFamily: FontFamily.interRegular,
+        marginBottom: 3
     },
     NameText: {
         fontSize: FontSizes.xxl,
@@ -148,7 +149,8 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.regular,
         fontSize: FontSizes.md,
         color: Color.textThree,
-        width: 100
+        width: 100,
+        marginTop: 5
     },
     activeStatus: {
         paddingVertical: 2,
@@ -159,7 +161,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontFamily: FontFamily.interRegular,
         fontSize: FontSizes.md,
-        color: Color.pureWhite
+        color: Color.pureWhite,
+        width: 90
     },
     weeklyText: {
         fontFamily: FontFamily.interRegular,
