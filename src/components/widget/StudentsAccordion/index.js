@@ -6,7 +6,6 @@ import { FontSizes } from '../../../utils/font'
 import { formattedDate, screenDimensions } from '../../../utils/functions'
 import AccordionItem from '../../base/Accordion'
 import MyCheckBox from '../../base/CheckBox'
-import CustomButton from '../../base/CustomButton'
 import GridTable from '../../base/GridTable'
 
 
@@ -14,10 +13,6 @@ const item = (item) => [
     {
         name: "Subject",
         value: item?.Subject?.name,
-    },
-    {
-        name: "Schedule ID",
-        value: item?.id,
     },
     {
         name: "Hours Per Week",
@@ -38,7 +33,7 @@ const item = (item) => [
 
 const StudentsAccordion = (props) => {
 
-    const { open, setOpen, setNextScreen, date, selectedStudent } = props
+    const { open, setOpen, date, selectedStudent, setselectData } = props
     const [activeItem, setActiveItem] = useState(null);
     const toggleItem = (index) => {
         setActiveItem(activeItem === index ? null : index); // Toggle state based on click
@@ -49,7 +44,7 @@ const StudentsAccordion = (props) => {
 
 
     const handleCheckbox = (scheduleId) => {
-        const index = globalData?.schedules.findIndex(item => item.id === scheduleId);
+        const index = globalData?.schedules.findIndex(item => item.id === Number(scheduleId));
         if (index === -1) {
             return; // Schedule item not found, handle error or return
         }
@@ -68,7 +63,7 @@ const StudentsAccordion = (props) => {
 
         setSelectedData(prev => {
             // If the checkbox is checked, add the schedule data to the selected data
-            if (newCheckedItems[index]) {
+            if (newCheckedItems[scheduleId]) {
                 return [...prev, { ...newData }];
             } else {
                 // If the checkbox is unchecked, remove the schedule data from the selected data
@@ -83,27 +78,32 @@ const StudentsAccordion = (props) => {
         setOpen(!open);
     };
 
+
     const getSelectedStudentSchedule = (studentId) => {
 
         const day = formattedDate(date, 'EEEE')
         const getStudentSchedules = globalData?.schedules?.filter(elem => elem?.studentId === studentId && elem.days === day && !elem.isComp && !elem.isBooster)
 
-        console.log({ checkedItems, selectedData })
-        return <>
-            <CustomButton
-                variant='fill'
-                title='Done'
-                onPress={() => { setNextScreen(true); toggleModal() }}
-            />
-            {getStudentSchedules?.map((elem, index) => (
-                <GridTable
-                    data={item(elem)}
-                    key={index}
-                    CheckboxChild={<MyCheckBox isChecked={checkedItems[elem.id]} onToggle={() => handleCheckbox(elem.id)} />}
-                />
-            ))}
-        </>
+        return (
 
+            getStudentSchedules?.length > 0 ? <>
+                {getStudentSchedules?.map((elem, index) => (
+                    <GridTable
+                        data={item(elem)}
+                        key={index}
+                        CheckboxChild={<MyCheckBox isChecked={checkedItems[elem.id]} onToggle={() => handleCheckbox(elem.id)} />}
+                    />
+                ))}
+            </> : <View><Text style={{ color: Color.text }}>No Schedule found Please Select Another Date</Text></View>
+
+
+        )
+
+    }
+
+    const handleClose = () => {
+        setselectData(selectedData)
+        toggleModal()
     }
 
 
@@ -119,13 +119,13 @@ const StudentsAccordion = (props) => {
                 >
                     <View style={styles.modalContainer}>
                         <View style={[styles.modalContent]}>
-                            {selectedStudent?.length > 0 ? <>
+                            {selectedStudent?.length > 0 && date ? <>
                                 <ScrollView>
                                     <View style={{ width: screenDimensions.width * 0.95 }}>
                                         {globalData?.students?.map((item, index) => {
                                             if (selectedStudent?.includes(item?.id)) {
                                                 return <AccordionItem
-                                                    children={getSelectedStudentSchedule(item?.id)}
+                                                    children={getSelectedStudentSchedule(item?.id, index)}
                                                     key={index}
                                                     date={`Main ID : ${item?.mainId}`}
                                                     studentName={`Year in School- ${item?.StudentYear?.name}`}
@@ -143,7 +143,7 @@ const StudentsAccordion = (props) => {
                                 <Text style={{ color: Color.black, fontSize: FontSizes.xl }}>Please Select Date </Text>
                             </View>}
                         </View>
-                        <TouchableOpacity style={styles.backdrop} onPress={toggleModal} />
+                        <TouchableOpacity style={styles.backdrop} onPress={handleClose} />
                     </View>
                 </Modal>
             </View>

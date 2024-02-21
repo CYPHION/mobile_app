@@ -44,8 +44,7 @@ const Home = ({ navigation }) => {
 
     return (
         <>
-            {/* <LoadingScreen loading={loading} /> */}
-            {(!!globaldata && !!user) ? <ScrollView>
+            {(!!globaldata?.students && !!user?.email) ? <ScrollView>
                 <View style={styles.profileContainer}>
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
                         <View>

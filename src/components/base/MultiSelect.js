@@ -18,15 +18,15 @@ const MultiSelectComponent = (prop) => {
         label,
         setValues,
         disable,
-        maxSelect
+        maxSelect,
+        required
     } = prop
 
     const [isFocus, setIsFocus] = useState(false);
 
-
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>{label ? label : null}</Text>
+            <Text style={styles.label}>{label ? `${label} ${required ? `(Required)` : ''}` : null}</Text>
             <MultiSelect
                 disable={disable}
                 style={[

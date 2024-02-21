@@ -18,4 +18,18 @@ export class API {
         return HttpService.GET(`/appointment/all?parentId=${parentId}`)
     }
 
+    static async createLeave(formData) {
+        return HttpService.POST(`/leave-application/create`, formData)
+    }
+
+    static async getAttendanceByDateRange(formData) {
+        return formData.teacher
+            ? HttpService.GET(`/attendance/date-range?${formData.formDataforSend}`)
+            : HttpService.GET(`/attendance/date-range?${formData}`)
+    }
+
+    static async compensationAll() {
+        return HttpService.GET(`/compensation/view`)
+    }
+
 }
