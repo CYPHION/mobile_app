@@ -11,6 +11,7 @@ import { screenDimensions } from '../../utils/functions'
 const Compensation = () => {
     const [active, setActive] = useState(true)
 
+
     return (
         <View>
             <CustomAppBar title='Compensation' />

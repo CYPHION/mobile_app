@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: 10
+        paddingVertical: 5
     },
     innerView: {
         overflow: 'hidden',

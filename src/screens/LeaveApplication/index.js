@@ -6,70 +6,63 @@ import GridTable from '../../components/base/GridTable';
 import MyModal from '../../components/base/Modal';
 import CreateAppliction from '../../components/widget/CreateApplication';
 import ViewApplication from '../../components/widget/ViewApplication';
+import { API } from '../../network/API';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
-import { screenDimensions } from '../../utils/functions';
+import { customToast, formattedDate, screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
+
 
 const LeaveApplication = () => {
 
     const [active, setActive] = useState(false)
     const [open, setOpen] = useState(false)
+    const [selectData, setselectData] = useState([])
+    const [selectedDate, setselectedDate] = useState('')
+    const [reason, setReason] = useState('')
     const [nextScreen, setNextScreen] = useState(false)
 
 
-    const item = [
+    const item = (item) => [
         {
-            name: "Enrollment date",
-            value: "10/8/2024",
+            name: "Main ID",
+            value: item?.Student?.mainId,
+        },
+        {
+            name: "Student Name",
+            value: item?.Student?.fullName,
+        },
+        {
+            name: "Year",
+            value: item?.Student?.StudentYear?.name,
         },
         {
             name: "Subject",
-            value: "Subject Value ",
+            value: item?.Subject?.name,
         },
         {
-            name: "Fees",
-            value: "10/8/2024",
+            name: "Lecture Time",
+            value: `${item?.LessonTiming?.hours} hours`,
         },
         {
-            name: "date",
-            value: "10/8/2024",
+            name: "Date",
+            value: formattedDate(selectedDate, 'dd-MM-yyyy'),
         },
         {
-            name: "name",
-            value: "M.Owais",
-        },
-        {
-            name: "Enrollment date",
-            value: "10/8/2024",
-        },
-    ]
-
-
-    const tableData = [
-        {
-            item,
-        },
-        {
-            item,
-        },
-        {
-            item,
-        },
-        {
-            item,
+            name: "Day",
+            value: formattedDate(selectedDate, 'EEEE'),
         },
     ]
 
     const renderScreen = () => (
-        <View>
+        <View >
 
             <Text style={styles.textHeading}>Leave Request Preview</Text>
             <Text style={styles.para}>Note: You are about to submit leave request. Kindly verify all details.</Text>
             <View>
                 {
-                    tableData.map((elem, index) => (
-                        <GridTable key={index} data={elem.item} />
+                    selectData?.map((elem, index) => (
+                        <GridTable key={index} data={item(elem)} />
                     ))
                 }
             </View>
@@ -96,6 +89,29 @@ const LeaveApplication = () => {
         </View>
     )
 
+    const handleProcessRequest = async () => {
+
+        const payload = selectData?.map(elem => ({
+            applicationDate: formattedDate(selectedDate, 'yyyy-MM-dd'),
+            scheduleId: elem.id,
+            studentId: elem.studentId,
+            reason: reason
+
+        }))
+
+        let formValues = {
+            data: payload
+        }
+
+        await API.createLeave(formValues).then(res => {
+            // customToast("success", res?.message)
+            setOpen(prev => !prev)
+        }).catch(err => {
+            customToast("error", err?.message)
+        })
+
+    }
+
 
 
     return (
@@ -107,37 +123,53 @@ const LeaveApplication = () => {
             />
             <View style={[styles.main]}>
                 <View style={styles.absoluteBtnView}>
-                    {nextScreen ? <CustomButton
-                        title={'SUBMIT'}
-                        variant='fill'
-                        btnstyle={styles.absoluteBtn}
-                        onPress={() => setOpen(prev => !prev)}
-                    /> : null}
-                </View>
-                <ScrollView>
-                    <View style={[styles.tabBtn]}>
+                    {nextScreen ? <>
                         <CustomButton
-                            title='Create Appliction'
-                            btnstyle={styles.btnStyle}
-                            variant={active ? '' : 'fill'}
-                            onPress={() => setActive(prev => !prev)}
-                        />
-                        <CustomButton
-                            btnstyle={styles.btnStyle}
-                            title='View Application'
-                            variant={active ? 'fill' : ''}
+                            title={'SUBMIT'}
+                            variant='fill'
+                            btnstyle={styles.absoluteBtn}
                             onPress={() => {
-                                setNextScreen(false)
-                                setActive(prev => !prev)
+                                handleProcessRequest()
                             }}
                         />
-                    </View>
-                    <View style={[GlobalStyles.p_10]}>
-                        {active ? <ViewApplication /> :
-                            <>
-                                {nextScreen ? renderScreen() : <CreateAppliction setNextScreen={setNextScreen} />}
-                            </>
-                        }
+                        <CustomButton
+                            title={'Go Back '}
+                            // variant='fill'
+                            btnstyle={styles.absoluteBtn}
+                            onPress={() => {
+                                setActive(false)
+                                setNextScreen(false)
+                                setselectData([])
+                            }}
+                        />
+                    </> : null}
+                </View>
+                <ScrollView>
+                    <View style={nextScreen && { height: selectData?.length > 1 ? screenDimensions.height * 1.33 : screenDimensions.height * 0.9 }}>
+                        <View style={[styles.tabBtn]}>
+                            <CustomButton
+                                title='Create Appliction'
+                                btnstyle={styles.btnStyle}
+                                variant={active ? '' : 'fill'}
+                                onPress={() => setActive(prev => !prev)}
+                            />
+                            <CustomButton
+                                btnstyle={styles.btnStyle}
+                                title='View Application'
+                                variant={active ? 'fill' : ''}
+                                onPress={() => {
+                                    setNextScreen(false)
+                                    setActive(prev => !prev)
+                                }}
+                            />
+                        </View>
+                        <View style={[GlobalStyles.p_10]}>
+                            {active ? <ViewApplication /> :
+                                <>
+                                    {nextScreen ? renderScreen() : <CreateAppliction setNextScreen={setNextScreen} setselectData={setselectData} setselectedDate={setselectedDate} selectData={selectData} setReason={setReason} />}
+                                </>
+                            }
+                        </View>
                     </View>
                 </ScrollView>
             </View>
@@ -149,9 +181,6 @@ export default LeaveApplication;
 
 
 const styles = StyleSheet.create({
-    main: {
-        backgroundColor: Color.white,
-    },
     tabBtn: {
         paddingVertical: 10,
         flexDirection: 'row',
@@ -176,12 +205,20 @@ const styles = StyleSheet.create({
         bottom: screenDimensions.height * 0.01,
         left: 0,
         right: 0,
-        zIndex: 10,
+        zIndex: 20,
         width: screenDimensions.width,
-        alignItems: 'center'
+        backgroundColor: Color.white,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     absoluteBtn: {
-        width: '90%',
+        width: '95%',
+    },
+    absoluteBtn2: {
+        width: '95%',
+        marginTop: 3,
+        borderColor: Color.text,
+        borderWidth: 0.5
     },
     iconView: {
         backgroundColor: Color.primary,
@@ -200,6 +237,7 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.interBold,
         color: Color.text,
         fontSize: FontSizes.lg
-    }
+    },
+
 
 })

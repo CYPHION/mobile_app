@@ -26,4 +26,18 @@ export class API {
         return HttpService.POST(`/testimonial/create`, data)
     }
 
+    static async createLeave(formData) {
+        return HttpService.POST(`/leave-application/create`, formData)
+    }
+
+    static async getAttendanceByDateRange(formData) {
+        return formData.teacher
+            ? HttpService.GET(`/attendance/date-range?${formData.formDataforSend}`)
+            : HttpService.GET(`/attendance/date-range?${formData}`)
+    }
+
+    static async compensationAll() {
+        return HttpService.GET(`/compensation/view`)
+    }
+
 }

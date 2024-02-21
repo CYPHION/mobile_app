@@ -24,7 +24,7 @@ const Table = (prop) => {
 
 
         default:
-            bgColor = Color.white
+            bgColor = Color.grayBackground
             textColor = Color.text
             break;
     }
