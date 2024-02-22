@@ -74,7 +74,7 @@ const ViewAppointments = () => {
     return (
         <ScrollView>
 
-            {global?.appointments.length > 0 ?
+            {global?.appointments?.length > 0 ?
                 <>
                     <View style={[GlobalStyles.headerStyles]}>
                         <Text style={GlobalStyles.headerTextStyle}>Analytics</Text>

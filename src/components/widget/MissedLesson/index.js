@@ -84,7 +84,11 @@ const MissedLesson = () => {
                     }))
                     setPaidUpto(formattedDate(maxDueFeeDate, 'MM-dd-yyyy'))
                     setDisable(false)
+                } else {
+
+                    setOpen(true)
                 }
+
 
             }
             else {

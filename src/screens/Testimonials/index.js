@@ -22,7 +22,7 @@ const Testimonials = () => {
         <SafeAreaView>
             <View style={[styles.main]}>
 
-                {!(global?.testimonials.some((item) => item?.userId === user?.id)) && <View style={styles.absView}>
+                {!(global?.testimonials?.some((item) => item?.userId === user?.id)) && <View style={styles.absView}>
                     <CustomButton
                         title='Write A Review'
                         variant='fill'

@@ -90,7 +90,7 @@ const Analytics = ({ navigation }) => {
                     />
                 }
             >
-                {(!!user?.email && !!global?.students) ? <>
+                {(!!user?.email && !!global?.students && !!global?.attendances && !!global?.fees && !!global?.appointments && !!global?.depositFee) ? <>
                     <View style={styles.viewChildrenContainer}>
 
                         <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 }}>
