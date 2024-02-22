@@ -9,7 +9,7 @@ import CustomButton from "./CustomButton";
 
 const DatePickerSingle = (props) => {
 
-    const { isVisible, onToggle, Children, onDone, required } = props;
+    const { isVisible, onToggle, Children, onDone, required, value } = props;
     const [startDate, setStartDate] = useState(new Date());
 
     const handleDateChange = (selectedDate) => {

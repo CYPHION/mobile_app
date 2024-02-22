@@ -57,7 +57,10 @@ export const customToast = (type, message) => { //type = error || success || inf
     Toast.show({
         type: type,
         text1: message,
-        position: 'top'
+        position: 'top',
+        text1Style: {
+            maxWidth: '100%'
+        }
     })
 }
 
@@ -132,4 +135,34 @@ export const getParentDropdown = (list, isDisable) => {
 
         }
     })
+}
+
+export function calculateFee(child, timeperiod, isMonthly, startDate, isBooster) {
+    const totalClassCharges = isMonthly ? Math.ceil((child.weeklyFee * 52) / 12) * timeperiod : child.weeklyFee * timeperiod
+    const endDate = new Date(startDate)
+    endDate?.setDate(endDate.getDate() + timeperiod * 7)
+
+    const nextMonth = new Date(startDate)
+    nextMonth.setMonth(nextMonth.getMonth() + timeperiod);
+    nextMonth.setDate(nextMonth.getDate());
+
+    let boosterCharges = 0
+    if (isBooster && child?.BoosterStudents?.length > 0 && child?.BoosterStudents[0].paidAmount === 0) {
+        boosterCharges = Number(child?.BoosterStudents[0]?.totalPackagePrice)
+    }
+
+
+    const obj = {
+        totalLectures: child.totalLectures * timeperiod,
+        totalHours: child.totalHours * timeperiod,
+        classDues: child.classDues ? child.classDues : 0,
+        classCharges: totalClassCharges,
+        bookCharges: child?.bookDues,
+        boosterCharges,
+        boosterDues: child.boosterDues,
+        endDate: formattedDate(isMonthly ? nextMonth : endDate, 'dd-MMMM-yyyy'),
+        totalCharges: totalClassCharges + boosterCharges,
+    }
+
+    return obj;
 }

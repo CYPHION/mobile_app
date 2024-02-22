@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
 import { useSelector } from 'react-redux'
 import { API } from '../../../network/API'
 import { Color } from '../../../utils/color'
@@ -33,13 +32,6 @@ const MissedLesson = () => {
     const [rows, setRows] = useState([])
     const [studentData, setStudentData] = useState(null);
     const globalData = useSelector(state => state?.global?.data)
-
-    const data = [
-        { name: "Abdullah ", value: "1" },
-        { name: "Fawad Khan", value: "2" },
-        { name: "Jawad Ali", value: "3" },
-        { name: "Sami Khan", value: "4" },
-    ];
 
     const onChangeHandler = (name, text) => {
         setFormData(prevFormData => ({
@@ -96,10 +88,10 @@ const MissedLesson = () => {
 
             }
             else {
-                setOpen(!open)
+                setOpen(true)
             }
         } else {
-            setOpen(!open)
+            setOpen(true)
         }
     }
 
@@ -122,7 +114,7 @@ const MissedLesson = () => {
         setIsLoading(false);
 
         // Extract student names from formData
-        const stds = (formData?.studentSelect || []).map(elem => elem.split("Missed")[0].trim());
+        const stds = (selectedValues || []).map(elem => elem.split("Missed")[0].trim());
 
         // Filter the data based on student names, attendanceType, and attendanceCategory
         const filteredData = res.filter(item => {
@@ -191,7 +183,7 @@ const MissedLesson = () => {
 
         const excludeComp = res?.filter(elem => !ids.includes(elem.id))
 
-        parentStdnt.forEach(studentObj => {
+        parentStdnt?.forEach(studentObj => {
             const studentName = studentObj.fullName;
             absenceCountMap.set(studentName, 0);
         });
@@ -233,7 +225,7 @@ const MissedLesson = () => {
 
 
     return (
-        <ScrollView>
+        <View>
             <MyModal
                 modalVisible={open}
                 setModalVisible={setOpen}
@@ -283,7 +275,7 @@ const MissedLesson = () => {
                 </View> :
                 <SelectedStudents setActiveScreen={setActiveScreen} selectedValues={selectedValues} studentData={studentData} />
             }
-        </ScrollView>
+        </View>
     )
 }
 
