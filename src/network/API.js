@@ -14,13 +14,6 @@ export class API {
         return HttpService.GET(`/global/mobile/${id}`)
     }
 
-    static async getAllApointment(parentId) {
-        return HttpService.GET(`/appointment/all?parentId=${parentId}`)
-    }
-
-    static async getAllTestimonial() {
-        return HttpService.GET(`/testimonial/all`)
-    }
 
     static async createTestimonial(data) {
         return HttpService.POST(`/testimonial/create`, data)

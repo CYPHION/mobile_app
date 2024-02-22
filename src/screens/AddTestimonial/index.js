@@ -3,14 +3,15 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/Feather'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import CustomButton from '../../components/base/CustomButton'
 import InputField from '../../components/base/InputField'
 import MyModal from '../../components/base/Modal'
 import { API } from '../../network/API'
+import { globalData } from '../../store/thunk'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { screenDimensions } from '../../utils/functions'
+import { customToast, screenDimensions } from '../../utils/functions'
 import { GlobalStyles } from '../../utils/globalStyles'
 
 const AddTestimonial = () => {
@@ -19,6 +20,7 @@ const AddTestimonial = () => {
     const [open, setOpen] = useState(false)
     const [isloading, setIsloading] = useState(false)
     const navigation = useNavigation()
+    const dispatch = useDispatch()
     const renderItem = () => (
         <View style={styles.modal}>
             <View style={styles.iconView}>
@@ -29,7 +31,6 @@ const AddTestimonial = () => {
                 title='OK'
                 variant='fill'
                 onPress={() => {
-                    console.log('hello')
                     navigation.navigate('testimonials', { added: true })
                 }}
                 btnstyle={{ width: screenDimensions.width * 0.2, paddingVertical: 5 }}
@@ -42,10 +43,10 @@ const AddTestimonial = () => {
         API.createTestimonial({ review: review, userId: user.id })
             .then(() => {
                 setOpen(true)
+                dispatch(globalData(user?.id))
             })
             .catch((err) => {
-                // customToast('error', err)
-                console.log('error', err)
+                customToast('error', 'You have already add a review!')
             })
             .finally(() => setIsloading(false))
     }

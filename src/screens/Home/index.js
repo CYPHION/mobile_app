@@ -116,7 +116,8 @@ const styles = StyleSheet.create({
     item: {
         marginHorizontal: 8,
         textAlign: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     nameText: {
         fontSize: FontSizes.md,
