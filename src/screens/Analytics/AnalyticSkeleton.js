@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 import { Color } from '../../utils/color'
@@ -15,51 +15,53 @@ const AnalyticsSkeleton = () => {
 
 
     return (
-        <ScrollView>
-            <View style={styles.viewChildrenContainer}>
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView>
+                <View style={styles.viewChildrenContainer}>
 
-                <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 }}>
-                    <View>
-                        <ShimmerPlaceholder style={styles.UserName} />
+                    <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 }}>
+                        <View>
+                            <ShimmerPlaceholder style={styles.UserName} />
+
+                        </View>
+
+                        <ShimmerPlaceholder style={styles.UserNames} />
+
+                    </View>
+                    <View style={[GlobalStyles.headerStyles]}>
+                        <ShimmerPlaceholder style={styles.AnalyticNames} />
+
+
+                        <ShimmerPlaceholder style={styles.UserNames} />
 
                     </View>
 
-                    <ShimmerPlaceholder style={styles.UserNames} />
-
-                </View>
-                <View style={[GlobalStyles.headerStyles]}>
-                    <ShimmerPlaceholder style={styles.AnalyticNames} />
+                    <View style={{ alignItems: 'center', gap: 10, paddingVertical: 10 }}>
 
 
-                    <ShimmerPlaceholder style={styles.UserNames} />
+                        <ShimmerPlaceholder style={styles.analyticBox}>
 
-                </View>
+                        </ShimmerPlaceholder>
 
-                <View style={{ alignItems: 'center', gap: 10, paddingVertical: 10 }}>
+                        <ShimmerPlaceholder style={styles.analyticBox}>
 
+                        </ShimmerPlaceholder>
 
-                    <ShimmerPlaceholder style={styles.analyticBox}>
+                        <ShimmerPlaceholder style={styles.analyticBox}>
 
-                    </ShimmerPlaceholder>
+                        </ShimmerPlaceholder>
 
-                    <ShimmerPlaceholder style={styles.analyticBox}>
+                        <ShimmerPlaceholder style={styles.analyticBox}>
 
-                    </ShimmerPlaceholder>
+                        </ShimmerPlaceholder>
 
-                    <ShimmerPlaceholder style={styles.analyticBox}>
-
-                    </ShimmerPlaceholder>
-
-                    <ShimmerPlaceholder style={styles.analyticBox}>
-
-                    </ShimmerPlaceholder>
+                    </View>
 
                 </View>
 
-            </View>
 
-
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

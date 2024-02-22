@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 import Download from 'react-native-vector-icons/Feather'
@@ -33,56 +33,57 @@ const HomeWorkSkeleton = () => {
     ]
 
     return (
-
-        <ScrollView>
-            <View style={{ paddingBottom: 10, backgroundColor: Color.white }}>
-                <View style={[styles.viewChildrenContainer, GlobalStyles.p_10]}>
-                    <Text style={[styles.NameText, styles.textFontFamily]}>Abdullah Khan</Text>
-                    <Text style={[styles.CompText, styles.textFontFamily]}>(3)</Text>
-                </View>
-                <View style={{ paddingHorizontal: 10, gap: 10, marginTop: 10 }}>
-                    {
-                        Data.map((elem, index) => (
-                            <View key={index} style={styles.allStudentContainer}>
-                                <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
-                                    <View style={[styles.allStudentContainers, { gap: 15 }]} >
-                                        <ShimmerPlaceholder style={[styles.bgIconColor]}>
-                                            {/* <Idcard name="idcard" size={FontSizes.xl} color={Color.iconColor} /> */}
-                                        </ShimmerPlaceholder>
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView>
+                <View style={{ paddingBottom: 10, backgroundColor: Color.white }}>
+                    <View style={[styles.viewChildrenContainer, GlobalStyles.p_10]}>
+                        <Text style={[styles.NameText, styles.textFontFamily]}>Abdullah Khan</Text>
+                        <Text style={[styles.CompText, styles.textFontFamily]}>(3)</Text>
+                    </View>
+                    <View style={{ paddingHorizontal: 10, gap: 10, marginTop: 10 }}>
+                        {
+                            Data.map((elem, index) => (
+                                <View key={index} style={styles.allStudentContainer}>
+                                    <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
+                                        <View style={[styles.allStudentContainers, { gap: 15 }]} >
+                                            <ShimmerPlaceholder style={[styles.bgIconColor]}>
+                                                {/* <Idcard name="idcard" size={FontSizes.xl} color={Color.iconColor} /> */}
+                                            </ShimmerPlaceholder>
+                                            <ShimmerPlaceholder style={styles.nameFont} />
+                                        </View>
                                         <ShimmerPlaceholder style={styles.nameFont} />
                                     </View>
-                                    <ShimmerPlaceholder style={styles.nameFont} />
-                                </View>
-                                <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
-                                    <View style={[styles.allStudentContainers, { gap: 15 }]} >
-                                        <ShimmerPlaceholder style={[styles.bgIconColor]}>
-                                            {/* <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} /> */}
-                                        </ShimmerPlaceholder>
+                                    <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
+                                        <View style={[styles.allStudentContainers, { gap: 15 }]} >
+                                            <ShimmerPlaceholder style={[styles.bgIconColor]}>
+                                                {/* <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} /> */}
+                                            </ShimmerPlaceholder>
+                                            <ShimmerPlaceholder style={styles.nameFont} />
+                                        </View>
                                         <ShimmerPlaceholder style={styles.nameFont} />
                                     </View>
-                                    <ShimmerPlaceholder style={styles.nameFont} />
+                                    <View style={styles.btnStyle}>
+                                        {elem.url ?
+                                            <ShimmerPlaceholder style={{ height: screenDimensions.width * 0.1, width: screenDimensions.width * 0.85 }}
+                                                title="Open Link"
+                                                variant='fill'
+                                                rightIcon={<Download name='link' size={FontSizes.lg} color={Color.white} />}
+                                            />
+                                            :
+                                            <ShimmerPlaceholder style={{ height: screenDimensions.width * 0.1, width: screenDimensions.width * 0.85 }}
+                                                title="Download"
+                                                rightIcon={<Download name='download' size={FontSizes.lg} color={Color.white} />}
+                                                variant='fill'
+                                            />
+                                        }
+                                    </View>
                                 </View>
-                                <View style={styles.btnStyle}>
-                                    {elem.url ?
-                                        <ShimmerPlaceholder style={{ height: screenDimensions.width * 0.1, width: screenDimensions.width * 0.85 }}
-                                            title="Open Link"
-                                            variant='fill'
-                                            rightIcon={<Download name='link' size={FontSizes.lg} color={Color.white} />}
-                                        />
-                                        :
-                                        <ShimmerPlaceholder style={{ height: screenDimensions.width * 0.1, width: screenDimensions.width * 0.85 }}
-                                            title="Download"
-                                            rightIcon={<Download name='download' size={FontSizes.lg} color={Color.white} />}
-                                            variant='fill'
-                                        />
-                                    }
-                                </View>
-                            </View>
-                        ))
-                    }
+                            ))
+                        }
+                    </View>
                 </View>
-            </View>
-        </ScrollView >
+            </ScrollView >
+        </SafeAreaView>
     )
 }
 

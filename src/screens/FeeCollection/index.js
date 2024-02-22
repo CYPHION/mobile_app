@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import AccordionItem from '../../components/base/Accordion';
 import CustomButton from '../../components/base/CustomButton';
 import DropdownComponent from '../../components/base/CustomDropDown';
@@ -90,95 +90,96 @@ const FeeCollection = () => {
 
 
     return (
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView>
+                <View style={{ backgroundColor: Color.white }}>
 
-        <ScrollView>
-            <View style={{ backgroundColor: Color.white }}>
+                    <View style={{ paddingHorizontal: 10, alignItems: 'center' }}>
+                        <DropdownComponent
+                            dropdownStyle={{ width: screenDimensions.width * 0.95 }}
+                            disable={false}
+                            data={data}
+                            placeHolderText={"Select Payment Type"}
+                            value={option}
+                            setValue={setOption}
+                        />
+                    </View>
+                    {option ? <>
 
-                <View style={{ paddingHorizontal: 10, alignItems: 'center' }}>
-                    <DropdownComponent
-                        dropdownStyle={{ width: screenDimensions.width * 0.95 }}
-                        disable={false}
-                        data={data}
-                        placeHolderText={"Select Payment Type"}
-                        value={option}
-                        setValue={setOption}
-                    />
-                </View>
-                {option ? <>
+                        <View style={[GlobalStyles.p_10]}>
+                            {items.map((item, index) => (
+                                <AccordionItem
+                                    children={<GridTable key={index} data={item.data} />}
+                                    key={index}
+                                    date={item.date}
+                                    studentName={item.studentName}
+                                    total={item.title}
+                                    data={item.data}
+                                    expanded={activeItem === index}
+                                    onToggle={() => toggleItem(index)} // Pass toggle function to each item
+                                />
+                            ))}
+                        </View>
 
-                    <View style={[GlobalStyles.p_10]}>
-                        {items.map((item, index) => (
-                            <AccordionItem
-                                children={<GridTable key={index} data={item.data} />}
-                                key={index}
-                                date={item.date}
-                                studentName={item.studentName}
-                                total={item.title}
-                                data={item.data}
-                                expanded={activeItem === index}
-                                onToggle={() => toggleItem(index)} // Pass toggle function to each item
+
+
+                        <View style={[GlobalStyles.headerStyles]}>
+                            <Text style={GlobalStyles.headerTextStyle}>Student Fees</Text>
+                        </View>
+                        <View style={[GlobalStyles.p_10]}>
+                            <InputField
+                                label={"Payment type"}
+                                inputMode={"text"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
+                                value={formData.paymentType}
+                            // onChangeText={(text) => onChangeHandler('paymentType', text)}
                             />
-                        ))}
-                    </View>
+                            <InputField
+                                label={"Number of weeks (Required)"}
+                                inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
+                                value={formData.noOfWeeks}
+                                onChangeText={(text) => onChangeHandler('noOfWeeks', text)}
+                            />
+                            <InputField
+                                label={"Paid Amount (Required)"}
+                                maxLength={5}
+                                inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
+                                value={formData.paidAmount}
+                                onChangeText={(text) => onChangeHandler('paidAmount', text)}
+                            />
+                            <InputField
+                                label={"Remarks"}
+                                maxLength={5}
+                                multiline={true}
+                                inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
+                                value={formData.remarks}
+                                onChangeText={(text) => onChangeHandler('remarks', text)}
+                            />
+                        </View>
+                        <View style={[GlobalStyles.headerStyles]}>
+                            <Text style={GlobalStyles.headerTextStyle}>Charges</Text>
+                            <Text style={GlobalStyles.headerTextStyle}>Amount</Text>
+                        </View>
+                        <View style={GlobalStyles.p_10}>
+                            <GridTable data={itemss} />
+                        </View>
+                        <View style={[GlobalStyles.headerStyles]}>
+                            <Text style={GlobalStyles.headerTextStyle}>Total Amount (Charges + Dues)</Text>
+                            <Text style={GlobalStyles.headerTextStyle}>&pound;528</Text>
+                        </View>
+                        <View style={[styles.btnView]}>
 
+                            <CustomButton
+                                title={'Pay Now'}
+                                variant='fill'
+                            />
+                        </View>
 
+                    </> : null
+                    }
+                </View>
 
-                    <View style={[GlobalStyles.headerStyles]}>
-                        <Text style={GlobalStyles.headerTextStyle}>Student Fees</Text>
-                    </View>
-                    <View style={[GlobalStyles.p_10]}>
-                        <InputField
-                            label={"Payment type"}
-                            inputMode={"text"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
-                            value={formData.paymentType}
-                        // onChangeText={(text) => onChangeHandler('paymentType', text)}
-                        />
-                        <InputField
-                            label={"Number of weeks (Required)"}
-                            inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
-                            value={formData.noOfWeeks}
-                            onChangeText={(text) => onChangeHandler('noOfWeeks', text)}
-                        />
-                        <InputField
-                            label={"Paid Amount (Required)"}
-                            maxLength={5}
-                            inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
-                            value={formData.paidAmount}
-                            onChangeText={(text) => onChangeHandler('paidAmount', text)}
-                        />
-                        <InputField
-                            label={"Remarks"}
-                            maxLength={5}
-                            multiline={true}
-                            inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
-                            value={formData.remarks}
-                            onChangeText={(text) => onChangeHandler('remarks', text)}
-                        />
-                    </View>
-                    <View style={[GlobalStyles.headerStyles]}>
-                        <Text style={GlobalStyles.headerTextStyle}>Charges</Text>
-                        <Text style={GlobalStyles.headerTextStyle}>Amount</Text>
-                    </View>
-                    <View style={GlobalStyles.p_10}>
-                        <GridTable data={itemss} />
-                    </View>
-                    <View style={[GlobalStyles.headerStyles]}>
-                        <Text style={GlobalStyles.headerTextStyle}>Total Amount (Charges + Dues)</Text>
-                        <Text style={GlobalStyles.headerTextStyle}>&pound;528</Text>
-                    </View>
-                    <View style={[styles.btnView]}>
-
-                        <CustomButton
-                            title={'Pay Now'}
-                            variant='fill'
-                        />
-                    </View>
-
-                </> : null
-                }
-            </View>
-
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

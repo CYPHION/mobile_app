@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/Feather'
 import { useDispatch, useSelector } from 'react-redux'
@@ -52,35 +52,38 @@ const AddTestimonial = () => {
     }
 
     return (
-        <ScrollView>
-            <MyModal
-                modalVisible={open}
-                children={renderItem()}
-                setModalVisible={setOpen}
-            />
-            <View style={styles.main}>
-                <View style={[styles.bgColor, styles.container, GlobalStyles.p_10]}>
-                    <Text style={styles.detailText}>Review - {user?.firstName} {user?.lastName}</Text>
-                </View>
-                <View style={GlobalStyles.p_10}>
-                    <InputField
-                        label={""}
-                        multiline
-                        value={review}
-                        onChangeText={(text) => setReview(text)}
-                    />
-                    <CustomButton
-                        title='Submit review'
-                        variant='fill'
-                        disabled={!(review.length > 0)}
-                        // onPress={() => setOpen(true)}
-                        onPress={handleSubmit}
-                        isloading={isloading}
-                    />
-                </View>
-            </View>
+        <SafeAreaView style={{ flex: 1 }}>
 
-        </ScrollView>
+
+            <ScrollView>
+                <MyModal
+                    modalVisible={open}
+                    children={renderItem()}
+                    setModalVisible={setOpen}
+                />
+                <View style={styles.main}>
+                    <View style={[styles.bgColor, styles.container, GlobalStyles.p_10]}>
+                        <Text style={styles.detailText}>Review - {user?.firstName} {user?.lastName}</Text>
+                    </View>
+                    <View style={GlobalStyles.p_10}>
+                        <InputField
+                            label={""}
+                            multiline
+                            value={review}
+                            onChangeText={(text) => setReview(text)}
+                        />
+                        <CustomButton
+                            title='Submit review'
+                            variant='fill'
+                            disabled={!(review.length > 0)}
+                            // onPress={() => setOpen(true)}
+                            onPress={handleSubmit}
+                            isloading={isloading}
+                        />
+                    </View>
+                </View>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

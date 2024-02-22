@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
@@ -26,8 +26,7 @@ const HomeSkeleton = ({ navigation }) => {
 
 
     return (
-        <>
-            {/* <LoadingScreen loading={loading} /> */}
+        <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
                 <View style={styles.profileContainer}>
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
@@ -75,7 +74,7 @@ const HomeSkeleton = ({ navigation }) => {
 
 
             </ScrollView>
-        </>
+        </SafeAreaView>
     )
 }
 

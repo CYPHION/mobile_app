@@ -53,7 +53,7 @@ const ConfirmResetPassword = (prop) => {
 
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
                 <View style={{ alignItems: 'center' }}>
                     <Image

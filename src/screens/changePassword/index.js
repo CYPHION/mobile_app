@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import CustomButton from '../../components/base/CustomButton'
 import InputField from '../../components/base/InputField'
 import MyModal from '../../components/base/Modal'
@@ -26,7 +26,7 @@ const ChangePasswordScreen = () => {
     };
 
     return (
-        <>
+        <SafeAreaView style={{ flex: 1 }}>
 
             <View style={{ flex: 1, backgroundColor: Color.white }}>
                 <View style={{ paddingVertical: 15, paddingHorizontal: 10, gap: 20 }}>
@@ -76,7 +76,7 @@ const ChangePasswordScreen = () => {
                     }
                 />
             </View>
-        </>
+        </SafeAreaView>
     )
 }
 
