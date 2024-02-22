@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
-import { StatusBar } from "react-native";
+import { SafeAreaView, StatusBar } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import IntroSlider from "./src/components/widget/IntroSlider";
 import MyDrawer from "./src/navigation/Drawer";
@@ -73,16 +73,18 @@ const App = () => {
         backgroundColor={Color.white}
         barStyle={'dark-content'}
       />
+      <SafeAreaView style={{ flex: 1 }}>
 
-      {splash ?
-        <SpashScreen />
-        : <>
-          {isIntro ?
-            <>
-              {!!userData.email ? <MyDrawer /> : <AuthSTack />}
-            </>
-            : <IntroSlider setIsIntro={setIsIntro} />}
-        </>}
+        {splash ?
+          <SpashScreen />
+          : <>
+            {isIntro ?
+              <>
+                {!!userData.email ? <MyDrawer /> : <AuthSTack />}
+              </>
+              : <IntroSlider setIsIntro={setIsIntro} />}
+          </>}
+      </SafeAreaView>
     </>
   )
 

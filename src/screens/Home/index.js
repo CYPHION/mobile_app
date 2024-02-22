@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from "react-native-vector-icons/Ionicons";
 import { useSelector } from 'react-redux';
@@ -49,7 +49,7 @@ const Home = ({ navigation }) => {
     const user = useSelector(state => state?.user?.data)
 
     return (
-        <>
+        <SafeAreaView style={{ flex: 1 }}>
             {(!!globaldata?.students && !!user?.email) ? <ScrollView>
                 <View style={styles.profileContainer}>
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
@@ -94,7 +94,7 @@ const Home = ({ navigation }) => {
                     <Graph labels={labels} dataOne={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9]} dataTwo={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9].reverse()} />
                 </View>
             </ScrollView> : <HomeSkeleton />}
-        </>
+        </SafeAreaView>
     )
 }
 
@@ -116,7 +116,8 @@ const styles = StyleSheet.create({
     item: {
         marginHorizontal: 8,
         textAlign: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     nameText: {
         fontSize: FontSizes.md,

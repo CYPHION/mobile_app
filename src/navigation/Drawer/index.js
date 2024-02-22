@@ -142,8 +142,8 @@ function CustomDrawerContent(props) {
 function MyDrawer({ old }) {
     const navigation = useNavigation();
 
-
-
+    const user = useSelector(state => state?.user?.data)
+    const global = useSelector(state => state?.global?.data)
     useEffect(() => {
         navigation.dispatch(
             CommonActions.reset({
@@ -166,6 +166,7 @@ function MyDrawer({ old }) {
                     backgroundColor: '#1F2544',
                     width: '100%',
                 },
+                swipeEnabled: (!!global.students && !!user.email)
             }}
 
         >

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
@@ -39,7 +39,7 @@ const Home = ({ navigation }) => {
     const [option, setOption] = useState("");
 
     return (
-        <>
+        <SafeAreaView style={{ flex: 1 }}>
             {/* <LoadingScreen loading={loading} /> */}
             <ScrollView>
                 <View style={styles.profileContainer}>
@@ -95,7 +95,7 @@ const Home = ({ navigation }) => {
 
 
             </ScrollView>
-        </>
+        </SafeAreaView>
     )
 }
 

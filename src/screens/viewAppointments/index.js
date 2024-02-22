@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import CardIcon from "react-native-vector-icons/AntDesign";
 import FilterIcon from "react-native-vector-icons/FontAwesome";
@@ -7,15 +7,16 @@ import GridIcon from 'react-native-vector-icons/Ionicons';
 import { default as NoHomework } from "react-native-vector-icons/MaterialCommunityIcons";
 import TimeIcon from 'react-native-vector-icons/MaterialIcons';
 import { useSelector } from 'react-redux';
-import { API } from '../../network/API';
+import Table from '../../components/base/Table';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
-import { customToast, formattedDate, screenDimensions } from '../../utils/functions';
+import { formattedDate, screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
 
 
 const ViewAppointments = () => {
     const userData = useSelector(state => state.user.data);
+    const global = useSelector(state => state.global.data);
     const [data, setData] = useState([])
     const list = (elem) => [
         {
@@ -69,19 +70,11 @@ const ViewAppointments = () => {
         },
     ];
 
-    const getData = () => {
-        API.getAllApointment(userData?.id)
-            .then(res => setData(res?.data))
-            .catch(err => customToast('error', err))
-    }
-    useEffect(() => {
-        getData()
-    }, [])
 
     return (
         <ScrollView>
 
-            {data.length > 0 ?
+            {global?.appointments?.length > 0 ?
                 <>
                     <View style={[GlobalStyles.headerStyles]}>
                         <Text style={GlobalStyles.headerTextStyle}>Analytics</Text>
@@ -93,7 +86,7 @@ const ViewAppointments = () => {
                         </TouchableOpacity>
                     </View>
                     <View>
-                        {data.length > 0 && data.map((elem, index) => (
+                        {global?.appointments.length > 0 && global?.appointments.map((elem, index) => (
                             <Table key={index} list={list(elem)} />
                         ))}
 
