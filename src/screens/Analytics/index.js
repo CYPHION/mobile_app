@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import FilterIcon from 'react-native-vector-icons/FontAwesome'
 import Pound from "react-native-vector-icons/FontAwesome5"
 import Icon from "react-native-vector-icons/Fontisto"
+import { useSelector } from 'react-redux'
 import CustomDatePicker from '../../components/base/CustomDatePicker'
+import { API } from '../../network/API'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
@@ -14,7 +16,21 @@ import { GlobalStyles } from '../../utils/globalStyles'
 const Analytics = () => {
 
     const [open, setOpen] = useState(false)
+    const [appointments, setAppointments] = useState([])
+    const user = useSelector(state => state?.user?.data)
+    const global = useSelector(state => state?.global?.data)
+    console.log('first', global)
+    const getData = () => {
+        API.getAllApointment(user.id)
+            .then(res => setAppointments(res.data))
+            .catch((err) => console.log(err))
+    }
+    useEffect(() => {
+        getData()
+    }, [])
 
+
+    // console.log(global?.fees?.filter((item) => item.payType === 'Deposit'))
 
     return (
         <ScrollView>
@@ -22,8 +38,8 @@ const Analytics = () => {
 
                 <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 }}>
                     <View>
-                        <Text style={[styles.NameText, styles.textFontFamily]}>Abdullah Khan</Text>
-                        <Text style={[styles.CompText, styles.textFontFamily]}>Year 2 - Weekly</Text>
+                        <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.NameText, styles.textFontFamily, { width: screenDimensions.width * 0.7 }]}>Hi, {user.firstName} {user.lastName}</Text>
+                        {/* <Text style={[styles.CompText, styles.textFontFamily]}>Year 2 - {user?.feeChargedBy}</Text> */}
                     </View>
                     <TouchableOpacity activeOpacity={0.7}>
                         <View style={styles.badge}></View>
@@ -48,52 +64,61 @@ const Analytics = () => {
                         </View>
                         <View style={[GlobalStyles.p_10, { width: '75%' }]} >
                             <Text style={styles.attendeceFont}>Attendance</Text>
-                            <Text style={[styles.totalFont]}>Total : 3</Text>
+                            <Text style={[styles.totalFont]}>Total : {global?.attendances?.length}</Text>
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
-                                <Text style={[styles.detailInnerText]}>Present: 3</Text>
-                                <Text style={[styles.detailInnerText]}>Absent: 2</Text>
-                                <Text style={[styles.detailInnerText]}>Leave: 3</Text>
+                                <Text style={[styles.detailInnerText]}>Present: {global?.attendances?.filter((item) => item?.attendanceType === 'present').length}</Text>
+                                <Text style={[styles.detailInnerText]}>Absent: {global?.attendances?.filter((item) => item?.attendanceType === 'absent').length}</Text>
+                                <Text style={[styles.detailInnerText]}>Leave: {global?.attendances?.filter((item) => item?.attendanceType === 'leave').length}</Text>
                             </View>
                         </View>
                     </View>
+
+
+
                     <View style={styles.analyticBox}>
                         <View style={{ backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', width: '25%' }}>
                             <Pound name='pound-sign' color={Color.white} size={screenDimensions.width * 0.12} />
                         </View>
                         <View style={[GlobalStyles.p_10, { width: '75%' }]} >
-                            <Text style={styles.attendeceFont}>Attendance</Text>
+                            <Text style={styles.attendeceFont}>Total Fees</Text>
                             <Text style={[styles.totalFont]}>Total : 3</Text>
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
                                 <Text style={[styles.detailInnerText]}>Weekly: £70</Text>
-                                <Text style={[styles.detailInnerText]}>Weekly: £100</Text>
+                                <Text style={[styles.detailInnerText]}>Monthly: £100</Text>
                                 <Text style={[styles.detailInnerText]}>Booster: £50</Text>
-                                <Text style={[styles.detailInnerText]}>Deposit:£50</Text>
+                                <Text style={[styles.detailInnerText]}>Deposit: £0</Text>
                             </View>
                         </View>
                     </View>
+
+
+
                     <View style={styles.analyticBox}>
                         <View style={{ backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', width: '25%' }}>
                             <Pound name='pound-sign' color={Color.white} size={screenDimensions.width * 0.12} />
                         </View>
                         <View style={[GlobalStyles.p_10, { width: '75%' }]} >
-                            <Text style={styles.attendeceFont}>Attendance</Text>
+                            <Text style={styles.attendeceFont}>Outstanding Fees</Text>
                             <Text style={[styles.totalFont]}>Total : 3</Text>
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
                             </View>
                         </View>
                     </View>
+
+
+
                     <View style={styles.analyticBox}>
                         <View style={{ backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', width: '25%' }}>
                             <Icon name='clock' color={Color.white} size={screenDimensions.width * 0.12} />
                         </View>
                         <View style={[GlobalStyles.p_10, { width: '75%' }]} >
-                            <Text style={styles.attendeceFont}>Attendance</Text>
-                            <Text style={[styles.totalFont]}>Total : 3</Text>
+                            <Text style={styles.attendeceFont}>Appointments</Text>
+                            <Text style={[styles.totalFont]}>Total : {appointments?.length}</Text>
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
-                                <Text style={[styles.detailInnerText]}>Complete 3</Text>
-                                <Text style={[styles.detailInnerText]}>Pending: 3</Text>
-                                <Text style={[styles.detailInnerText]}>Cancelled: 3</Text>
-                                <Text style={[styles.detailInnerText]}>Missed: 1</Text>
+                                <Text style={[styles.detailInnerText]}>Complete: {appointments?.filter((item) => item?.status == 'Completed').length}</Text>
+                                <Text style={[styles.detailInnerText]}>Pending:  {appointments?.filter((item) => item?.status == 'Pending').length}</Text>
+                                <Text style={[styles.detailInnerText]}>Cancelled:  {appointments?.filter((item) => item?.status == 'Cancelled').length}</Text>
+                                <Text style={[styles.detailInnerText]}>Missed:  {appointments?.filter((item) => item?.status == 'Missed').length}</Text>
                             </View>
                         </View>
                     </View>

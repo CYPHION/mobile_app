@@ -30,7 +30,7 @@ const slides = [
     },
 ];
 
-const IntroSlider = (props) => {
+const IntroSlider = ({ setIsIntro }) => {
     const [progressWidth, setProgressWidth] = useState(33.3)
     const sliderRef = useRef(null);
     const onSlideChange = (index, num) => {
@@ -80,7 +80,7 @@ const IntroSlider = (props) => {
     const renderDoneButton = () => (
         <View style={[styles.flexClass, { margin: 5, backgroundColor: Color.primary, borderRadius: 6, padding: 15 }]} >
             <Text style={{ fontFamily: FontFamily.interSemiBold, fontSize: FontSizes.md, color: Color.white }} >
-                Done
+                Login
             </Text>
         </View >
     )
@@ -117,7 +117,7 @@ const IntroSlider = (props) => {
                 renderSkipButton={renderSkipButton}
                 renderDoneButton={renderDoneButton}
                 onDone={() => {
-                    props.setShowApp(true)
+                    setIsIntro(true)
                     AsyncStorage.setItem('intro', JSON.stringify(true));
                 }}
                 onSlideChange={onSlideChange}

@@ -1,20 +1,24 @@
+import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/Feather'
+import { useSelector } from 'react-redux'
 import CustomButton from '../../components/base/CustomButton'
 import InputField from '../../components/base/InputField'
 import MyModal from '../../components/base/Modal'
+import { API } from '../../network/API'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
 import { GlobalStyles } from '../../utils/globalStyles'
 
 const AddTestimonial = () => {
-
+    const user = useSelector(state => state?.user?.data)
     const [review, setReview] = useState('')
     const [open, setOpen] = useState(false)
-
+    const [isloading, setIsloading] = useState(false)
+    const navigation = useNavigation()
     const renderItem = () => (
         <View style={styles.modal}>
             <View style={styles.iconView}>
@@ -24,13 +28,27 @@ const AddTestimonial = () => {
             <CustomButton
                 title='OK'
                 variant='fill'
-                onPress={() => setOpen(false)}
+                onPress={() => {
+                    console.log('hello')
+                    navigation.navigate('testimonials', { added: true })
+                }}
                 btnstyle={{ width: screenDimensions.width * 0.2, paddingVertical: 5 }}
             />
         </View>
     )
 
-
+    const handleSubmit = () => {
+        setIsloading(true)
+        API.createTestimonial({ review: review, userId: user.id })
+            .then(() => {
+                setOpen(true)
+            })
+            .catch((err) => {
+                // customToast('error', err)
+                console.log('error', err)
+            })
+            .finally(() => setIsloading(false))
+    }
 
     return (
         <ScrollView>
@@ -41,7 +59,7 @@ const AddTestimonial = () => {
             />
             <View style={styles.main}>
                 <View style={[styles.bgColor, styles.container, GlobalStyles.p_10]}>
-                    <Text style={styles.detailText}>Review - Abdullah Khan</Text>
+                    <Text style={styles.detailText}>Review - {user?.firstName} {user?.lastName}</Text>
                 </View>
                 <View style={GlobalStyles.p_10}>
                     <InputField
@@ -53,7 +71,10 @@ const AddTestimonial = () => {
                     <CustomButton
                         title='Submit review'
                         variant='fill'
-                        onPress={() => setOpen(true)}
+                        disabled={!(review.length > 0)}
+                        // onPress={() => setOpen(true)}
+                        onPress={handleSubmit}
+                        isloading={isloading}
                     />
                 </View>
             </View>

@@ -1,33 +1,23 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import LinearGradient from 'react-native-linear-gradient'
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
+import { screenDimensions } from '../../utils/functions'
 import { GlobalStyles } from '../../utils/globalStyles'
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
 
 
-const Table = (prop) => {
-    const { list, status } = prop
-
-    let bgColor;
-    let textColor;
-
-    switch (status) {
-        case 'Accepted':
-            bgColor = Color.success
-            textColor = Color.text
-            break;
-
-        case 'Rejected':
-            bgColor = Color.error
-            textColor = Color.white
-            break;
 
 
-        default:
-            bgColor = Color.grayBackground
-            textColor = Color.text
-            break;
-    }
+
+const TableSkeleton = (prop) => {
+
+    let list = [
+        1, 2, 3, 4, 5, 6, 7
+    ]
+    // const { list, status } = prop
 
     return (
         <>
@@ -38,27 +28,21 @@ const Table = (prop) => {
                         {list.map((elem, index) => (
                             <View key={index} style={[styles.rowStyle, styles.header]}>
                                 <View style={{ gap: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    {elem.icon &&
-                                        <View style={[styles.bgIconColor]}>
-                                            {elem.icon}
-                                        </View>
-                                    }
-                                    <Text style={styles.textStyle}>{elem.name}</Text>
+
+                                    <ShimmerPlaceholder style={styles.textStyle} />
                                 </View>
-                                <Text style={[styles.textStyle, { color: Color.textThree }]}>{elem.value}</Text>
+                                <ShimmerPlaceholder style={[styles.textStyle, { color: Color.textThree }]} />
                             </View>
                         ))}
                     </View>
-                    {status && <Text style={[{ backgroundColor: bgColor, textAlign: 'center', color: textColor }, GlobalStyles.p_10]}>
-                        {status}
-                    </Text>}
+
                 </View>
             </View>
         </>
     )
 }
 
-export default Table
+export default TableSkeleton
 
 const styles = StyleSheet.create({
     container: {
@@ -83,7 +67,7 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.interRegular,
         fontSize: FontSizes.md,
         color: Color.text,
-        textAlign: 'center'
+        width: screenDimensions.width * .25,
     },
     headingText: {
         fontSize: FontSizes.xl,
@@ -113,5 +97,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1, // Set a lower opacity for a subtle shadow
         shadowRadius: 2, // Set a lower radius for a less spread shadow
     },
+    SklbgIconColor: {
+        width: 30,
+        marginRight: 10,
+    }
 
 })

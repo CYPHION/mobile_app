@@ -15,5 +15,6 @@ export const Color = {
     borderDivider: '#888888',
     success: '#95fd65',
     iconColor: '#0f0f0f',
-    btnDisable: "#a8a8a8"
+    btnDisable: "#a8a8a8",
+    warning: '#FFB400'
 }

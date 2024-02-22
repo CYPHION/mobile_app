@@ -1,3 +1,4 @@
+import { useRoute } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -5,7 +6,6 @@ import Icon from "react-native-vector-icons/Ionicons"
 import CustomButton from '../../components/base/CustomButton'
 import GridTable from '../../components/base/GridTable'
 import InputField from '../../components/base/InputField'
-import TopbarWithGraph from '../../components/widget/TopbarWithGraph'
 import { Color } from '../../utils/color'
 import { FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
@@ -19,8 +19,8 @@ const ViewFess = () => {
         remarks: ''
     })
 
-    const [isActive, setIsActive] = useState(false)
-
+    const router = useRoute()
+    const { student } = router.params
     const [error, setError] = useState('')
 
     const onChangeHandler = (name, text) => {
@@ -44,25 +44,26 @@ const ViewFess = () => {
         { name: 'Object10', value: 100 },
     ]
 
-
     return (
         <ScrollView>
             <View style={{ paddingVertical: 10, backgroundColor: Color.white }}>
-                <TopbarWithGraph />
-                <View style={[GlobalStyles.headerStyles]}>
+                {/* <TopbarWithGraph student={student} /> */}
+                {/* <View style={[GlobalStyles.headerStyles]}>
                     <Text style={GlobalStyles.headerTextStyle}>Student Details</Text>
-                </View>
-                {isActive ? <>
+                </View> */}
+                {student?.status === "active" ? <>
                     <View style={[GlobalStyles.p_10]}>
                         <InputField
                             label={"Payment type"}
                             inputMode={"text"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
-                            value={formData.paymentType}
+                            value={formData?.paymentType}
+                            editable={false}
                         // onChangeText={(text) => onChangeHandler('paymentType', text)}
                         />
                         <InputField
                             label={"Number of weeks (Required)"}
                             inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
+                            // keyboardType='numeric'
                             value={formData.noOfWeeks}
                             onChangeText={(text) => onChangeHandler('noOfWeeks', text)}
                         />
@@ -77,7 +78,7 @@ const ViewFess = () => {
                             label={"Remarks"}
                             maxLength={5}
                             multiline={true}
-                            inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
+                            inputMode={"text"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
                             value={formData.remarks}
                             onChangeText={(text) => onChangeHandler('remarks', text)}
                         />
@@ -102,10 +103,10 @@ const ViewFess = () => {
                     </View>
                 </> :
                     <>
-                        <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.5 }}>
+                        <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
                             <View>
                                 <Icon name='eye-off' size={screenDimensions.width * 0.5} color={Color.textTwo} />
-                                <Text style={styles.inactivetext}>Child Inactive</Text>
+                                <Text style={styles.inactivetext}>Child {student?.status}</Text>
                             </View>
                         </View>
                     </>

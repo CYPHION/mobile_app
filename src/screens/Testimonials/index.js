@@ -1,106 +1,79 @@
-import { useNavigation } from '@react-navigation/native'
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react'
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icon, { default as NoHomework } from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useSelector } from 'react-redux'
 import CustomButton from '../../components/base/CustomButton'
+import { API } from '../../network/API'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { screenDimensions } from '../../utils/functions'
+import { formattedDate, screenDimensions } from '../../utils/functions'
 import { GlobalStyles } from '../../utils/globalStyles'
-
 
 const Testimonials = () => {
     const navigation = useNavigation()
-    const data = [
-        {
-            name: 'Helena Moore',
-            type: 'Parent',
-            date: 'june 5,2024',
-            message: 'My Son has Got an Exceptional GCSE Results range from 9 To 7 in all subjects with support of Prime I highly appreciate them and recommended prime tuition to other parents.To 7 in all subjects with support of Prime Tuition. Prime Tuition is proved to be excellent in teaching and resources they provide to my child. I highly appreciate them and recommended prime tuition to other parents.'
-        },
-        {
-            name: 'Helena Moore',
-            type: 'Parent',
-            date: 'june 5,2024',
-            message: 'My Son has Got an appreciate them and recommended prime tuition to other parents.To 7 in all subjects with support of Prime Tuition. Prime Tuition is proved to be excellent in teaching and resources they provide to my child. I highly appreciate them and recommended prime tuition to other parents.'
-        },
-        {
-            name: 'Helena Moore',
-            type: 'Parent',
-            date: 'june 5,2024',
-            message: 'My Son has Got an Exceptional GCSE Results range from 9 To 7 in all subjects with support of Prime Tuition. Prime Tuition is proved to be excellent in teaching and resources they provide to my child. I highly appreciate them and recommended prime tuition to other parents.To 7 in all subjects with support of Prime Tuition. Prime Tuition is proved to be excellent in teaching and resources they provide to my child. I highly appreciate them and recommended prime tuition to other parents.'
-        },
-        {
-            name: 'Helena Moore',
-            type: 'Parent',
-            date: 'june 5,2024',
-            message: 'My Son has Got an Exceptional GCSE Results range from 9 To 7 in all subjects with support of Prime Tuition.  I highly appreciate them and recommended prime tuition to other parents.To 7 in all subjects with support of Prime Tuition. Prime Tuition is proved to be excellent in teaching and resources they provide to my child. I highly appreciate them and recommended prime tuition to other parents.'
-        },
-        {
-            name: 'Helena Moore',
-            type: 'Parent',
-            date: 'june 5,2024',
-            message: 'My Son has Got an Exceptional GCSE Results range from 9 To 7 in all subjects with support of Prime Tuition.  I highly appreciate them and recommended prime tuition to other parents.To 7 in all subjects with support of Prime Tuition. Prime Tuition is proved to be excellent in teaching and resources they provide to my child. I highly appreciate them and recommended prime tuition to other parents.'
-        },
-        {
-            name: 'Helena Moore',
-            type: 'Parent',
-            date: 'june 5,2024',
-            message: 'My Son has Got an Exceptional GCSE Results range from 9 To 7 in all subjects with support of Prime Tuition.  I highly appreciate them and recommended prime tuition to other parents.To 7 in all subjects with support of Prime Tuition. Prime Tuition is proved to be excellent in teaching and resources they provide to my child. I highly appreciate them and recommended prime tuition to other parents.'
-        },
-        {
-            name: 'Helena Moore',
-            type: 'Parent',
-            date: 'june 5,2024',
-            message: 'My Son has Got an Exceptional GCSE Results range from 9 To 7 in all subjects with support of Prime Tuition.  I highly appreciate them and recommended prime tuition to other parents.To 7 in all subjects with support of Prime Tuition. Prime Tuition is proved to be excellent in teaching and resources they provide to my child. I highly appreciate them and recommended prime tuition to other parents.'
-        },
-        {
-            name: 'Helena Moore',
-            type: 'Parent',
-            date: 'june 5,2024',
-            message: 'My Son has Got an Exceptional GCSE Results range from 9 To 7 in all subjects with support of Prime Tuition.  I highly appreciate them and recommended prime tuition to other parents.To 7 in all subjects with support of Prime Tuition. Prime Tuition is proved to be excellent in teaching and resources they provide to my child. I highly appreciate them and recommended prime tuition to other parents.'
-        },
-        {
-            name: 'Helena Moore',
-            type: 'Parent',
-            date: 'june 5,2024',
-            message: 'My Son has Got an Exceptional GCSE Results range from 9 To 7 in all subjects with support of Prime Tuition.  I highly appreciate them and recommended prime tuition to other parents.To 7 in all subjects with support of Prime Tuition. Prime Tuition is proved to be excellent in teaching and resources they provide to my child. I highly appreciate them and recommended prime tuition to other parents.'
-        },
-    ]
+    const [data, setData] = useState([])
+    const user = useSelector(state => state?.user?.data)
+
+    const route = useRoute();
+    route.params
+
+
+    const getData = () => {
+        API.getAllTestimonial()
+            .then((res) => setData(res.data))
+            .catch((err) => console.log(err))
+
+    }
+
+
+    useEffect(() => {
+        getData()
+    }, [route.params])
+
 
 
     return (
-        <View style={styles.main}>
-            <CustomButton
-                title='Write A Review'
-                variant='fill'
-                btnstyle={styles.btnStyle}
-                leftIcon={<Icon name='pencil' color={Color.white} size={FontSizes.md} />}
-                onPress={() => navigation.navigate('root', { screen: 'addTestimonial' })}
-            />
-            <ScrollView>
-                <View style={{ zIndex: 1 }}>
+        <SafeAreaView>
+            <View style={[styles.main]}>
+                {!(data.some((item) => item?.userId === user?.id)) && <View style={styles.absView}>
+                    <CustomButton
+                        title='Write A Review'
+                        variant='fill'
+                        btnstyle={styles.btnStyle}
+                        leftIcon={<Icon name='pencil' color={Color.white} size={FontSizes.md} />}
+                        onPress={() => navigation.navigate('root', { screen: 'addTestimonial' })}
+                    />
+                </View>}
+                {data?.length > 0 ?
+                    <ScrollView>
 
-                    <View style={[GlobalStyles.headerStyles]}>
-                        <Text style={GlobalStyles.headerTextStyle}>Availible Reviews</Text>
-                    </View>
+                        <View style={{ zIndex: 1 }}>
 
-                    <View style={[GlobalStyles.p_10, { gap: 15 }]}>
-                        {data.map((elem, index) => (
-                            <View key={index} style={[styles.card, GlobalStyles.p_10]}>
-                                <Text style={[styles.nameText]}>{elem.name}</Text>
-                                <View style={{ flexDirection: 'row', gap: 6 }}>
-                                    <Text style={styles.textTwo}>({elem.type})</Text>
-                                    <Text style={styles.dateText}>{elem.date}</Text>
-                                </View>
-                                <Text style={styles.para}>{elem.message}</Text>
+
+                            <View style={[GlobalStyles.p_10, { gap: 15 }]}>
+                                {data.map((elem, index) => (
+                                    <View key={index} style={[styles.card, GlobalStyles.p_10]}>
+                                        <Text style={[styles.nameText]}>{elem?.User?.firstName} {elem?.User?.lastName}</Text>
+                                        <View style={{ flexDirection: 'row', gap: 6 }}>
+                                            <Text style={styles.textTwo}>({elem?.User?.type})</Text>
+                                            <Text style={styles.dateText}>{formattedDate(elem.createdAt, 'yyyy dd,MMM')}</Text>
+                                        </View>
+                                        <Text style={styles.para}>{elem.review}</Text>
+                                    </View>
+                                ))}
                             </View>
-                        ))}
-                    </View>
-                </View>
-            </ScrollView>
-        </View>
+                        </View>
+                    </ScrollView> :
+                    <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
+                        <View>
+                            <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                            <Text style={styles.inactivetext}>No Reviews found</Text>
+                        </View>
+                    </View>}
+            </View>
+        </SafeAreaView>
     )
 }
 
@@ -109,6 +82,8 @@ export default Testimonials
 const styles = StyleSheet.create({
     main: {
         backgroundColor: Color.white,
+        height: screenDimensions.height,
+        width: screenDimensions.width,
     },
     card: {
         backgroundColor: Color.grayBackground,
@@ -135,13 +110,20 @@ const styles = StyleSheet.create({
         fontSize: FontSizes.md,
         paddingVertical: 10
     },
+    absView: {
+        position: 'absolute',
+        right: 10,
+        bottom: screenDimensions.height * 0.15,
+        zIndex: 2,
+    },
     btnStyle: {
         width: 'auto',
         padding: 5,
         paddingHorizontal: 10,
-        position: 'absolute',
-        right: 10,
-        bottom: screenDimensions.height * 0.02,
-        zIndex: 2
+    },
+    inactivetext: {
+        textAlign: 'center',
+        color: Color.textTwo,
+        fontSize: FontSizes.lg
     }
 })

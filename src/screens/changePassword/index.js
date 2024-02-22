@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import CustomButton from '../../components/base/CustomButton'
 import InputField from '../../components/base/InputField'
 import MyModal from '../../components/base/Modal'
+import Otp from '../../components/base/Otp'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 
@@ -57,12 +58,7 @@ const ChangePasswordScreen = () => {
                             <Text style={[styles.modalTextHeading]}>Verification code</Text>
 
                             <View style={styles.modalOtp}>
-                                <Text style={{ position: 'absolute', top: 10, fontSize: 25 }} >this is custom design,</Text>
-                                <View style={styles.otp} ></View>
-                                <View style={styles.otp} ></View>
-                                <View style={styles.otp} ></View>
-                                <View style={styles.otp} ></View>
-                                <View style={styles.otp} ></View>
+                                <Otp handleTextChange={(text) => console.log('tesxt-->', text)} />
                             </View>
                             <Text style={styles.modalText}>
                                 00:45

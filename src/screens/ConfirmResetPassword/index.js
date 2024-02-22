@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useDispatch } from 'react-redux'
+import CustomAppBar from '../../components/base/CustomAppBar'
 import CustomButton from '../../components/base/CustomButton'
 import FlaotingTextInput from '../../components/base/FlaotingTextInput'
 import { handleLogin } from '../../store/slice/user'
@@ -12,9 +13,9 @@ import { removeError, screenDimensions } from '../../utils/functions'
 const ConfirmResetPassword = (prop) => {
 
     const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-        code: ''
+        code: '',
+        Newpassword: '',
+        Confirmpassword: ''
     })
 
     const [isLoading, setIsLoading] = useState(false)
@@ -42,6 +43,11 @@ const ConfirmResetPassword = (prop) => {
 
     const handleSubmit = () => {
         // setIsLoading(true)
+        console.log("Input Value:", formData.code);
+        console.log("Input Value:", formData.Newpassword);
+
+        console.log("Input Value:", formData.Confirmpassword);
+
 
     };
 
@@ -57,6 +63,9 @@ const ConfirmResetPassword = (prop) => {
                     />
                     <View style={[styles.absoluteImage, styles.picture]} />
                     <View style={[styles.logoView]}>
+                        <View style={{ width: screenDimensions.width, position: 'absolute', top: 0 }}>
+                            <CustomAppBar color={Color.white} />
+                        </View>
                         <Image
                             resizeMode="contain"
                             style={[styles.logo]}
@@ -99,25 +108,25 @@ const ConfirmResetPassword = (prop) => {
                             }}
                         >
                             <FlaotingTextInput
-                                value={formData.email}
+                                value={formData.code}
                                 inputMode={'numeric'}
-                                onChangeText={(text) => onChangeHandler("email", text)}
+                                onChangeText={(text) => onChangeHandler("code", text)}
                                 label={"Enter Code"}
                                 errorMcg={error.email}
                             />
                             <FlaotingTextInput
                                 errorMcg={error.password}
                                 password={true}
-                                value={formData.password}
-                                onChangeText={(text) => onChangeHandler("password", text)}
+                                value={formData.Newpassword}
+                                onChangeText={(text) => onChangeHandler("Newpassword", text)}
                                 label={"New Password"}
                             />
 
                             <FlaotingTextInput
                                 errorMcg={error.password}
                                 password={true}
-                                value={formData.password}
-                                onChangeText={(text) => onChangeHandler("password", text)}
+                                value={formData.Confirmpassword}
+                                onChangeText={(text) => onChangeHandler("Confirmpassword", text)}
                                 label={"Confirm Password"}
                             />
 

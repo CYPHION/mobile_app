@@ -15,6 +15,7 @@ import Home from '../../screens/Home';
 import Profile from '../../screens/Profile';
 import Receipt from '../../screens/Receipt';
 import { Color } from '../../utils/color';
+import { FontSizes } from '../../utils/font';
 
 const Tab = createBottomTabNavigator();
 
@@ -68,11 +69,20 @@ const TabNavigation = ({ old }) => {
             initialRouteName="home"
             screenOptions={{
                 headerShown: false, // Hide header for all screens
+                tabBarStyle: {
+                    height: 60,
+                    paddingBottom: 5
+                },
+                tabBarLabelStyle: {
+                    fontSize: FontSizes.sm
+                },
+
             }}
         >
             <Tab.Screen name="receipt" component={Receipt}
                 options={{
                     tabBarLabel: 'Receipt',
+
                     tabBarIcon: ({ color, size, focused }) => (
                         <ReceiptIcon
                             name="receipt"

@@ -18,7 +18,7 @@ import ProceedCompensation from '../ProceedCompensation'
 
 
 const SelectedStudents = (props) => {
-    const { selectedValues, setActiveScreen } = props
+    const { selectedValues, setActiveScreen, studentData } = props
     const [remarks, setRemarks] = useState('')
     const [activeStudent, setActiveStudent] = useState(true)
     const [process, setProcess] = useState(false)
@@ -117,7 +117,7 @@ const SelectedStudents = (props) => {
             </View>
         )
     }
-
+    console.log({ studentData })
     return (
         <>
             {process ?
@@ -128,8 +128,12 @@ const SelectedStudents = (props) => {
                     {activeStudent ?
                         <>
                             <View>
-                                {filteredStudents.map((elem, index) => (
-                                    <View key={index}>
+                                {studentData?.length > 0 && studentData?.map((student, index) => {
+                                    const attenaceDatamap = studentData[index]?.attendanceData[0]
+                                    const eachStudentAttendanceData = studentData[index]?.attendanceData
+                                    let studentId = attenaceDatamap?.studentId
+                                    let studentYear = attenaceDatamap?.Student?.studentYear
+                                    return <View key={index}>
                                         <View style={[styles.bgColor, styles.container]}>
                                             <Text style={styles.detailText}>{elem.name} </Text>
                                         </View>
@@ -178,7 +182,7 @@ const SelectedStudents = (props) => {
                                             </View>
                                         </View>
                                     </View>
-                                ))}
+                                })}
                                 <View style={{ width: screenDimensions.width, alignItems: 'center' }}>
 
                                     <CustomButton

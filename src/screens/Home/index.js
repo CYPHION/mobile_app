@@ -9,6 +9,7 @@ import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { getImage, screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
+import HomeSkeleton from './HomeSkeleton';
 
 const dorp = [
     { name: "2024", value: "1" },
@@ -25,31 +26,35 @@ const dorp = [
 
 const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
 
-const renderItem = ({ item }) => {
-    const src = item?.picture ? { uri: getImage(item?.picture) } : require("../../images/profileAvatar.png");
-
-    return (<View style={styles.item}>
-        <Image resizeMode='contain' source={src} style={styles.image} />
-        <Text style={[styles.nameText, { fontFamily: FontFamily.interSemiBold }]} >{item.fullName}</Text>
-        <Text style={[styles.nameText, { fontFamily: FontFamily.interRegular, fontSize: FontSizes.sm }]} >{item.StudentYear.name} - {item.feeChargedBy}</Text>
-    </View>)
-};
 
 const Home = ({ navigation }) => {
+    const renderItem = ({ item }) => {
+
+        // const navigation = useNavigation()
+        const src = item?.picture ? { uri: getImage(item?.picture) } : require("../../images/profileAvatar.png");
+
+        return (
+            <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('children', { screen: 'viewStudent', params: { id: item.id } })}>
+                < View style={styles.item} >
+                    <Image resizeMode='contain' source={src} style={styles.image} />
+                    <Text style={[styles.nameText, { fontFamily: FontFamily.interSemiBold }]} >{item.fullName}</Text>
+                    <Text style={[styles.nameText, { fontFamily: FontFamily.interRegular, fontSize: FontSizes.sm }]} >{item.StudentYear.name} - {item.feeChargedBy}</Text>
+                </View >
+            </TouchableOpacity >
+        )
+    };
     const [option, setOption] = useState("");
 
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
 
-
     return (
         <>
-            {/* <LoadingScreen loading={loading} /> */}
-            <ScrollView>
+            {(!!globaldata?.students && !!user?.email) ? <ScrollView>
                 <View style={styles.profileContainer}>
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
                         <View>
-                            <Text style={[styles.NameText, styles.textFontFamily]}>Hi, {user.firstName} {user.lastName}</Text>
+                            <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.NameText, styles.textFontFamily, { width: screenDimensions.width * 0.7 }]}>Hi, {user.firstName} {user.lastName}</Text>
                             <Text style={[styles.CompText, styles.textFontFamily]}>Welcome to Prime Tuition</Text>
                         </View>
                         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
@@ -59,13 +64,13 @@ const Home = ({ navigation }) => {
                     </View>
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
                         <View>
-                            <Text style={[styles.CompText]}>Enrolled Children ({globaldata?.students?.length})</Text>
+                            <Text style={[styles.CompText]}>Enrolled Children ({globaldata?.students ? globaldata?.students?.length : 0})</Text>
                         </View>
                         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'children' })}>
                             <Text style={[styles.CompText]}>see all</Text>
                         </TouchableOpacity>
                     </View>
-                    <View>
+                    <View style={{ backgroundColor: Color.grayBackground, padding: 3 }}>
                         <FlatList
                             showsHorizontalScrollIndicator={false}
                             data={globaldata?.students}
@@ -78,7 +83,7 @@ const Home = ({ navigation }) => {
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
                         <Text style={[styles.CompText]}>Fee Paid Per Month</Text>
                         <DropdownComponent
-                            dropdownStyle={{ width: screenDimensions.width * 0.2 }}
+                            dropdownStyle={{ width: 80 }}
                             disable={false}
                             data={dorp}
                             placeHolderText={"2024"}
@@ -88,7 +93,7 @@ const Home = ({ navigation }) => {
                     </View>
                     <Graph labels={labels} dataOne={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9]} dataTwo={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9].reverse()} />
                 </View>
-            </ScrollView>
+            </ScrollView> : <HomeSkeleton />}
         </>
     )
 }
