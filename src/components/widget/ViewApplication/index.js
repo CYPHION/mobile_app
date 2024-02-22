@@ -28,10 +28,11 @@ const ViewApplication = () => {
 
 
     return (
-        globalData?.leaves?.length === 0 ? <View>
-            <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
-            <Text style={styles.inactivetext}>No Leaves found</Text>
-        </View> :
+        globalData?.leaves?.length === 0 ?
+            <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.7 }}>
+                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                <Text style={styles.inactivetext}>No Leaves found</Text>
+            </View> :
             <ScrollView>
 
                 <View style={[GlobalStyles.headerStyles]}>
