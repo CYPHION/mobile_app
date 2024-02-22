@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
@@ -9,20 +9,7 @@ import { screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
 
-const dorp = [
-    { name: "2024", value: "1" },
-    { name: "2023", value: "2" },
-    { name: " 2022", value: "3" },
-    { name: "2021", value: "4" },
-    { name: "2020", value: "5" },
-    { name: "2019 ", value: "6" },
-    { name: "2018 ", value: "7" },
-    { name: "2017 ", value: "8" },
-];
 
-
-
-const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
 
 const renderItem = ({ item }) => {
 
@@ -36,7 +23,7 @@ const renderItem = ({ item }) => {
 };
 
 const HomeSkeleton = ({ navigation }) => {
-    const [option, setOption] = useState("");
+
 
     return (
         <>
@@ -48,33 +35,28 @@ const HomeSkeleton = ({ navigation }) => {
                             <ShimmerPlaceholder style={[styles.NameText, styles.textFontFamily]} />
                             <ShimmerPlaceholder style={[styles.CompText, styles.textFontFamily]} />
                         </View>
-                        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
-                            {/* <View style={styles.badge}></View> */}
-                            <ShimmerPlaceholder style={[styles.NameNot]} />
 
-                        </TouchableOpacity>
+                        <ShimmerPlaceholder style={[styles.NameNot]} />
+
+
                     </View>
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
                         <View>
                             <ShimmerPlaceholder style={[styles.CompText]} />
                         </View>
-                        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'children' })}>
-                            <ShimmerPlaceholder style={[styles.CompText]} />
-                        </TouchableOpacity>
+
+                        <ShimmerPlaceholder style={[styles.CompText]} />
+
                     </View>
                     <View>
                         <FlatList
-                            showsHorizontalScrollIndicator={false}
-                            data={[1, 2, 3]}
-                            horizontal
+
                             renderItem={renderItem}
-                            keyExtractor={(item, index) => index.toString()}
-                            contentContainerStyle={styles.flatListContainer}
+                            horizontal
+                            data={[1, 2, 3]}
+
                         />
                     </View>
-
-                    {/* <ShimmerPlaceholder style={{ width: 150, height: 20 }} /> */}
-
 
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
                         <ShimmerPlaceholder style={[styles.CompText]} />
@@ -89,8 +71,6 @@ const HomeSkeleton = ({ navigation }) => {
 
                         </ShimmerPlaceholder>
                     </View>
-
-
                 </View>
 
 
