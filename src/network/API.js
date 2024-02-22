@@ -33,4 +33,40 @@ export class API {
         return HttpService.GET(`/compensation/view`)
     }
 
+    static async getAvailableSchedule(form) {
+        return form
+            ? HttpService.GET(`/compensation-availability/view?date=${form.date}&yearName=${form.yearName}`)
+            : HttpService.GET(`/compensation-availability/view`)
+    }
+
+    static async createCompensation(formData) {
+        return HttpService.POST(`/compensation/bulk-create`, formData)
+    }
+
+    static async compensationByParent(id) {
+        return HttpService.GET(`/compensation/byParent?studentId=${id}`)
+    }
+
+    static async getAllInvoice(id) {
+        return id ? HttpService.GET(`/invoice/all?id=${id}`) : HttpService.GET('/invoice/all')
+    }
+
+    static async getStudentScheduledByParentId(id, isBooster = 'all') {
+        return isBooster === 'all'
+            ? await HttpService.GET(`/schedule/parent/${id}`)
+            : await HttpService.GET(`/schedule/parent/${id}?isBooster=${isBooster}`)
+    }
+
+    static async getStudentWithActiveBooster(query) {
+        return await HttpService.GET(`/student/active-booster?${query}`)
+    }
+
+    static async getAllStudentScheduleByIdWithBooster(id) {
+        return await HttpService.GET(`/schedule/all?userType=student&studentId=${id}`)
+    }
+
+    static async getPrentFeeDetail(id) {
+        return HttpService.GET(`/fee/parent/${id}`)
+    }
+
 }

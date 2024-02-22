@@ -6,7 +6,7 @@ import { FontFamily, FontSizes } from '../../utils/font'
 import { GlobalStyles } from '../../utils/globalStyles'
 
 const GridTable = (props) => {
-    const { data, heading, CheckboxChild, header, onDownloadClick } = props
+    const { data, heading, CheckboxChild, header, onDownloadClick, ids } = props
 
 
 
@@ -27,8 +27,8 @@ const GridTable = (props) => {
                         {CheckboxChild && CheckboxChild}
                         {heading && <Text style={styles.headingText}>{heading}</Text>}
                         {data && data.map((elem, index) => (
-                            <View key={index} style={[styles.rowStyle, styles.header,
-                            { borderBottomWidth: index === data.length - 1 ? 0 : 1 }]}>
+                            <View key={elem?.id ? elem?.id : index} style={[styles.rowStyle, styles.header,
+                            { borderBottomWidth: index === data.length - 1 ? 0 : 1 }, { backgroundColor: ids?.includes(elem.id) ? Color.borderColorTwo : 'white' }]}>
                                 <Text style={styles.textStyle}>{elem.name}</Text>
                                 <Text style={styles.textStyle}>{elem.value}</Text>
                             </View>
@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
     textStyle: {
         fontFamily: FontFamily.interRegular,
         fontSize: FontSizes.md,
-        color: Color.text
+        color: Color.text,
+        textAlign: 'right'
     },
     headingText: {
         fontSize: FontSizes.xl,

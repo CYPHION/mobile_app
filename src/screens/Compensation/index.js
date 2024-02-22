@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
+import { SafeAreaView, StyleSheet, View } from 'react-native'
 import CustomAppBar from '../../components/base/CustomAppBar'
 import CustomButton from '../../components/base/CustomButton'
 import MissedLesson from '../../components/widget/MissedLesson'
@@ -17,7 +17,7 @@ const Compensation = () => {
             <View>
                 <CustomAppBar title='Compensation' />
                 <View style={[styles.main]}>
-                    <ScrollView>
+                    <View>
                         <View style={[styles.tabBtn]}>
                             <CustomButton
                                 title='Missed Lesson'
@@ -39,7 +39,7 @@ const Compensation = () => {
                         <View style={styles.body}>
                             {active ? <MissedLesson /> : <ViewCompensation />}
                         </View>
-                    </ScrollView>
+                    </View>
                 </View>
             </View>
         </SafeAreaView>
