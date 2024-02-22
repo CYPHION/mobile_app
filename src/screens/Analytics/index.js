@@ -35,7 +35,7 @@ const Analytics = ({ navigation }) => {
     const global = useSelector(state => state?.global?.data);
 
     const filterByDate = (data, startDate, endDate) => {
-        return data.filter(item => {
+        return data?.filter(item => {
             const itemDate = new Date(item?.createdAt);
             return itemDate >= startDate && itemDate <= endDate;
         });
