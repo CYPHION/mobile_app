@@ -43,42 +43,44 @@ const ViewAttendance = () => {
     const filterAttendance = globalData?.attendances?.filter(elem => elem.id === student?.id)
 
     return (
-        <ScrollView>
-            {
-                filterAttendance?.length > 0 ? <>
-                    <View style={styles.viewChildrenContainer}>
-                        <TopbarWithGraph student={student} />
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView>
+                {
+                    filterAttendance?.length > 0 ? <>
+                        <View style={styles.viewChildrenContainer}>
+                            <TopbarWithGraph student={student} />
 
-                        <View style={[GlobalStyles.headerStyles]}>
-                            <Text style={GlobalStyles.headerTextStyle}>Student Details</Text>
-                            <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
-                                <View style={[styles.iconView]}>
-                                    <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
-                                </View>
-                                <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
-                            </TouchableOpacity>
+                            <View style={[GlobalStyles.headerStyles]}>
+                                <Text style={GlobalStyles.headerTextStyle}>Student Details</Text>
+                                <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
+                                    <View style={[styles.iconView]}>
+                                        <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
+                                    </View>
+                                    <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            <View>
+                                {filterAttendance?.map((elem, index) => (
+                                    <Table key={index} status={elem.status} list={list(elem)} />
+                                ))}
+                            </View>
                         </View>
-
+                        <CustomDatePicker
+                            isVisible={open}
+                            onToggle={() => setOpen(false)}
+                            onDone={(date) => console.log(date)}
+                        />
+                    </> : <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
                         <View>
-                            {filterAttendance?.map((elem, index) => (
-                                <Table key={index} status={elem.status} list={list(elem)} />
-                            ))}
+                            <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                            <Text style={styles.inactivetext}>No Attendance found</Text>
                         </View>
                     </View>
-                    <CustomDatePicker
-                        isVisible={open}
-                        onToggle={() => setOpen(false)}
-                        onDone={(date) => console.log(date)}
-                    />
-                </> : <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
-                    <View>
-                        <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
-                        <Text style={styles.inactivetext}>No Attendance found</Text>
-                    </View>
-                </View>
-            }
+                }
 
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

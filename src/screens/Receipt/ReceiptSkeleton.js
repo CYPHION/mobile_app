@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import AccordionSkeleton from '../../components/base/AccordianSkeleton';
@@ -13,28 +13,30 @@ const List = [1, 2, 3, 4, 5, 6, 7]
 const ReceiptSkelton = () => {
 
     return (
-        <ScrollView>
-            <View style={styles.feesContainers}>
-                <View style={styles.feesReceiptContainer}>
-                    <View>
-                        <ShimmerPlaceholder style={styles.fessYears} />
-                    </View>
-                    <View>
-                        <ShimmerPlaceholder
-                            style={styles.fessYears}
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView>
+                <View style={styles.feesContainers}>
+                    <View style={styles.feesReceiptContainer}>
+                        <View>
+                            <ShimmerPlaceholder style={styles.fessYears} />
+                        </View>
+                        <View>
+                            <ShimmerPlaceholder
+                                style={styles.fessYears}
 
-                        />
+                            />
+                        </View>
+                    </View>
+                    <View>
+                        {List?.map((item, index) => (
+                            <AccordionSkeleton
+                                key={index}
+                            />
+                        ))}
                     </View>
                 </View>
-                <View>
-                    {List?.map((item, index) => (
-                        <AccordionSkeleton
-                            key={index}
-                        />
-                    ))}
-                </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

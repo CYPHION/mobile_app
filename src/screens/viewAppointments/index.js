@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import CardIcon from "react-native-vector-icons/AntDesign";
 import FilterIcon from "react-native-vector-icons/FontAwesome";
 import BookIcon, { default as CalendarIcon, default as CapIcon } from 'react-native-vector-icons/FontAwesome5';
@@ -79,35 +79,39 @@ const ViewAppointments = () => {
     }, [])
 
     return (
-        <ScrollView>
 
-            {data.length > 0 ?
-                <>
-                    <View style={[GlobalStyles.headerStyles]}>
-                        <Text style={GlobalStyles.headerTextStyle}>Analytics</Text>
-                        <TouchableOpacity activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
-                            <View style={[styles.iconView]}>
-                                <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
-                            </View>
-                            <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View>
-                        {data.length > 0 && data.map((elem, index) => (
-                            <Table key={index} list={list(elem)} />
-                        ))}
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView>
 
-                    </View>
-                </>
-                :
-                <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
-                    <View>
-                        <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
-                        <Text style={styles.inactivetext}>No Appointment found</Text>
-                    </View>
-                </View>}
+                {data.length > 0 ?
+                    <>
 
-        </ScrollView >
+                        <View style={[GlobalStyles.headerStyles]}>
+                            <Text style={GlobalStyles.headerTextStyle}>Analytics</Text>
+                            <TouchableOpacity activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
+                                <View style={[styles.iconView]}>
+                                    <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
+                                </View>
+                                <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View>
+                            {data.length > 0 && data.map((elem, index) => (
+                                <Table key={index} list={list(elem)} />
+                            ))}
+
+                        </View>
+                    </>
+                    :
+                    <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
+                        <View>
+                            <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                            <Text style={styles.inactivetext}>No Appointment found</Text>
+                        </View>
+                    </View>}
+
+            </ScrollView >
+        </SafeAreaView>
     )
 }
 

@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import AccordionItem from '../../components/base/Accordion';
 import DropdownComponent from '../../components/base/CustomDropDown';
-import { Color } from '../../utils/color';
-import { FontFamily, FontSizes } from '../../utils/font';
 import { formattedDate, screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
 
@@ -37,43 +35,45 @@ const Receipt = () => {
     };
 
     return (
-        <ScrollView>
-            <View style={styles.feesContainers}>
-                <View style={styles.feesReceiptContainer}>
-                    <View>
-                        <Text style={styles.fessYears}>Select Year</Text>
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView>
+                <View style={styles.feesContainers}>
+                    <View style={styles.feesReceiptContainer}>
+                        <View>
+                            <Text style={styles.fessYears}>Select Year</Text>
+                        </View>
+                        <View>
+                            <DropdownComponent
+                                dropdownStyle={{ width: screenDimensions.width * 0.25 }}
+                                disable={false}
+                                data={data}
+                                placeHolderText={"2024"}
+                                value={option}
+                                setValue={setOption}
+                            />
+                        </View>
                     </View>
                     <View>
-                        <DropdownComponent
-                            dropdownStyle={{ width: screenDimensions.width * 0.25 }}
-                            disable={false}
-                            data={data}
-                            placeHolderText={"2024"}
-                            value={option}
-                            setValue={setOption}
-                        />
+                        {globaldata?.fees.map((item, index) => (
+                            <AccordionItem
+                                children={ineerList(item).map((elem, index) => (
+                                    <View key={index} style={GlobalStyles.contentView}>
+                                        <Text style={[GlobalStyles.contentItem]}>{elem.name}</Text>
+                                        <Text style={[GlobalStyles.contentItem]}>{elem.value}</Text>
+                                    </View>
+                                ))}
+                                key={index}
+                                date={`${item.payType} (${item.payBy})`}
+                                studentName={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
+                                total={`£${item.amountPaid}`}
+                                expanded={activeItem === index}
+                                onToggle={() => toggleItem(index)} // Pass toggle function to each item
+                            />
+                        ))}
                     </View>
                 </View>
-                <View>
-                    {globaldata?.fees.map((item, index) => (
-                        <AccordionItem
-                            children={ineerList(item).map((elem, index) => (
-                                <View key={index} style={GlobalStyles.contentView}>
-                                    <Text style={[GlobalStyles.contentItem]}>{elem.name}</Text>
-                                    <Text style={[GlobalStyles.contentItem]}>{elem.value}</Text>
-                                </View>
-                            ))}
-                            key={index}
-                            date={`${item.payType} (${item.payBy})`}
-                            studentName={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
-                            total={`£${item.amountPaid}`}
-                            expanded={activeItem === index}
-                            onToggle={() => toggleItem(index)} // Pass toggle function to each item
-                        />
-                    ))}
-                </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

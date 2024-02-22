@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import CustomButton from '../../components/base/CustomButton';
 import GridTable from '../../components/base/GridTable';
@@ -115,65 +115,67 @@ const LeaveApplication = () => {
 
 
     return (
-        <View>
-            <MyModal
-                modalVisible={open}
-                setModalVisible={setOpen}
-                children={ModalContent()}
-            />
-            <View style={[styles.main]}>
-                <View style={styles.absoluteBtnView}>
-                    {nextScreen ? <>
-                        <CustomButton
-                            title={'SUBMIT'}
-                            variant='fill'
-                            btnstyle={styles.absoluteBtn}
-                            onPress={() => {
-                                handleProcessRequest()
-                            }}
-                        />
-                        <CustomButton
-                            title={'Go Back '}
-                            // variant='fill'
-                            btnstyle={styles.absoluteBtn}
-                            onPress={() => {
-                                setActive(false)
-                                setNextScreen(false)
-                                setselectData([])
-                            }}
-                        />
-                    </> : null}
-                </View>
-                <ScrollView>
-                    <View style={nextScreen && { height: selectData?.length > 1 ? screenDimensions.height * 1.33 : screenDimensions.height * 0.9 }}>
-                        <View style={[styles.tabBtn]}>
+        <SafeAreaView style={{ flex: 1 }}>
+            <View>
+                <MyModal
+                    modalVisible={open}
+                    setModalVisible={setOpen}
+                    children={ModalContent()}
+                />
+                <View style={[styles.main]}>
+                    <View style={styles.absoluteBtnView}>
+                        {nextScreen ? <>
                             <CustomButton
-                                title='Create Appliction'
-                                btnstyle={styles.btnStyle}
-                                variant={active ? '' : 'fill'}
-                                onPress={() => setActive(prev => !prev)}
-                            />
-                            <CustomButton
-                                btnstyle={styles.btnStyle}
-                                title='View Application'
-                                variant={active ? 'fill' : ''}
+                                title={'SUBMIT'}
+                                variant='fill'
+                                btnstyle={styles.absoluteBtn}
                                 onPress={() => {
-                                    setNextScreen(false)
-                                    setActive(prev => !prev)
+                                    handleProcessRequest()
                                 }}
                             />
-                        </View>
-                        <View style={[GlobalStyles.p_10]}>
-                            {active ? <ViewApplication /> :
-                                <>
-                                    {nextScreen ? renderScreen() : <CreateAppliction setNextScreen={setNextScreen} setselectData={setselectData} setselectedDate={setselectedDate} selectData={selectData} setReason={setReason} />}
-                                </>
-                            }
-                        </View>
+                            <CustomButton
+                                title={'Go Back '}
+                                // variant='fill'
+                                btnstyle={styles.absoluteBtn}
+                                onPress={() => {
+                                    setActive(false)
+                                    setNextScreen(false)
+                                    setselectData([])
+                                }}
+                            />
+                        </> : null}
                     </View>
-                </ScrollView>
+                    <ScrollView>
+                        <View style={nextScreen && { height: selectData?.length > 1 ? screenDimensions.height * 1.33 : screenDimensions.height * 0.9 }}>
+                            <View style={[styles.tabBtn]}>
+                                <CustomButton
+                                    title='Create Appliction'
+                                    btnstyle={styles.btnStyle}
+                                    variant={active ? '' : 'fill'}
+                                    onPress={() => setActive(prev => !prev)}
+                                />
+                                <CustomButton
+                                    btnstyle={styles.btnStyle}
+                                    title='View Application'
+                                    variant={active ? 'fill' : ''}
+                                    onPress={() => {
+                                        setNextScreen(false)
+                                        setActive(prev => !prev)
+                                    }}
+                                />
+                            </View>
+                            <View style={[GlobalStyles.p_10]}>
+                                {active ? <ViewApplication /> :
+                                    <>
+                                        {nextScreen ? renderScreen() : <CreateAppliction setNextScreen={setNextScreen} setselectData={setselectData} setselectedDate={setselectedDate} selectData={selectData} setReason={setReason} />}
+                                    </>
+                                }
+                            </View>
+                        </View>
+                    </ScrollView>
+                </View>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 

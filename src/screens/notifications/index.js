@@ -74,29 +74,31 @@ const Data = [
 const Notifications = () => {
     return (
         <>
-            <ScrollView >
-                <View style={GlobalStyles.p_10}>
-                    {Data.map((item, index) => (
-                        <View key={index} style={{ width: '100%', padding: 5 }}>
-                            <View key={index} style={[styles.notificationContainer, GlobalStyles.p_10]}>
-                                <View style={styles.notificationContainers}>
-                                    <View style={styles.bgIconColor}>
-                                        <BellIcon name="notifications-outline" size={FontSizes.xxl} color={Color.text} />
-                                    </View>
-                                    <View >
-                                        <Text ellipsizeMode="tail" numberOfLines={1} style={styles.notificationFont}>{item.notification}</Text>
-                                        <Text style={styles.notificationNameFont}>{item.name}</Text>
-                                    </View>
+            <SafeAreaView style={{ flex: 1 }}>
+                <ScrollView >
+                    <View style={GlobalStyles.p_10}>
+                        {Data.map((item, index) => (
+                            <View key={index} style={{ width: '100%', padding: 5 }}>
+                                <View key={index} style={[styles.notificationContainer, GlobalStyles.p_10]}>
+                                    <View style={styles.notificationContainers}>
+                                        <View style={styles.bgIconColor}>
+                                            <BellIcon name="notifications-outline" size={FontSizes.xxl} color={Color.text} />
+                                        </View>
+                                        <View >
+                                            <Text ellipsizeMode="tail" numberOfLines={1} style={styles.notificationFont}>{item.notification}</Text>
+                                            <Text style={styles.notificationNameFont}>{item.name}</Text>
+                                        </View>
 
-                                </View>
-                                <View>
-                                    <Text style={styles.notificationTime}>  {item.time}</Text>
+                                    </View>
+                                    <View>
+                                        <Text style={styles.notificationTime}>  {item.time}</Text>
+                                    </View>
                                 </View>
                             </View>
-                        </View>
-                    ))}
-                </View>
-            </ScrollView>
+                        ))}
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
 
         </>
     )

@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FilterIcon from "react-native-vector-icons/FontAwesome";
 import NoHomework from "react-native-vector-icons/MaterialCommunityIcons";
 import { useSelector } from 'react-redux';
@@ -69,53 +69,55 @@ const ViewProgress = () => {
 
 
     return (
-        <ScrollView>
-            {
-                filterReport?.length > 0 ? <View>
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView>
+                {
+                    filterReport?.length > 0 ? <View>
 
-                    <CustomDatePicker
-                        setSelectedDate={setSelectedDate}
-                        onToggle={() => setOpen(false)}
-                        isVisible={open}
-                        onDone={(date) => console.log(date)}
-                        Children={<DropdownComponent
-                            label={'Select Department'}
-                            disable={false}
-                            data={getDepartmentDropdown(globalData?.departments)}
-                            placeHolderText={"Select Department"}
-                            value={option}
-                            setValue={setOption}
-                        />}
-                    />
+                        <CustomDatePicker
+                            setSelectedDate={setSelectedDate}
+                            onToggle={() => setOpen(false)}
+                            isVisible={open}
+                            onDone={(date) => console.log(date)}
+                            Children={<DropdownComponent
+                                label={'Select Department'}
+                                disable={false}
+                                data={getDepartmentDropdown(globalData?.departments)}
+                                placeHolderText={"Select Department"}
+                                value={option}
+                                setValue={setOption}
+                            />}
+                        />
 
-                    <TopbarWithGraph student={router.params.student} isGraph={false} />
+                        <TopbarWithGraph student={router.params.student} isGraph={false} />
 
-                    <View style={[GlobalStyles.headerStyles]}>
-                        <Text style={GlobalStyles.headerTextStyle}>Report Details</Text>
-                        <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
-                            <View style={[styles.iconView]}>
-                                <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
-                            </View>
-                            <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
-                        </TouchableOpacity>
+                        <View style={[GlobalStyles.headerStyles]}>
+                            <Text style={GlobalStyles.headerTextStyle}>Report Details</Text>
+                            <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
+                                <View style={[styles.iconView]}>
+                                    <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
+                                </View>
+                                <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View>
+
+                            {filterReport?.map((elem, index) => (
+                                <GridTable onDownloadClick={onDownloadClick} header={`Test ${index + 1}`} key={index} data={nestedArray(elem)} />
+                            ))}
+                        </View>
+                    </View> : <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
+                        <View>
+                            <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                            <Text style={styles.inactivetext}>No Progress Report found</Text>
+                        </View>
                     </View>
-
-                    <View>
-
-                        {filterReport?.map((elem, index) => (
-                            <GridTable onDownloadClick={onDownloadClick} header={`Test ${index + 1}`} key={index} data={nestedArray(elem)} />
-                        ))}
-                    </View>
-                </View> : <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
-                    <View>
-                        <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
-                        <Text style={styles.inactivetext}>No Progress Report found</Text>
-                    </View>
-                </View>
-            }
+                }
 
 
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

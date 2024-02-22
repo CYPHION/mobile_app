@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import Filter from "../../components/SVGS/Filter.svg";
@@ -16,57 +16,59 @@ const ViewAllStudentsSkeleton = () => {
     return (
 
         <>
-            <ScrollView>
+            <SafeAreaView style={{ flex: 1 }}>
+                <ScrollView>
 
-                <Filter width={60} height={20} fill={"red"} />
+                    <Filter width={60} height={20} fill={"red"} />
 
-                <View style={styles.profileContainer}>
-                    <View style={[styles.profileRowContainer]}>
-                        <View>
-                            <ShimmerPlaceholder style={[styles.NameText, styles.textFontFamily]} />
-                            <ShimmerPlaceholder style={[styles.CompText, styles.textFontFamily]} />
-                        </View>
-                        {/* <TouchableOpacity  >
+                    <View style={styles.profileContainer}>
+                        <View style={[styles.profileRowContainer]}>
+                            <View>
+                                <ShimmerPlaceholder style={[styles.NameText, styles.textFontFamily]} />
+                                <ShimmerPlaceholder style={[styles.CompText, styles.textFontFamily]} />
+                            </View>
+                            {/* <TouchableOpacity  >
                             <View style={styles.badge}></View>
 
                         </TouchableOpacity> */}
-                    </View>
-                    <View style={[styles.profileRowContainer]}>
-                        <View>
-                            <ShimmerPlaceholder style={[styles.CompTextt]} />
                         </View>
-                    </View>
+                        <View style={[styles.profileRowContainer]}>
+                            <View>
+                                <ShimmerPlaceholder style={[styles.CompTextt]} />
+                            </View>
+                        </View>
 
 
-                    {
-                        list.map((elem, index) => (
-                            <View key={index} >
-                                <View style={styles.allStudentContainer}>
-                                    <View style={styles.allStudentContainers}>
-                                        <View >
-                                            <ShimmerPlaceholder style={styles.image} />
-                                        </View>
-                                        <View>
-                                            <ShimmerPlaceholder style={styles.nameFont} />
-                                            <ShimmerPlaceholder style={styles.yearFont} />
-                                            <View style={[styles.activeStatus,]}>
-                                                <ShimmerPlaceholder style={styles.activeStatusText} />
+                        {
+                            list.map((elem, index) => (
+                                <View key={index} >
+                                    <View style={styles.allStudentContainer}>
+                                        <View style={styles.allStudentContainers}>
+                                            <View >
+                                                <ShimmerPlaceholder style={styles.image} />
+                                            </View>
+                                            <View>
+                                                <ShimmerPlaceholder style={styles.nameFont} />
+                                                <ShimmerPlaceholder style={styles.yearFont} />
+                                                <View style={[styles.activeStatus,]}>
+                                                    <ShimmerPlaceholder style={styles.activeStatusText} />
+                                                </View>
                                             </View>
                                         </View>
-                                    </View>
 
-                                    <View >
-                                        <ShimmerPlaceholder style={styles.weeklyText} />
+                                        <View >
+                                            <ShimmerPlaceholder style={styles.weeklyText} />
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
-                        ))
-                    }
+                            ))
+                        }
 
 
 
-                </View>
-            </ScrollView>
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
         </>
     )
 }

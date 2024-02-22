@@ -35,7 +35,7 @@ const Testimonials = () => {
 
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
             <View style={[styles.main]}>
                 {!(data.some((item) => item?.userId === user?.id)) && <View style={styles.absView}>
                     <CustomButton
