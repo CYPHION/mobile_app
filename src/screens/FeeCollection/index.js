@@ -1,3 +1,4 @@
+import { useStripe } from '@stripe/stripe-react-native';
 import { default as React, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -52,6 +53,8 @@ const FeeCollection = () => {
     const [formData, setFormData] = useState(initialData)
     const globalData = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
+    const { initPaymentSheet, presentPaymentSheet } = useStripe()
+
 
     const data = [
         { name: "Pay By Family", value: "Parent" },
@@ -442,6 +445,35 @@ const FeeCollection = () => {
         }
     }
 
+    const handlePayNwow = async () => {
+
+
+        // 1.Create a Payment intent
+        let res = await fetch("http://localhost:5000/fee/stripe/create-intent", {
+            method: "POST",
+        });
+        res = await res.json()
+        const { client_secret: clientSecret } = await res.data
+        // const response = await API.createIntent({ parentId: user?.id })
+        // 2. Initialize the payment sheet
+        const initResponse = await initPaymentSheet({
+            merchantDisplayName: 'notJust.dev',
+            paymentIntentClientSecret: clientSecret,
+        })
+        if (initResponse.error) {
+            console.log(initResponse.error)
+            return;
+        }
+
+        //3. Present payment sheet
+
+        await presentPaymentSheet()
+
+
+
+        console.log(initResponse)
+    }
+
 
     useEffect(() => {
         const childDetails = [];
@@ -636,6 +668,7 @@ const FeeCollection = () => {
                         <CustomButton
                             title={'Pay Now'}
                             variant='fill'
+                            onPress={handlePayNwow}
                         />
                     </View>
                 </View >
