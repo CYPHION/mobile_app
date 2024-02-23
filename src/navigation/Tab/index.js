@@ -96,7 +96,7 @@ const TabNavigation = ({ old }) => {
             />
             <Tab.Screen name="fee" component={FeeCollection}
                 options={{
-                    tabBarLabel: 'Fee',
+                    tabBarLabel: 'Pay Fee',
                     tabBarIcon: ({ color, size, focused }) => (
                         <CardIcon
                             name="card"
@@ -105,7 +105,7 @@ const TabNavigation = ({ old }) => {
                     ),
                     tabBarActiveTintColor: Color.primary,
                     headerShown: true,
-                    headerTitle: 'Student Fees'
+                    headerTitle: 'Pay Fees'
 
                 }}
             />
