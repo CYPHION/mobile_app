@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import CardIcon from "react-native-vector-icons/AntDesign"
 import FilterIcon from 'react-native-vector-icons/FontAwesome'
 import CapIcon from 'react-native-vector-icons/FontAwesome5'

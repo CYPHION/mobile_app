@@ -1,6 +1,9 @@
 import React from 'react'
-import { SafeAreaView, View } from 'react-native'
+import { SafeAreaView, StyleSheet, View } from 'react-native'
 import PTLogo from '../../components/SVGS/PT-Logo'
+import { Color } from '../../utils/color'
+import { FontFamily, FontSizes } from '../../utils/font'
+import { screenDimensions } from '../../utils/functions'
 
 const SpashScreen = () => {
     return (

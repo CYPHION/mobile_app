@@ -1,9 +1,11 @@
 import { useRoute } from '@react-navigation/native'
 import React from 'react'
-import { SafeAreaView, ScrollView, Text, View } from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import GridTable from '../../components/base/GridTable'
 import TopbarWithGraph from '../../components/widget/TopbarWithGraph'
+import { Color } from '../../utils/color'
+import { FontFamily, FontSizes } from '../../utils/font'
 import { formattedDate } from '../../utils/functions'
 import { GlobalStyles } from '../../utils/globalStyles'
 
