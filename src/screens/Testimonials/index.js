@@ -19,9 +19,8 @@ const Testimonials = () => {
 
 
     return (
-        <SafeAreaView>
-            <View style={[styles.main]}>
-
+        <>
+            <SafeAreaView style={{ flex: 1 }}>
                 {!(global?.testimonials?.some((item) => item?.userId === user?.id)) && <View style={styles.absView}>
                     <CustomButton
                         title='Write A Review'
@@ -31,38 +30,37 @@ const Testimonials = () => {
                         onPress={() => navigation.navigate('root', { screen: 'addTestimonial' })}
                     />
                 </View>}
-                {global?.testimonials?.length > 0 ?
+                <View style={[styles.main]}>
                     <ScrollView>
-
-                        <View style={{ zIndex: 1 }}>
-                            <View style={[{ marginBottom: 7 }, GlobalStyles.headerStyles]}>
-                                <Text style={GlobalStyles.headerTextStyle}>Availible Reviews </Text>
-                            </View>
-
-                            <View style={[GlobalStyles.p_10, { gap: 15 }]}>
-                                {global?.testimonials.map((elem, index) => (
-                                    <View key={index} style={[styles.card, GlobalStyles.p_10]}>
-                                        <Text style={[styles.nameText]}>{elem?.User?.firstName} {elem?.User?.lastName}</Text>
-                                        <View style={{ flexDirection: 'row', gap: 6 }}>
-                                            <Text style={styles.textTwo}>({elem?.User?.type && elem.User.type[0].toUpperCase() + elem.User.type.slice(1)})</Text>
-                                            <Text style={styles.dateText}>{formattedDate(elem.createdAt, 'MMM dd,yyyy')}</Text>
+                        {global?.testimonials?.length > 0 ?
+                            <View style={{ zIndex: 1 }}>
+                                <View style={[{ marginBottom: 7 }, GlobalStyles.headerStyles]}>
+                                    <Text style={GlobalStyles.headerTextStyle}>Available Reviews</Text>
+                                </View>
+                                <View style={[GlobalStyles.p_10, { gap: 15 }]}>
+                                    {global?.testimonials.map((elem, index) => (
+                                        <View key={index} style={[styles.card, GlobalStyles.p_10]}>
+                                            <Text style={[styles.nameText]}>{elem?.User?.firstName} {elem?.User?.lastName}</Text>
+                                            <View style={{ flexDirection: 'row', gap: 6 }}>
+                                                <Text style={styles.textTwo}>({elem?.User?.type && elem.User.type[0].toUpperCase() + elem.User.type.slice(1)})</Text>
+                                                <Text style={styles.dateText}>{formattedDate(elem.createdAt, 'MMM dd,yyyy')}</Text>
+                                            </View>
+                                            <Text style={styles.para}>{elem.review}</Text>
                                         </View>
-                                        <Text style={styles.para}>{elem.review}</Text>
-                                    </View>
-                                ))}
+                                    ))}
+                                </View>
                             </View>
-                        </View>
+                            :
+                            <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
+                                <View>
+                                    <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                                    <Text style={styles.inactivetext}>No Reviews found</Text>
+                                </View>
+                            </View>}
                     </ScrollView>
-
-                    :
-                    <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
-                        <View>
-                            <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
-                            <Text style={styles.inactivetext}>No Reviews found</Text>
-                        </View>
-                    </View>}
-            </View>
-        </SafeAreaView>
+                </View>
+            </SafeAreaView>
+        </>
     )
 }
 
@@ -71,8 +69,6 @@ export default Testimonials
 const styles = StyleSheet.create({
     main: {
         backgroundColor: Color.white,
-        height: screenDimensions.height,
-        width: screenDimensions.width,
     },
     card: {
         backgroundColor: Color.grayBackground,
@@ -102,7 +98,7 @@ const styles = StyleSheet.create({
     absView: {
         position: 'absolute',
         right: 10,
-        bottom: screenDimensions.height * 0.15,
+        bottom: screenDimensions.height * 0.01,
         zIndex: 2,
     },
     btnStyle: {

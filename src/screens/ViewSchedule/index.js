@@ -60,8 +60,7 @@ const ViewSchedule = () => {
     const router = useRoute()
     const globalData = useSelector(state => state?.global?.data)
 
-    const Schedules = globalData?.schedules?.filter(elem => elem.studentId === router.params?.id)
-
+    const Schedules = globalData?.schedules?.filter(elem => elem.studentId === router.params?.student?.id)
 
     return (
         <ScrollView>

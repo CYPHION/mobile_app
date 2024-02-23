@@ -62,8 +62,8 @@ const AddTestimonial = () => {
                     setModalVisible={setOpen}
                 />
                 <View style={styles.main}>
-                    <View style={[styles.bgColor, styles.container, GlobalStyles.p_10]}>
-                        <Text style={styles.detailText}>Review - {user?.firstName} {user?.lastName}</Text>
+                    <View style={[GlobalStyles.headerStyles, GlobalStyles.p_10]}>
+                        <Text style={GlobalStyles.headerTextStyle}>Review - {user?.firstName} {user?.lastName}</Text>
                     </View>
                     <View style={GlobalStyles.p_10}>
                         <InputField

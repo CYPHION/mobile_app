@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FilterIcon from "react-native-vector-icons/FontAwesome";
 import NoHomework from "react-native-vector-icons/MaterialCommunityIcons";
 import { useSelector } from 'react-redux';
@@ -52,32 +52,116 @@ const nestedArray = (item) => [
 
 
 const ViewProgress = () => {
-
+    const [refresh, setRefresh] = useState(false);
+    const [progress, setProgress] = useState([]);
     const router = useRoute()
+    const [open, setOpen] = useState(false);
+    const [option, setOption] = useState("");
 
     const globalData = useSelector(state => state?.global?.data)
     const filterReport = globalData?.reports?.filter(elem => elem.studentId === router.params.student?.id)
 
-    const [open, setOpen] = useState(false);
-    const [selectedDate, setSelectedDate] = useState('');
-    const [option, setOption] = useState("");
+    const currentDate = new Date();
+    const startOfMonth = new Date(currentDate);
+    startOfMonth.setMonth(currentDate.getMonth() - 1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    const endDate = new Date();
+    endDate.setHours(23, 59, 59, 999);
+
+    // Set endDate to the end of the current day (11:59:59.999 PM)
+    endDate.setHours(23, 59, 59, 999);
+
+    const [date, setDate] = useState({
+        startDate: startOfMonth,
+        endDate: endDate,
+    });
+
+    const filterByDate = (data, startDate, endDate) => {
+
+
+
+        if (option === '') {
+            return data?.filter(item => {
+                const itemDate = new Date(item?.createdAt)
+                return itemDate >= startDate && itemDate <= endDate;
+            });
+        } else {
+            return data?.filter(item => {
+                const itemDate = new Date(item?.createdAt);
+                return itemDate >= startDate && itemDate <= endDate && item.Department?.id === option;
+            });
+        }
+    }
+
+    const handleFilter = () => {
+        setProgress(filterByDate(filterReport, date.startDate, date.endDate))
+        setOption('')
+    }
+
+    useEffect(() => {
+        setProgress(filterByDate(filterReport, date.startDate, date.endDate))
+    }, [])
+
+
 
     const onDownloadClick = () => {
         //when user click on download button
         console.log('first')
     }
 
+    const renderItem = () => (
+        <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
+            <View>
+                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                <Text style={styles.inactivetext}>No Progress Report found</Text>
+            </View>
+        </View>
+    )
+
+    const handleRefresh = () => {
+        setRefresh(true);
+
+        const refreshedStartDate = new Date();
+        refreshedStartDate.setMonth(refreshedStartDate.getMonth() - 1);
+        refreshedStartDate.setHours(0, 0, 0, 0);
+
+        const refreshedEndDate = new Date();
+        refreshedEndDate.setHours(23, 59, 59, 999);
+
+        setDate({
+            startDate: refreshedStartDate,
+            endDate: refreshedEndDate,
+        });
+        setOption('')
+        setProgress(filterByDate(filterReport, refreshedStartDate, refreshedEndDate))
+        setRefresh(false);
+        // Add additional logic or fetch data as needed
+        // ...
+    };
 
     return (
-        <ScrollView>
+
+        <ScrollView
+            refreshControl={
+                <RefreshControl
+                    onRefresh={handleRefresh}
+                    refreshing={refresh}
+                />
+            }
+        >
             {
                 filterReport?.length > 0 ? <View>
 
                     <CustomDatePicker
-                        setSelectedDate={setSelectedDate}
+                        stDate={date.startDate}
+                        enDate={date.endDate}
                         onToggle={() => setOpen(false)}
                         isVisible={open}
-                        onDone={(date) => console.log(date)}
+                        onDone={(date) => {
+                            setDate(date)
+                            handleFilter()
+                        }}
                         Children={<DropdownComponent
                             label={'Select Department'}
                             disable={false}
@@ -100,18 +184,21 @@ const ViewProgress = () => {
                         </TouchableOpacity>
                     </View>
 
-                    <View>
+                    {progress?.length > 0 ? <View>
 
-                        {filterReport?.map((elem, index) => (
+                        {progress?.map((elem, index) => (
                             <GridTable onDownloadClick={onDownloadClick} header={`Test ${index + 1}`} key={index} data={nestedArray(elem)} />
                         ))}
-                    </View>
-                </View> : <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
-                    <View>
-                        <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
-                        <Text style={styles.inactivetext}>No Progress Report found</Text>
-                    </View>
-                </View>
+                    </View> :
+                        <>
+                            {renderItem()}
+                        </>
+                    }
+                </View> :
+                    <>
+                        {renderItem()}
+                    </>
+
             }
 
 

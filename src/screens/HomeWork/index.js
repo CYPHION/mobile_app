@@ -14,13 +14,12 @@ import { GlobalStyles } from '../../utils/globalStyles'
 
 const HomeWork = () => {
     const router = useRoute()
-    const { student } = router.params
     const globalData = useSelector(state => state?.global?.data)
 
 
     const filterHomework = globalData?.homeworks?.filter(item => {
         const studentIds = JSON.parse(item.studentId);
-        return studentIds.some(id => id === student?.id);
+        return studentIds.some(id => id === router.params?.student?.id);
     });
 
 
@@ -32,7 +31,7 @@ const HomeWork = () => {
                     {
                         filterHomework?.length > 0 ? <>
                             <View style={[styles.viewChildrenContainer, GlobalStyles.p_10]}>
-                                <Text style={[styles.NameText, styles.textFontFamily]}>{student?.fullName}</Text>
+                                <Text style={[styles.NameText, styles.textFontFamily]}>{router.params?.student?.fullName}</Text>
                                 <Text style={[styles.CompText, styles.textFontFamily]}>({filterHomework?.length})</Text>
                             </View>
                             <View style={{ paddingHorizontal: 10, gap: 10, marginTop: 10 }}>

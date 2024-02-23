@@ -109,8 +109,8 @@ const CustomDatePicker = (props) => {
                                     btnstyle={{ paddingVertical: 2 }}
                                     onPress={() => {
                                         onDone({
-                                            startDate: formattedDate(startDate, "MMM dd yyyy"),
-                                            endDate: formattedDate(endDate, "MMM dd yyyy"),
+                                            startDate: startDate,
+                                            endDate: endDate,
                                         })
                                         onToggle();
                                     }}
