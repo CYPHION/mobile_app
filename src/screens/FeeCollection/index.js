@@ -38,6 +38,7 @@ const initialData = {
 const FeeCollection = () => {
     const [activeItem, setActiveItem] = useState(null);
     const [option, setOption] = useState("");
+    const [studentId, setStudentId] = useState("")
     const [error, setError] = useState('')
     const [dropdownData, setDropdownData] = useState([])
     const [isLoadingChange, setIsLoadingChange] = useState(false)
@@ -232,9 +233,13 @@ const FeeCollection = () => {
         setChilds([])
         setSchedule([])
         setError({})
+        setIsLoadingChange(false)
+        setStudentId("")
+        setOption("")
+        return
     }
 
-    const handlefunctionAccToTab = (id) => {
+    const handlefunctionAccToTab = (id, options) => {
         setIsLoadingChange(true)
         if (!id) {
             setChilds([])
@@ -244,18 +249,12 @@ const FeeCollection = () => {
             return
         }
         else {
-            if (option === "Student") {
-                setChilds([])
-                setSchedule([])
-                setError({})
+            if (options === "Student") {
                 const parentId = globalData?.students?.find(elem => elem.id === id)?.parentId
                 getStudentDetails(id)
                 parentFeeDetail(parentId)
             }
             else {
-                setChilds([])
-                setSchedule([])
-                setError({})
                 getChilds(id)
                 parentFeeDetail(id)
             }
@@ -545,7 +544,7 @@ const FeeCollection = () => {
                                 <View style={[GlobalStyles.p_10]} key={index}>
                                     <AccordionItem
                                         children={<GridTable key={child.id} data={getStudentRowData(child)} ids={[13, 14, 15]} />}
-                                        key={index}
+                                        key={child.id}
                                         date={`${child.feeChargedBy === "Monthly" ? "(Monthly)" : "(Weekly)"} ${isBooster ? "Booster Student" : ""}`}
                                         studentName={child.status}
                                         total={`${child?.fullName} `}
@@ -640,9 +639,11 @@ const FeeCollection = () => {
                         />
                     </View>
                 </View >
-                : ''
+                : null
         )
     }
+
+
     return (
 
         <>
@@ -655,10 +656,13 @@ const FeeCollection = () => {
                         data={data}
                         placeHolderText={"Select Payment Type"}
                         value={option}
-                        setValue={(option) => {
-                            setOption(option)
-                            handleReset()
-                            option !== "Student" && handlefunctionAccToTab(user?.id)
+                        setValue={text => {
+                            setOption(text);
+                            if (text !== "Student") {
+                                handlefunctionAccToTab(user?.id, text); // Pass the updated option to the function
+                            } else {
+                                handleReset()
+                            }
                         }}
                     />
                 </View>
@@ -680,9 +684,10 @@ const FeeCollection = () => {
                                             disable={false}
                                             data={getParentDropdown(dropdownData)}
                                             placeHolderText={"Select Payment Type"}
-                                            value={option}
-                                            setValue={(option) => {
-                                                setOption(option)
+                                            value={studentId}
+                                            setValue={val => {
+                                                setStudentId(val)
+                                                handlefunctionAccToTab(val, option)
                                             }}
                                         />
                                     </View>

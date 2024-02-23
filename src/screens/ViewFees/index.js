@@ -12,15 +12,10 @@ import { screenDimensions } from '../../utils/functions'
 import { GlobalStyles } from '../../utils/globalStyles'
 
 const ViewFess = () => {
-    const [formData, setFormData] = useState({
-        paymentType: 'Card',
-        noOfWeeks: '',
-        paidAmount: '',
-        remarks: ''
-    })
+    const [activeItem, setActiveItem] = useState(null);
 
     const router = useRoute()
-    const { student } = router.params
+    const student = router.params?.student
     const [error, setError] = useState('')
 
     const onChangeHandler = (name, text) => {
