@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import LoadingScreen from '../../components/base/LoadingScreen'
 import { Color } from '../../utils/color'
@@ -26,10 +26,11 @@ const ViewAllStudents = ({ navigation }) => {
     return (
 
         <>
-            <LoadingScreen loading={loading} />
-            <ScrollView>
-                <View style={styles.profileContainer}>
-                    {/* <View style={[styles.profileRowContainer]}>
+            <SafeAreaView style={{ flex: 1 }}>
+                <LoadingScreen loading={loading} />
+                <ScrollView>
+                    <View style={styles.profileContainer}>
+                        {/* <View style={[styles.profileRowContainer]}>
                         <View>
                             <Text style={[styles.NameText, styles.textFontFamily]}>Hi, {user?.firstName} {user?.lastName}</Text>
                             <Text style={[styles.CompText, styles.textFontFamily]}>Welcome to Prime Tuition</Text>
@@ -39,42 +40,43 @@ const ViewAllStudents = ({ navigation }) => {
 
                         </TouchableOpacity>
                     </View> */}
-                    <View style={[styles.profileRowContainer]}>
-                        <View>
-                            <Text style={[styles.CompText]}>Enrolled Children ({globalData?.students ? globalData?.students?.length : 0})</Text>
+                        <View style={[styles.profileRowContainer]}>
+                            <View>
+                                <Text style={[styles.CompText]}>Enrolled Children ({globalData?.students ? globalData?.students?.length : 0})</Text>
+                            </View>
                         </View>
-                    </View>
 
 
-                    {
-                        globalData?.students?.map((elem, index) => (
-                            <TouchableOpacity activeOpacity={0.9} key={index} onPress={() => navigation.navigate('viewStudent', { id: elem.id })}>
-                                <View style={styles.allStudentContainer}>
-                                    <View style={styles.allStudentContainers}>
-                                        <View>
-                                            <Image resizeMode='contain' source={elem?.picture ? { uri: getImage(elem?.picture) } : require("../../images/profileAvatar.png")} style={styles.image} />
-                                        </View>
-                                        <View>
-                                            <Text style={[styles.nameFont]}>{elem?.fullName}</Text>
-                                            <Text style={[styles.yearFont]}>{elem?.StudentYear?.name}</Text>
-                                            <View style={[styles.activeStatus, { backgroundColor: bgColor[elem?.status] }]}>
-                                                <Text style={styles.activeStatusText}>{elem?.status}</Text>
+                        {
+                            globalData?.students?.map((elem, index) => (
+                                <TouchableOpacity activeOpacity={0.9} key={index} onPress={() => navigation.navigate('viewStudent', { id: elem.id })}>
+                                    <View style={styles.allStudentContainer}>
+                                        <View style={styles.allStudentContainers}>
+                                            <View>
+                                                <Image resizeMode='contain' source={elem?.picture ? { uri: getImage(elem?.picture) } : require("../../images/profileAvatar.png")} style={styles.image} />
+                                            </View>
+                                            <View>
+                                                <Text style={[styles.nameFont]}>{elem?.fullName}</Text>
+                                                <Text style={[styles.yearFont]}>{elem?.StudentYear?.name}</Text>
+                                                <View style={[styles.activeStatus, { backgroundColor: bgColor[elem?.status] }]}>
+                                                    <Text style={styles.activeStatusText}>{elem?.status}</Text>
+                                                </View>
                                             </View>
                                         </View>
+
+                                        <View >
+                                            <Text style={styles.weeklyText}> {elem?.feeChargedBy}</Text>
+                                        </View>
                                     </View>
-
-                                    <View >
-                                        <Text style={styles.weeklyText}> {elem?.feeChargedBy}</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-                        ))
-                    }
+                                </TouchableOpacity>
+                            ))
+                        }
 
 
 
-                </View>
-            </ScrollView >
+                    </View>
+                </ScrollView >
+            </SafeAreaView>
         </>
     )
 }
@@ -115,7 +117,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-end',
         // padding: 10,
-        elevation: 2,  // off set dena hai yahan 
+        elevation: 2,  // off set dena hai yahan
         borderRadius: 10,
         borderColor: "black",
         backgroundColor: Color.pureWhite,

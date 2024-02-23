@@ -5,27 +5,25 @@ import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import AccordionSkeleton from '../../components/base/AccordianSkeleton';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
+import { screenDimensions } from '../../utils/functions';
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
 
 
 const List = [1, 2, 3, 4, 5, 6, 7]
 
-const ReceiptSkelton = () => {
+const FeeSkeleton = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
+
+
                 <View style={styles.feesContainers}>
                     <View style={styles.feesReceiptContainer}>
                         <View>
                             <ShimmerPlaceholder style={styles.fessYears} />
                         </View>
-                        <View>
-                            <ShimmerPlaceholder
-                                style={styles.fessYears}
 
-                            />
-                        </View>
                     </View>
                     <View>
                         {List?.map((item, index) => (
@@ -36,11 +34,11 @@ const ReceiptSkelton = () => {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
 
-export default ReceiptSkelton
+export default FeeSkeleton
 
 const styles = StyleSheet.create({
 
@@ -52,16 +50,16 @@ const styles = StyleSheet.create({
     },
     feesContainers: {
         paddingHorizontal: 10,
-        borderRadius: 3
-        ,
+        borderRadius: 3,
+        paddingVertical: 20
 
     },
     fessYears: {
         color: Color.primary,
         fontFamily: FontFamily.interRegular,
         fontSize: FontSizes.md,
-        width: 65,
-        height: 25,
+        width: screenDimensions.width * 0.95,
+        height: 35,
         borderRadius: 3
     }
 })

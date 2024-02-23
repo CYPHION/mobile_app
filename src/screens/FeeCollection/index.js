@@ -1,3 +1,4 @@
+import { useStripe } from '@stripe/stripe-react-native';
 import { default as React, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -13,6 +14,7 @@ import { Color } from '../../utils/color';
 import { FontSizes } from '../../utils/font';
 import { calculateFee, customToast, formattedDate, getParentDropdown, screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
+import FeeSkeleton from '../Fee/FeesSkeleton';
 
 
 const summaryInitial = {
@@ -35,9 +37,18 @@ const initialData = {
     showOnReceipt: false,
 }
 
+const data = [
+    { name: "Pay By Family", value: "Parent" },
+    { name: "Pay By Student", value: "Student" },
+    { name: " Pay Dues", value: "Dues" },
+    { name: "Pay Book Dues", value: "bookDues" },
+
+];
+
 const FeeCollection = () => {
     const [activeItem, setActiveItem] = useState(null);
     const [option, setOption] = useState("");
+    const [studentId, setStudentId] = useState("")
     const [error, setError] = useState('')
     const [dropdownData, setDropdownData] = useState([])
     const [isLoadingChange, setIsLoadingChange] = useState(false)
@@ -49,84 +60,12 @@ const FeeCollection = () => {
     const [summary, setSumamry] = useState(summaryInitial);
     const [totalChargesOfAllStudents, setTotalChargesOfAllStudents] = useState(0);
     const [formData, setFormData] = useState(initialData)
+    const [invoiceData, setInvoiceData] = useState({})
+    const [isLoading, setIsLoading] = useState(false)
+    const [sendData, setSendData] = useState({})
     const globalData = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
-
-    const data = [
-        { name: "Pay By Family", value: "Parent" },
-        { name: "Pay By Student", value: "Student" },
-        { name: " Pay Dues", value: "Dues" },
-        { name: "Pay Book Dues", value: "bookDues" },
-
-    ];
-
-    const items = [
-        {
-            date: "Main ID: 11111",
-            studentName: "Year In School - 12",
-            title: "Abdullah Khan",
-            data: [
-                { name: "Book Dues ", value: "£0" },
-                { name: " Total Booster Price", value: "£80" },
-                { name: "Booster Dues", value: "£80" },
-                { name: "Total Booster Weeks", value: "£80" },
-                { name: "Total Booster Weeks", value: "4 Weeks" },
-                { name: "Total Charges", value: "£80" },
-            ],
-        },
-        {
-            date: "Main ID: 11111",
-            studentName: "Year In School - 13S",
-            title: "Hassan Khan",
-            data: [
-                { name: "Book Dues ", value: "£0" },
-                { name: " Total Booster Price", value: "£80" },
-                { name: "Booster Dues", value: "£80" },
-                { name: "Total Booster Weeks", value: "£80" },
-                { name: "Total Booster Weeks", value: "4 Weeks" },
-                { name: "Total Charges", value: "£80" },
-            ],
-        },
-        {
-            date: "Main ID: 11111",
-            studentName: "Year In School - 13S",
-            title: "Hassan Khan",
-            data: [
-                { name: "Book Dues ", value: "£0" },
-                { name: " Total Booster Price", value: "£80" },
-                { name: "Booster Dues", value: "£80" },
-                { name: "Total Booster Weeks", value: "£80" },
-                { name: "Total Booster Weeks", value: "4 Weeks" },
-                { name: "Total Charges", value: "£80" },
-            ],
-        },
-        {
-            date: "Main ID: 11111",
-            studentName: "Year In School - 13S",
-            title: "Hassan Khan",
-            data: [
-                { name: "Book Dues ", value: "£0" },
-                { name: " Total Booster Price", value: "£80" },
-                { name: "Booster Dues", value: "£80" },
-                { name: "Total Booster Weeks", value: "£80" },
-                { name: "Total Booster Weeks", value: "4 Weeks" },
-                { name: "Total Charges", value: "£80" },
-            ],
-        },
-    ]
-
-    const itemss = [
-        { name: 'Object1', value: 10 },
-        { name: 'Object2', value: 20 },
-        { name: 'Object3', value: 30 },
-        { name: 'Object4', value: 40 },
-        { name: 'Object5', value: 50 },
-        { name: 'Object6', value: 60 },
-        { name: 'Object7', value: 70 },
-        { name: 'Object8', value: 80 },
-        { name: 'Object9', value: 90 },
-        { name: 'Object10', value: 100 },
-    ]
+    const { initPaymentSheet, presentPaymentSheet, confirmPaymentSheetPayment } = useStripe()
 
 
     let weekly = childs?.filter(elem => elem?.feeChargedBy === "Weekly" || elem?.feeChargedBy === "Hourly")?.map(elem => elem)
@@ -134,7 +73,6 @@ const FeeCollection = () => {
     let total = (Number(summary?.bookDues) + Number(summary?.classDues) + Number(summary?.boosterDues) + totalChargesOfAllStudents) - (Number(summary?.extraPaid + Number(formData?.feeWaived)))
     let extra = (formData?.paidAmount || 0) - total;
     let getData = ((summary.totalDues === 0 && option === "Dues") || (summary.bookDues === 0 && option === "bookDues")) ? false : true
-
     let extrasDues;
     option === "Dues"
         ? (extrasDues =
@@ -232,9 +170,13 @@ const FeeCollection = () => {
         setChilds([])
         setSchedule([])
         setError({})
+        setIsLoadingChange(false)
+        setStudentId("")
+        setOption("")
+        return
     }
 
-    const handlefunctionAccToTab = (id) => {
+    const handlefunctionAccToTab = (id, options) => {
         setIsLoadingChange(true)
         if (!id) {
             setChilds([])
@@ -244,18 +186,12 @@ const FeeCollection = () => {
             return
         }
         else {
-            if (option === "Student") {
-                setChilds([])
-                setSchedule([])
-                setError({})
+            if (options === "Student") {
                 const parentId = globalData?.students?.find(elem => elem.id === id)?.parentId
                 getStudentDetails(id)
                 parentFeeDetail(parentId)
             }
             else {
-                setChilds([])
-                setSchedule([])
-                setError({})
                 getChilds(id)
                 parentFeeDetail(id)
             }
@@ -326,7 +262,7 @@ const FeeCollection = () => {
             ?.filter((data) => data.studentId === childId && !data.isComp)
             .map((filteredData) => (
                 <Text fontWeight={600} fontSize={'0.8rem '}>
-                    {`${filteredData.Subject?.name} at ${'\n'} ${filteredData.days} from ${filteredData.LessonTiming?.time} ${'\n'}(${filteredData?.isBooster ? 'Booster Scheudule' : 'Regular Schedule'}) `}
+                    {`${filteredData.Subject?.name} at ${'\n'} ${filteredData.days} from ${filteredData.LessonTiming?.time} ${'\n'}(${filteredData?.isBooster ? 'Booster Scheudule' : 'Regular Schedule'}) ${'\n'}`}
                 </Text>
             ))
     };
@@ -443,6 +379,238 @@ const FeeCollection = () => {
         }
     }
 
+    const handleSubmit = () => {
+        setIsLoading(true)
+
+        const remarks = formData.showOnReceipt ? formData?.remarks : ''
+
+        let casherName = user?.firstName + ' ' + user.lastName
+
+        const onlyBoosterFee = formData.isBoosterPaid
+
+        let formofParent = {
+            parentId: user?.id,
+            amountPaid: Number(formData.paidAmount),
+            payBy: 'card',
+            noOfMonths: Number(formData?.noOfMonths),
+            noOfWeeks: Number(formData?.noOfWeeks),
+            feeWaived: Number(formData?.feeWaived),
+            remarks: remarks,
+            isBooster: true,
+            payType: 'regular',
+            invoice: {
+                document: ''
+            }
+        }
+
+        let formOfStudent = {
+            studentId: studentId,
+            amountPaid: Number(formData.paidAmount),
+            payBy: 'card',
+            timeperiod: Number(formData.noOfMonths) !== 0 ? Number(formData.noOfMonths) : Number(formData.noOfWeeks),
+            feeWaived: Number(formData?.feeWaived),
+            remarks: remarks,
+            payType: 'regular',
+            isBooster: true,
+            onlyBoosterFee: onlyBoosterFee,
+            invoice: {
+                document: ''
+            }
+        }
+
+        let payDues = {
+            parentId: user?.id,
+            payBy: 'card',
+            payType: 'dues',
+            feeWaived: Number(formData?.feeWaived),
+            amountPaid: Number(formData.duesAmount),
+            remarks: remarks,
+            invoice: {
+                document: ''
+            }
+
+        }
+
+        let bookDues = {
+            parentId: user?.id,
+            payBy: 'card',
+            payType: 'book',
+            feeWaived: Number(formData?.feeWaived),
+            amountPaid: Number(formData.duesAmount),
+            onlyBook: true,
+            remarks: remarks,
+            invoice: {
+                document: ''
+            }
+        }
+
+        let sendFOrmData
+        if (option === "Parent") {
+            sendFOrmData = formofParent
+        } else {
+
+            if (option === "Student") {
+                sendFOrmData = formOfStudent
+            }
+            else {
+
+                if (option === "Dues") {
+
+                    sendFOrmData = payDues
+                }
+                else {
+                    sendFOrmData = bookDues
+                }
+            }
+        }
+
+
+        if (option === 'Parent' || option === "Student") {
+            if (!sendFOrmData.payBy || sendFOrmData.amountPaid === 0) {
+                setError(prev => ({
+                    ...prev,
+                    paidAmount: sendFOrmData.amountPaid === 0 ? "Paid Amount cannot be zero" : "",
+                    payType: !sendFOrmData.payBy ? "Paytype cannot be empty" : ""
+                }))
+                return (
+                    !sendFOrmData.payBy && customToast("error", 'Paytype cannot be empty'),
+                    sendFOrmData.amountPaid === 0 && customToast("error", 'Paid Amount cannot be zero'),
+                    setIsLoading(false)
+                )
+            } else if (option === "Parent" && !sendFOrmData.noOfMonths && !sendFOrmData.noOfWeeks) {
+                return customToast("error", 'No of months and No of weeks both cannot be zero or empty')
+            } else if (option === "Student" && !sendFOrmData.timeperiod) {
+                console.log('e')
+                return customToast("error", 'No of months and No of weeks both cannot be zero or empty')
+            }
+        } else {
+            if (option === "Dues" || option === "bookDues") {
+                sendFOrmData.amountPaid === 0 && customToast("error", 'Dues Amount cannot be zero')
+            }
+        }
+
+        setSendData(sendFOrmData)
+        handleFormDataForStripe(sendFOrmData, recieptNo, casherName, true)
+
+
+    }
+
+    const handleFormDataForStripe = async (sendFOrmData, recieptNo, casherName, isStripe = false) => {
+        if (option === "Parent") {
+            const parentMainId = user?.mainId
+            let form = {
+                titleHead: option,
+                parentId: parentMainId,
+                amountPaid: formData.paidAmount,
+                remarks: formData.remarks,
+                showOnReceipt: formData.showOnReceipt,
+                noOfWeeks: formData.noOfWeeks,
+                noOfMonths: formData.noOfMonths,
+                totalPayment: totalChargesOfAllStudents,
+                extra: extra,
+                recieptNo: recieptNo,
+                dateails: dateails,
+                cashierName: casherName,
+                summary: summary,
+                feeWaived: formData.feeWaived,
+                duesAmount: formData.duesAmount
+            }
+            setInvoiceData(form)
+            await handlePayNwow({ ...sendFOrmData, option }, form)
+        }
+        else {
+            if (option === "Student") {
+                const parentMainId = user?.mainId
+                let form = {
+                    titleHead: option,
+                    parentId: parentMainId,
+                    amountPaid: formData.paidAmount,
+                    remarks: formData.remarks,
+                    showOnReceipt: formData.showOnReceipt,
+                    noOfWeeks: formData.noOfWeeks,
+                    noOfMonths: formData.noOfMonths,
+                    totalPayment: totalChargesOfAllStudents,
+                    extra: extra,
+                    recieptNo: recieptNo,
+                    dateails: dateails,
+                    cashierName: casherName,
+                    summary: summary,
+                    feeWaived: formData.feeWaived,
+                    duesAmount: formData.duesAmount
+                }
+                setInvoiceData(form)
+                handlePayNwow({ ...sendFOrmData, option }, form)
+            }
+            else {
+                let extras
+                option === "Dues" ? (
+                    extras = formData.duesAmount > summary?.totalDues ?
+                        `${formData.duesAmount - summary?.totalDues}` :
+                        `${Number(summary?.totalDues) - Number(formData.duesAmount)}`
+                ) : (
+                    extras = formData.duesAmount > summary?.bookDues ?
+                        `${formData.duesAmount - summary?.bookDues}` :
+                        `${Number(summary?.bookDues) - Number(formData.duesAmount)}`
+                )
+                const parentMainId = user?.mainId
+                let form = {
+                    titleHead: option === "Dues" ? option : "Book Dues",
+                    parentId: parentMainId,
+                    amountPaid: formData.paidAmount,
+                    remarks: formData.remarks,
+                    showOnReceipt: formData.showOnReceipt,
+                    noOfWeeks: formData.noOfWeeks,
+                    noOfMonths: formData.noOfMonths,
+                    totalPayment: totalChargesOfAllStudents,
+                    extra: extras,
+                    recieptNo: recieptNo,
+                    dateails: dateails,
+                    cashierName: casherName,
+                    summary: summary,
+                    feeWaived: formData.feeWaived,
+                    duesAmount: formData.duesAmount
+                }
+                setInvoiceData(form)
+                handlePayNwow({ ...sendFOrmData, option }, form)
+            }
+
+        }
+    }
+
+    const handlePayNwow = async (data, invoiceData) => {
+
+        // 1.Create a Payment intent
+        let res = await API.stripeIntent({ amount: data?.amountPaid })
+        const intent = await API.createIntent({ ...data, category: data?.option === "bookDues" ? "BookDues" : data?.option, intentId: res?.data?.id, noOfMonth: data?.noOfMonths, noOfWeek: data?.noOfWeeks, invoiceData })
+        const { client_secret: clientSecret } = res?.data
+        // 2. Initialize the payment sheet
+
+        const initResponse = await initPaymentSheet({
+            merchantDisplayName: 'Mr.JD',
+            paymentIntentClientSecret: clientSecret,
+        })
+        if (initResponse.error) {
+            customToast("error", initResponse.error)
+            return;
+        }
+
+
+        // 3. Present payment sheet
+        const paymentResult = await presentPaymentSheet({
+            clientSecret
+        });
+
+        if (paymentResult?.error) {
+            customToast("error", paymentResult?.error?.message)
+            setIsLoading(false)
+            return
+        } else {
+            await API.IntentSuccessURL(res?.data?.id).then(res => customToast("success", res.message)).catch(err => customToast("error", err?.message))
+            handleReset()
+        }
+
+
+    }
 
     useEffect(() => {
         const childDetails = [];
@@ -532,7 +700,6 @@ const FeeCollection = () => {
     }, [summary])
 
 
-
     const renderFields = () => {
 
         return (
@@ -545,7 +712,7 @@ const FeeCollection = () => {
                                 <View style={[GlobalStyles.p_10]} key={index}>
                                     <AccordionItem
                                         children={<GridTable key={child.id} data={getStudentRowData(child)} ids={[13, 14, 15]} />}
-                                        key={index}
+                                        key={child.id}
                                         date={`${child.feeChargedBy === "Monthly" ? "(Monthly)" : "(Weekly)"} ${isBooster ? "Booster Student" : ""}`}
                                         studentName={child.status}
                                         total={`${child?.fullName} `}
@@ -615,9 +782,8 @@ const FeeCollection = () => {
                         </View>
                         <InputField
                             label={"Remarks"}
-                            maxLength={5}
                             multiline={true}
-                            inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
+                            inputMode={"text"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
                             value={formData.remarks}
                             onChangeText={(text) => onChangeHandler('remarks', text)}
                         />
@@ -637,65 +803,72 @@ const FeeCollection = () => {
                         <CustomButton
                             title={'Pay Now'}
                             variant='fill'
+                            onPress={handleSubmit}
                         />
                     </View>
                 </View >
-                : ''
+                : null
         )
     }
+
+
     return (
 
         <>
             <SafeAreaView style={{ flex: 1 }} >
+                {(!!globalData?.students && !!user?.email) ? <>
 
-                <View style={{ paddingHorizontal: 10, alignItems: 'center' }}>
-                    <DropdownComponent
-                        dropdownStyle={{ width: screenDimensions.width * 0.95 }}
-                        disable={false}
-                        data={data}
-                        placeHolderText={"Select Payment Type"}
-                        value={option}
-                        setValue={(option) => {
-                            setOption(option)
-                            handleReset()
-                            option !== "Student" && handlefunctionAccToTab(user?.id)
-                        }}
-                    />
-                </View>
-
-                <LoadingScreen loading={isLoadingChange} />
-                <View style={{ paddingBottom: 50 }} >
-
-
-                    <ScrollView>
-
-
-                        {
-                            !isLoadingChange &&
-                            <View >
-                                {
-                                    option === "Student" && <View style={{ paddingHorizontal: 10, alignItems: 'center' }}>
-                                        <DropdownComponent
-                                            dropdownStyle={{ width: screenDimensions.width * 0.95 }}
-                                            disable={false}
-                                            data={getParentDropdown(dropdownData)}
-                                            placeHolderText={"Select Payment Type"}
-                                            value={option}
-                                            setValue={(option) => {
-                                                setOption(option)
-                                            }}
-                                        />
-                                    </View>
+                    <View style={{ paddingHorizontal: 10, alignItems: 'center' }}>
+                        <DropdownComponent
+                            dropdownStyle={{ width: screenDimensions.width * 0.95 }}
+                            disable={false}
+                            data={data}
+                            placeHolderText={"Select Payment Type"}
+                            value={option}
+                            setValue={text => {
+                                setOption(text);
+                                if (text !== "Student") {
+                                    handlefunctionAccToTab(user?.id, text); // Pass the updated option to the function
                                 }
+                            }}
+                        />
+                    </View>
 
-                                {getData && renderFields()}
-                            </View>
-                        }
+                    <LoadingScreen loading={isLoadingChange} />
+                    <View style={{ paddingBottom: 50 }} >
+
+
+                        <ScrollView>
+
+
+                            {
+                                !isLoadingChange &&
+                                <View >
+                                    {
+                                        option === "Student" && <View style={{ paddingHorizontal: 10, alignItems: 'center' }}>
+                                            <DropdownComponent
+                                                dropdownStyle={{ width: screenDimensions.width * 0.95 }}
+                                                disable={false}
+                                                data={getParentDropdown(dropdownData)}
+                                                placeHolderText={"Select Payment Type"}
+                                                value={studentId}
+                                                setValue={val => {
+                                                    setStudentId(val)
+                                                    handlefunctionAccToTab(val, option)
+                                                }}
+                                            />
+                                        </View>
+                                    }
+
+                                    {getData && renderFields()}
+                                </View>
+                            }
 
 
 
-                    </ScrollView>
-                </View>
+                        </ScrollView>
+                    </View>
+                </> : <FeeSkeleton />}
             </SafeAreaView>
         </>
     )

@@ -1,118 +1,97 @@
-import { useRoute } from '@react-navigation/native'
-import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
-import Icon from "react-native-vector-icons/Ionicons"
-import CustomButton from '../../components/base/CustomButton'
-import GridTable from '../../components/base/GridTable'
-import InputField from '../../components/base/InputField'
-import { Color } from '../../utils/color'
-import { FontSizes } from '../../utils/font'
-import { screenDimensions } from '../../utils/functions'
-import { GlobalStyles } from '../../utils/globalStyles'
+import { useRoute } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import Download from 'react-native-vector-icons/Feather';
+import { default as NoHomework } from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useSelector } from 'react-redux';
+import AccordionItem from '../../components/base/Accordion';
+import { Color } from '../../utils/color';
+import { FontFamily, FontSizes } from '../../utils/font';
+import { formattedDate, getImage, screenDimensions } from '../../utils/functions';
+import { GlobalStyles } from '../../utils/globalStyles';
+import ReceiptSkelton from '../Receipt/ReceiptSkeleton';
+
+
+
 
 const ViewFess = () => {
-    const [formData, setFormData] = useState({
-        paymentType: 'Card',
-        noOfWeeks: '',
-        paidAmount: '',
-        remarks: ''
-    })
-
+    const [activeItem, setActiveItem] = useState(null);
+    const [data, setData] = useState([])
+    const globaldata = useSelector(state => state?.global?.data)
+    const user = useSelector(state => state?.user?.data)
     const router = useRoute()
-    const { student } = router.params
-    const [error, setError] = useState('')
+    const ineerList = (item) => [
+        { name: "Previous Dues", value: `£${item?.totalDues}` },
+        { name: "Book dues", value: `£${item?.bookDues}` },
+        { name: "Paid Amount", value: `£${item?.amountPaid}` },
+    ]
 
-    const onChangeHandler = (name, text) => {
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            [name]: text
-        }));
+
+    const toggleItem = (index) => {
+        setActiveItem(activeItem === index ? null : index); // Toggle state based on click
+    };
+
+
+    const handleDownload = (fileName) => {
+        const url = getImage(fileName); // Replace with your download URL
+        console.log(url)
 
     };
 
-    const items = [
-        { name: 'Object1', value: 10 },
-        { name: 'Object2', value: 20 },
-        { name: 'Object3', value: 30 },
-        { name: 'Object4', value: 40 },
-        { name: 'Object5', value: 50 },
-        { name: 'Object6', value: 60 },
-        { name: 'Object7', value: 70 },
-        { name: 'Object8', value: 80 },
-        { name: 'Object9', value: 90 },
-        { name: 'Object10', value: 100 },
-    ]
+
+
+
+    const renderItem = () => (
+        <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
+            <View>
+                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                <Text style={styles.inactivetext}>No Record found</Text>
+            </View>
+        </View>
+    )
+
+
+
+    useEffect(() => {
+        const filter = globaldata?.fees?.filter((item) => item.studentId === router?.params?.student?.id)
+        setData(filter)
+    }, [globaldata?.fees])
 
     return (
         <ScrollView>
-            <View style={{ paddingVertical: 10, backgroundColor: Color.white }}>
-                {/* <TopbarWithGraph student={student} /> */}
-                {/* <View style={[GlobalStyles.headerStyles]}>
-                    <Text style={GlobalStyles.headerTextStyle}>Student Details</Text>
-                </View> */}
-                {student?.status === "active" ? <>
-                    <View style={[GlobalStyles.p_10]}>
-                        <InputField
-                            label={"Payment type"}
-                            inputMode={"text"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
-                            value={formData?.paymentType}
-                            editable={false}
-                        // onChangeText={(text) => onChangeHandler('paymentType', text)}
-                        />
-                        <InputField
-                            label={"Number of weeks (Required)"}
-                            inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
-                            // keyboardType='numeric'
-                            value={formData.noOfWeeks}
-                            onChangeText={(text) => onChangeHandler('noOfWeeks', text)}
-                        />
-                        <InputField
-                            label={"Paid Amount (Required)"}
-                            maxLength={5}
-                            inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
-                            value={formData.paidAmount}
-                            onChangeText={(text) => onChangeHandler('paidAmount', text)}
-                        />
-                        <InputField
-                            label={"Remarks"}
-                            maxLength={5}
-                            multiline={true}
-                            inputMode={"text"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
-                            value={formData.remarks}
-                            onChangeText={(text) => onChangeHandler('remarks', text)}
-                        />
-                    </View>
-                    <View style={[GlobalStyles.headerStyles]}>
-                        <Text style={GlobalStyles.headerTextStyle}>Charges</Text>
-                        <Text style={GlobalStyles.headerTextStyle}>Total</Text>
-                    </View>
-                    <View>
-                        <GridTable data={items} />
-                    </View>
-                    <View style={[GlobalStyles.headerStyles]}>
-                        <Text style={GlobalStyles.headerTextStyle}>Total Charges</Text>
-                        <Text style={GlobalStyles.headerTextStyle}>&pound;528</Text>
-                    </View>
-                    <View style={[styles.btnView]}>
-
-                        <CustomButton
-                            title={'Pay Now'}
-                            variant='fill'
-                        />
-                    </View>
-                </> :
-                    <>
-                        <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
-                            <View>
-                                <Icon name='eye-off' size={screenDimensions.width * 0.5} color={Color.textTwo} />
-                                <Text style={styles.inactivetext}>Child {student?.status}</Text>
-                            </View>
-                        </View>
-                    </>
-                }
-
-            </View>
+            {(!!user.email && !!globaldata?.fees) ?
+                <View style={styles.feesContainers}>
+                    {data?.length > 0 ?
+                        <>
+                            {data.map((item, index) => (
+                                <AccordionItem
+                                    children={ineerList(item).map((elem, index) => (
+                                        <View key={index} style={GlobalStyles.contentView}>
+                                            <Text style={[GlobalStyles.contentItem]}>{elem.name}</Text>
+                                            <Text style={[GlobalStyles.contentItem]}>{elem.value}</Text>
+                                        </View>
+                                    ))}
+                                    key={index}
+                                    date={`${item.payType} (${item.payBy})`}
+                                    studentName={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
+                                    total={
+                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                            <Text style={[styles.accordionTitleHeading]}>£{item.amountPaid} </Text>
+                                            <Download name='download' onPress={() => handleDownload(item?.invoice?.document)} size={FontSizes.xxl} color={Color.text} />
+                                        </View>
+                                    }
+                                    expanded={activeItem === index}
+                                    onToggle={() => {
+                                        toggleItem(index)
+                                    }} // Pass toggle function to each item
+                                />
+                            ))}
+                        </> :
+                        <>
+                            {renderItem()}
+                        </>
+                    }
+                </View> : <ReceiptSkelton />}
         </ScrollView>
     )
 }
@@ -121,13 +100,27 @@ export default ViewFess
 
 const styles = StyleSheet.create({
 
-    btnView: {
-        paddingHorizontal: 10,
-        paddingVertical: 15,
+    feesReceiptContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    feesContainers: {
+        padding: 10
+    },
+    fessYears: {
+        color: Color.primary,
+        fontFamily: FontFamily.interRegular,
+        fontSize: FontSizes.md,
     },
     inactivetext: {
         textAlign: 'center',
         color: Color.textTwo,
         fontSize: FontSizes.lg
-    }
+    },
+    accordionTitleHeading: {
+        color: Color.textThree,
+        fontFamily: FontFamily.interMedium,
+        fontSize: FontSizes.xxl,
+    },
 })

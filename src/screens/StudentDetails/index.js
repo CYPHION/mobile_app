@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native'
 import React from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import GridTable from '../../components/base/GridTable'
 import TopbarWithGraph from '../../components/widget/TopbarWithGraph'
@@ -63,21 +63,23 @@ const StudentDetails = ({ navigation }) => {
 
 
     return (
-        <ScrollView>
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView>
 
-            <View style={styles.viewChildrenContainer}>
-                <TopbarWithGraph student={student} />
+                <View style={styles.viewChildrenContainer}>
+                    <TopbarWithGraph student={student} />
 
-                <View style={[styles.bgColor, GlobalStyles.p_10]}>
-                    <Text style={styles.detailText}>Student Details</Text>
+                    <View style={[styles.bgColor, GlobalStyles.p_10]}>
+                        <Text style={styles.detailText}>Student Details</Text>
+                    </View>
+
+                    <View>
+                        <GridTable data={Data} />
+                    </View>
+
                 </View>
-
-                <View>
-                    <GridTable data={Data} />
-                </View>
-
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 
