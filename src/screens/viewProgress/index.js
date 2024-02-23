@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FilterIcon from "react-native-vector-icons/FontAwesome";
 import NoHomework from "react-native-vector-icons/MaterialCommunityIcons";
 import { useSelector } from 'react-redux';
@@ -141,68 +141,72 @@ const ViewProgress = () => {
     };
 
     return (
-
-        <ScrollView
-            refreshControl={
-                <RefreshControl
-                    onRefresh={handleRefresh}
-                    refreshing={refresh}
-                />
-            }
-        >
-            {
-                filterReport?.length > 0 ? <View>
-
-                    <CustomDatePicker
-                        stDate={date.startDate}
-                        enDate={date.endDate}
-                        onToggle={() => setOpen(false)}
-                        isVisible={open}
-                        onDone={(date) => {
-                            setDate(date)
-                            handleFilter()
-                        }}
-                        Children={<DropdownComponent
-                            label={'Select Department'}
-                            disable={false}
-                            data={getDepartmentDropdown(globalData?.departments)}
-                            placeHolderText={"Select Department"}
-                            value={option}
-                            setValue={setOption}
-                        />}
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        onRefresh={handleRefresh}
+                        refreshing={refresh}
                     />
+                }
+            >
+                {
+                    filterReport?.length > 0 ?
+                        <View>
+                            <CustomDatePicker
+                                stDate={date.startDate}
+                                enDate={date.endDate}
+                                onToggle={() => setOpen(false)}
+                                isVisible={open}
+                                onDone={(date) => {
+                                    setDate(date)
+                                    handleFilter()
+                                }}
+                                Children={<DropdownComponent
+                                    label={'Select Department'}
+                                    disable={false}
+                                    data={getDepartmentDropdown(globalData?.departments)}
+                                    placeHolderText={"Select Department"}
+                                    value={option}
+                                    setValue={setOption}
+                                />}
+                            />
 
-                    <TopbarWithGraph student={router.params.student} isGraph={false} />
+                            <TopbarWithGraph student={router.params.student} isGraph={false} />
 
-                    <View style={[GlobalStyles.headerStyles]}>
-                        <Text style={GlobalStyles.headerTextStyle}>Report Details</Text>
-                        <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
-                            <View style={[styles.iconView]}>
-                                <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
+                            <View style={[GlobalStyles.headerStyles]}>
+                                <Text style={GlobalStyles.headerTextStyle}>Report Details</Text>
+                                <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
+                                    <View style={[styles.iconView]}>
+                                        <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
+                                    </View>
+                                    <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
+                                </TouchableOpacity>
                             </View>
-                            <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
-                        </TouchableOpacity>
-                    </View>
 
-                    {progress?.length > 0 ? <View>
+                            <View>
+                                {progress?.length > 0 ? <View>
 
-                        {progress?.map((elem, index) => (
-                            <GridTable onDownloadClick={onDownloadClick} header={`Test ${index + 1}`} key={index} data={nestedArray(elem)} />
-                        ))}
-                    </View> :
+                                    {progress?.map((elem, index) => (
+                                        <GridTable onDownloadClick={onDownloadClick} header={`Test ${index + 1}`} key={index} data={nestedArray(elem)} />
+                                    ))}
+                                </View> :
+                                    <>
+                                        {renderItem()}
+                                    </>
+                                }
+                            </View>
+                        </View>
+                        :
                         <>
                             {renderItem()}
                         </>
-                    }
-                </View> :
-                    <>
-                        {renderItem()}
-                    </>
 
-            }
+                }
 
 
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

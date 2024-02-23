@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import CardIcon from "react-native-vector-icons/AntDesign";
 import BookIcon from "react-native-vector-icons/FontAwesome5";
@@ -72,35 +72,38 @@ const ViewChildren = ({ navigation }) => {
 
 
     return (
-        <ScrollView>
 
-            <View style={styles.viewChildrenContainer}>
-                <TopbarWithGraph student={selectedAttributes} />
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView>
 
-                <View style={{ gap: 10, marginTop: 10, paddingHorizontal: 10 }}>
+                <View style={styles.viewChildrenContainer}>
+                    <TopbarWithGraph student={selectedAttributes} />
 
-                    {items?.map((elem, index) => (
-                        <TouchableOpacity style={[GlobalStyles.r_10, GlobalStyles.p_10,]} key={index} activeOpacity={0.7} onPress={() => navigation.navigate(elem.path, { student: selectedAttributes })}>
-                            <View style={[styles.viewChildernStaclList]}>
-                                <View style={styles.viewChildernStaclList}>
-                                    <View style={[styles.bgIconColor]}>
-                                        {elem.icon}
+                    <View style={{ gap: 10, marginTop: 10, paddingHorizontal: 10 }}>
+
+                        {items?.map((elem, index) => (
+                            <TouchableOpacity style={[GlobalStyles.r_10, GlobalStyles.p_10,]} key={index} activeOpacity={0.7} onPress={() => navigation.navigate(elem.path, { student: selectedAttributes })}>
+                                <View style={[styles.viewChildernStaclList]}>
+                                    <View style={styles.viewChildernStaclList}>
+                                        <View style={[styles.bgIconColor]}>
+                                            {elem.icon}
+                                        </View>
+                                        <View>
+                                            <Text style={styles.stackFont}>{elem.label}</Text>
+                                        </View>
                                     </View>
                                     <View>
-                                        <Text style={styles.stackFont}>{elem.label}</Text>
+                                        <StackIcon name="right" size={FontSizes.xl} color={Color.iconColor} />
                                     </View>
                                 </View>
-                                <View>
-                                    <StackIcon name="right" size={FontSizes.xl} color={Color.iconColor} />
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    ))}
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+
                 </View>
 
-            </View>
-
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
 
     )
 }

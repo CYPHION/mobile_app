@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { SafeAreaView, StyleSheet, View } from 'react-native'
 import PTLogo from '../../components/SVGS/PT-Logo'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
@@ -7,13 +7,15 @@ import { screenDimensions } from '../../utils/functions'
 
 const SpashScreen = () => {
     return (
-        <View style={styles.main}>
-            <View >
-                {/* <Image source={require('../../images/PrimeTuitionLogo.png')} /> */}
-                <PTLogo />
-                {/* <Text style={styles.textStyle}>Prime Tuition</Text> */}
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={styles.main}>
+                <View >
+                    {/* <Image source={require('../../images/PrimeTuitionLogo.png')} /> */}
+                    <PTLogo />
+                    {/* <Text style={styles.textStyle}>Prime Tuition</Text> */}
+                </View>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
