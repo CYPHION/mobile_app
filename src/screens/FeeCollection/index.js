@@ -14,6 +14,7 @@ import { Color } from '../../utils/color';
 import { FontSizes } from '../../utils/font';
 import { calculateFee, customToast, formattedDate, getParentDropdown, screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
+import FeeSkeleton from '../Fee/FeesSkeleton';
 
 
 const summaryInitial = {
@@ -62,7 +63,6 @@ const FeeCollection = () => {
     const [invoiceData, setInvoiceData] = useState({})
     const [isLoading, setIsLoading] = useState(false)
     const [sendData, setSendData] = useState({})
-    const [cashier, setCashier] = useState('')
     const globalData = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
     const { initPaymentSheet, presentPaymentSheet, confirmPaymentSheetPayment } = useStripe()
@@ -73,7 +73,6 @@ const FeeCollection = () => {
     let total = (Number(summary?.bookDues) + Number(summary?.classDues) + Number(summary?.boosterDues) + totalChargesOfAllStudents) - (Number(summary?.extraPaid + Number(formData?.feeWaived)))
     let extra = (formData?.paidAmount || 0) - total;
     let getData = ((summary.totalDues === 0 && option === "Dues") || (summary.bookDues === 0 && option === "bookDues")) ? false : true
-
     let extrasDues;
     option === "Dues"
         ? (extrasDues =
@@ -263,7 +262,7 @@ const FeeCollection = () => {
             ?.filter((data) => data.studentId === childId && !data.isComp)
             .map((filteredData) => (
                 <Text fontWeight={600} fontSize={'0.8rem '}>
-                    {`${filteredData.Subject?.name} at ${'\n'} ${filteredData.days} from ${filteredData.LessonTiming?.time} ${'\n'}(${filteredData?.isBooster ? 'Booster Scheudule' : 'Regular Schedule'}) `}
+                    {`${filteredData.Subject?.name} at ${'\n'} ${filteredData.days} from ${filteredData.LessonTiming?.time} ${'\n'}(${filteredData?.isBooster ? 'Booster Scheudule' : 'Regular Schedule'}) ${'\n'}`}
                 </Text>
             ))
     };
@@ -408,7 +407,7 @@ const FeeCollection = () => {
             studentId: studentId,
             amountPaid: Number(formData.paidAmount),
             payBy: 'card',
-            timeperiod: formData.noOfMonths !== 0 ? Number(formData.noOfMonths) : Number(formData.noOfWeeks),
+            timeperiod: Number(formData.noOfMonths) !== 0 ? Number(formData.noOfMonths) : Number(formData.noOfWeeks),
             feeWaived: Number(formData?.feeWaived),
             remarks: remarks,
             payType: 'regular',
@@ -481,6 +480,7 @@ const FeeCollection = () => {
             } else if (option === "Parent" && !sendFOrmData.noOfMonths && !sendFOrmData.noOfWeeks) {
                 return customToast("error", 'No of months and No of weeks both cannot be zero or empty')
             } else if (option === "Student" && !sendFOrmData.timeperiod) {
+                console.log('e')
                 return customToast("error", 'No of months and No of weeks both cannot be zero or empty')
             }
         } else {
@@ -700,7 +700,6 @@ const FeeCollection = () => {
     }, [summary])
 
 
-
     const renderFields = () => {
 
         return (
@@ -817,59 +816,59 @@ const FeeCollection = () => {
 
         <>
             <SafeAreaView style={{ flex: 1 }} >
+                {(!!globalData?.students && !!user?.email) ? <>
 
-                <View style={{ paddingHorizontal: 10, alignItems: 'center' }}>
-                    <DropdownComponent
-                        dropdownStyle={{ width: screenDimensions.width * 0.95 }}
-                        disable={false}
-                        data={data}
-                        placeHolderText={"Select Payment Type"}
-                        value={option}
-                        setValue={text => {
-                            setOption(text);
-                            if (text !== "Student") {
-                                handlefunctionAccToTab(user?.id, text); // Pass the updated option to the function
-                            } else {
-                                handleReset()
-                            }
-                        }}
-                    />
-                </View>
-
-                <LoadingScreen loading={isLoadingChange} />
-                <View style={{ paddingBottom: 50 }} >
-
-
-                    <ScrollView>
-
-
-                        {
-                            !isLoadingChange &&
-                            <View >
-                                {
-                                    option === "Student" && <View style={{ paddingHorizontal: 10, alignItems: 'center' }}>
-                                        <DropdownComponent
-                                            dropdownStyle={{ width: screenDimensions.width * 0.95 }}
-                                            disable={false}
-                                            data={getParentDropdown(dropdownData)}
-                                            placeHolderText={"Select Payment Type"}
-                                            value={studentId}
-                                            setValue={val => {
-                                                setStudentId(val)
-                                                handlefunctionAccToTab(val, option)
-                                            }}
-                                        />
-                                    </View>
+                    <View style={{ paddingHorizontal: 10, alignItems: 'center' }}>
+                        <DropdownComponent
+                            dropdownStyle={{ width: screenDimensions.width * 0.95 }}
+                            disable={false}
+                            data={data}
+                            placeHolderText={"Select Payment Type"}
+                            value={option}
+                            setValue={text => {
+                                setOption(text);
+                                if (text !== "Student") {
+                                    handlefunctionAccToTab(user?.id, text); // Pass the updated option to the function
                                 }
+                            }}
+                        />
+                    </View>
 
-                                {getData && renderFields()}
-                            </View>
-                        }
+                    <LoadingScreen loading={isLoadingChange} />
+                    <View style={{ paddingBottom: 50 }} >
+
+
+                        <ScrollView>
+
+
+                            {
+                                !isLoadingChange &&
+                                <View >
+                                    {
+                                        option === "Student" && <View style={{ paddingHorizontal: 10, alignItems: 'center' }}>
+                                            <DropdownComponent
+                                                dropdownStyle={{ width: screenDimensions.width * 0.95 }}
+                                                disable={false}
+                                                data={getParentDropdown(dropdownData)}
+                                                placeHolderText={"Select Payment Type"}
+                                                value={studentId}
+                                                setValue={val => {
+                                                    setStudentId(val)
+                                                    handlefunctionAccToTab(val, option)
+                                                }}
+                                            />
+                                        </View>
+                                    }
+
+                                    {getData && renderFields()}
+                                </View>
+                            }
 
 
 
-                    </ScrollView>
-                </View>
+                        </ScrollView>
+                    </View>
+                </> : <FeeSkeleton />}
             </SafeAreaView>
         </>
     )
