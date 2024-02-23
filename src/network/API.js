@@ -69,4 +69,7 @@ export class API {
         return HttpService.GET(`/fee/parent/${id}`)
     }
 
+    static async createIntent(query) {
+        return HttpService.POST(`/stripe/create?${query}`)
+    }
 }
