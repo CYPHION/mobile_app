@@ -69,7 +69,14 @@ export class API {
         return HttpService.GET(`/fee/parent/${id}`)
     }
 
-    static async createIntent(query) {
-        return HttpService.POST(`/stripe/create?${query}`)
+    static async createIntent(formData) {
+        return HttpService.POST(`/stripe/create`, formData)
     }
+    static async stripeIntent(formData) {
+        return HttpService.POST(`/fee/stripe/create-intent`, formData)
+    }
+    static async IntentSuccessURL(id) {
+        return HttpService.GET(`/fee/stripe/intent/${id}?isMobile=1`)
+    }
+
 }
