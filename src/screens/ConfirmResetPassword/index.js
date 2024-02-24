@@ -17,8 +17,6 @@ const ConfirmResetPassword = (prop) => {
     const router = useRoute()
     let email = router.params.email
 
-    console.log({ email })
-
     const [formData, setFormData] = useState({
         code: '',
         Newpassword: '',
@@ -26,6 +24,7 @@ const ConfirmResetPassword = (prop) => {
     })
 
     const [isLoading, setIsLoading] = useState(false)
+    const [isLoadingResend, setIsLoadingResend] = useState(false)
 
     const [error, setError] = useState({
         // username: '',
@@ -75,6 +74,13 @@ const ConfirmResetPassword = (prop) => {
         }
 
     };
+
+    const resendEmail = async () => {
+        setIsLoadingResend(true)
+        await API.generateOtp({ email: email, resend: true }).then(res => {
+            customToast("success", "Resend Email Successfully")
+        }).catch(err => customToast("error", err?.message)).finally(() => setIsLoadingResend(false))
+    }
 
 
 
@@ -159,7 +165,7 @@ const ConfirmResetPassword = (prop) => {
                             />
                             <CustomButton
                                 btnstyle={{ width: screenDimensions.width * 0.8 }}
-                                disabled={isLoading}
+                                disabled={isLoadingResend}
                                 title={"Resend Email"}
                                 onPress={resendEmail}
                             />
