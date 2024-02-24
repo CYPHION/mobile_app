@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import { useDispatch } from 'react-redux';
 import CustomButton from '../../components/base/CustomButton';
 import GridTable from '../../components/base/GridTable';
 import MyModal from '../../components/base/Modal';
 import CreateAppliction from '../../components/widget/CreateApplication';
 import ViewApplication from '../../components/widget/ViewApplication';
 import { API } from '../../network/API';
+import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { customToast, formattedDate, screenDimensions } from '../../utils/functions';
@@ -21,7 +23,7 @@ const LeaveApplication = () => {
     const [selectedDate, setselectedDate] = useState('')
     const [reason, setReason] = useState('')
     const [nextScreen, setNextScreen] = useState(false)
-
+    const dispatch = useDispatch()
 
     const item = (item) => [
         {
@@ -56,9 +58,10 @@ const LeaveApplication = () => {
 
     const renderScreen = () => (
         <View >
-
-            <Text style={styles.textHeading}>Leave Request Preview</Text>
-            <Text style={styles.para}>Note: You are about to submit leave request. Kindly verify all details.</Text>
+            <View style={GlobalStyles.p_10}>
+                <Text style={styles.textHeading}>Leave Request Preview</Text>
+                <Text style={styles.para}>Note: You are about to submit leave request. Kindly verify all details.</Text>
+            </View>
             <View>
                 {
                     selectData?.map((elem, index) => (
@@ -83,6 +86,7 @@ const LeaveApplication = () => {
                     setOpen(false)
                     setNextScreen(false)
                     setActive(prev => !prev)
+                    dispatch(globalData())
                 }}
                 btnstyle={{ width: screenDimensions.width * 0.2, paddingVertical: 5 }}
             />

@@ -19,7 +19,7 @@ import { formattedDate, screenDimensions } from '../../utils/functions'
 const list = (schedule) => [
     {
         name: "Department Name",
-        value: schedule?.Department?.name,
+        value: schedule?.Department?.name?.split(' ')[0],
         icon: <Idcard name="idcard" size={FontSizes.xl} color={Color.iconColor} />,
     },
     {
@@ -39,12 +39,12 @@ const list = (schedule) => [
     },
     {
         name: "Start Date",
-        value: schedule?.startDate ? formattedDate(schedule?.startDate, 'MMM-dd,yyyy') : '',
+        value: (schedule?.startDate && !isNaN(new Date(schedule?.startDate)) && schedule?.startDate !== '0000-00-00') ? formattedDate(schedule?.startDate, 'MMM-dd,yyyy') : '',
         icon: <CalendarCheckIcon name="calendar-multiple-check" size={FontSizes.xl} color={Color.iconColor} />,
     },
     {
         name: "End Date",
-        value: schedule?.endDate && !isNaN(new Date(schedule?.endDate)) ? formattedDate(schedule?.endDate, 'MMM-dd,yyyy') : '',
+        value: (schedule?.endDate && !isNaN(new Date(schedule?.endDate)) && schedule?.endDate !== '0000-00-00') ? formattedDate(schedule?.endDate, 'MMM-dd,yyyy') : '',
         icon: <CalendarTimeIcon name="calendar-times-o" size={FontSizes.xl} color={Color.iconColor} />,
     },
     {
@@ -61,7 +61,7 @@ const ViewSchedule = () => {
     const globalData = useSelector(state => state?.global?.data)
 
     const Schedules = globalData?.schedules?.filter(elem => elem.studentId === router.params?.student?.id)
-
+    console.log(Schedules[0]?.endDate)
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>

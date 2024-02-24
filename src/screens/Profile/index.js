@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import FontAwsomeIcon from 'react-native-vector-icons/FontAwesome5';
 import MailIcon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../components/base/CustomButton';
-import InputField from '../../components/base/InputField';
 import MyModal from '../../components/base/Modal';
 import { handleLogout } from '../../store/slice/user';
 import { Color } from '../../utils/color';
@@ -53,35 +52,27 @@ const Profile = ({ navigation }) => {
 
                         <View style={{ backgroundColor: Color.white, overflow: 'scroll' }}>
                             <View style={[styles.mainContainer]}>
-                                <Image resizeMode='contain' source={src} style={[styles.profileImage]} />
+                                {/* <Image resizeMode='contain' source={src} style={[styles.profileImage]} /> */}
                                 <View>
                                     <Text style={[styles.text, { color: Color.text, fontSize: FontSizes.xl }]}>{user?.firstName} {user?.lastName}</Text>
                                     <Text style={[styles.text, { color: Color.textThree, fontSize: FontSizes.md }]}>{user?.email}</Text>
                                 </View>
                             </View>
                             <View >
+
+
                                 <View style={[styles.row]}>
                                     <View style={[styles.sideView]}>
                                         <View style={styles.bgIconColor}>
                                             <FontAwsomeIcon name="user-alt" size={FontSizes.xl} color={Color.text} />
                                         </View>
                                     </View>
-                                    <View style={[styles.middelView]}>
-                                        <InputField
-                                            label={"User Name"}
-                                            labelStyle={{ paddingHorizontal: 15 }}
-                                            inputStyle={{
-                                                borderWidth: 0
-                                            }}
-                                            editable={false}
-                                            value={user.firstName}
-                                            onChangeText={(text) => onChangeHandler('text', text)}
-                                        />
-                                    </View>
-                                    <View style={[styles.sideView]}>
-                                        {/* <TouchableOpacity onPress={() => handleUpdate('username')} activeOpacity={0.7} >
-                                    <Text style={[styles.text, styles.textTwo]}>Edit</Text>
-                                </TouchableOpacity> */}
+                                    <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
+                                        <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>User Name</Text>
+
+                                        <Text style={[styles.textTwo, { color: Color.textThree, padding: 10 }]}>
+                                            {user.firstName}
+                                        </Text>
                                     </View>
                                 </View>
 
@@ -92,25 +83,15 @@ const Profile = ({ navigation }) => {
                                             <MailIcon name="mail" size={FontSizes.xl} color={Color.text} />
                                         </View>
                                     </View>
-                                    <View style={[styles.middelView]}>
-                                        <InputField
-                                            label={"Email"}
-                                            labelStyle={{ paddingHorizontal: 15 }}
-                                            inputStyle={{
-                                                borderWidth: 0
-                                            }}
-                                            editable={false}
-                                            // inputMode={"numeric"} // by default type is text
-                                            value={user?.email}
-                                        // onChangeText={(text) => onChangeHandler('text', text)}
-                                        />
-                                    </View>
-                                    <View style={[styles.sideView]}>
-                                        {/* <TouchableOpacity onPress={() => handleUpdate('email')} activeOpacity={0.7} >
-                                    <Text style={[styles.text, styles.textTwo]}>Edit</Text>
-                                </TouchableOpacity> */}
+                                    <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
+                                        <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>Email</Text>
+
+                                        <Text style={[styles.textTwo, { color: Color.textThree, padding: 10 }]}>
+                                            {user?.email}
+                                        </Text>
                                     </View>
                                 </View>
+
 
 
                                 <View style={[styles.row]}>
@@ -127,13 +108,7 @@ const Profile = ({ navigation }) => {
                                             </Text>
                                         </TouchableOpacity>
                                     </View>
-                                    <View style={[styles.sideView]}>
-                                        {/* <TouchableOpacity onPress={()=> handleUpdate('')} activeOpacity={0.7} >
-                                    <Text style={[styles.text, styles.textTwo]}>Edit</Text>
-                                </TouchableOpacity> */}
-                                    </View>
                                 </View>
-
 
                                 <View style={[styles.row]}>
                                     <View style={[styles.sideView]}>
@@ -141,26 +116,13 @@ const Profile = ({ navigation }) => {
                                             <FontAwsomeIcon name="mobile-alt" size={FontSizes.xl} color={Color.text} />
                                         </View>
                                     </View>
-                                    <View style={[styles.middelView]}>
-                                        <InputField
-                                            label={"Phone Number"}
-                                            labelStyle={{ paddingHorizontal: 15 }}
-                                            inputStyle={{
-                                                borderWidth: 0
-                                            }}
-                                            editable={false}
-                                            // inputMode={"numeric"} // by default type is text
-                                            value={user?.phoneNo}
-                                        // onChangeText={(text) => onChangeHandler('text', text)}
-                                        />
-                                    </View>
-                                    <View style={[styles.sideView]}>
-                                        {/* <TouchableOpacity onPress={() => handleUpdate('number')} activeOpacity={0.7} >
-                                    <Text style={[styles.text, styles.textTwo]}>Edit</Text>
-                                </TouchableOpacity> */}
+                                    <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
+                                        <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>Phone Number</Text>
+                                        <Text style={[styles.textTwo, { color: Color.textThree, padding: 10 }]}>
+                                            {user?.phoneNo}
+                                        </Text>
                                     </View>
                                 </View>
-
 
                             </View>
                             <View style={{ alignItems: 'center', marginTop: 10 }}>
@@ -227,7 +189,7 @@ const styles = StyleSheet.create({
         height: screenDimensions.height * 0.3,
         gap: 15,
         alignItems: 'center',
-        justifyContent: 'flex-end'
+        justifyContent: 'center'
     },
     profileImage: {
         width: screenDimensions.width * 0.25,
