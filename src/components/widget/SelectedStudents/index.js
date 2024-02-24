@@ -304,6 +304,7 @@ const SelectedStudents = (props) => {
                                             </View>
                                             <View style={GlobalStyles.p_10}>
                                                 <DropdownComponent
+                                                    dropdownStyle={{ height: 50 }}
                                                     disable={false}
                                                     data={excludedIds?.length > 0 ? excludedIds?.map(data => ({
                                                         name: `${data?.Student?.mainId} - ${data?.Student?.StudentYear?.name} - ${data?.Subject?.name} - ${data?.Department?.name}, ${data?.Schedule?.days} ${data?.Schedule?.LessonTiming?.time} ${formattedDate(data?.attendanceDate, "dd-MM-yyyy")} - ${data?.attendanceType} `,
@@ -340,6 +341,7 @@ const SelectedStudents = (props) => {
                                                     </TouchableOpacity>
                                                 </View>
                                                 <DropdownComponent
+                                                    dropdownStyle={{ height: 50 }}
                                                     disable={false}
                                                     data={(selectedDates[index] || [])?.map(elem => ({
                                                         name: `${elem?.Schedule?.Subject?.name} -  ${elem?.Schedule?.Department?.name} of ${elem?.Schedule?.LessonTiming?.time}, ${elem?.Schedule?.days}, Year-${elem.yearName}, ${elem?.availableSeats} Places Available`,

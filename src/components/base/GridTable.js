@@ -10,10 +10,11 @@ const GridTable = (props) => {
 
 
 
+
     return (
         <>
             <View style={styles.container}>
-                <View style={styles.innerView}>
+                <View style={[styles.innerView, GlobalStyles.p_10]}>
                     {!!header && <View style={[styles.header, styles.headerStyle, GlobalStyles.p_10]}>
                         <Text style={[styles.headingText, { color: Color.white }]}>{header}</Text>
                         <TouchableOpacity onPress={onDownloadClick} >
@@ -30,7 +31,7 @@ const GridTable = (props) => {
                             <View key={elem?.id ? elem?.id : index} style={[styles.rowStyle, styles.header,
                             { borderBottomWidth: index === data.length - 1 ? 0 : 1 }, { backgroundColor: ids?.includes(elem.id) ? Color.borderColorTwo : 'white' }]}>
                                 <Text style={styles.textStyle}>{elem.name}</Text>
-                                <Text style={styles.textStyle}>{elem.value}</Text>
+                                <Text style={[styles.textStyle, { maxWidth: '50%' }]}>{elem.value}</Text>
                             </View>
                         ))}
                     </View>

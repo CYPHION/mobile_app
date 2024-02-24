@@ -157,6 +157,7 @@ const FeeCollection = () => {
             } else {
                 setIsOnlyBooster(false)
                 customToast("error", 'No schedule or booster found for this student')
+                handleReset()
             }
         }
         else {
@@ -172,7 +173,6 @@ const FeeCollection = () => {
         setError({})
         setIsLoadingChange(false)
         setStudentId("")
-        setOption("")
         return
     }
 
@@ -262,7 +262,7 @@ const FeeCollection = () => {
             ?.filter((data) => data.studentId === childId && !data.isComp)
             .map((filteredData) => (
                 <Text fontWeight={600} fontSize={'0.8rem '}>
-                    {`${filteredData.Subject?.name} at ${'\n'} ${filteredData.days} from ${filteredData.LessonTiming?.time} ${'\n'}(${filteredData?.isBooster ? 'Booster Scheudule' : 'Regular Schedule'}) ${'\n'}`}
+                    {`${filteredData.Subject?.name} at ${filteredData.days}${'\n'}from ${filteredData.LessonTiming?.time}${'\n'}(${filteredData?.isBooster ? 'Booster Scheudule' : 'Regular Schedule'})${'\n'}${'\n'}`}
                 </Text>
             ))
     };
@@ -486,6 +486,7 @@ const FeeCollection = () => {
         } else {
             if (option === "Dues" || option === "bookDues") {
                 sendFOrmData.amountPaid === 0 && customToast("error", 'Dues Amount cannot be zero')
+                return
             }
         }
 
@@ -769,7 +770,7 @@ const FeeCollection = () => {
                             onChangeText={(text) => onChangeHandler('duesAmount', text)}
                         />}
 
-                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}><MyCheckBox isChecked={formData?.showOnReceipt} onToggle={() => onChangeHandler('showOnReceipt', !formData?.showOnReceipt)} />
                                 <Text style={{ color: Color.text }}>Remarks Show on Receipt?</Text>
                             </View>
@@ -823,10 +824,11 @@ const FeeCollection = () => {
                             dropdownStyle={{ width: screenDimensions.width * 0.95 }}
                             disable={false}
                             data={data}
-                            placeHolderText={"Select Payment Type"}
+                            placeHolderText={"Select Option"}
                             value={option}
                             setValue={text => {
                                 setOption(text);
+                                handleReset()
                                 if (text !== "Student") {
                                     handlefunctionAccToTab(user?.id, text); // Pass the updated option to the function
                                 }
@@ -850,7 +852,7 @@ const FeeCollection = () => {
                                                 dropdownStyle={{ width: screenDimensions.width * 0.95 }}
                                                 disable={false}
                                                 data={getParentDropdown(dropdownData)}
-                                                placeHolderText={"Select Payment Type"}
+                                                placeHolderText={"Select student"}
                                                 value={studentId}
                                                 setValue={val => {
                                                     setStudentId(val)

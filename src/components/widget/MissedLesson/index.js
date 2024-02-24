@@ -71,7 +71,7 @@ const MissedLesson = () => {
 
             if (maxDueFeeDate !== null) {
                 const maxDueFeeDateObject = new Date(maxDueFeeDate);
-                const startDateSet = new Date(maxDueFeeDateObject.getTime() - (48 * 7 * 24 * 60 * 60 * 1000));
+                const startDateSet = new Date(maxDueFeeDateObject.getTime() - (8 * 7 * 24 * 60 * 60 * 1000));
                 const today = new Date()
 
                 if (maxDueFeeDateObject.setHours(0, 0, 0, 0) >= today.setHours(0, 0, 0, 0)) {
@@ -262,7 +262,7 @@ const MissedLesson = () => {
                         <CustomButton
                             title={'Submit'}
                             variant='fill'
-                            btnstyle={styles.btnStyle}
+                            btnstyle={{ width: screenDimensions.width * 0.25 }}
                             onPress={handleSubmit}
                             disabled={selectedValues?.length === 0 ? true : false}
                             isLoading={isLoading}
@@ -293,7 +293,9 @@ const styles = StyleSheet.create({
         paddingVertical: 10
     },
     btnStyle: {
-        width: screenDimensions.width * 0.25
+        width: screenDimensions.width * 0.25,
+        borderColor: Color.primary,
+        borderWidth: 1
     },
     iconView: {
         backgroundColor: Color.primary,

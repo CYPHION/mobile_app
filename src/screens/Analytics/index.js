@@ -93,16 +93,7 @@ const Analytics = ({ navigation }) => {
                 {(!!user?.email && !!global?.students && !!global?.attendances && !!global?.fees && !!global?.appointments && !!global?.depositFee) ? <>
                     <View style={styles.viewChildrenContainer}>
 
-                        <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 }}>
-                            <View>
-                                <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.NameText, styles.textFontFamily, { width: screenDimensions.width * 0.7 }]}>Hi, {user.firstName} {user.lastName}</Text>
-                                {/* <Text style={[styles.CompText, styles.textFontFamily]}>Year 2 - {user?.feeChargedBy}</Text> */}
-                            </View>
-                            <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })}>
-                                <View style={styles.badge}></View>
-                                <Icon name="bell" color={Color.textTwo} size={FontSizes.xxxl} />
-                            </TouchableOpacity>
-                        </View>
+
                         <View style={[GlobalStyles.headerStyles]}>
                             <Text style={GlobalStyles.headerTextStyle}>Analytics</Text>
                             <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
@@ -119,63 +110,65 @@ const Analytics = ({ navigation }) => {
                                 <View style={{ backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', width: '25%' }}>
                                     <Icon name='clock' color={Color.white} size={screenDimensions.width * 0.12} />
                                 </View>
-                                <View style={[GlobalStyles.p_10, { width: '75%' }]} >
+                                <View style={[{ width: '75%' }]} >
                                     <Text style={styles.attendeceFont}>Attendance</Text>
-                                    <Text style={[styles.totalFont]}>Total : {totalAttendance.length || 0}</Text>
-                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
-                                        <Text style={[styles.detailInnerText]}>Present: {totalAttendance.filter((item) => item?.attendanceType === 'present').length || 0}</Text>
-                                        <Text style={[styles.detailInnerText]}>Absent: {totalAttendance.filter((item) => item?.attendanceType === 'absent').length || 0}</Text>
-                                        <Text style={[styles.detailInnerText]}>Leave: {totalAttendance.filter((item) => item?.attendanceType === 'leave').length || 0}</Text>
+                                    <View style={{ padding: 5, paddingHorizontal: 10 }}>
+                                        <Text style={[styles.totalFont]}>Total : {totalAttendance.length || 0}</Text>
+                                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
+                                            <Text style={[styles.detailInnerText]}>Present: {totalAttendance.filter((item) => item?.attendanceType === 'present').length || 0}</Text>
+                                            <Text style={[styles.detailInnerText]}>Absent: {totalAttendance.filter((item) => item?.attendanceType === 'absent').length || 0}</Text>
+                                            <Text style={[styles.detailInnerText]}>Leave: {totalAttendance.filter((item) => item?.attendanceType === 'leave').length || 0}</Text>
+                                        </View>
                                     </View>
                                 </View>
                             </View>
-
 
 
                             <View style={styles.analyticBox}>
                                 <View style={{ backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', width: '25%' }}>
                                     <Pound name='pound-sign' color={Color.white} size={screenDimensions.width * 0.12} />
                                 </View>
-                                <View style={[GlobalStyles.p_10, { width: '75%' }]} >
+                                <View style={[{ width: '75%' }]} >
                                     <Text style={styles.attendeceFont}>Total Fees</Text>
-                                    <Text style={[styles.totalFont]}>Total : £{totalFee}</Text>
-                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
-                                        {/* <Text style={[styles.detailInnerText]}>Weekly: £70</Text>
-                                <Text style={[styles.detailInnerText]}>Monthly: £100</Text> */}
-                                        <Text style={[styles.detailInnerText]}>Booster: £{boosterFees}</Text>
-                                        <Text style={[styles.detailInnerText]}>Deposit: £{totalDepositFee}</Text>
+                                    <View style={{ padding: 5, paddingHorizontal: 10 }}>
+                                        <Text style={[styles.totalFont]}>Total : £{totalFee}</Text>
+                                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
+                                            <Text style={[styles.detailInnerText]}>Booster: £{boosterFees}</Text>
+                                            <Text style={[styles.detailInnerText]}>Deposit: £{totalDepositFee}</Text>
+                                        </View>
                                     </View>
                                 </View>
                             </View>
-
-
 
                             <View style={styles.analyticBox}>
                                 <View style={{ backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', width: '25%' }}>
                                     <Pound name='pound-sign' color={Color.white} size={screenDimensions.width * 0.12} />
                                 </View>
-                                <View style={[GlobalStyles.p_10, { width: '75%' }]} >
+                                <View style={[{ width: '75%' }]} >
                                     <Text style={styles.attendeceFont}>Outstanding Fees</Text>
-                                    <Text style={[styles.totalFont]}>Total : £{outStangingFee}</Text>
-                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
+                                    <View style={{ padding: 5, paddingHorizontal: 10 }}>
+                                        <Text style={[styles.totalFont]}>Total : £{outStangingFee}</Text>
+                                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
+
+                                        </View>
                                     </View>
                                 </View>
                             </View>
-
-
 
                             <View style={styles.analyticBox}>
                                 <View style={{ backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', width: '25%' }}>
                                     <Icon name='clock' color={Color.white} size={screenDimensions.width * 0.12} />
                                 </View>
-                                <View style={[GlobalStyles.p_10, { width: '75%' }]} >
-                                    <Text style={styles.attendeceFont}>Appointments</Text>
-                                    <Text style={[styles.totalFont]}>Total : {appointment.length || 0}</Text>
-                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
-                                        <Text style={[styles.detailInnerText]}>Complete: {appointment.filter((item) => item?.status === 'Completed').length || 0}</Text>
-                                        <Text style={[styles.detailInnerText]}>Pending:  {appointment.filter((item) => item?.status === 'Pending').length || 0}</Text>
-                                        <Text style={[styles.detailInnerText]}>Cancelled:  {appointment.filter((item) => item?.status === 'Cancelled').length || 0}</Text>
-                                        <Text style={[styles.detailInnerText]}>Missed:  {appointment.filter((item) => item?.status === 'Missed').length || 0}</Text>
+                                <View style={[{ width: '75%' }]} >
+                                    <Text style={[styles.attendeceFont]}>Appointments</Text>
+                                    <View style={{ padding: 5, paddingHorizontal: 10 }}>
+                                        <Text style={[styles.totalFont]}>Total : {appointment.length || 0}</Text>
+                                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
+                                            <Text style={[styles.detailInnerText]}>Complete: {appointment.filter((item) => item?.status === 'Completed').length || 0}</Text>
+                                            <Text style={[styles.detailInnerText]}>Pending:  {appointment.filter((item) => item?.status === 'Pending').length || 0}</Text>
+                                            <Text style={[styles.detailInnerText]}>Cancelled:  {appointment.filter((item) => item?.status === 'Cancelled').length || 0}</Text>
+                                            <Text style={[styles.detailInnerText]}>Missed:  {appointment.filter((item) => item?.status === 'Missed').length || 0}</Text>
+                                        </View>
                                     </View>
                                 </View>
                             </View>
@@ -235,7 +228,10 @@ const styles = StyleSheet.create({
     attendeceFont: {
         fontSize: FontSizes.md,
         color: Color.textThree,
-        fontFamily: FontFamily.medium
+        fontFamily: FontFamily.medium,
+        backgroundColor: Color.grayBackground,
+        paddingHorizontal: 10,
+        paddingVertical: 5
     },
     totalFont: {
         fontSize: FontSizes.lg,
