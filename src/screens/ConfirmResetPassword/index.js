@@ -1,16 +1,23 @@
+import { useRoute } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import CustomAppBar from '../../components/base/CustomAppBar'
 import CustomButton from '../../components/base/CustomButton'
 import FlaotingTextInput from '../../components/base/FlaotingTextInput'
+import { API } from '../../network/API'
 import { handleLogin } from '../../store/slice/user'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { removeError, screenDimensions } from '../../utils/functions'
+import { customToast, removeError, screenDimensions } from '../../utils/functions'
 
 
 const ConfirmResetPassword = (prop) => {
+
+    const router = useRoute()
+    let email = router.params.email
+
+    console.log({ email })
 
     const [formData, setFormData] = useState({
         code: '',
@@ -41,15 +48,35 @@ const ConfirmResetPassword = (prop) => {
 
     };
 
-    const handleSubmit = () => {
-        // setIsLoading(true)
-        console.log("Input Value:", formData.code);
-        console.log("Input Value:", formData.Newpassword);
+    const handleSubmit = async () => {
+        setIsLoading(true)
 
-        console.log("Input Value:", formData.Confirmpassword);
+        if (!formData.code || !formData.Confirmpassword || !formData.Newpassword) {
+            !formData.code && customToast("error", "Otp COde is required")
+            !formData.Confirmpassword && customToast("error", "confirm Password is required")
+            !formData.Newpassword && customToast("error", "Password is required")
+            setIsLoading(false)
 
+        } else {
+            if (formData.Confirmpassword.trim() === formData.Newpassword.trim()) {
+
+                let data = {
+                    otp: formData.code, email, updateObj: {
+                        password: formData.Newpassword
+                    }
+                }
+                await API.checkOtp({
+                    data: data
+                }).then(res => customToast("success", res?.message)).catch(err => customToast("error", err?.message)).finally(() => setIsLoading(false))
+            } else {
+                customToast("error", "Password & Confirm Password is not match")
+                setIsLoading(false)
+            }
+        }
 
     };
+
+
 
 
     return (
@@ -92,16 +119,6 @@ const ConfirmResetPassword = (prop) => {
                             { gap: 10, height: screenDimensions.height * 0.65, width: screenDimensions.width * 0.9 },
                         ]}
                     >
-                        <Text
-                            style={{
-                                marginTop: 20,
-                                color: Color.white,
-                                fontFamily: FontFamily.interRegular,
-                                fontSize: FontSizes.xl,
-                            }}
-                        >
-                            Reset Password
-                        </Text>
                         <View
                             style={{
                                 gap: 10,
@@ -136,9 +153,15 @@ const ConfirmResetPassword = (prop) => {
                             <CustomButton
                                 btnstyle={{ width: screenDimensions.width * 0.8 }}
                                 variant={"fill"}
-                                // disabled={isLoading}
+                                disabled={isLoading}
                                 title={"Reset Password"}
-                                onPress={() => handleSubmit()}
+                                onPress={handleSubmit}
+                            />
+                            <CustomButton
+                                btnstyle={{ width: screenDimensions.width * 0.8 }}
+                                disabled={isLoading}
+                                title={"Resend Email"}
+                                onPress={resendEmail}
                             />
                         </View>
                     </View>

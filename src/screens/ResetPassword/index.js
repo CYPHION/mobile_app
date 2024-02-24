@@ -5,17 +5,18 @@ import { useDispatch } from 'react-redux'
 import CustomAppBar from '../../components/base/CustomAppBar'
 import CustomButton from '../../components/base/CustomButton'
 import FlaotingTextInput from '../../components/base/FlaotingTextInput'
+import { API } from '../../network/API'
 import { handleLogin } from '../../store/slice/user'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { removeError, screenDimensions } from '../../utils/functions'
+import { customToast, removeError, screenDimensions } from '../../utils/functions'
 
 
 const ResetPassword = (prop) => {
 
+    const navigation = useNavigation()
     const [formData, setFormData] = useState({
         email: '',
-        password: ''
     })
 
     const [isLoading, setIsLoading] = useState(false)
@@ -41,13 +42,22 @@ const ResetPassword = (prop) => {
 
     };
 
-    const handleSubmit = () => {
-        // setIsLoading(true)
+    const handleSubmit = async () => {
+        setIsLoading(true)
+        if (!formData?.email) {
+            !formData.email && customToast("error", "Email is required")
+            setIsLoading(false)
+        }
+        else {
+
+            await API.generateOtp({ email: formData.email }).then(res => {
+                navigation.navigate('confirmPassword', { email: formData.email })
+            }).catch(err => customToast("error", err?.message)).finally(() => setIsLoading(false))
+        }
 
     };
 
 
-    const navigation = useNavigation()
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -116,9 +126,10 @@ const ResetPassword = (prop) => {
                             <CustomButton
                                 btnstyle={{ width: screenDimensions.width * 0.8 }}
                                 variant={"fill"}
-                                // disabled={isLoading}
+                                disabled={isLoading}
+                                isLoading={isLoading}
                                 title={"Continue"}
-                                onPress={() => navigation.navigate('confirmPassword')}
+                                onPress={handleSubmit}
 
                             />
                         </View>

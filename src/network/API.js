@@ -78,5 +78,11 @@ export class API {
     static async IntentSuccessURL(id) {
         return HttpService.GET(`/fee/stripe/intent/${id}?isMobile=1`)
     }
+    static async generateOtp(formData) {
+        return HttpService.POST(`/otp/generate-otp`, formData)
+    }
+    static async checkOtp(formData) {
+        return HttpService.UPD(`/otp/check-otp`, formData)
+    }
 
 }
