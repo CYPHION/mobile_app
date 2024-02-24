@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import NoHomework from "react-native-vector-icons/MaterialCommunityIcons"
 import { useSelector } from 'react-redux'
 import { API } from '../../../network/API'
@@ -68,30 +68,36 @@ const ViewCompensation = () => {
         getALLCompensation()
     }, [globalData?.students])
 
-
+    const inset = useSafeAreaInsets()
     return (
-        <View style={{ height: screenDimensions.height }}>
-            {rows?.length === 0 ? <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
-                <View>
-                    <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
-                    <Text style={styles.inactivetext}>No Progress Report found</Text>
-                </View>
-            </View> : <ScrollView>
-                <View style={[GlobalStyles.headerStyles]}>
-                    <Text style={GlobalStyles.headerTextStyle}>View Compensations</Text>
-                </View>
-                <View style={[GlobalStyles.p_10, { minHeight: rows?.length > 1 ? screenDimensions.height * 1.8 : null, }]}>
-                    {rows?.map((elem, index) => (
-                        <GridTable
-                            data={items(elem)}
-                            key={index}
-                        />
-                    ))}
-                </View>
-            </ScrollView >}
 
+        <View>
+            {rows?.length === 0 ?
+                <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
+                    <View>
+                        <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                        <Text style={styles.inactivetext}>No Progress Report found</Text>
+                    </View>
+                </View>
+                :
+                <View style={{ height: screenDimensions.height * 0.77 }} >
+                    <ScrollView>
+
+                        <View style={[GlobalStyles.headerStyles]}>
+                            <Text style={GlobalStyles.headerTextStyle}>View Compensations</Text>
+                        </View>
+                        <View style={[GlobalStyles.p_10]}>
+                            {rows?.map((elem, index) => (
+                                <GridTable
+                                    data={items(elem)}
+                                    key={index}
+                                />
+                            ))}
+                        </View>
+                    </ScrollView>
+                </View >
+            }
         </View >
-
     )
 }
 

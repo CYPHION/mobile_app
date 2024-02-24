@@ -14,7 +14,7 @@ const GridTable = (props) => {
     return (
         <>
             <View style={styles.container}>
-                <View style={styles.innerView}>
+                <View style={[styles.innerView, GlobalStyles.p_10]}>
                     {!!header && <View style={[styles.header, styles.headerStyle, GlobalStyles.p_10]}>
                         <Text style={[styles.headingText, { color: Color.white }]}>{header}</Text>
                         <TouchableOpacity onPress={onDownloadClick} >
