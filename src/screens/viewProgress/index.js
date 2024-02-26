@@ -94,8 +94,8 @@ const ViewProgress = () => {
         }
     }
 
-    const handleFilter = () => {
-        setProgress(filterByDate(filterReport, date.startDate, date.endDate))
+    const handleFilter = (startDate, endDate) => {
+        setProgress(filterByDate(filterReport, startDate, endDate))
         setOption('')
     }
 
@@ -162,7 +162,7 @@ const ViewProgress = () => {
                                 isVisible={open}
                                 onDone={(date) => {
                                     setDate(date)
-                                    handleFilter()
+                                    handleFilter(date?.startDate, date?.endDate)
                                 }}
                                 Children={<DropdownComponent
                                     label={'Select Department'}

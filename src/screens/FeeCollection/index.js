@@ -540,7 +540,7 @@ const FeeCollection = () => {
                     duesAmount: formData.duesAmount
                 }
                 setInvoiceData(form)
-                handlePayNwow({ ...sendFOrmData, option }, form)
+                await handlePayNwow({ ...sendFOrmData, option }, form)
             }
             else {
                 let extras
@@ -572,7 +572,7 @@ const FeeCollection = () => {
                     duesAmount: formData.duesAmount
                 }
                 setInvoiceData(form)
-                handlePayNwow({ ...sendFOrmData, option }, form)
+                await handlePayNwow({ ...sendFOrmData, option }, form)
             }
 
         }
@@ -606,7 +606,10 @@ const FeeCollection = () => {
             setIsLoading(false)
             return
         } else {
-            await API.IntentSuccessURL(res?.data?.id).then(res => customToast("success", res.message)).catch(err => customToast("error", err?.message))
+            await API.IntentSuccessURL(res?.data?.id).then(res => {
+                customToast("success", res.message)
+                setIsLoading(false)
+            }).catch(err => customToast("error", err?.message))
             handleReset()
         }
 
@@ -805,6 +808,8 @@ const FeeCollection = () => {
                             title={'Pay Now'}
                             variant='fill'
                             onPress={handleSubmit}
+                            isLoading={isLoading}
+                            disabled={isLoading}
                         />
                     </View>
                 </View >

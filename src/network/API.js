@@ -78,13 +78,6 @@ export class API {
     static async IntentSuccessURL(id) {
         return HttpService.GET(`/fee/stripe/intent/${id}?isMobile=1`)
     }
-    static async generateOtp(formData) {
-        return HttpService.POST(`/otp/generate-otp`, formData)
-    }
-    static async checkOtp(formData) {
-        return HttpService.UPD(`/otp/check-otp`, formData)
-    }
-
     static async updateUser(obj) {
         return await HttpService.UPD(`/user/update`, obj)
     }
@@ -99,6 +92,13 @@ export class API {
         let queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
 
         return HttpService.GET(`/notification-alert/all${queryString}`);
+    }
+
+    static async generateOtp(formData) {
+        return HttpService.POST(`/otp/generate-otp`, formData)
+    }
+    static async checkOtp(formData) {
+        return HttpService.UPD(`/otp/check-otp`, formData)
     }
 
 }
