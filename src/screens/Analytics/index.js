@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import FilterIcon from 'react-native-vector-icons/FontAwesome'
 import Pound from "react-native-vector-icons/FontAwesome5"
@@ -31,6 +31,13 @@ const Analytics = ({ navigation }) => {
         endDate: endDate,
     });
 
+    const [appointment, setAppointment] = useState([])
+    const [totalAttendance, setTotalAttendance] = useState([])
+    const [boosterFees, setBoosterFees] = useState([])
+    const [totalFee, setTotalFee] = useState([])
+    const [outStangingFee, setOutStangingFee] = useState([])
+    const [totalDepositFee, setTotalDepositFee] = useState([])
+
     const user = useSelector(state => state?.user?.data);
     const global = useSelector(state => state?.global?.data);
 
@@ -41,24 +48,28 @@ const Analytics = ({ navigation }) => {
         });
     };
 
-    const appointment = filterByDate(global?.appointments, date.startDate, date.endDate);
-    const totalAttendance = filterByDate(global?.attendances, date.startDate, date.endDate);
-    const filteredFees = filterByDate(global?.fees, date.startDate, date.endDate);
 
-    const boosterFees = filteredFees?.reduce((acc, elem) => {
-        if (elem?.isBooster) {
-            return acc + elem?.boosterPaid;
-        }
-        return acc;
-    }, 0);
+    const handelFilter = (startDate, endDate) => {
+        setAppointment(filterByDate(global?.appointments, startDate, endDate));
+        setTotalAttendance(filterByDate(global?.attendances, startDate, endDate));
+        const filteredFees = filterByDate(global?.fees, startDate, endDate);
 
-    const totalFee = filteredFees?.reduce((acc, elem) => acc + elem?.amountPaid, 0);
+        setBoosterFees(filteredFees?.reduce((acc, elem) => {
+            if (elem?.isBooster) {
+                return acc + elem?.boosterPaid;
+            }
+            return acc;
+        }, 0));
 
-    const filteredStudents = filterByDate(global?.students, date.startDate, date.endDate);
-    const filteredDepositFees = filterByDate(global?.depositFee, date.startDate, date.endDate);
+        setTotalFee(filteredFees?.reduce((acc, elem) => acc + elem?.amountPaid, 0));
 
-    const outStangingFee = filteredStudents?.reduce((acc, elem) => acc + elem.totalDues, 0);
-    const totalDepositFee = filteredDepositFees?.reduce((acc, elem) => acc + elem.amountPaid, 0);
+        const filteredStudents = filterByDate(global?.students, startDate, endDate);
+        const filteredDepositFees = filterByDate(global?.depositFee, startDate, endDate);
+
+        setOutStangingFee(filteredStudents?.reduce((acc, elem) => acc + elem.totalDues, 0));
+        setTotalDepositFee(filteredDepositFees?.reduce((acc, elem) => acc + elem.amountPaid, 0));
+    }
+
 
     const handleRefresh = () => {
         setRefresh(true);
@@ -79,6 +90,11 @@ const Analytics = ({ navigation }) => {
         // Add additional logic or fetch data as needed
         // ...
     };
+
+    useEffect(() => {
+        handelFilter(date.startDate, date.endDate)
+    }, [])
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -179,7 +195,10 @@ const Analytics = ({ navigation }) => {
                     <CustomDatePicker
                         isVisible={open}
                         onToggle={() => setOpen(false)}
-                        onDone={(date) => setDate(date)}
+                        onDone={(date) => {
+                            setDate(date)
+                            handelFilter(date.startDate, date.endDate)
+                        }}
                     />
                 </> :
                     <AnalyticsSkeleton />}

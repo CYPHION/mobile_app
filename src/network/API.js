@@ -94,4 +94,11 @@ export class API {
         return HttpService.GET(`/notification-alert/all${queryString}`);
     }
 
+    static async generateOtp(formData) {
+        return HttpService.POST(`/otp/generate-otp`, formData)
+    }
+    static async checkOtp(formData) {
+        return HttpService.UPD(`/otp/check-otp`, formData)
+    }
+
 }

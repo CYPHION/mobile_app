@@ -71,7 +71,7 @@ export const CheckForHttpErrors = error => {
 
 
     if (!response) {
-        customToast('error', 'No response from server')
+        customToast("error", 'No response from server')
         return 'Server not responding'
     }
 
@@ -79,15 +79,15 @@ export const CheckForHttpErrors = error => {
         case 401:
             response.data.message
                 ?
-                customToast('error', response.data.message)
+                customToast("error", response.data.message)
                 :
-                customToast('error', 'Your session is expired, please login again')
+                customToast("error", 'Your session is expired, please login again')
             store.dispatch(logoutUser())
             break
         case 440:
             response.data.message
-                ? customToast('error', response.data.message)
-                : customToast('error', 'Your session is expired, please login again')
+                ? customToast("error", response.data.message)
+                : customToast("error", 'Your session is expired, please login again')
             store.dispatch(logoutUser())
             break
         default:
