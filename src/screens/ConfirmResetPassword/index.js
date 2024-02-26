@@ -24,6 +24,7 @@ const ConfirmResetPassword = (prop) => {
     })
 
     const [isLoading, setIsLoading] = useState(false)
+    const [isResend, setIsResend] = useState(false)
     const [isLoadingResend, setIsLoadingResend] = useState(false)
 
     const [error, setError] = useState({
@@ -66,7 +67,11 @@ const ConfirmResetPassword = (prop) => {
                 }
                 await API.checkOtp({
                     data: data
-                }).then(res => customToast("success", res?.message)).catch(err => customToast("error", err?.message)).finally(() => setIsLoading(false))
+                }).then(res => customToast("success", res?.message)).catch(err => {
+                    customToast("error", err?.message)
+                    setIsResend(true)
+
+                }).finally(() => setIsLoading(false))
             } else {
                 customToast("error", "Password & Confirm Password is not match")
                 setIsLoading(false)
@@ -79,6 +84,7 @@ const ConfirmResetPassword = (prop) => {
         setIsLoadingResend(true)
         await API.generateOtp({ email: email, resend: true }).then(res => {
             customToast("success", "Resend Email Successfully")
+            setIsResend(false)
         }).catch(err => customToast("error", err?.message)).finally(() => setIsLoadingResend(false))
     }
 
@@ -163,12 +169,12 @@ const ConfirmResetPassword = (prop) => {
                                 title={"Reset Password"}
                                 onPress={handleSubmit}
                             />
-                            <CustomButton
+                            {isResend && <CustomButton
                                 btnstyle={{ width: screenDimensions.width * 0.8 }}
                                 disabled={isLoadingResend}
                                 title={"Resend Email"}
                                 onPress={resendEmail}
-                            />
+                            />}
                         </View>
                     </View>
 
