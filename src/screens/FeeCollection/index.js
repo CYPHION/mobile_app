@@ -262,7 +262,7 @@ const FeeCollection = () => {
             ?.filter((data) => data.studentId === childId && !data.isComp)
             .map((filteredData) => (
                 <Text fontWeight={600} fontSize={'0.8rem '}>
-                    {`${filteredData.Subject?.name} at ${'\n'} ${filteredData.days} from ${filteredData.LessonTiming?.time} ${'\n'}(${filteredData?.isBooster ? 'Booster Scheudule' : 'Regular Schedule'}) ${'\n'}`}
+                    {`${filteredData.Subject?.name} at ${filteredData.days}${'\n'}from ${filteredData.LessonTiming?.time}${'\n'}(${filteredData?.isBooster ? 'Booster Scheudule' : 'Regular Schedule'})${'\n'}${'\n'}`}
                 </Text>
             ))
     };
@@ -824,7 +824,7 @@ const FeeCollection = () => {
                             dropdownStyle={{ width: screenDimensions.width * 0.95 }}
                             disable={false}
                             data={data}
-                            placeHolderText={"Select Payment Type"}
+                            placeHolderText={"Select Option"}
                             value={option}
                             setValue={text => {
                                 setOption(text);
@@ -852,7 +852,7 @@ const FeeCollection = () => {
                                                 dropdownStyle={{ width: screenDimensions.width * 0.95 }}
                                                 disable={false}
                                                 data={getParentDropdown(dropdownData)}
-                                                placeHolderText={"Select Payment Type"}
+                                                placeHolderText={"Select student"}
                                                 value={studentId}
                                                 setValue={val => {
                                                     setStudentId(val)

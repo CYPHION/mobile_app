@@ -17,7 +17,7 @@ const Compensation = () => {
             <View>
                 <CustomAppBar title='Compensation' />
                 <View style={[styles.main]}>
-                    <View>
+                    <View >
                         <View style={[styles.tabBtn]}>
                             <CustomButton
                                 title='Missed Lesson'
@@ -36,7 +36,7 @@ const Compensation = () => {
                                 }}
                             />
                         </View>
-                        <View style={styles.body}>
+                        <View >
                             {active ? <MissedLesson /> : <ViewCompensation />}
                         </View>
                     </View>

@@ -99,9 +99,7 @@ const ViewProgress = () => {
         setOption('')
     }
 
-    useEffect(() => {
-        setProgress(filterByDate(filterReport, date.startDate, date.endDate))
-    }, [])
+
 
 
 
@@ -139,6 +137,10 @@ const ViewProgress = () => {
         // Add additional logic or fetch data as needed
         // ...
     };
+
+    useEffect(() => {
+        setProgress(filterByDate(filterReport, date.startDate, date.endDate))
+    }, [])
 
     return (
         <SafeAreaView style={{ flex: 1 }}>

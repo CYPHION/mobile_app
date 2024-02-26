@@ -85,4 +85,20 @@ export class API {
         return HttpService.UPD(`/otp/check-otp`, formData)
     }
 
+    static async updateUser(obj) {
+        return await HttpService.UPD(`/user/update`, obj)
+    }
+
+    static async getAllNotifications(subType, type, category) {
+        let queryParams = [];
+
+        if (subType) queryParams.push(`subType=${encodeURIComponent(subType)}`);
+        if (type) queryParams.push(`type=${encodeURIComponent(type)}`);
+        if (category) queryParams.push(`category=${encodeURIComponent(category)}`);
+
+        let queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
+
+        return HttpService.GET(`/notification-alert/all${queryString}`);
+    }
+
 }

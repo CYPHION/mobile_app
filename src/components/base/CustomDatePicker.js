@@ -9,14 +9,33 @@ import CustomButton from "./CustomButton";
 
 const CustomDatePicker = (props) => {
     const { isVisible, onToggle, Children, onDone } = props;
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+    const currentDate = new Date();
+    const startOfMonth = new Date(currentDate);
+    startOfMonth.setMonth(currentDate.getMonth() - 1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    const endDate = new Date(currentDate);
+    endDate.setHours(23, 59, 59, 999);
+
+    const [date, setDate] = useState({
+        startDate: startOfMonth,
+        endDate: endDate,
+    });
+
+    // const [startDate, setStartDate] = useState(new Date());
+    // const [endDate, setEndDate] = useState(new Date());
     const [selectedDateType, setSelectedDateType] = useState("startDate");
 
     const handleDateChange = (selectedDate) => {
         selectedDateType === "startDate"
-            ? setStartDate(selectedDate)
-            : setEndDate(selectedDate);
+            ? setDate(prev => ({
+                ...prev,
+                startDate: selectedDate
+            }))
+            : setDate(prev => ({
+                ...prev,
+                endDate: selectedDate
+            }));
     };
 
     const renderDateSelector = (type) => (
@@ -49,7 +68,7 @@ const CustomDatePicker = (props) => {
                 ]}
             >
                 {formattedDate(
-                    type === "startDate" ? startDate : endDate,
+                    type === "startDate" ? date.startDate : date.endDate,
                     "MMM dd yyyy"
                 )}
             </Text>
@@ -83,7 +102,7 @@ const CustomDatePicker = (props) => {
                                     style={{ height: 120, marginVertical: 10 }}
                                     textColor={Color.textThree}
                                     mode="date"
-                                    date={selectedDateType === "endDate" ? endDate : startDate}
+                                    date={selectedDateType === "endDate" ? date.endDate : date.startDate}
                                     onDateChange={(date) => handleDateChange(date)}
                                 />
                             </View>
@@ -109,8 +128,8 @@ const CustomDatePicker = (props) => {
                                     btnstyle={{ paddingVertical: 2 }}
                                     onPress={() => {
                                         onDone({
-                                            startDate: startDate,
-                                            endDate: endDate,
+                                            startDate: date.startDate,
+                                            endDate: date.endDate,
                                         })
                                         onToggle();
                                     }}

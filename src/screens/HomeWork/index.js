@@ -16,10 +16,9 @@ const HomeWork = () => {
     const router = useRoute()
     const globalData = useSelector(state => state?.global?.data)
 
-
-    const filterHomework = globalData?.homeworks?.filter(item => {
-        const studentIds = JSON.parse(item.studentId);
-        return studentIds.some(id => id === router.params?.student?.id);
+    const filterHomework = globalData?.homeworks?.filter((item, index) => {
+        const studentIds = item.studentId.length > 0 ? item.studentId : [];
+        return studentIds.length > 0 ? studentIds?.some(id => id === router.params?.student?.id) : false;
     });
 
 

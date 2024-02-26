@@ -1,7 +1,7 @@
 import { DrawerContentScrollView, createDrawerNavigator } from '@react-navigation/drawer';
 import { CommonActions, DrawerActions, useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import { useDispatch, useSelector } from 'react-redux';
@@ -70,7 +70,7 @@ function CustomDrawerContent(props) {
                 <TouchableOpacity activeOpacity={0.8}>
                     <View style={styles.userInfoSection}>
                         <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
-                            <Image resizeMode='contain' source={src} style={styles.image} />
+                            {/* <Image resizeMode='contain' source={src} style={styles.image} /> */}
                             <View style={{ flexDirection: 'column' }}>
                                 <Text style={styles.title}>{user?.firstName} {user?.lastName}</Text>
                             </View>

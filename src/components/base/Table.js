@@ -45,7 +45,7 @@ const Table = (prop) => {
                                     }
                                     <Text style={styles.textStyle}>{elem.name}</Text>
                                 </View>
-                                <Text style={[styles.textStyle, { color: Color.textThree }]}>{elem.value}</Text>
+                                <Text numberOfLines={8} style={[styles.textStyle, { maxWidth: '50%', color: Color.textThree }]}>{elem.value}</Text>
                             </View>
                         ))}
                     </View>
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.interRegular,
         fontSize: FontSizes.md,
         color: Color.text,
-        textAlign: 'center'
+        textAlign: 'right',
     },
     headingText: {
         fontSize: FontSizes.xl,

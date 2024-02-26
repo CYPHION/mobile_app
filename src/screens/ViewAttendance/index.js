@@ -1,5 +1,5 @@
 import { useRoute } from '@react-navigation/native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import CardIcon from "react-native-vector-icons/AntDesign"
 import FilterIcon from 'react-native-vector-icons/FontAwesome'
@@ -25,6 +25,7 @@ import { GlobalStyles } from '../../utils/globalStyles'
 const ViewAttendance = () => {
     const [refresh, setRefresh] = useState(false);
     const [open, setOpen] = useState(false)
+    const [data, setData] = useState([])
     const router = useRoute()
     const globalData = useSelector(state => state?.global?.data)
     const filterAttendance = globalData?.attendances?.filter(elem => elem.studentId === router?.params?.student?.id)
@@ -46,12 +47,13 @@ const ViewAttendance = () => {
 
     const filterByDate = (data, startDate, endDate) => {
         return data?.filter(item => {
-            const itemDate = new Date(item?.createdAt);
+            const itemDate = new Date(item?.attendanceDate);
+            console.log(itemDate)
             return itemDate >= startDate && itemDate <= endDate;
         });
     };
 
-    const attendanceData = filterByDate(filterAttendance, date.startDate, date.endDate)
+
 
     const list = (attendance) => [
         { name: ' Department Name', value: attendance?.Department?.name, icon: <CardIcon color={Color.primary} name='idcard' size={FontSizes.lg} /> },
@@ -93,6 +95,12 @@ const ViewAttendance = () => {
             </View>
         </View>
     )
+
+    useEffect(() => {
+        setData(filterByDate(filterAttendance, date.startDate, date.endDate))
+    }, [date])
+
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView
@@ -118,8 +126,8 @@ const ViewAttendance = () => {
                                 </TouchableOpacity>
                             </View>
 
-                            {attendanceData?.length > 0 ? <View>
-                                {attendanceData?.map((elem, index) => (
+                            {data?.length > 0 ? <View>
+                                {data?.map((elem, index) => (
                                     <Table key={index} status={elem.status} list={list(elem)} />
                                 ))}
                             </View> :

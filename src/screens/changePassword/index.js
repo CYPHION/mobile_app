@@ -1,16 +1,20 @@
 import React, { useState } from 'react'
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, StyleSheet, View } from 'react-native'
+import { useSelector } from 'react-redux'
 import CustomButton from '../../components/base/CustomButton'
 import InputField from '../../components/base/InputField'
-import MyModal from '../../components/base/Modal'
-import Otp from '../../components/base/Otp'
+import { API } from '../../network/API'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
+import { customToast } from '../../utils/functions'
 
 const ChangePasswordScreen = () => {
-    const [open, setOpen] = useState(false)
-
-
+    const [isLoading, setIsloading] = useState(false)
+    const [error, seterror] = useState({
+        newPass: '',
+        confPass: ''
+    })
+    const user = useSelector(state => state?.user?.data)
 
     const [formData, setFormData] = useState({
         newPass: '',
@@ -25,6 +29,35 @@ const ChangePasswordScreen = () => {
         }));
     };
 
+    const handleSubmit = () => {
+        setIsloading(true)
+        if (formData.confPass.trim() === '' || formData.newPass.trim() === '') {
+            customToast('error', 'Please enter password')
+        } else {
+            if (formData.confPass === formData.newPass) {
+
+                API.updateUser({ password: formData.newPass, id: user?.id })
+                    .then((res) => {
+                        customToast('success', res.message)
+                    })
+                    .catch((err) => {
+                        customToast('error', err)
+                    })
+                    .finally(() => {
+                        setFormData({
+                            newPass: '',
+                            confPass: ''
+                        })
+                        setIsloading(false)
+                    })
+            } else {
+                customToast('error', 'Password must be same.')
+                setIsloading(false)
+            }
+        }
+    }
+
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
 
@@ -36,21 +69,25 @@ const ChangePasswordScreen = () => {
                             value={formData.newPass}
                             label={"New Password"}
                             onChangeText={(text) => onChangeHandler('newPass', text)}
+                            error={error.newPass}
                         />
                         <InputField
                             secureTextEntry={true} // if you password Field pass secureTextEntry=true
                             value={formData.confPass}
                             label={"Confirm Password"}
                             onChangeText={(text) => onChangeHandler('confPass', text)}
+                            error={error.confPass}
                         />
                     </View>
                     <CustomButton
                         title='Confirm'
                         variant='fill'
-                        onPress={() => setOpen(true)}
+                        onPress={handleSubmit}
+                        isLoading={isLoading}
+                        disabled={isLoading}
                     />
                 </View>
-                <MyModal
+                {/* <MyModal
                     modalVisible={open}
                     setModalVisible={setOpen}
                     children={
@@ -74,7 +111,7 @@ const ChangePasswordScreen = () => {
                             />
                         </View>
                     }
-                />
+                /> */}
             </View>
         </SafeAreaView>
     )
