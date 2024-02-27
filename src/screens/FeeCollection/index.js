@@ -168,6 +168,7 @@ const FeeCollection = () => {
     }
 
     const handleReset = () => {
+        setFormData(initialData)
         setChilds([])
         setSchedule([])
         setError({})
@@ -608,9 +609,16 @@ const FeeCollection = () => {
         } else {
             await API.IntentSuccessURL(res?.data?.id).then(res => {
                 customToast("success", res.message)
+                console.log("successss---->", res)
+
+            }).catch(err => {
+                customToast("error", err?.message)
+                console.log("error---->", err)
+            }).finally(() => {
+                console.log("finally---->")
                 setIsLoading(false)
-            }).catch(err => customToast("error", err?.message))
-            handleReset()
+                handleReset()
+            })
         }
 
 
