@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Download from 'react-native-vector-icons/Feather';
 import { default as NoHomework } from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AccordionItem from '../../components/base/Accordion';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
@@ -16,9 +16,11 @@ import ReceiptSkelton from '../Receipt/ReceiptSkeleton';
 
 const ViewFess = () => {
     const [activeItem, setActiveItem] = useState(null);
+    const [refreshing, setRefreshing] = useState(false);
     const [data, setData] = useState([])
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
+    const dispatch = useDispatch()
     const router = useRoute()
     const ineerList = (item) => [
         { name: "Previous Dues", value: `£${item?.totalDues}` },
@@ -50,6 +52,14 @@ const ViewFess = () => {
         </View>
     )
 
+    // const onRefresh = useCallback(() => {
+    //     setRefreshing(true)
+    //     // setTimeout(() => {
+    //     dispatch(globalData())
+    //     setRefreshing(false)
+    //     // }, 100);
+    // }, [])
+
 
 
     useEffect(() => {
@@ -58,7 +68,12 @@ const ViewFess = () => {
     }, [globaldata?.fees])
 
     return (
-        <ScrollView>
+        <ScrollView
+        // refreshControl={<RefreshControl
+        //     onRefresh={onRefresh}
+        //     refreshing={refreshing}
+        // />}
+        >
             {(!!user.email && !!globaldata?.fees) ?
                 <View style={styles.feesContainers}>
                     {data?.length > 0 ?

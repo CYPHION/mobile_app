@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Download from 'react-native-vector-icons/Feather';
 import { default as NoHomework } from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AccordionItem from '../../components/base/Accordion';
 import DropdownComponent from '../../components/base/CustomDropDown';
 import { Color } from '../../utils/color';
@@ -19,6 +19,8 @@ const Receipt = () => {
     const [activeItem, setActiveItem] = useState(null);
     const [option, setOption] = useState(new Date().getFullYear());
     const [data, setData] = useState([])
+    const [refreshing, setRefreshing] = useState(false)
+    const dispatch = useDispatch()
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
 
@@ -41,6 +43,22 @@ const Receipt = () => {
 
     };
 
+    const fetchData = () => {
+        const filteredData = globaldata?.fees?.filter((item) => {
+            const itemYear = new Date(item.createdAt).getFullYear(); // Replace 'invoiceDate' with your actual date property
+            return itemYear === parseInt(option);
+        });
+        setData(filteredData);
+    }
+
+    // const onRefresh = useCallback(() => {
+    //     setRefreshing(true)
+    //     // setTimeout(() => {
+    //     dispatch(globalData())
+    //     fetchData()
+    //     setRefreshing(false)
+    //     // }, 100);
+    // }, [])
 
 
     useEffect(() => {
@@ -54,11 +72,7 @@ const Receipt = () => {
 
 
     useEffect(() => {
-        const filteredData = globaldata?.fees?.filter((item) => {
-            const itemYear = new Date(item.createdAt).getFullYear(); // Replace 'invoiceDate' with your actual date property
-            return itemYear === parseInt(option);
-        });
-        setData(filteredData);
+        fetchData()
     }, [option]);
 
     const renderItem = () => (
@@ -72,7 +86,12 @@ const Receipt = () => {
 
 
     return (
-        <ScrollView>
+        <ScrollView
+        // refreshControl={<RefreshControl
+        //     onRefresh={onRefresh}
+        //     refreshing={refreshing}
+        // />}
+        >
             {(!!user.email && !!globaldata.students) ?
                 <View style={styles.feesContainers}>
                     {globaldata?.fees.length > 0 ? <>
