@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../components/base/CustomButton';
 import GridTable from '../../components/base/GridTable';
 import MyModal from '../../components/base/Modal';
@@ -16,7 +16,7 @@ import { GlobalStyles } from '../../utils/globalStyles';
 
 
 const LeaveApplication = () => {
-
+    const [refresh, setRefresh] = useState(false);
     const [active, setActive] = useState(false)
     const [open, setOpen] = useState(false)
     const [selectData, setselectData] = useState([])
@@ -24,7 +24,7 @@ const LeaveApplication = () => {
     const [reason, setReason] = useState('')
     const [nextScreen, setNextScreen] = useState(false)
     const dispatch = useDispatch()
-
+    const user = useSelector(state => state?.user?.data)
     const item = (item) => [
         {
             name: "Main ID",
@@ -86,7 +86,7 @@ const LeaveApplication = () => {
                     setOpen(false)
                     setNextScreen(false)
                     setActive(prev => !prev)
-                    dispatch(globalData())
+                    dispatch(globalData(user?.id))
                 }}
                 btnstyle={{ width: screenDimensions.width * 0.2, paddingVertical: 5 }}
             />
@@ -116,6 +116,16 @@ const LeaveApplication = () => {
 
     }
 
+    const handleRefresh = () => {
+        setRefresh(true);
+        dispatch(globalData(user?.id))
+            .then(() => {
+                setRefresh(false);
+            })
+            .catch(() => {
+                setRefresh(false);
+            });
+    };
 
 
     return (
@@ -149,7 +159,14 @@ const LeaveApplication = () => {
                             />
                         </> : null}
                     </View>
-                    <ScrollView>
+                    <ScrollView
+                        refreshControl={
+                            <RefreshControl
+                                onRefresh={handleRefresh}
+                                refreshing={refresh}
+                            />
+                        }
+                    >
                         <View style={nextScreen && { height: selectData?.length > 1 ? screenDimensions.height * 1.33 : screenDimensions.height * 0.9 }}>
                             <View style={[styles.tabBtn]}>
                                 <CustomButton

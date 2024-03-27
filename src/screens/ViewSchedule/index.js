@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native'
-import React from 'react'
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import Idcard from "react-native-vector-icons/AntDesign"
 import CalendarTimeIcon from "react-native-vector-icons/FontAwesome"
 import BookIcon from "react-native-vector-icons/FontAwesome5"
@@ -8,8 +8,9 @@ import CalendarIcon from "react-native-vector-icons/FontAwesome6"
 import GridIcon from "react-native-vector-icons/Ionicons"
 import { default as CalendarCheckIcon, default as NoHomework } from "react-native-vector-icons/MaterialCommunityIcons"
 import TimeIcon from "react-native-vector-icons/MaterialIcons"
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Table from '../../components/base/Table'
+import { globalData } from '../../store/thunk'
 import { Color } from '../../utils/color'
 import { FontSizes } from '../../utils/font'
 import { formattedDate, screenDimensions } from '../../utils/functions'
@@ -56,24 +57,53 @@ const list = (schedule) => [
 ]
 
 const ViewSchedule = () => {
-
+    const [refresh, setRefresh] = useState(false);
+    const [data, setData] = useState([])
     const router = useRoute()
-    const globalData = useSelector(state => state?.global?.data)
+    const globaldata = useSelector(state => state?.global?.data)
+    const user = useSelector(state => state?.user?.data)
+    const dispatch = useDispatch()
+    const Schedules = globaldata?.schedules?.filter(elem => elem.studentId === router.params?.student?.id)
 
-    const Schedules = globalData?.schedules?.filter(elem => elem.studentId === router.params?.student?.id)
-    console.log(Schedules[0]?.endDate)
+    const fetchData = () => {
+        setData(Schedules)
+    }
+
+    const handleRefresh = () => {
+        setRefresh(true);
+        dispatch(globalData(user?.id))
+            .then(() => {
+                fetchData()
+                setRefresh(false);
+            })
+            .catch(() => {
+                fetchData()
+                setRefresh(false);
+            });
+    };
+
+    useEffect(() => {
+        fetchData()
+    }, [globaldata?.schedules])
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        onRefresh={handleRefresh}
+                        refreshing={refresh}
+                    />
+                }>
                 {
-                    Schedules?.length > 0 ? <View>
+                    data?.length > 0 ? <View>
 
 
                         {/* <TopbarWithGraph student={student} /> */}
 
 
                         <View>
-                            {Schedules.map((elem, index) => (
+                            {data.map((elem, index) => (
                                 <Table
                                     key={index}
                                     list={list(elem)}

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import FilterIcon from "react-native-vector-icons/FontAwesome"
 import NoHomework from "react-native-vector-icons/MaterialCommunityIcons"
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Color } from '../../../utils/color'
 import { FontFamily, FontSizes } from '../../../utils/font'
 import { formattedDate, screenDimensions } from '../../../utils/functions'
@@ -27,26 +27,21 @@ const ViewApplication = () => {
     const [refresh, setRefresh] = useState(false);
     const [open, setOpen] = useState(false)
     const [data, setData] = useState([])
+    const globaldata = useSelector(state => state?.global?.data)
+    const user = useSelector(state => state?.user?.data)
+    const dispatch = useDispatch()
 
-    const currentDate = new Date();
-    const startOfMonth = new Date(currentDate);
-    startOfMonth.setMonth(currentDate.getMonth() - 1);
-    startOfMonth.setHours(0, 0, 0, 0);
-
-    const endDate = new Date(currentDate);
-    endDate.setHours(23, 59, 59, 999);
-
-    const [date, setDate] = useState({
-        startDate: startOfMonth,
-        endDate: endDate,
-    });
-    const globalData = useSelector(state => state?.global?.data)
-
-    const filterByDate = (data, startDate, endDate) => {
-        return data?.filter(item => {
-            const itemDate = new Date(item?.applicationDate);
-            return itemDate >= startDate && itemDate <= endDate;
-        });
+    const filterByDate = (startDate, endDate) => {
+        let filterData;
+        if (!!startDate && !!endDate) {
+            filterData = globaldata?.leaves?.filter(item => {
+                const itemDate = new Date(item?.applicationDate);
+                return itemDate >= startDate && itemDate <= endDate;
+            })
+        } else {
+            filterData = globaldata?.leaves?.filter(item => true)
+        }
+        setData(filterData)
     };
 
 
@@ -58,25 +53,18 @@ const ViewApplication = () => {
     )
 
 
-    const handleRefresh = () => {
-        setRefresh(true);
-
-        const refreshedStartDate = new Date();
-        refreshedStartDate.setMonth(refreshedStartDate.getMonth() - 1);
-        refreshedStartDate.setHours(0, 0, 0, 0);
-
-        const refreshedEndDate = new Date();
-        refreshedEndDate.setHours(23, 59, 59, 999);
-
-        setDate({
-            startDate: refreshedStartDate,
-            endDate: refreshedEndDate,
-        });
-
-        setRefresh(false);
-        // Add additional logic or fetch data as needed
-        // ...
-    };
+    // const handleRefresh = () => {
+    //     setRefresh(true);
+    //     dispatch(globalData(user?.id))
+    //         .then(() => {
+    //             filterByDate()
+    //             setRefresh(false);
+    //         })
+    //         .catch(() => {
+    //             filterByDate()
+    //             setRefresh(false);
+    //         });
+    // };
 
     const statusBackround = {
         processed: 'Accepted',
@@ -86,25 +74,25 @@ const ViewApplication = () => {
 
 
     useEffect(() => {
-        setData(filterByDate(globalData?.leaves, date.startDate, date.endDate))
-    }, [date])
+        filterByDate()
+    }, [globaldata?.leaves])
 
     return (
-        globalData?.leaves?.length < 0 ?
+        data.length < 0 ?
             <>{returnItem()}</>
             :
             <ScrollView
-                refreshControl={
-                    <RefreshControl
-                        onRefresh={handleRefresh}
-                        refreshing={refresh}
-                    />
-                }
+            // refreshControl={
+            //     <RefreshControl
+            //         onRefresh={handleRefresh}
+            //         refreshing={refresh}
+            //     />
+            // }
             >
                 <CustomDatePicker
                     isVisible={open}
                     onToggle={() => setOpen(false)}
-                    onDone={(date) => setDate(date)}
+                    onDone={(date) => filterByDate(date?.startDate, date?.endDate)}
                 />
                 <View style={[GlobalStyles.headerStyles]}>
                     <Text style={GlobalStyles.headerTextStyle}>View Leaves</Text>

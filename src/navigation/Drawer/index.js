@@ -7,6 +7,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../components/base/CustomButton';
 import MyModal from '../../components/base/Modal';
+import { handleResetData } from '../../store/slice/global';
 import { handleLogout } from '../../store/slice/user';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
@@ -125,6 +126,7 @@ function CustomDrawerContent(props) {
                                 btnstyle={{ paddingVertical: 4 }}
                                 onPress={() => {
                                     dipatch(handleLogout())
+                                    dipatch(handleResetData())
                                     setOpen(!open)
                                 }}
                             />

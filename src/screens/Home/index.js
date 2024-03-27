@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { FlatList, Image, RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from "react-native-vector-icons/Ionicons";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DropdownComponent from '../../components/base/CustomDropDown';
 import Graph from '../../components/base/GraphComponent';
+import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { getImage, screenDimensions } from '../../utils/functions';
@@ -44,13 +45,30 @@ const Home = ({ navigation }) => {
         )
     };
     const [option, setOption] = useState("");
-
+    const [refreshing, setRefreshing] = useState(false)
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
+    const dispatch = useDispatch()
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        dispatch(globalData(user?.id))
+            .then(() => {
+                setRefreshing(false); // Set refreshing to false after data fetching is completed
+            })
+            .catch(() => {
+                setRefreshing(false); // Ensure refreshing is set to false even if there's an error
+            })
+    }, [])
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            {(!!globaldata?.students && !!user?.email) ? <ScrollView>
+            {(!!globaldata?.students && !!user?.email) ? <ScrollView
+                refreshControl={<RefreshControl
+                    onRefresh={onRefresh}
+                    refreshing={refreshing}
+                />}
+            >
                 <View style={styles.profileContainer}>
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
                         <View>

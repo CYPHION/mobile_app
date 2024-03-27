@@ -3,11 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FilterIcon from "react-native-vector-icons/FontAwesome";
 import NoHomework from "react-native-vector-icons/MaterialCommunityIcons";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomDatePicker from '../../components/base/CustomDatePicker';
 import DropdownComponent from '../../components/base/CustomDropDown';
 import GridTable from '../../components/base/GridTable';
 import TopbarWithGraph from '../../components/widget/TopbarWithGraph';
+import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { formattedDate, getDepartmentDropdown, screenDimensions } from '../../utils/functions';
@@ -38,7 +39,8 @@ const nestedArray = (item) => [
     {
         name: 'Test End Date',
         value: item?.endDate ? formattedDate(item?.endDate, 'dd-MM-yyyy') : ''
-    }, {
+    },
+    {
         name: 'Test Status',
         value: `${item?.meanPercentage > 0 ? `${item?.meanPercentage}%` : ''}`
     },
@@ -58,46 +60,32 @@ const ViewProgress = () => {
     const [open, setOpen] = useState(false);
     const [option, setOption] = useState("");
 
-    const globalData = useSelector(state => state?.global?.data)
-    const filterReport = globalData?.reports?.filter(elem => elem.studentId === router.params.student?.id)
-
-    const currentDate = new Date();
-    const startOfMonth = new Date(currentDate);
-    startOfMonth.setMonth(currentDate.getMonth() - 1);
-    startOfMonth.setHours(0, 0, 0, 0);
-
-    const endDate = new Date();
-    endDate.setHours(23, 59, 59, 999);
-
-    // Set endDate to the end of the current day (11:59:59.999 PM)
-    endDate.setHours(23, 59, 59, 999);
-
-    const [date, setDate] = useState({
-        startDate: startOfMonth,
-        endDate: endDate,
-    });
-
-    const filterByDate = (data, startDate, endDate) => {
+    const globaldata = useSelector(state => state?.global?.data)
+    const user = useSelector(state => state?.user?.data)
+    const filterReport = globaldata?.reports?.filter(elem => elem.studentId === router.params.student?.id)
+    const dispatch = useDispatch()
 
 
-
-        if (option === '') {
-            return data?.filter(item => {
+    const filterByDate = (startDate, endDate) => {
+        let filterDate;
+        if (option === '' && startDate && endDate) {
+            filterDate = filterReport?.filter(item => {
                 const itemDate = new Date(item?.createdAt)
                 return itemDate >= startDate && itemDate <= endDate;
             });
-        } else {
-            return data?.filter(item => {
+        } else if (startDate && endDate && !!option) {
+            filterDate = filterReport?.filter(item => {
                 const itemDate = new Date(item?.createdAt);
                 return itemDate >= startDate && itemDate <= endDate && item.Department?.id === option;
             });
+        } else {
+            filterDate = filterReport?.filter(item => true);
         }
-    }
-
-    const handleFilter = (startDate, endDate) => {
-        setProgress(filterByDate(filterReport, startDate, endDate))
+        setProgress(filterDate)
         setOption('')
     }
+
+
 
 
 
@@ -119,28 +107,20 @@ const ViewProgress = () => {
 
     const handleRefresh = () => {
         setRefresh(true);
-
-        const refreshedStartDate = new Date();
-        refreshedStartDate.setMonth(refreshedStartDate.getMonth() - 1);
-        refreshedStartDate.setHours(0, 0, 0, 0);
-
-        const refreshedEndDate = new Date();
-        refreshedEndDate.setHours(23, 59, 59, 999);
-
-        setDate({
-            startDate: refreshedStartDate,
-            endDate: refreshedEndDate,
-        });
-        setOption('')
-        setProgress(filterByDate(filterReport, refreshedStartDate, refreshedEndDate))
-        setRefresh(false);
-        // Add additional logic or fetch data as needed
-        // ...
+        dispatch(globalData(user?.id))
+            .then(() => {
+                filterByDate()
+                setRefresh(false);
+            })
+            .catch(() => {
+                filterByDate()
+                setRefresh(false);
+            });
     };
 
     useEffect(() => {
-        setProgress(filterByDate(filterReport, date.startDate, date.endDate))
-    }, [])
+        filterByDate()
+    }, [globaldata?.reports])
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -156,18 +136,15 @@ const ViewProgress = () => {
                     filterReport?.length > 0 ?
                         <View>
                             <CustomDatePicker
-                                stDate={date.startDate}
-                                enDate={date.endDate}
                                 onToggle={() => setOpen(false)}
                                 isVisible={open}
                                 onDone={(date) => {
-                                    setDate(date)
-                                    handleFilter(date?.startDate, date?.endDate)
+                                    filterByDate(date?.startDate, date?.endDate)
                                 }}
                                 Children={<DropdownComponent
                                     label={'Select Department'}
                                     disable={false}
-                                    data={getDepartmentDropdown(globalData?.departments)}
+                                    data={getDepartmentDropdown(globaldata?.departments)}
                                     placeHolderText={"Select Department"}
                                     value={option}
                                     setValue={setOption}

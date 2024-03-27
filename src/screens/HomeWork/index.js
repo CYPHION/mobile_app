@@ -1,41 +1,76 @@
 import { useRoute } from '@react-navigation/native'
-import React from 'react'
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Linking, RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import Idcard from "react-native-vector-icons/AntDesign"
 import Download from 'react-native-vector-icons/Feather'
 import BookIcon from "react-native-vector-icons/FontAwesome5"
 import NoHomework from "react-native-vector-icons/MaterialCommunityIcons"
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import CustomButton from '../../components/base/CustomButton'
+import { globalData } from '../../store/thunk'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { formattedDate, screenDimensions } from '../../utils/functions'
+import { customToast, formattedDate, getImage, screenDimensions } from '../../utils/functions'
 import { GlobalStyles } from '../../utils/globalStyles'
 
 const HomeWork = () => {
+    const [refresh, setRefresh] = useState(false);
+    const [data, setData] = useState(false);
     const router = useRoute()
-    const globalData = useSelector(state => state?.global?.data)
+    const globaldata = useSelector(state => state?.global?.data)
+    const user = useSelector(state => state?.user?.data)
+    const dispatch = useDispatch()
 
-    const filterHomework = globalData?.homeworks?.filter((item, index) => {
+    const filterHomework = globaldata?.homeworks?.filter((item, index) => {
         const studentIds = item?.studentId?.length > 0 ? item.studentId : [];
         return studentIds.length > 0 ? studentIds?.some(id => id === router?.params?.student?.id) : false;
     });
 
+    const fetchData = () => {
+        setData(filterHomework)
+    }
 
+    const handleRefresh = () => {
+        setRefresh(true);
+        dispatch(globalData(user?.id))
+            .then(() => {
+                fetchData()
+                setRefresh(false);
+            })
+            .catch(() => {
+                fetchData()
+                setRefresh(false);
+            });
+    };
+
+    const openLink = (url) => {
+        Linking.openURL(url).catch((err) => customToast('error', 'Something went wrong!'));
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [globaldata?.homeworks])
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        onRefresh={handleRefresh}
+                        refreshing={refresh}
+                    />
+                }
+            >
                 <View style={{ paddingBottom: 10, backgroundColor: Color.white }}>
                     {
-                        filterHomework?.length > 0 ? <>
+                        data?.length > 0 ? <>
                             <View style={[styles.viewChildrenContainer, GlobalStyles.p_10]}>
                                 <Text style={[styles.NameText, styles.textFontFamily]}>{router.params?.student?.fullName}</Text>
-                                <Text style={[styles.CompText, styles.textFontFamily]}>({filterHomework?.length})</Text>
+                                <Text style={[styles.CompText, styles.textFontFamily]}>({data?.length})</Text>
                             </View>
                             <View style={{ paddingHorizontal: 10, gap: 10, marginTop: 10 }}>
                                 {
-                                    filterHomework?.map((elem, index) => (
+                                    data?.map((elem, index) => (
                                         <View key={index} style={styles.allStudentContainer}>
                                             <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
                                                 <View style={[styles.allStudentContainers, { gap: 15 }]} >
@@ -58,12 +93,14 @@ const HomeWork = () => {
                                             <View style={styles.btnStyle}>
                                                 {elem.fileType === "link" ?
                                                     <CustomButton
+                                                        onPress={() => openLink(elem?.link)}
                                                         title="Open Link"
                                                         variant='fill'
                                                         rightIcon={<Download name='link' size={FontSizes.lg} color={Color.white} />}
                                                     />
                                                     :
                                                     <CustomButton
+                                                        onPress={() => openLink(getImage(elem?.filename))}
                                                         title="Download"
                                                         rightIcon={<Download name='download' size={FontSizes.lg} color={Color.white} />}
                                                         variant='fill'

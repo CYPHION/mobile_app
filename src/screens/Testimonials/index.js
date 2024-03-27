@@ -1,27 +1,51 @@
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { RefreshControl, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import Icon, { default as NoHomework } from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import CustomButton from '../../components/base/CustomButton'
+import { globalData } from '../../store/thunk'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { formattedDate, screenDimensions } from '../../utils/functions'
 import { GlobalStyles } from '../../utils/globalStyles'
 
 const Testimonials = () => {
+    const [refresh, setRefresh] = useState(false);
+    const [data, setData] = useState([]);
     const navigation = useNavigation()
     const user = useSelector(state => state?.user?.data)
     const global = useSelector(state => state?.global?.data)
+    const dispatch = useDispatch()
 
+    const fetchData = () => {
+        setData(global?.testimonials)
+    }
+
+    const handleRefresh = () => {
+        setRefresh(true);
+        dispatch(globalData(user?.id))
+            .then(() => {
+                fetchData()
+                setRefresh(false);
+            })
+            .catch(() => {
+                fetchData()
+                setRefresh(false);
+            });
+    };
+
+    useEffect(() => {
+        fetchData()
+    }, [global?.testimonials])
 
 
 
     return (
         <>
             <SafeAreaView style={{ flex: 1 }}>
-                {!(global?.testimonials?.some((item) => item?.userId === user?.id)) && <View style={styles.absView}>
+                {!(data?.some((item) => item?.userId === user?.id)) && <View style={styles.absView}>
                     <CustomButton
                         title='Write A Review'
                         variant='fill'
@@ -31,14 +55,21 @@ const Testimonials = () => {
                     />
                 </View>}
                 <View style={[styles.main]}>
-                    <ScrollView>
-                        {global?.testimonials?.length > 0 ?
+                    <ScrollView
+                        refreshControl={
+                            <RefreshControl
+                                onRefresh={handleRefresh}
+                                refreshing={refresh}
+                            />
+                        }
+                    >
+                        {data?.length > 0 ?
                             <View style={{ zIndex: 1 }}>
                                 <View style={[{ marginBottom: 7 }, GlobalStyles.headerStyles]}>
                                     <Text style={GlobalStyles.headerTextStyle}>Available Reviews</Text>
                                 </View>
                                 <View style={[GlobalStyles.p_10, { gap: 15 }]}>
-                                    {global?.testimonials.map((elem, index) => (
+                                    {data.map((elem, index) => (
                                         <View key={index} style={[styles.card, GlobalStyles.p_10]}>
                                             <Text style={[styles.nameText]}>{elem?.User?.firstName} {elem?.User?.lastName}</Text>
                                             <View style={{ flexDirection: 'row', gap: 6 }}>

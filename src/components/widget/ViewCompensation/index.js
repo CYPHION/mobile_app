@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import NoHomework from "react-native-vector-icons/MaterialCommunityIcons"
 import { useSelector } from 'react-redux'
@@ -54,6 +54,7 @@ const ViewCompensation = () => {
 
     const globalData = useSelector(state => state?.global?.data)
     const [rows, setRows] = useState([])
+    const [refreshing, setRefreshing] = useState(false);
 
 
     const getALLCompensation = async () => {
@@ -61,8 +62,13 @@ const ViewCompensation = () => {
         await API.compensationByParent(JSON.stringify(studentIds)).then(res => {
             const data = res?.data
             setRows(data)
-        }).catch(err => customToast("error", err?.message))
+        }).catch(err => customToast("error", err?.message)).finally(() => setRefreshing(false))
     }
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        getALLCompensation()
+    }, []);
 
     useEffect(() => {
         getALLCompensation()
@@ -76,12 +82,15 @@ const ViewCompensation = () => {
                 <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
                     <View>
                         <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
-                        <Text style={styles.inactivetext}>No Progress Report found</Text>
+                        <Text style={styles.inactivetext}>No Compensation found</Text>
                     </View>
                 </View>
                 :
-                <View style={{ height: screenDimensions.height * 0.77 }} >
-                    <ScrollView>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                    }>
+                    <View style={{ height: screenDimensions.height * 0.77 }} >
 
                         <View style={[GlobalStyles.headerStyles]}>
                             <Text style={GlobalStyles.headerTextStyle}>View Compensations</Text>
@@ -94,8 +103,8 @@ const ViewCompensation = () => {
                                 />
                             ))}
                         </View>
-                    </ScrollView>
-                </View >
+                    </View >
+                </ScrollView>
             }
         </View >
     )
