@@ -1,7 +1,7 @@
 import { useStripe } from '@stripe/stripe-react-native';
 import { default as React, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AccordionItem from '../../components/base/Accordion';
 import MyCheckBox from '../../components/base/CheckBox';
 import CustomButton from '../../components/base/CustomButton';
@@ -10,6 +10,7 @@ import GridTable from '../../components/base/GridTable';
 import InputField from '../../components/base/InputField';
 import LoadingScreen from '../../components/base/LoadingScreen';
 import { API } from '../../network/API';
+import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontSizes } from '../../utils/font';
 import { calculateFee, customToast, formattedDate, getParentDropdown, screenDimensions } from '../../utils/functions';
@@ -63,8 +64,9 @@ const FeeCollection = () => {
     const [invoiceData, setInvoiceData] = useState({})
     const [isLoading, setIsLoading] = useState(false)
     const [sendData, setSendData] = useState({})
-    const globalData = useSelector(state => state?.global?.data)
+    const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
+    const dispatch = useDispatch()
     const { initPaymentSheet, presentPaymentSheet, confirmPaymentSheetPayment } = useStripe()
 
 
@@ -188,7 +190,7 @@ const FeeCollection = () => {
         }
         else {
             if (options === "Student") {
-                const parentId = globalData?.students?.find(elem => elem.id === id)?.parentId
+                const parentId = globaldata?.students?.find(elem => elem.id === id)?.parentId
                 getStudentDetails(id)
                 parentFeeDetail(parentId)
             }
@@ -608,6 +610,7 @@ const FeeCollection = () => {
             return
         } else {
             await API.IntentSuccessURL(res?.data?.id).then(res => {
+
                 customToast("success", res.message)
                 console.log("successss---->", res)
 
@@ -617,6 +620,7 @@ const FeeCollection = () => {
             }).finally(() => {
                 console.log("finally---->")
                 setIsLoading(false)
+                dispatch(globalData(user?.id))
                 handleReset()
             })
         }
@@ -700,7 +704,7 @@ const FeeCollection = () => {
 
     useEffect(() => {
         if (option === 'Student') {
-            const data = globalData?.students?.filter(elem => elem.mainId !== null)
+            const data = globaldata?.students?.filter(elem => elem.mainId !== null)
             setDropdownData(data)
         }
     }, [option])
@@ -830,7 +834,7 @@ const FeeCollection = () => {
 
         <>
             <SafeAreaView style={{ flex: 1 }} >
-                {(!!globalData?.students && !!user?.email) ? <>
+                {(!!globaldata?.students && !!user?.email) ? <>
 
                     <View style={{ paddingHorizontal: 10, alignItems: 'center' }}>
                         <DropdownComponent

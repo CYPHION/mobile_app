@@ -1,10 +1,11 @@
 import { useRoute } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Download from 'react-native-vector-icons/Feather';
 import { default as NoHomework } from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import AccordionItem from '../../components/base/Accordion';
+import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { formattedDate, getImage, screenDimensions } from '../../utils/functions';
@@ -40,7 +41,10 @@ const ViewFess = () => {
 
     };
 
-
+    const fetchData = () => {
+        const filter = globaldata?.fees?.filter((item) => item.studentId === router?.params?.student?.id)
+        setData(filter)
+    }
 
 
     const renderItem = () => (
@@ -52,27 +56,30 @@ const ViewFess = () => {
         </View>
     )
 
-    // const onRefresh = useCallback(() => {
-    //     setRefreshing(true)
-    //     // setTimeout(() => {
-    //     dispatch(globalData())
-    //     setRefreshing(false)
-    //     // }, 100);
-    // }, [])
-
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        dispatch(globalData(user?.id))
+            .then(() => {
+                fetchData()
+                setRefreshing(false); // Set refreshing to false after data fetching is completed
+            })
+            .catch(() => {
+                fetchData()
+                setRefreshing(false); // Ensure refreshing is set to false even if there's an error
+            });
+    }, [])
 
 
     useEffect(() => {
-        const filter = globaldata?.fees?.filter((item) => item.studentId === router?.params?.student?.id)
-        setData(filter)
+        fetchData()
     }, [globaldata?.fees])
 
     return (
         <ScrollView
-        // refreshControl={<RefreshControl
-        //     onRefresh={onRefresh}
-        //     refreshing={refreshing}
-        // />}
+            refreshControl={<RefreshControl
+                onRefresh={onRefresh}
+                refreshing={refreshing}
+            />}
         >
             {(!!user.email && !!globaldata?.fees) ?
                 <View style={styles.feesContainers}>
@@ -87,7 +94,7 @@ const ViewFess = () => {
                                         </View>
                                     ))}
                                     key={index}
-                                    date={`${item.payType} (${item.payBy})`}
+                                    date={`${item.payType}`}
                                     studentName={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
                                     total={
                                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>

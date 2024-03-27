@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Download from 'react-native-vector-icons/Feather';
 import { default as NoHomework } from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import AccordionItem from '../../components/base/Accordion';
 import DropdownComponent from '../../components/base/CustomDropDown';
+import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { formattedDate, getImage, screenDimensions } from '../../utils/functions';
@@ -51,14 +52,18 @@ const Receipt = () => {
         setData(filteredData);
     }
 
-    // const onRefresh = useCallback(() => {
-    //     setRefreshing(true)
-    //     // setTimeout(() => {
-    //     dispatch(globalData())
-    //     fetchData()
-    //     setRefreshing(false)
-    //     // }, 100);
-    // }, [])
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        dispatch(globalData(user?.id))
+            .then(() => {
+                fetchData()
+                setRefreshing(false); // Set refreshing to false after data fetching is completed
+            })
+            .catch(() => {
+                fetchData()
+                setRefreshing(false); // Ensure refreshing is set to false even if there's an error
+            })
+    }, [])
 
 
     useEffect(() => {
@@ -70,11 +75,9 @@ const Receipt = () => {
         setYears(yearArray);
     }, []);
 
-
     useEffect(() => {
         fetchData()
-    }, [option]);
-
+    }, [option, globaldata?.fees]);
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>
@@ -84,13 +87,12 @@ const Receipt = () => {
         </View>
     )
 
-
     return (
         <ScrollView
-        // refreshControl={<RefreshControl
-        //     onRefresh={onRefresh}
-        //     refreshing={refreshing}
-        // />}
+            refreshControl={<RefreshControl
+                onRefresh={onRefresh}
+                refreshing={refreshing}
+            />}
         >
             {(!!user.email && !!globaldata.students) ?
                 <View style={styles.feesContainers}>
@@ -122,7 +124,7 @@ const Receipt = () => {
                                                 </View>
                                             ))}
                                             key={index}
-                                            date={`${item.payType} (${item.payBy})`}
+                                            date={`${item.payType}`}
                                             studentName={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
                                             total={
                                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>

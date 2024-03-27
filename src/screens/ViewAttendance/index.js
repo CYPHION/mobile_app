@@ -8,10 +8,11 @@ import { default as BookIcon } from 'react-native-vector-icons/FontAwesome6'
 import { default as GridIcon, default as Icon } from "react-native-vector-icons/Ionicons"
 import NoHomework from "react-native-vector-icons/MaterialCommunityIcons"
 import TimeIcon from 'react-native-vector-icons/MaterialIcons'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import CustomDatePicker from '../../components/base/CustomDatePicker'
 import Table from '../../components/base/Table'
 import TopbarWithGraph from '../../components/widget/TopbarWithGraph'
+import { globalData } from '../../store/thunk'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { formattedDate, screenDimensions } from '../../utils/functions'
@@ -27,32 +28,27 @@ const ViewAttendance = () => {
     const [open, setOpen] = useState(false)
     const [data, setData] = useState([])
     const router = useRoute()
-    const globalData = useSelector(state => state?.global?.data)
-    const filterAttendance = globalData?.attendances?.filter(elem => elem.studentId === router?.params?.student?.id)
+    const globaldata = useSelector(state => state?.global?.data)
+    const user = useSelector(state => state?.user?.data)
+    const filterAttendance = globaldata?.attendances?.filter(elem => elem.studentId === router?.params?.student?.id)
+    const dispatch = useDispatch()
 
 
-    const currentDate = new Date();
-    const startOfMonth = new Date(currentDate);
-    startOfMonth.setMonth(currentDate.getMonth() - 1);
-    startOfMonth.setHours(0, 0, 0, 0);
-
-    const endDate = new Date(currentDate);
-    endDate.setHours(23, 59, 59, 999);
-
-    const [date, setDate] = useState({
-        startDate: startOfMonth,
-        endDate: endDate,
-    });
-
-
-    const filterByDate = (data, startDate, endDate) => {
-        return data?.filter(item => {
-            const itemDate = new Date(item?.attendanceDate);
-            console.log(itemDate)
-            return itemDate >= startDate && itemDate <= endDate;
-        });
+    const filterByDate = (startDate, endDate) => {
+        if (startDate && endDate) {
+            const filteer = filterAttendance?.filter(item => {
+                const itemDate = new Date(item?.attendanceDate);
+                return itemDate >= startDate && itemDate <= endDate;
+            });
+            setData(filteer)
+        } else {
+            setData(filterAttendance)
+        }
     };
 
+    const handleDateChange = (date) => {
+        filterByDate(date.startDate, date.endDate)
+    }
 
 
     const list = (attendance) => [
@@ -60,7 +56,7 @@ const ViewAttendance = () => {
         { name: ' Subject', value: attendance?.Subject?.name, icon: <BookIcon color={Color.primary} name='book' size={FontSizes.lg} /> },
         { name: ' Type', value: `${attendance.attendanceType.charAt(0).toUpperCase()}${attendance.attendanceType.slice(1)}`, icon: <GridIcon color={Color.primary} name='grid' size={FontSizes.lg} /> },
         { name: ' Category', value: `${attendance.attendanceCategory.charAt(0).toUpperCase()}${attendance.attendanceCategory.slice(1)} Lesson`, icon: <CapIcon color={Color.primary} name='graduation-cap' size={FontSizes.lg} /> },
-        { name: ' Teacher Name', value: `${attendance.teacherId ? globalData?.teachers.find(teacher => teacher.id === attendance.teacherId)?.name : 'N/A'}`, icon: <Icon color={Color.primary} name='home' size={FontSizes.lg} /> },
+        { name: ' Teacher Name', value: `${attendance.teacherId ? globaldata?.teachers.find(teacher => teacher.id === attendance.teacherId)?.name : 'N/A'}`, icon: <Icon color={Color.primary} name='home' size={FontSizes.lg} /> },
         { name: ' Day', value: `${attendance.attendanceDate ? formattedDate(attendance?.attendanceDate, 'EEE dd, MMM-yyyy') : ''}`, icon: <BookIcon color={Color.primary} name='book' size={FontSizes.lg} /> },
         { name: ' Time', value: attendance?.Schedule?.LessonTiming?.time, icon: <TimeIcon color={Color.primary} name='timelapse' size={FontSizes.lg} /> },
         { name: ' Marked At', value: `${attendance.attendanceDate ? formattedDate(attendance.createdAt, 'MMM dd ,yyyy hh:mm:ss a') : ''}`, icon: <CardIcon color={Color.primary} name='idcard' size={FontSizes.lg} /> },
@@ -69,22 +65,15 @@ const ViewAttendance = () => {
 
     const handleRefresh = () => {
         setRefresh(true);
-
-        const refreshedStartDate = new Date();
-        refreshedStartDate.setMonth(refreshedStartDate.getMonth() - 1);
-        refreshedStartDate.setHours(0, 0, 0, 0);
-
-        const refreshedEndDate = new Date();
-        refreshedEndDate.setHours(23, 59, 59, 999);
-
-        setDate({
-            startDate: refreshedStartDate,
-            endDate: refreshedEndDate,
-        });
-
-        setRefresh(false);
-        // Add additional logic or fetch data as needed
-        // ...
+        dispatch(globalData(user?.id))
+            .then(() => {
+                filterByDate()
+                setRefresh(false);
+            })
+            .catch(() => {
+                filterByDate()
+                setRefresh(false);
+            });
     };
 
     const renderItem = () => (
@@ -97,8 +86,8 @@ const ViewAttendance = () => {
     )
 
     useEffect(() => {
-        setData(filterByDate(filterAttendance, date.startDate, date.endDate))
-    }, [date])
+        filterByDate()
+    }, [])
 
 
     return (
@@ -139,7 +128,7 @@ const ViewAttendance = () => {
                         <CustomDatePicker
                             isVisible={open}
                             onToggle={() => setOpen(false)}
-                            onDone={(date) => setDate(date)}
+                            onDone={(date) => handleDateChange(date)}
                         />
                     </> : <>
                         {renderItem()}

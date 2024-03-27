@@ -3,8 +3,9 @@ import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOp
 import FilterIcon from 'react-native-vector-icons/FontAwesome'
 import Pound from "react-native-vector-icons/FontAwesome5"
 import Icon from "react-native-vector-icons/Fontisto"
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import CustomDatePicker from '../../components/base/CustomDatePicker'
+import { globalData } from '../../store/thunk'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
@@ -41,6 +42,7 @@ const Analytics = ({ navigation }) => {
     const user = useSelector(state => state?.user?.data);
     const global = useSelector(state => state?.global?.data);
 
+    const dispatch = useDispatch()
     const filterByDate = (data, startDate, endDate) => {
         return data?.filter(item => {
             const itemDate = new Date(item?.createdAt);
@@ -85,10 +87,14 @@ const Analytics = ({ navigation }) => {
             startDate: refreshedStartDate,
             endDate: refreshedEndDate,
         });
-
-        setRefresh(false);
-        // Add additional logic or fetch data as needed
-        // ...
+        dispatch(globalData(user?.id))
+            .then(() => {
+                handelFilter(refreshedStartDate, refreshedEndDate)
+                setRefresh(false); // Set refreshing to false after data fetching is completed
+            })
+            .catch(() => {
+                setRefresh(false); // Ensure refreshing is set to false even if there's an error
+            })
     };
 
     useEffect(() => {
