@@ -1,12 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import NoHomework from "react-native-vector-icons/MaterialCommunityIcons"
-import { useSelector } from 'react-redux'
-import { API } from '../../../network/API'
 import { Color } from '../../../utils/color'
 import { FontSizes } from '../../../utils/font'
-import { customToast, formattedDate, screenDimensions } from '../../../utils/functions'
+import { formattedDate, screenDimensions } from '../../../utils/functions'
 import { GlobalStyles } from '../../../utils/globalStyles'
 import GridTable from '../../base/GridTable'
 
@@ -50,29 +48,29 @@ const items = (row) => [
     },
 ]
 
-const ViewCompensation = () => {
+const ViewCompensation = ({ rows }) => {
 
-    const globalData = useSelector(state => state?.global?.data)
-    const [rows, setRows] = useState([])
-    const [refreshing, setRefreshing] = useState(false);
+    // const globalData = useSelector(state => state?.global?.data)
+    // const [rows, setRows] = useState([])
+    // const [refreshing, setRefreshing] = useState(false);
 
 
-    const getALLCompensation = async () => {
-        const studentIds = globalData?.students?.map(elem => elem?.id)
-        await API.compensationByParent(JSON.stringify(studentIds)).then(res => {
-            const data = res?.data
-            setRows(data)
-        }).catch(err => customToast("error", err?.message)).finally(() => setRefreshing(false))
-    }
+    // const getALLCompensation = async () => {
+    //     const studentIds = globalData?.students?.map(elem => elem?.id)
+    //     await API.compensationByParent(JSON.stringify(studentIds)).then(res => {
+    //         const data = res?.data
+    //         setRows(data)
+    //     }).catch(err => customToast("error", err?.message)).finally(() => setRefreshing(false))
+    // }
 
-    const onRefresh = useCallback(() => {
-        setRefreshing(true);
-        getALLCompensation()
-    }, []);
+    // const onRefresh = useCallback(() => {
+    //     setRefreshing(true);
+    //     getALLCompensation()
+    // }, []);
 
-    useEffect(() => {
-        getALLCompensation()
-    }, [globalData?.students])
+    // useEffect(() => {
+    // getALLCompensation()
+    // }, [globalData?.students])
 
     const inset = useSafeAreaInsets()
     return (
@@ -87,10 +85,11 @@ const ViewCompensation = () => {
                 </View>
                 :
                 <ScrollView
-                    refreshControl={
-                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                    }>
-                    <View style={{ height: screenDimensions.height * 0.77 }} >
+                // refreshControl={
+                //     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                // }
+                >
+                    <View  >
 
                         <View style={[GlobalStyles.headerStyles]}>
                             <Text style={GlobalStyles.headerTextStyle}>View Compensations</Text>
