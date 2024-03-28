@@ -1,23 +1,47 @@
-import React, { useState } from 'react'
-import { SafeAreaView, StyleSheet, View } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
+import { useSelector } from 'react-redux'
 import CustomAppBar from '../../components/base/CustomAppBar'
 import CustomButton from '../../components/base/CustomButton'
 import MissedLesson from '../../components/widget/MissedLesson'
 import ViewCompensation from '../../components/widget/ViewCompensation'
+import { API } from '../../network/API'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
 
 const Compensation = () => {
     const [active, setActive] = useState(true)
+    const globalData = useSelector(state => state?.global?.data)
+    const [rows, setRows] = useState([])
+    const [refreshing, setRefreshing] = useState(false);
 
+
+    const getALLCompensation = async () => {
+        const studentIds = globalData?.students?.map(elem => elem?.id)
+        await API.compensationByParent(JSON.stringify(studentIds)).then(res => {
+            const data = res?.data
+            setRows(data)
+        }).catch(err => customToast("error", err?.message)).finally(() => setRefreshing(false))
+    }
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        getALLCompensation()
+    }, []);
+
+    useEffect(() => {
+        getALLCompensation()
+    }, [globalData?.students])
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <View>
-                <CustomAppBar title='Compensation' />
-                <View style={[styles.main]}>
-                    <View >
+            <ScrollView refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
+                <View>
+                    <CustomAppBar title='Compensation' />
+                    <View style={[styles.main]}>
                         <View style={[styles.tabBtn]}>
                             <CustomButton
                                 title='Missed Lesson'
@@ -37,11 +61,11 @@ const Compensation = () => {
                             />
                         </View>
                         <View >
-                            {active ? <MissedLesson /> : <ViewCompensation />}
+                            {active ? <MissedLesson /> : <ViewCompensation rows={rows} />}
                         </View>
                     </View>
                 </View>
-            </View>
+            </ScrollView>
         </SafeAreaView>
     )
 }

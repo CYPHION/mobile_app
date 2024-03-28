@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { FlatList, Image, RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import MenuIcon from 'react-native-vector-icons/Entypo';
 import Icon from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from 'react-redux';
 import DropdownComponent from '../../components/base/CustomDropDown';
@@ -49,6 +50,11 @@ const Home = ({ navigation }) => {
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
     const dispatch = useDispatch()
+
+    const toggleDrawer = () => {
+        navigation.toggleDrawer();
+    }
+
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         dispatch(globalData(user?.id))
@@ -71,9 +77,14 @@ const Home = ({ navigation }) => {
             >
                 <View style={styles.profileContainer}>
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
-                        <View>
-                            <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.NameText, styles.textFontFamily, { width: screenDimensions.width * 0.7 }]}>Hi, {user.firstName} {user.lastName}</Text>
-                            <Text style={[styles.CompText, styles.textFontFamily]}>Welcome to Prime Tuition</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                            <TouchableOpacity activeOpacity={0.7} onPress={() => toggleDrawer()} >
+                                <MenuIcon name='menu' size={FontSizes.xxxl} />
+                            </TouchableOpacity>
+                            <View >
+                                <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.NameText, styles.textFontFamily, { width: screenDimensions.width * 0.7 }]}>Hi, {user.firstName} {user.lastName}</Text>
+                                <Text style={[styles.CompText, styles.textFontFamily]}>Welcome to Prime Tuition</Text>
+                            </View>
                         </View>
                         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
                             <View style={styles.badge}></View>
