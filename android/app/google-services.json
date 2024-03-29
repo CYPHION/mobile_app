@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1023256248503",
+    "project_id": "pt-notifications",
+    "storage_bucket": "pt-notifications.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023256248503:android:fb1668a4ee561574668d32",
+        "android_client_info": {
+          "package_name": "com.primetutuitionmobileapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLQs0YwSV7wXFs7NFOKwICm3X-ZmuUMjE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
