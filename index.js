@@ -2,6 +2,7 @@
  * @format
  */
 import { stripePublishKey } from '@env';
+import messaging from '@react-native-firebase/messaging';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { AppRegistry } from 'react-native';
@@ -14,6 +15,7 @@ import { store } from './src/store';
 import { Color } from './src/utils/color';
 
 
+
 const MyTheme = {
     ...DefaultTheme,
     colors: {
@@ -22,6 +24,17 @@ const MyTheme = {
 
     },
 };
+
+
+
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+    console.log('Message handled in the background!', remoteMessage);
+});
+messaging().getInitialNotification(async remoteMessage => {
+    console.log('Message handled in the background!', remoteMessage);
+});
+
+
 
 
 const ReduxApp = () => (

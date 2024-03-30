@@ -79,7 +79,7 @@ const Home = ({ navigation }) => {
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                             <TouchableOpacity activeOpacity={0.7} onPress={() => toggleDrawer()} >
-                                <MenuIcon name='menu' size={FontSizes.xxxl} />
+                                <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.black} />
                             </TouchableOpacity>
                             <View >
                                 <Text ellipsizeMode="tail" numberOfLines={1} style={[styles.NameText, styles.textFontFamily, { width: screenDimensions.width * 0.7 }]}>Hi, {user.firstName} {user.lastName}</Text>

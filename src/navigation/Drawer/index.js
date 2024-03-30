@@ -1,3 +1,5 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 import { DrawerContentScrollView, createDrawerNavigator } from '@react-navigation/drawer';
 import { CommonActions, DrawerActions, useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
@@ -7,6 +9,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../components/base/CustomButton';
 import MyModal from '../../components/base/Modal';
+import { API } from '../../network/API';
 import { handleResetData } from '../../store/slice/global';
 import { handleLogout } from '../../store/slice/user';
 import { Color } from '../../utils/color';
@@ -63,7 +66,25 @@ function CustomDrawerContent(props) {
     const [open, setOpen] = useState(false)
     const dipatch = useDispatch()
     const user = useSelector(state => state?.user?.data)
+    const globaldata = useSelector(state => state?.global?.data)
     const src = user?.picture ? { uri: getImage(user?.picture) } : require("../../images/profileAvatar.png");
+
+    const logoutHandler = async () => {
+        const token = await messaging().getToken();
+        const fcmToken = JSON.parse(globaldata?.currentUser?.fcmToken)
+        const sendTokens = fcmToken?.filter(item => item !== token)
+        const uptObj = {
+            ...globaldata?.currentUser,
+            fcmToken: JSON.stringify(sendTokens)
+        }
+        API.updateUser(uptObj)
+            .then(async (res) => {
+                await AsyncStorage.removeItem('fcmToken');
+                dipatch(handleLogout())
+                dipatch(handleResetData())
+            }).catch(err => console.log(err))
+        setOpen(!open)
+    }
 
     return (
         <DrawerContentScrollView {...props}>
@@ -125,9 +146,7 @@ function CustomDrawerContent(props) {
                                 variant={'fill'}
                                 btnstyle={{ paddingVertical: 4 }}
                                 onPress={() => {
-                                    dipatch(handleLogout())
-                                    dipatch(handleResetData())
-                                    setOpen(!open)
+                                    logoutHandler()
                                 }}
                             />
                         </View>
