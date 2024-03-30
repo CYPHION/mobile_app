@@ -1,3 +1,5 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -6,13 +8,13 @@ import MailIcon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../components/base/CustomButton';
 import MyModal from '../../components/base/Modal';
+import { API } from '../../network/API';
 import { handleResetData } from '../../store/slice/global';
 import { handleLogout } from '../../store/slice/user';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { getImage, screenDimensions } from '../../utils/functions';
 import ProfileSkeleton from './ProfileSkeleton';
-
 
 
 const Profile = ({ navigation }) => {
@@ -29,7 +31,29 @@ const Profile = ({ navigation }) => {
     const src = user?.dp ? { uri: getImage(user?.dp) } : require("../../images/profile.png");
     // console.log(user)
 
+    const logoutHandler = async () => {
+        const token = await messaging().getToken();
+        const fcmToken = JSON.parse(globaldata?.currentUser?.fcmToken)
 
+        const sendTokens = fcmToken?.filter(item => item !== token)
+        const uptObj = {
+            ...globaldata?.currentUser,
+            fcmToken: JSON.stringify(sendTokens)
+        }
+        console.log(fcmToken.length, typeof (fcmToken))
+        if (true) {
+            API.updateUser(uptObj)
+                .then(async (res) => {
+                    await AsyncStorage.removeItem('fcmToken');
+                    dipatch(handleLogout())
+                    dipatch(handleResetData())
+                }).catch(err => console.log(err))
+
+        }
+        setOpen(!open)
+
+
+    }
 
     const handleUpdate = (type) => {
         console.log(type)
@@ -165,9 +189,7 @@ const Profile = ({ navigation }) => {
                                             variant={'fill'}
                                             btnstyle={{ paddingVertical: 4 }}
                                             onPress={() => {
-                                                dipatch(handleLogout())
-                                                dipatch(handleResetData())
-                                                setOpen(!open)
+                                                logoutHandler()
                                             }}
                                         />
                                     </View>

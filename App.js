@@ -37,8 +37,8 @@ const App = () => {
   const [isIntro, setIsIntro] = useState(true)
   const [splash, setSplash] = useState(true)
   const userData = useSelector(state => state.user.data);
+  const globaldata = useSelector(state => state.global.data);
   const dispatch = useDispatch()
-
   const requestPostNotificationsPermission = async () => {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
@@ -51,29 +51,32 @@ const App = () => {
     }
   }
 
+
   const setToken = async () => {
     try {
       const token = await messaging().getToken();
-      let FCMtoken = await AsyncStorage.getItem('fcmToken');
-      if (!FCMtoken) {
-        await AsyncStorage.setItem('fcmToken', token);
+      const FCMtoken = await AsyncStorage.getItem('fcmToken');
+      console.log('FCMtoken', token)
+      if (!FCMtoken && !!globaldata?.currentUser) {
         let getTokens;
-        if (!userData?.fcmToken) {
+        if (!globaldata?.currentUser?.fcmToken || globaldata?.currentUser?.fcmToken.length <= 0) {
           getTokens = [token ? token : '']
         } else {
-          getTokens = JSON.parse(userData?.fcmToken)
+          getTokens = JSON.parse(globaldata?.currentUser?.fcmToken)
           getTokens.push(token)
         }
         const uptObj = {
-          ...userData,
+          ...globaldata?.currentUser,
           fcmToken: JSON.stringify(getTokens)
         }
-
-        const res = await API.updateUser(uptObj);
-        console.log(res);
+        API.updateUser(uptObj)
+          .then(async (res) => {
+            await AsyncStorage.setItem('fcmToken', token);
+          }).catch(err => console.log(err))
       } else {
-        console.log('andr gaya hi nhi ..')
+        console.log('Token already saved to database ..')
       }
+
     } catch (error) {
       console.log(error)
     }
@@ -121,7 +124,7 @@ const App = () => {
     // AsyncStorage.removeItem('fcmToken')
     requestPostNotificationsPermission();
     setToken()
-  }, []);
+  }, [globaldata?.currentUser]);
 
 
 
