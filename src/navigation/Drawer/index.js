@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import messaging from '@react-native-firebase/messaging';
 import { DrawerContentScrollView, createDrawerNavigator } from '@react-navigation/drawer';
 import { CommonActions, DrawerActions, useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
@@ -70,12 +69,13 @@ function CustomDrawerContent(props) {
     const src = user?.picture ? { uri: getImage(user?.picture) } : require("../../images/profileAvatar.png");
 
     const logoutHandler = async () => {
-        const token = await messaging().getToken();
-        const fcmToken = JSON.parse(globaldata?.currentUser?.fcmToken)
+        const token = await AsyncStorage.getItem('fcmToken')
+        const fcmToken = globaldata?.currentUser?.fcmToken
         const sendTokens = fcmToken?.filter(item => item !== token)
+
         const uptObj = {
             ...globaldata?.currentUser,
-            fcmToken: JSON.stringify(sendTokens)
+            fcmToken: sendTokens
         }
         API.updateUser(uptObj)
             .then(async (res) => {

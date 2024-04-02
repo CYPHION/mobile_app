@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
-import { PermissionsAndroid, SafeAreaView, StatusBar } from "react-native";
+import { Alert, PermissionsAndroid, SafeAreaView, StatusBar } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import IntroSlider from "./src/components/widget/IntroSlider";
 import MyDrawer from "./src/navigation/Drawer";
@@ -39,6 +39,8 @@ const App = () => {
   const userData = useSelector(state => state.user.data);
   const globaldata = useSelector(state => state.global.data);
   const dispatch = useDispatch()
+
+
   const requestPostNotificationsPermission = async () => {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
@@ -56,25 +58,25 @@ const App = () => {
     try {
       const token = await messaging().getToken();
       const FCMtoken = await AsyncStorage.getItem('fcmToken');
-      console.log('FCMtoken', token)
-      if (!FCMtoken && !!globaldata?.currentUser) {
+      const mbleToken = globaldata?.currentUser?.fcmToken
+      if (FCMtoken) {
+        console.log('Token already saved to database ..')
+      } else {
         let getTokens;
-        if (!globaldata?.currentUser?.fcmToken || globaldata?.currentUser?.fcmToken.length <= 0) {
-          getTokens = [token ? token : '']
+        if (mbleToken?.length > 0) {
+          getTokens = [...mbleToken, token];
         } else {
-          getTokens = JSON.parse(globaldata?.currentUser?.fcmToken)
-          getTokens.push(token)
+          getTokens = [token ? token : '']
         }
         const uptObj = {
           ...globaldata?.currentUser,
-          fcmToken: JSON.stringify(getTokens)
+          fcmToken: getTokens
         }
         API.updateUser(uptObj)
           .then(async (res) => {
             await AsyncStorage.setItem('fcmToken', token);
+            dispatch(globalData(userData?.id))
           }).catch(err => console.log(err))
-      } else {
-        console.log('Token already saved to database ..')
       }
 
     } catch (error) {
@@ -114,9 +116,8 @@ const App = () => {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      Alert.alert(remoteMessage?.notification?.title, remoteMessage?.notification?.body)
     });
-
     return unsubscribe;
   }, []);
 
@@ -124,6 +125,7 @@ const App = () => {
     // AsyncStorage.removeItem('fcmToken')
     requestPostNotificationsPermission();
     setToken()
+
   }, [globaldata?.currentUser]);
 
 
@@ -136,7 +138,6 @@ const App = () => {
         barStyle={'dark-content'}
       />
       <SafeAreaView style={{ flex: 1 }}>
-
         {splash ?
           <SpashScreen />
           : <>
