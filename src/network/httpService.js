@@ -2,8 +2,8 @@ import axios from 'axios';
 import { CheckForHttpErrors } from '../utils/functions';
 import { UserService } from './userService';
 // 
-// export const URL = 'https://api.cyphion.com'
-export const URL = 'http://localhost:5000'
+export const URL = 'https://api.cyphion.com'
+// export const URL = 'http://localhost:5000'
 
 
 export default class HttpService {

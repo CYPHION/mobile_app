@@ -101,8 +101,8 @@ export class API {
         return HttpService.UPD(`/otp/check-otp`, formData)
     }
 
-    static async getAllNotification() {
-        return HttpService.GET(`/notification-alert/parent?parentId=22`)
+    static async getAllNotification(parentId) {
+        return HttpService.GET(`/notification-alert/parent?parentId=${Number(parentId)}`)
     }
 
 }

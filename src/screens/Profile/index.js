@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import messaging from '@react-native-firebase/messaging';
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -29,30 +28,24 @@ const Profile = ({ navigation }) => {
     const user = useSelector(state => state.user.data)
     const globaldata = useSelector(state => state?.global?.data)
     const src = user?.dp ? { uri: getImage(user?.dp) } : require("../../images/profile.png");
-    // console.log(user)
+
 
     const logoutHandler = async () => {
-        const token = await messaging().getToken();
-        const fcmToken = JSON.parse(globaldata?.currentUser?.fcmToken)
-
+        const token = await AsyncStorage.getItem('fcmToken')
+        const fcmToken = globaldata?.currentUser?.fcmToken
         const sendTokens = fcmToken?.filter(item => item !== token)
+
         const uptObj = {
             ...globaldata?.currentUser,
-            fcmToken: JSON.stringify(sendTokens)
+            fcmToken: sendTokens
         }
-        console.log(fcmToken.length, typeof (fcmToken))
-        if (true) {
-            API.updateUser(uptObj)
-                .then(async (res) => {
-                    await AsyncStorage.removeItem('fcmToken');
-                    dipatch(handleLogout())
-                    dipatch(handleResetData())
-                }).catch(err => console.log(err))
-
-        }
+        API.updateUser(uptObj)
+            .then(async (res) => {
+                await AsyncStorage.removeItem('fcmToken');
+                dipatch(handleLogout())
+                dipatch(handleResetData())
+            }).catch(err => console.log(err))
         setOpen(!open)
-
-
     }
 
     const handleUpdate = (type) => {

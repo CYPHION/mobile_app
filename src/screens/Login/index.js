@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
+import PTWhite from '../../components/SVGS/PT-Logo-White'
 import CustomButton from '../../components/base/CustomButton'
 import FlaotingTextInput from '../../components/base/FlaotingTextInput'
 import { API } from '../../network/API'
@@ -65,11 +66,12 @@ const LoginScreen = (prop) => {
                     />
                     <View style={[styles.absoluteImage, styles.picture]} />
                     <View style={[styles.logoView]}>
-                        <Image
+                        {/* <Image
                             resizeMode="contain"
                             style={[styles.logo]}
-                            source={require("../../images/PT_LogoWhite.png")}
-                        />
+                            source={require("../../components/SVGS/PT-Logo-White.js")}
+                        /> */}
+                        <PTWhite />
                         <View>
                             <Text
                                 style={[styles.textStyle, { fontFamily: FontFamily.interRegular }]}

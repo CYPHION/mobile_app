@@ -1,14 +1,15 @@
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { RefreshControl, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import BellIcon from "react-native-vector-icons/Ionicons";
+import { useDispatch, useSelector } from 'react-redux';
 import { API } from '../../network/API';
+import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
-
 
 const Data = [
     {
@@ -75,11 +76,28 @@ const Data = [
 
 const Notifications = () => {
     const [data, setData] = useState([])
+    const [refreshing, setRefreshing] = useState(false)
+    const user = useSelector(state => state?.user?.data)
+    const dispatch = useDispatch()
     const getNotification = () => {
-        API.getAllNotification()
+        API.getAllNotification(user?.id)
             .then((res) => setData(res?.data))
             .catch((err) => console.log(err))
     }
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        dispatch(globalData(user?.id))
+            .then(() => {
+                getNotification()
+                setRefreshing(false); // Set refreshing to false after data fetching is completed
+            })
+            .catch(() => {
+                getNotification()
+                setRefreshing(false); // Ensure refreshing is set to false even if there's an error
+            });
+    }, [])
+    console.log('data', data)
 
     useEffect(() => {
         getNotification()
@@ -88,28 +106,41 @@ const Notifications = () => {
     return (
         <>
             <SafeAreaView style={{ flex: 1 }}>
-                <ScrollView >
+                <ScrollView
+                    refreshControl={<RefreshControl
+                        onRefresh={onRefresh}
+                        refreshing={refreshing}
+                    />}
+                >
                     <View style={GlobalStyles.p_10}>
-                        {data?.map((item, index) => (
-                            <View key={index} style={{ width: '100%', padding: 5 }}>
-                                <View key={index} style={[styles.notificationContainer, GlobalStyles.p_10]}>
-                                    <View style={styles.notificationContainers}>
-                                        <View style={styles.bgIconColor}>
-                                            <BellIcon name="notifications-outline" size={FontSizes.xxl} color={Color.text} />
-                                        </View>
-                                        <View >
-                                            {/* <Text ellipsizeMode="tail" numberOfLines={1} style={styles.notificationFont}>{item?.subType}</Text> */}
-                                            <Text numberOfLines={2} style={styles.notificationNameFont}>{item?.message}</Text>
-                                            <Text style={[styles.notificationTime, { marginTop: 5 }]}>{moment(item?.time).fromNow()}</Text>
-                                        </View>
+                        {data?.length > 0 ? <>
+                            {data?.map((item, index) => (
+                                <View key={index} style={{ width: '100%', padding: 5 }}>
+                                    <View key={index} style={[styles.notificationContainer, GlobalStyles.p_10]}>
+                                        <View style={styles.notificationContainers}>
+                                            <View style={styles.bgIconColor}>
+                                                <BellIcon name="notifications-outline" size={FontSizes.xxl} color={Color.text} />
+                                            </View>
+                                            <View >
+                                                {/* <Text ellipsizeMode="tail" numberOfLines={1} style={styles.notificationFont}>{item?.subType}</Text> */}
+                                                <Text numberOfLines={2} style={styles.notificationNameFont}>{item?.message}</Text>
+                                                <Text style={[styles.notificationTime, { marginTop: 5 }]}>{moment(item?.createdAt).fromNow()}</Text>
+                                            </View>
 
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
-                        ))}
+                            ))}
+                        </> :
+                            <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
+                                <View>
+                                    <BellIcon name='notifications-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                                    <Text style={styles.inactivetext}>No Notifications found</Text>
+                                </View>
+                            </View>}
                     </View>
                 </ScrollView>
-            </SafeAreaView>
+            </SafeAreaView >
 
         </>
     )
@@ -158,11 +189,17 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.interRegular,
         fontSize: FontSizes.md,
         color: Color.textThree,
+        width: screenDimensions.width * 0.7
     },
     notificationTime: {
         fontFamily: FontFamily.interRegular,
         fontSize: FontSizes.sm,
         color: Color.textThree,
-    }
+    },
+    inactivetext: {
+        textAlign: 'center',
+        color: Color.textTwo,
+        fontSize: FontSizes.lg
+    },
 
 })

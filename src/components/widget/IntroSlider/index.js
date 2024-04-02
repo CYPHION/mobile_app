@@ -5,6 +5,7 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import { Color } from '../../../utils/color/index';
 import { FontFamily, FontSizes } from '../../../utils/font';
 import { screenDimensions } from '../../../utils/functions';
+import PTWhite from '../../SVGS/PT-Logo-White';
 
 const slides = [
     {
@@ -12,21 +13,24 @@ const slides = [
         text: 'Welcome To',
         title: 'PRIME TUITION',
         picture: require('../../../images/Image-18.png'),
-        logo: require('../../../images/PT_LogoWhite.png') // Correct the image path and extension
+        // logo: require('../../../images/PT_LogoWhite.png') // Correct the image path and extension
+        logo: <PTWhite />
     },
     {
         id: 2,
         text: 'Easy Fee',
         title: 'PAYMENT PLANS',
         picture: require('../../../images/Image-16.png'), // Correct the image path and extension
-        logo: require('../../../images/PT_LogoWhite.png') // Correct the image path and extension
+        // logo: require('../../../images/PT_LogoWhite.png') // Correct the image path and extension
+        logo: <PTWhite />
     },
     {
         id: 3,
         text: 'Quality Education',
         title: 'FOR EVERY CHILD',
         picture: require('../../../images/Image-18.png'), // Correct the image path and extension
-        logo: require('../../../images/PT_LogoWhite.png') // Correct the image path and extension
+        // logo: require('../../../images/PT_LogoWhite.png') // Correct the image path and extension
+        logo: <PTWhite />
     },
 ];
 
@@ -51,9 +55,10 @@ const IntroSlider = ({ setIsIntro }) => {
                         style={[styles.absoluteImage, { backgroundColor: 'rgba(0, 0, 0, 0.4)' }]}
                     />
                     <View style={[styles.logoDiv]} >
-                        <Image
+                        {/* <Image
                             source={item.logo}
-                        />
+                        /> */}
+                        {item.logo}
                     </View>
                     <View style={[styles.logoDiv, { justifyContent: 'flex-start' }]}>
                         <View style={[styles.flexClass, { position: 'absolute', top: screenDimensions.height * 0.04 }]}>
