@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Linking, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Download from 'react-native-vector-icons/Feather';
 import { default as NoHomework } from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -37,7 +37,7 @@ const ViewFess = () => {
 
     const handleDownload = (fileName) => {
         const url = getImage(fileName); // Replace with your download URL
-        console.log(url)
+        Linking.openURL(url).catch((err) => customToast('error', 'Something went wrong!'));
 
     };
 

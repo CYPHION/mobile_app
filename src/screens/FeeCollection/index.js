@@ -15,7 +15,7 @@ import { Color } from '../../utils/color';
 import { FontSizes } from '../../utils/font';
 import { calculateFee, customToast, formattedDate, getParentDropdown, screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
-import FeeSkeleton from '../Fee/FeesSkeleton';
+import FeeSkeleton from './FeesSkeleton';
 
 
 const summaryInitial = {
@@ -401,6 +401,9 @@ const FeeCollection = () => {
             remarks: remarks,
             isBooster: true,
             payType: 'regular',
+            byCardAmount: Number(formData.paidAmount),
+            byCashAmount: 0,
+            byBankAmount: 0,
             invoice: {
                 document: ''
             }
@@ -416,6 +419,9 @@ const FeeCollection = () => {
             payType: 'regular',
             isBooster: true,
             onlyBoosterFee: onlyBoosterFee,
+            byCardAmount: Number(formData.paidAmount),
+            byCashAmount: 0,
+            byBankAmount: 0,
             invoice: {
                 document: ''
             }
@@ -428,6 +434,9 @@ const FeeCollection = () => {
             feeWaived: Number(formData?.feeWaived),
             amountPaid: Number(formData.duesAmount),
             remarks: remarks,
+            byCardAmount: Number(formData.duesAmount),
+            byCashAmount: 0,
+            byBankAmount: 0,
             invoice: {
                 document: ''
             }
@@ -442,6 +451,9 @@ const FeeCollection = () => {
             amountPaid: Number(formData.duesAmount),
             onlyBook: true,
             remarks: remarks,
+            byCardAmount: Number(formData.duesAmount),
+            byCashAmount: 0,
+            byBankAmount: 0,
             invoice: {
                 document: ''
             }
@@ -517,7 +529,10 @@ const FeeCollection = () => {
                 cashierName: casherName,
                 summary: summary,
                 feeWaived: formData.feeWaived,
-                duesAmount: formData.duesAmount
+                duesAmount: formData.duesAmount,
+                byCardAmount: formData.paidAmount,
+                byCashAmount: 0,
+                byBankAmount: 0,
             }
             setInvoiceData(form)
             await handlePayNwow({ ...sendFOrmData, option }, form)
@@ -540,7 +555,10 @@ const FeeCollection = () => {
                     cashierName: casherName,
                     summary: summary,
                     feeWaived: formData.feeWaived,
-                    duesAmount: formData.duesAmount
+                    duesAmount: formData.duesAmount,
+                    byCardAmount: formData.paidAmount,
+                    byCashAmount: 0,
+                    byBankAmount: 0,
                 }
                 setInvoiceData(form)
                 await handlePayNwow({ ...sendFOrmData, option }, form)
@@ -572,7 +590,10 @@ const FeeCollection = () => {
                     cashierName: casherName,
                     summary: summary,
                     feeWaived: formData.feeWaived,
-                    duesAmount: formData.duesAmount
+                    duesAmount: formData.duesAmount,
+                    byCardAmount: formData.duesAmount,
+                    byCashAmount: 0,
+                    byBankAmount: 0,
                 }
                 setInvoiceData(form)
                 await handlePayNwow({ ...sendFOrmData, option }, form)
