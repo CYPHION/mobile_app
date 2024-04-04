@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
-import { RefreshControl, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import BellIcon from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from 'react-redux';
@@ -76,9 +76,18 @@ const Data = [
 
 const Notifications = () => {
     const [data, setData] = useState([])
+    const [activeItem, setActiveItem] = useState(null);
+
     const [refreshing, setRefreshing] = useState(false)
     const user = useSelector(state => state?.user?.data)
+    const [expanded, setExpanded] = useState(false);
     const dispatch = useDispatch()
+
+
+    const toggleItem = (index) => {
+        setActiveItem(activeItem === index ? null : index); // Toggle state based on click
+    };
+
     const getNotification = () => {
         API.getAllNotification(user?.id)
             .then((res) => setData(res?.data))
@@ -97,7 +106,6 @@ const Notifications = () => {
                 setRefreshing(false); // Ensure refreshing is set to false even if there's an error
             });
     }, [])
-    console.log('data', data)
 
     useEffect(() => {
         getNotification()
@@ -115,21 +123,21 @@ const Notifications = () => {
                     <View style={GlobalStyles.p_10}>
                         {data?.length > 0 ? <>
                             {data?.map((item, index) => (
-                                <View key={index} style={{ width: '100%', padding: 5 }}>
+                                <TouchableOpacity onPress={() => toggleItem(index)} activeOpacity={1} key={index} style={{ width: '100%', padding: 5 }}>
                                     <View key={index} style={[styles.notificationContainer, GlobalStyles.p_10]}>
-                                        <View style={styles.notificationContainers}>
+                                        <View style={[styles.notificationContainers]}>
                                             <View style={styles.bgIconColor}>
                                                 <BellIcon name="notifications-outline" size={FontSizes.xxl} color={Color.text} />
                                             </View>
                                             <View >
                                                 {/* <Text ellipsizeMode="tail" numberOfLines={1} style={styles.notificationFont}>{item?.subType}</Text> */}
-                                                <Text numberOfLines={2} style={styles.notificationNameFont}>{item?.message}</Text>
+                                                <Text numberOfLines={activeItem === index ? null : 2} style={[styles.notificationNameFont]}>{item?.message}</Text>
                                                 <Text style={[styles.notificationTime, { marginTop: 5 }]}>{moment(item?.createdAt).fromNow()}</Text>
                                             </View>
 
                                         </View>
                                     </View>
-                                </View>
+                                </TouchableOpacity>
                             ))}
                         </> :
                             <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
@@ -137,7 +145,8 @@ const Notifications = () => {
                                     <BellIcon name='notifications-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
                                     <Text style={styles.inactivetext}>No Notifications found</Text>
                                 </View>
-                            </View>}
+                            </View>
+                        }
                     </View>
                 </ScrollView>
             </SafeAreaView >

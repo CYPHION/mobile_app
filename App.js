@@ -16,7 +16,6 @@ import { Color } from "./src/utils/color";
 const Stack = createNativeStackNavigator();
 
 
-
 function AuthSTack() {
   return (
     <Stack.Navigator
