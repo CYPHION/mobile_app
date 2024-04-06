@@ -24,6 +24,12 @@ const ViewAppointments = () => {
     const user = useSelector(state => state.user.data);
     const dispatch = useDispatch()
 
+    const statusColor = {
+        Completed: Color.active,
+        Cancelled: Color.error,
+        Pending: Color.freeze,
+        Missed: Color.SecondaryText
+    }
 
     const filterByDate = (startDate, endDate) => {
         let filterData;
@@ -90,7 +96,8 @@ const ViewAppointments = () => {
         },
         {
             name: " Status",
-            value: `${elem?.status}`,
+            // value: `${elem?.status}`,
+            value: <Text style={{ color: statusColor[elem?.status] }}>{elem?.status}</Text>,
             icon: (
                 <CapIcon
                     color={Color.primary}
