@@ -86,10 +86,11 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <ReceiptIcon
                             name="receipt"
-                            color={focused ? Color.primary : color}
+                            color={focused ? Color.SecondaryText : Color.inactiveIcon}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.primary,
+                    tabBarActiveTintColor: Color.SecondaryText,
+                    tabBarInactiveTintColor: Color.inactiveIcon,
                     headerShown: true,
                     headerTitle: 'View Fee Receipt'
                 }}
@@ -100,10 +101,11 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <CardIcon
                             name="card"
-                            color={focused ? Color.primary : color}
+                            color={focused ? Color.SecondaryText : Color.inactiveIcon}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.primary,
+                    tabBarActiveTintColor: Color.SecondaryText,
+                    tabBarInactiveTintColor: Color.inactiveIcon,
                     headerShown: true,
                     headerTitle: 'Pay Fees'
 
@@ -115,10 +117,11 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <Icon
                             name="home"
-                            color={focused ? Color.primary : color}
+                            color={focused ? Color.SecondaryText : Color.inactiveIcon}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.primary
+                    tabBarActiveTintColor: Color.SecondaryText,
+                    tabBarInactiveTintColor: Color.inactiveIcon,
                 }}
             />
             <Tab.Screen name="analytics" component={Analytics}
@@ -127,10 +130,11 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <AnalyticsIcon
                             name="signal-cellular-3"
-                            color={focused ? Color.primary : color}
+                            color={focused ? Color.SecondaryText : Color.inactiveIcon}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.primary,
+                    tabBarActiveTintColor: Color.SecondaryText,
+                    tabBarInactiveTintColor: Color.inactiveIcon,
 
                 }}
             />
@@ -142,11 +146,12 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <UserIcon
                             name="user-circle"
-                            color={focused ? Color.primary : color}
+                            color={focused ? Color.SecondaryText : Color.inactiveIcon}
                             size={size}
                         />
                     ),
-                    tabBarActiveTintColor: Color.primary,
+                    tabBarInactiveTintColor: Color.inactiveIcon,
+                    tabBarActiveTintColor: Color.SecondaryText,
 
                 }}
             />

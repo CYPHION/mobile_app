@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.semiBold,
         color: Color.black
     },
-    progressBar: { position: 'absolute', top: screenDimensions.height * 0.20, backgroundColor: Color.primaryLight, height: 10, width: screenDimensions.width * 0.4, borderRadius: 10 }
+    progressBar: { position: 'absolute', top: screenDimensions.height * 0.20, backgroundColor: Color.primaryBg, height: 10, width: screenDimensions.width * 0.4, borderRadius: 10 }
 
 
 

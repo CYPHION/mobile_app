@@ -3,7 +3,6 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Color } from '../../../utils/color'
 import { FontFamily, FontSizes } from '../../../utils/font'
-import Graph from '../../base/GraphComponent'
 const TopbarWithGraph = ({ student, isGraph = true }) => {
     const navigation = useNavigation()
 
@@ -20,10 +19,9 @@ const TopbarWithGraph = ({ student, isGraph = true }) => {
                 </View>
                 {/* <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
                     <View style={styles.badge}></View>
-                    <Icon name="notifications" color={Color.textTwo} size={FontSizes.xxxl} />
+                    <Icon name="notifications" size={FontSizes.xxxl} />
                 </TouchableOpacity> */}
             </View>
-            {isGraph && <Graph labels={labels} dataOne={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9]} dataTwo={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9].reverse()} />}
         </>
     )
 }

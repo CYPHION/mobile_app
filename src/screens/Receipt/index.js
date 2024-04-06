@@ -81,7 +81,7 @@ const Receipt = () => {
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>
-                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textThree} />
                 <Text style={styles.inactivetext}>No Record found</Text>
             </View>
         </View>
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     },
     inactivetext: {
         textAlign: 'center',
-        color: Color.textTwo,
+        color: Color.textThree,
         fontSize: FontSizes.lg
     },
     accordionTitleHeading: {

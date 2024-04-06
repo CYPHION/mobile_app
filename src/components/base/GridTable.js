@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     },
     rowStyle: {
         paddingVertical: 10,
-        borderBottomColor: Color.borderDivider,
+        borderBottomColor: Color.textThree,
         borderBottomWidth: 1
     },
     textStyle: {
