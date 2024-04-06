@@ -930,7 +930,7 @@ const styles = StyleSheet.create({
     },
     inactivetext: {
         textAlign: 'center',
-        color: Color.textTwo,
+        color: Color.textThree,
         fontSize: FontSizes.lg
     },
 

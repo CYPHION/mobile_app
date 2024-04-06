@@ -57,12 +57,8 @@ const HomeSkeleton = ({ navigation }) => {
                         />
                     </View>
 
-                    <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
-                        <ShimmerPlaceholder style={[styles.CompText]} />
-                        <View>
-                            <ShimmerPlaceholder style={[styles.DropDown]} />
-                        </View>
-
+                    <View style={[styles.profileRowContainer, GlobalStyles.p_10, { justifyContent: 'center' }]}>
+                        <ShimmerPlaceholder style={[styles.CompText, { width: screenDimensions.width * 0.9, marginVertical: 10 }]} />
                     </View>
 
                     <View style={styles.GraphContainer} >
@@ -74,7 +70,7 @@ const HomeSkeleton = ({ navigation }) => {
 
 
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
 
@@ -92,7 +88,8 @@ const styles = StyleSheet.create({
     item: {
         marginHorizontal: 8,
         textAlign: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginHorizontal: 15
     },
     nameText: {
         fontSize: FontSizes.md,
@@ -101,10 +98,8 @@ const styles = StyleSheet.create({
         marginTop: 3,
         borderRadius: 8,
         width: 100,
-        backgroundColor: Color.error
     },
     image: {
-        backgroundColor: Color.error,
         width: screenDimensions.width * 0.25,
         height: screenDimensions.width * 0.25,
         borderRadius: screenDimensions.width * 0.25 * 0.5,
@@ -118,7 +113,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: 50,
         marginBottom: 5,
-        backgroundColor: Color.error
     },
     CompText: {
         fontSize: FontSizes.md,
@@ -126,7 +120,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: 150,
         height: 25,
-        backgroundColor: Color.error
     },
     badge: {
         height: 10,
@@ -145,14 +138,12 @@ const styles = StyleSheet.create({
     },
     GraphContainers: {
         borderRadius: 8,
-        width: 350,
-        height: 300,
-        backgroundColor: Color.error,
+        width: screenDimensions.width * 0.9,
+        height: 250,
     },
     DropDown: {
         width: 95,
         height: 35,
-        backgroundColor: Color.error,
     },
     NameNot: {
         height: 30,

@@ -1,11 +1,8 @@
 import { useRoute } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
-import Idcard from "react-native-vector-icons/AntDesign"
-import CalendarTimeIcon from "react-native-vector-icons/FontAwesome"
 import BookIcon from "react-native-vector-icons/FontAwesome5"
 import CalendarIcon from "react-native-vector-icons/FontAwesome6"
-import GridIcon from "react-native-vector-icons/Ionicons"
 import { default as CalendarCheckIcon, default as NoHomework } from "react-native-vector-icons/MaterialCommunityIcons"
 import TimeIcon from "react-native-vector-icons/MaterialIcons"
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,11 +15,11 @@ import { formattedDate, screenDimensions } from '../../utils/functions'
 
 
 const list = (schedule) => [
-    {
-        name: "Department Name",
-        value: schedule?.Department?.name?.split(' ')[0],
-        icon: <Idcard name="idcard" size={FontSizes.xl} color={Color.iconColor} />,
-    },
+    // {
+    //     name: "Department Name",
+    //     value: schedule?.Department?.name?.split(' ')[0],
+    //     icon: <Idcard name="idcard" size={FontSizes.xl} color={Color.iconColor} />,
+    // },
     {
         name: "Lesson",
         value: schedule?.Subject?.name,
@@ -43,16 +40,16 @@ const list = (schedule) => [
         value: (schedule?.startDate && !isNaN(new Date(schedule?.startDate)) && schedule?.startDate !== '0000-00-00') ? formattedDate(schedule?.startDate, 'MMM-dd,yyyy') : '',
         icon: <CalendarCheckIcon name="calendar-multiple-check" size={FontSizes.xl} color={Color.iconColor} />,
     },
-    {
-        name: "End Date",
-        value: (schedule?.endDate && !isNaN(new Date(schedule?.endDate)) && schedule?.endDate !== '0000-00-00') ? formattedDate(schedule?.endDate, 'MMM-dd,yyyy') : '',
-        icon: <CalendarTimeIcon name="calendar-times-o" size={FontSizes.xl} color={Color.iconColor} />,
-    },
-    {
-        name: "Category",
-        value: schedule?.isComp ? 'Compensation Schedule' : schedule?.isBooster ? "Booster Lesson" : 'Regular Lesson',
-        icon: <GridIcon name="grid" size={FontSizes.xl} color={Color.iconColor} />,
-    },
+    // {
+    //     name: "End Date",
+    //     value: (schedule?.endDate && !isNaN(new Date(schedule?.endDate)) && schedule?.endDate !== '0000-00-00') ? formattedDate(schedule?.endDate, 'MMM-dd,yyyy') : '',
+    //     icon: <CalendarTimeIcon name="calendar-times-o" size={FontSizes.xl} color={Color.iconColor} />,
+    // },
+    // {
+    //     name: "Category",
+    //     value: schedule?.isComp ? 'Compensation Schedule' : schedule?.isBooster ? "Booster Lesson" : 'Regular Lesson',
+    //     icon: <GridIcon name="grid" size={FontSizes.xl} color={Color.iconColor} />,
+    // },
 
 ]
 
@@ -64,7 +61,6 @@ const ViewSchedule = () => {
     const user = useSelector(state => state?.user?.data)
     const dispatch = useDispatch()
     const Schedules = globaldata?.schedules?.filter(elem => elem.studentId === router.params?.student?.id)
-
     const fetchData = () => {
         setData(Schedules)
     }
@@ -81,6 +77,7 @@ const ViewSchedule = () => {
                 setRefresh(false);
             });
     };
+
 
     useEffect(() => {
         fetchData()
@@ -112,7 +109,7 @@ const ViewSchedule = () => {
                         </View>
                     </View> : <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
                         <View>
-                            <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                            <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTThree} />
                             <Text style={styles.inactivetext}>No Schedule found</Text>
                         </View>
                     </View>
@@ -132,7 +129,7 @@ const styles = StyleSheet.create({
     },
     inactivetext: {
         textAlign: 'center',
-        color: Color.textTwo,
+        color: Color.textTThree,
         fontSize: FontSizes.lg
     }
 

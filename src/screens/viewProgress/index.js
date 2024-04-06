@@ -62,7 +62,7 @@ const ViewProgress = () => {
 
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
-    const filterReport = globaldata?.reports?.filter(elem => elem.studentId === router.params.student?.id)
+    const filterReport = globaldata?.reports?.filter(elem => elem?.studentId === router?.params?.student?.id)
     const dispatch = useDispatch()
 
 
@@ -99,7 +99,7 @@ const ViewProgress = () => {
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>
-                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTThree} />
                 <Text style={styles.inactivetext}>No Progress Report found</Text>
             </View>
         </View>
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     },
     inactivetext: {
         textAlign: 'center',
-        color: Color.textTwo,
+        color: Color.textTThree,
         fontSize: FontSizes.lg
     }
 })

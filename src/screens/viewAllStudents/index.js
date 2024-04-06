@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import LoadingScreen from '../../components/base/LoadingScreen'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { getImage, screenDimensions } from '../../utils/functions'
+import { bgColor, getImage, screenDimensions } from '../../utils/functions'
 
 const ViewAllStudents = ({ navigation }) => {
     const user = useSelector(state => state?.user?.data)
@@ -12,12 +12,6 @@ const ViewAllStudents = ({ navigation }) => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
 
-    const bgColor = {
-        active: Color.primary,
-        inactive: Color.error,
-        pending: Color.btnDisable,
-        freeze: Color.warning
-    }
 
     useEffect(() => {
         setLoading(false)

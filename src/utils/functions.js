@@ -4,6 +4,7 @@ import Toast from 'react-native-toast-message'
 import { URL } from '../network/httpService'
 import { store } from '../store'
 import { logoutUser } from '../store/thunk'
+import { Color } from './color'
 
 export const screenDimensions = Dimensions.get('window')
 
@@ -165,4 +166,11 @@ export function calculateFee(child, timeperiod, isMonthly, startDate, isBooster)
     }
 
     return obj;
+}
+
+export const bgColor = {
+    active: Color.active,
+    inactive: Color.error,
+    pending: Color.pending,
+    freeze: Color.freeze
 }

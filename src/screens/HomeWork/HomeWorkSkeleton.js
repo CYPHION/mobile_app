@@ -47,7 +47,6 @@ const HomeWorkSkeleton = () => {
                                     <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
                                         <View style={[styles.allStudentContainers, { gap: 15 }]} >
                                             <ShimmerPlaceholder style={[styles.bgIconColor]}>
-                                                {/* <Idcard name="idcard" size={FontSizes.xl} color={Color.iconColor} /> */}
                                             </ShimmerPlaceholder>
                                             <ShimmerPlaceholder style={styles.nameFont} />
                                         </View>
@@ -56,7 +55,6 @@ const HomeWorkSkeleton = () => {
                                     <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
                                         <View style={[styles.allStudentContainers, { gap: 15 }]} >
                                             <ShimmerPlaceholder style={[styles.bgIconColor]}>
-                                                {/* <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} /> */}
                                             </ShimmerPlaceholder>
                                             <ShimmerPlaceholder style={styles.nameFont} />
                                         </View>

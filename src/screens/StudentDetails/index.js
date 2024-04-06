@@ -20,10 +20,10 @@ const StudentDetails = ({ navigation }) => {
     const isMonthly = student?.feeChargedBy === "Monthly" ? true : false
 
     const Data = [
-        {
-            name: 'Year',
-            value: student?.StudentYear?.name
-        },
+        // {
+        //     name: 'Year',
+        //     value: student?.StudentYear?.name
+        // },
         {
             name: 'Fee Plan',
             value: `${student?.feePlan} weeks`
@@ -32,25 +32,26 @@ const StudentDetails = ({ navigation }) => {
             name: `${isMonthly ? 'Fee Per Month' : 'Fee Per Week'}`,
             value: `£${isMonthly ? student?.monthlyFee : student?.weeklyFee}`
         },
-        {
-            name: 'Enrollment Date',
-            value: `${student?.enrollmentDate ? formattedDate(student?.enrollmentDate, 'dd-MM-yyyy') : ''}`
-        },
+        // {
+        //     name: 'Enrollment Date',
+        //     value: `${student?.enrollmentDate ? formattedDate(student?.enrollmentDate, 'dd-MM-yyyy') : ''}`
+        // },
         {
             name: 'Start Date',
             value: `${student?.startDate ? formattedDate(student?.startDate, 'dd-MM-yyyy') : ''}`
         },
-        {
-            name: 'Mobile No.',
-            value: userData?.mobileNo || 'N/A'
-        }, {
-            name: 'Home Number',
-            value: userData?.phoneNo || 'N/A'
-        },
-        {
-            name: 'Category',
-            value: student?.isChildcareStd ? 'Child Care' : 'Not Child Care'
-        },
+        // {
+        //     name: 'Mobile No.',
+        //     value: userData?.mobileNo || 'N/A'
+        // },
+        // {
+        //     name: 'Home Number',
+        //     value: userData?.phoneNo || 'N/A'
+        // },
+        // {
+        //     name: 'Category',
+        //     value: student?.isChildcareStd ? 'Child Care' : 'Not Child Care'
+        // },
         {
             name: 'Contract Type',
             value: globalData?.contractType?.find(elem => elem.id === student?.contractType)?.name

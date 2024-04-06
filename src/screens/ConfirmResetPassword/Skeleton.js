@@ -48,7 +48,7 @@ const Home = ({ navigation }) => {
                             <ShimmerPlaceholder style={[styles.NameText, styles.textFontFamily]} />
                             <ShimmerPlaceholder style={[styles.CompText, styles.textFontFamily]} />
                         </View>
-                        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
+                        <TouchableOpacity activeOpacity={0.7} >
                             {/* <View style={styles.badge}></View> */}
                             <ShimmerPlaceholder style={[styles.NameNot]} />
 
@@ -122,10 +122,8 @@ const styles = StyleSheet.create({
         marginTop: 3,
         borderRadius: 8,
         width: 100,
-        backgroundColor: Color.error
     },
     image: {
-        backgroundColor: Color.error,
         width: screenDimensions.width * 0.25,
         height: screenDimensions.width * 0.25,
         borderRadius: screenDimensions.width * 0.25 * 0.5,
@@ -139,7 +137,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: 50,
         marginBottom: 5,
-        backgroundColor: Color.error
     },
     CompText: {
         fontSize: FontSizes.md,
@@ -147,7 +144,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: 150,
         height: 25,
-        backgroundColor: Color.error
     },
     badge: {
         height: 10,
@@ -168,12 +164,10 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: 350,
         height: 300,
-        backgroundColor: Color.error,
     },
     DropDown: {
         width: 95,
         height: 35,
-        backgroundColor: Color.error,
     },
     NameNot: {
         height: 30,
