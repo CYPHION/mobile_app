@@ -2,8 +2,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect, useRef } from 'react';
-import { BackHandler } from 'react-native';
-import Icon from 'react-native-vector-icons/Entypo';
+import { BackHandler, TouchableOpacity } from 'react-native';
+import { default as Icon, default as MenuIcon } from 'react-native-vector-icons/Entypo';
 import UserIcon from 'react-native-vector-icons/FontAwesome';
 import ReceiptIcon from 'react-native-vector-icons/FontAwesome6';
 import CardIcon from 'react-native-vector-icons/Ionicons';
@@ -21,18 +21,30 @@ const Tab = createBottomTabNavigator();
 
 const StackProfile = createNativeStackNavigator();
 const ProfileStack = () => {
+    const navigation = useNavigation();
     return <StackProfile.Navigator
         initialRouteName='profile'
     >
         <StackProfile.Screen name="profile" component={Profile}
             options={{
-                headerShown: false,
+                headerShown: true,
+                headerTitle: 'Profile',
+                headerRight: () => (
+                    <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
+                        <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.black} />
+                    </TouchableOpacity>
+                ),
 
             }} />
         <StackProfile.Screen name="changePassword" component={ChangePasswordScreen}
             options={{
                 headerShown: true,
                 headerTitle: 'Change Password',
+                headerRight: () => (
+                    <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
+                        <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.black} />
+                    </TouchableOpacity>
+                ),
             }}
         />
     </StackProfile.Navigator>
@@ -92,7 +104,12 @@ const TabNavigation = ({ old }) => {
                     tabBarActiveTintColor: Color.SecondaryText,
                     tabBarInactiveTintColor: Color.inactiveIcon,
                     headerShown: true,
-                    headerTitle: 'View Fee Receipt'
+                    headerTitle: 'View Fee Receipt',
+                    headerRight: () => (
+                        <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
+                            <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.black} />
+                        </TouchableOpacity>
+                    ),
                 }}
             />
             <Tab.Screen name="fee" component={FeeCollection}
@@ -107,7 +124,12 @@ const TabNavigation = ({ old }) => {
                     tabBarActiveTintColor: Color.SecondaryText,
                     tabBarInactiveTintColor: Color.inactiveIcon,
                     headerShown: true,
-                    headerTitle: 'Pay Fees'
+                    headerTitle: 'Pay Fees',
+                    headerRight: () => (
+                        <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
+                            <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.black} />
+                        </TouchableOpacity>
+                    ),
 
                 }}
             />
@@ -126,6 +148,13 @@ const TabNavigation = ({ old }) => {
             />
             <Tab.Screen name="analytics" component={Analytics}
                 options={{
+                    headerShown: true,
+                    headerTitle: 'Analytics',
+                    headerRight: () => (
+                        <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
+                            <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.black} />
+                        </TouchableOpacity>
+                    ),
                     tabBarLabel: 'Analytics',
                     tabBarIcon: ({ color, size, focused }) => (
                         <AnalyticsIcon

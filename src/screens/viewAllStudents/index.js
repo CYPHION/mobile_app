@@ -46,8 +46,9 @@ const ViewAllStudents = ({ navigation }) => {
                                 <TouchableOpacity activeOpacity={0.9} key={index} onPress={() => navigation.navigate('viewStudent', { id: elem.id })}>
                                     <View style={styles.allStudentContainer}>
                                         <View style={styles.allStudentContainers}>
-                                            <View>
+                                            <View style={{ borderWidth: 2, borderColor: Color.primary, borderRadius: screenDimensions.width * 0.18 * 0.5, width: screenDimensions.width * 0.18, height: screenDimensions.width * 0.18, position: 'relative' }}>
                                                 <Image resizeMode='contain' source={elem?.picture ? { uri: getImage(elem?.picture) } : require("../../images/profileAvatar.png")} style={styles.image} />
+                                                <View style={[styles.stBadge, { backgroundColor: bgColor[elem?.status] }]}></View>
                                             </View>
                                             <View>
                                                 <Text style={[styles.nameFont]}>{elem?.fullName}</Text>
@@ -146,11 +147,16 @@ const styles = StyleSheet.create({
         color: Color.text,
     },
     image: {
-        width: screenDimensions.width * 0.18,
-        height: screenDimensions.width * 0.18,
+        width: "100%",
+        height: "100%",
         borderRadius: screenDimensions.width * 0.18 * 0.5,
         backgroundColor: Color.disable,
-        borderColor: Color.borderColor,
-        borderWidth: 0.3,
-    }
+    },
+    stBadge: {
+        position: "absolute",
+        right: 0,
+        width: 20,
+        height: 20,
+        borderRadius: 10
+    },
 })

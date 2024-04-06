@@ -246,7 +246,7 @@ const Home = ({ navigation }) => {
                     <View style={[styles.profileRowContainer, GlobalStyles.p_10]}>
                         <Text style={[styles.CompText, { marginVertical: 10 }]}>More With Prime Tuition</Text>
                     </View>
-                    <View style={{ justifyContent: 'center', alignItems: 'center', width: screenDimensions.width }}>
+                    <View style={{ justifyContent: 'center', alignItems: 'center', width: screenDimensions.width, paddingBottom: 20 }}>
                         <View style={styles.cardContainer}>
                             {cards?.map((elem, index) => (
                                 <TouchableOpacity onPress={() => handleCardPress(elem)} activeOpacity={0.9} key={index}>

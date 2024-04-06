@@ -4,6 +4,7 @@ import { RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View 
 import { ScrollView } from 'react-native-gesture-handler';
 import BellIcon from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from 'react-redux';
+import LoadingScreen from '../../components/base/LoadingScreen';
 import { API } from '../../network/API';
 import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
@@ -77,7 +78,7 @@ const Data = [
 const Notifications = () => {
     const [data, setData] = useState([])
     const [activeItem, setActiveItem] = useState(null);
-
+    const [active, setActive] = useState(true)
     const [refreshing, setRefreshing] = useState(false)
     const user = useSelector(state => state?.user?.data)
     const [expanded, setExpanded] = useState(false);
@@ -92,6 +93,7 @@ const Notifications = () => {
         API.getAllNotification(user?.id)
             .then((res) => setData(res?.data))
             .catch((err) => console.log(err))
+            .finally(() => setActive(false))
     }
 
     const onRefresh = useCallback(() => {
@@ -120,6 +122,7 @@ const Notifications = () => {
                         refreshing={refreshing}
                     />}
                 >
+                    <LoadingScreen loading={active} />
                     <View style={GlobalStyles.p_10}>
                         {data?.length > 0 ? <>
                             {data?.map((item, index) => (
