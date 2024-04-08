@@ -29,7 +29,6 @@ const Profile = ({ navigation }) => {
     const globaldata = useSelector(state => state?.global?.data)
     const src = user?.dp ? { uri: getImage(user?.dp) } : require("../../images/profile.png");
 
-
     const logoutHandler = async () => {
         const token = await AsyncStorage.getItem('fcmToken')
         const fcmToken = globaldata?.currentUser?.fcmToken
@@ -74,7 +73,7 @@ const Profile = ({ navigation }) => {
                                     {/* <Image resizeMode='contain' source={src} style={[styles.profileImage]} /> */}
                                     <View>
                                         <Text style={[styles.text, { color: Color.text, fontSize: FontSizes.xl }]}>{user?.firstName} {user?.lastName}</Text>
-                                        <Text style={[styles.text, { color: Color.textThree, fontSize: FontSizes.md }]}>{user?.email}</Text>
+                                        <Text style={[styles.text, { color: Color.primary, fontSize: FontSizes.md }]}>{user?.email}</Text>
                                     </View>
                                 </View>
                                 <View >
@@ -89,7 +88,7 @@ const Profile = ({ navigation }) => {
                                         <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
                                             <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>User Name</Text>
 
-                                            <Text style={[styles.textTwo, { color: Color.textThree, padding: 10 }]}>
+                                            <Text style={[styles.textTwo, { color: Color.primary, padding: 10 }]}>
                                                 {user.firstName}
                                             </Text>
                                         </View>
@@ -105,7 +104,7 @@ const Profile = ({ navigation }) => {
                                         <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
                                             <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>Email</Text>
 
-                                            <Text style={[styles.textTwo, { color: Color.textThree, padding: 10 }]}>
+                                            <Text style={[styles.textTwo, { color: Color.primary, padding: 10 }]}>
                                                 {user?.email}
                                             </Text>
                                         </View>
@@ -122,7 +121,7 @@ const Profile = ({ navigation }) => {
                                         <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
                                             <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>Password</Text>
                                             <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('profiles', { screen: 'changePassword' })}>
-                                                <Text style={[styles.textTwo, { color: Color.textThree, padding: 10 }]}>
+                                                <Text style={[styles.textTwo, { color: Color.primary, padding: 10 }]}>
                                                     Tap to change password
                                                 </Text>
                                             </TouchableOpacity>
@@ -137,8 +136,8 @@ const Profile = ({ navigation }) => {
                                         </View>
                                         <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
                                             <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>Phone Number</Text>
-                                            <Text style={[styles.textTwo, { color: Color.textThree, padding: 10 }]}>
-                                                {user?.phoneNo}
+                                            <Text style={[styles.textTwo, { color: Color.primary, padding: 10 }]}>
+                                                {user?.mobileNo}
                                             </Text>
                                         </View>
                                     </View>

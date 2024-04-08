@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     attendeceFont: {
         fontSize: FontSizes.md,
         color: Color.textThree,
-        fontFamily: FontFamily.medium,
+        fontFamily: FontFamily.bold,
         backgroundColor: Color.grayBackground,
         paddingHorizontal: 10,
         paddingVertical: 5
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     totalFont: {
         fontSize: FontSizes.lg,
         fontFamily: FontFamily.interBold,
-        color: Color.text
+        color: Color.primary
     },
     analyticBox: {
         flexDirection: 'row',

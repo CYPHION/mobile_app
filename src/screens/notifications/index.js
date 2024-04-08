@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     notificationTime: {
         fontFamily: FontFamily.interRegular,
         fontSize: FontSizes.sm,
-        color: Color.textThree,
+        color: Color.primary,
     },
     inactivetext: {
         textAlign: 'center',

@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     nameFont: {
         fontFamily: FontFamily.interMedium,
         fontSize: FontSizes.lg,
-        color: Color.text,
+        color: Color.primary,
     },
     yearFont: {
         textAlign: 'left',
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     weeklyText: {
         fontFamily: FontFamily.interBold,
         fontSize: FontSizes.md,
-        color: Color.text,
+        color: Color.primary,
     },
     image: {
         width: "100%",

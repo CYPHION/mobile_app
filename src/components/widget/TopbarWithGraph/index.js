@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     },
     CompText: {
         fontSize: FontSizes.md,
-        color: Color.text,
+        color: Color.primary,
     },
     badge: {
         height: 10,

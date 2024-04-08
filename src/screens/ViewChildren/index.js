@@ -17,33 +17,33 @@ import { GlobalStyles } from '../../utils/globalStyles';
 const items = [
     {
         label: 'View Student Details',
-        icon: <DetaiIcon name="insert-chart-outlined" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <DetaiIcon name="insert-chart-outlined" size={FontSizes.xl} color={Color.primary} />,
         path: 'studentDetail'
     },
     {
         label: 'View Shedule ',
-        icon: <CalendarIcon name="calendar-month" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <CalendarIcon name="calendar-month" size={FontSizes.xl} color={Color.primary} />,
         path: 'studentSchedule'
     },
     {
         label: 'View Attendace',
-        icon: <CardIcon name="idcard" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <CardIcon name="idcard" size={FontSizes.xl} color={Color.primary} />,
         path: 'studentAttendance'
     },
     {
         label: 'View Fees',
-        icon: <CreditCardIcon name="credit-card-multiple-outline" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <CreditCardIcon name="credit-card-multiple-outline" size={FontSizes.xl} color={Color.primary} />,
         path: 'fee',
         mainRoute: 'tabs'
     },
     {
         label: 'Homework',
-        icon: <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <BookIcon name="book" size={FontSizes.xl} color={Color.primary} />,
         path: 'studentHomework'
     },
     {
         label: 'Progress Report ',
-        icon: <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <BookIcon name="book" size={FontSizes.xl} color={Color.primary} />,
         path: 'studentReport'
     },
 ]

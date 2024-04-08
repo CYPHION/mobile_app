@@ -18,37 +18,37 @@ const list = (schedule) => [
     // {
     //     name: "Department Name",
     //     value: schedule?.Department?.name?.split(' ')[0],
-    //     icon: <Idcard name="idcard" size={FontSizes.xl} color={Color.iconColor} />,
+    //     icon: <Idcard name="idcard" size={FontSizes.xl} color={Color.primary} />,
     // },
     {
         name: "Lesson",
         value: schedule?.Subject?.name,
-        icon: <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <BookIcon name="book" size={FontSizes.xl} color={Color.primary} />,
     },
     {
         name: "Schedule Days",
         value: schedule?.days,
-        icon: <CalendarIcon name="calendar-days" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <CalendarIcon name="calendar-days" size={FontSizes.xl} color={Color.primary} />,
     },
     {
         name: "Time",
         value: schedule?.LessonTiming?.time,
-        icon: <TimeIcon name="timelapse" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <TimeIcon name="timelapse" size={FontSizes.xl} color={Color.primary} />,
     },
     {
         name: "Start Date",
         value: (schedule?.startDate && !isNaN(new Date(schedule?.startDate)) && schedule?.startDate !== '0000-00-00') ? formattedDate(schedule?.startDate, 'MMM-dd,yyyy') : '',
-        icon: <CalendarCheckIcon name="calendar-multiple-check" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <CalendarCheckIcon name="calendar-multiple-check" size={FontSizes.xl} color={Color.primary} />,
     },
     // {
     //     name: "End Date",
     //     value: (schedule?.endDate && !isNaN(new Date(schedule?.endDate)) && schedule?.endDate !== '0000-00-00') ? formattedDate(schedule?.endDate, 'MMM-dd,yyyy') : '',
-    //     icon: <CalendarTimeIcon name="calendar-times-o" size={FontSizes.xl} color={Color.iconColor} />,
+    //     icon: <CalendarTimeIcon name="calendar-times-o" size={FontSizes.xl} color={Color.primary} />,
     // },
     // {
     //     name: "Category",
     //     value: schedule?.isComp ? 'Compensation Schedule' : schedule?.isBooster ? "Booster Lesson" : 'Regular Lesson',
-    //     icon: <GridIcon name="grid" size={FontSizes.xl} color={Color.iconColor} />,
+    //     icon: <GridIcon name="grid" size={FontSizes.xl} color={Color.primary} />,
     // },
 
 ]

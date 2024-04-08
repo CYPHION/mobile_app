@@ -75,16 +75,16 @@ const HomeWork = () => {
                                             <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
                                                 <View style={[styles.allStudentContainers, { gap: 15 }]} >
                                                     <View style={[styles.bgIconColor]}>
-                                                        <Idcard name="idcard" size={FontSizes.xl} color={Color.iconColor} />
+                                                        <Idcard name="idcard" size={FontSizes.xl} color={Color.primary} />
                                                     </View>
                                                     <Text style={styles.nameFont}>Homework Title</Text>
                                                 </View>
-                                                <Text style={styles.nameFont}>{elem.name}</Text>
+                                                <Text numberOfLines={1} style={[styles.nameFont, { width: 150 }]}>{elem.name}</Text>
                                             </View>
                                             <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
                                                 <View style={[styles.allStudentContainers, { gap: 15 }]} >
                                                     <View style={[styles.bgIconColor]}>
-                                                        <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />
+                                                        <BookIcon name="book" size={FontSizes.xl} color={Color.primary} />
                                                     </View>
                                                     <Text style={styles.nameFont}>Expiry Date</Text>
                                                 </View>
