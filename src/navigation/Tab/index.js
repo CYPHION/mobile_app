@@ -8,6 +8,7 @@ import UserIcon from 'react-native-vector-icons/FontAwesome';
 import ReceiptIcon from 'react-native-vector-icons/FontAwesome6';
 import CardIcon from 'react-native-vector-icons/Ionicons';
 import AnalyticsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import CustomAppBar from '../../components/base/CustomAppBar';
 import Analytics from '../../screens/Analytics';
 import ChangePasswordScreen from '../../screens/ChangePassword';
 import FeeCollection from '../../screens/FeeCollection';
@@ -21,30 +22,19 @@ const Tab = createBottomTabNavigator();
 
 const StackProfile = createNativeStackNavigator();
 const ProfileStack = () => {
-    const navigation = useNavigation();
     return <StackProfile.Navigator
         initialRouteName='profile'
     >
         <StackProfile.Screen name="profile" component={Profile}
             options={{
                 headerShown: true,
-                headerTitle: 'Profile',
-                headerRight: () => (
-                    <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
-                        <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.black} />
-                    </TouchableOpacity>
-                ),
+                header: () => <CustomAppBar back={false} title={'Profile'} />
 
             }} />
         <StackProfile.Screen name="changePassword" component={ChangePasswordScreen}
             options={{
                 headerShown: true,
-                headerTitle: 'Change Password',
-                headerRight: () => (
-                    <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
-                        <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.black} />
-                    </TouchableOpacity>
-                ),
+                header: () => <CustomAppBar title={'Change Password'} />
             }}
         />
     </StackProfile.Navigator>
@@ -98,11 +88,11 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <ReceiptIcon
                             name="receipt"
-                            color={focused ? Color.SecondaryText : Color.inactiveIcon}
+                            color={focused ? Color.SecondaryText : Color.text}
                             size={size} />
                     ),
                     tabBarActiveTintColor: Color.SecondaryText,
-                    tabBarInactiveTintColor: Color.inactiveIcon,
+                    tabBarInactiveTintColor: Color.text,
                     headerShown: true,
                     headerTitle: 'View Fee Receipt',
                     headerRight: () => (
@@ -118,11 +108,11 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <CardIcon
                             name="card"
-                            color={focused ? Color.SecondaryText : Color.inactiveIcon}
+                            color={focused ? Color.SecondaryText : Color.text}
                             size={size} />
                     ),
                     tabBarActiveTintColor: Color.SecondaryText,
-                    tabBarInactiveTintColor: Color.inactiveIcon,
+                    tabBarInactiveTintColor: Color.text,
                     headerShown: true,
                     headerTitle: 'Pay Fees',
                     headerRight: () => (
@@ -139,11 +129,11 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <Icon
                             name="home"
-                            color={focused ? Color.SecondaryText : Color.inactiveIcon}
+                            color={focused ? Color.SecondaryText : Color.text}
                             size={size} />
                     ),
                     tabBarActiveTintColor: Color.SecondaryText,
-                    tabBarInactiveTintColor: Color.inactiveIcon,
+                    tabBarInactiveTintColor: Color.text,
                 }}
             />
             <Tab.Screen name="analytics" component={Analytics}
@@ -159,11 +149,11 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <AnalyticsIcon
                             name="signal-cellular-3"
-                            color={focused ? Color.SecondaryText : Color.inactiveIcon}
+                            color={focused ? Color.SecondaryText : Color.text}
                             size={size} />
                     ),
                     tabBarActiveTintColor: Color.SecondaryText,
-                    tabBarInactiveTintColor: Color.inactiveIcon,
+                    tabBarInactiveTintColor: Color.text,
 
                 }}
             />
@@ -175,11 +165,11 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <UserIcon
                             name="user-circle"
-                            color={focused ? Color.SecondaryText : Color.inactiveIcon}
+                            color={focused ? Color.SecondaryText : Color.text}
                             size={size}
                         />
                     ),
-                    tabBarInactiveTintColor: Color.inactiveIcon,
+                    tabBarInactiveTintColor: Color.text,
                     tabBarActiveTintColor: Color.SecondaryText,
 
                 }}

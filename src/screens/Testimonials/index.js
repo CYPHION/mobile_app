@@ -106,13 +106,13 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     nameText: {
-        color: Color.text,
+        color: Color.primary,
         fontFamily: FontFamily.interMedium,
         fontSize: FontSizes.lg
     },
     textTwo: {
         fontSize: FontSizes.md,
-        color: Color.text,
+        color: Color.primary,
         fontFamily: FontFamily.interMedium
     },
     dateText: {

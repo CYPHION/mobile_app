@@ -5,6 +5,7 @@ import { default as NoHomework } from 'react-native-vector-icons/MaterialCommuni
 import { useDispatch, useSelector } from 'react-redux';
 import AccordionItem from '../../components/base/Accordion';
 import DropdownComponent from '../../components/base/CustomDropDown';
+import LoadingScreen from '../../components/base/LoadingScreen';
 import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
@@ -18,6 +19,7 @@ import ReceiptSkelton from './ReceiptSkeleton';
 const Receipt = () => {
     const [years, setYears] = useState([]);
     const [activeItem, setActiveItem] = useState(null);
+    const [isLoading, setIsloading] = useState(true);
     const [option, setOption] = useState(new Date().getFullYear());
     const [data, setData] = useState([])
     const [refreshing, setRefreshing] = useState(false)
@@ -49,6 +51,7 @@ const Receipt = () => {
             const itemYear = new Date(item.createdAt).getFullYear(); // Replace 'invoiceDate' with your actual date property
             return itemYear === parseInt(option);
         });
+        setIsloading(false)
         setData(filteredData);
     }
 
@@ -94,6 +97,7 @@ const Receipt = () => {
                 refreshing={refreshing}
             />}
         >
+            <LoadingScreen loading={isLoading} />
             {(!!user.email && !!globaldata.students) ?
                 <View style={styles.feesContainers}>
                     {globaldata?.fees.length > 0 ? <>
@@ -177,7 +181,7 @@ const styles = StyleSheet.create({
         fontSize: FontSizes.lg
     },
     accordionTitleHeading: {
-        color: Color.textThree,
+        color: Color.primary,
         fontFamily: FontFamily.interMedium,
         fontSize: FontSizes.xxl,
     },

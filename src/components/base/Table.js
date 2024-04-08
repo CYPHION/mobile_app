@@ -13,7 +13,7 @@ const Table = (prop) => {
 
     switch (status) {
         case 'Accepted':
-            bgColor = Color.success
+            bgColor = Color.active
             textColor = Color.text
             break;
 

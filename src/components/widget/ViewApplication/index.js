@@ -41,6 +41,7 @@ const ViewApplication = () => {
         } else {
             filterData = globaldata?.leaves?.filter(item => true)
         }
+        filterData.reverse()
         setData(filterData)
     };
 

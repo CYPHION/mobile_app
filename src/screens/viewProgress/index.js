@@ -43,7 +43,7 @@ const nestedArray = (item) => [
     {
         name: 'Test Status',
         // value: `${item?.meanPercentage > 0 ? `${item?.meanPercentage}%` : ''}`
-        value: <Text style={{ color: item?.meanPercentage > 50 ? 'green' : 'red' }}>{item?.meanPercentage}%</Text>
+        value: <Text style={{ color: item?.meanPercentage > 50 ? 'green' : 'red' }}>{item?.meanPercentage ? item?.meanPercentage : 0}%</Text>
     },
     {
         name: 'Date Enrolled',

@@ -1,7 +1,8 @@
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
-import { RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import RenderHtml from 'react-native-render-html';
 import BellIcon from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingScreen from '../../components/base/LoadingScreen';
@@ -12,70 +13,8 @@ import { FontFamily, FontSizes } from '../../utils/font';
 import { screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
 
-const Data = [
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Hassan Khan",
-        time: "1 min ago",
-    },
-    {
-        notification: "Your Lesson is ",
-        name: "Amir Khan",
-        time: "2 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Amir Khan",
-        time: "4 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Hassan Khan",
-        time: "6 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending! fasffgff agahgds as hshsrh",
-        name: "Hassan Khan",
-        time: "8 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Hassan Khan",
-        time: "10 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Amir Khan",
-        time: "11 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Areeb Khan",
-        time: "12 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Hassan Khan",
-        time: "13 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Hassan Khan",
-        time: "12 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Amir Khan",
-        time: "13 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Hassan Khan",
-        time: "18 min ago",
-    },
-]
-
 const Notifications = () => {
+    const { width } = useWindowDimensions();
     const [data, setData] = useState([])
     const [activeItem, setActiveItem] = useState(null);
     const [active, setActive] = useState(true)
@@ -134,7 +73,13 @@ const Notifications = () => {
                                             </View>
                                             <View >
                                                 {/* <Text ellipsizeMode="tail" numberOfLines={1} style={styles.notificationFont}>{item?.subType}</Text> */}
-                                                <Text numberOfLines={activeItem === index ? null : 2} style={[styles.notificationNameFont]}>{item?.message}</Text>
+                                                <RenderHtml
+                                                    source={{ html: item?.message }}
+                                                    contentWidth={width}
+                                                    baseStyle={styles.notificationNameFont}
+                                                    enableExperimentalMarginCollapsing={true}
+                                                />
+
                                                 <Text style={[styles.notificationTime, { marginTop: 5 }]}>{moment(item?.createdAt).fromNow()}</Text>
                                             </View>
 
@@ -206,7 +151,7 @@ const styles = StyleSheet.create({
     notificationTime: {
         fontFamily: FontFamily.interRegular,
         fontSize: FontSizes.sm,
-        color: Color.textThree,
+        color: Color.primary,
     },
     inactivetext: {
         textAlign: 'center',

@@ -184,7 +184,7 @@ function MyDrawer({ old }) {
             screenOptions={{
                 headerShown: false, // Hide header for all screens
                 drawerStyle: {
-                    backgroundColor: '#1F2544',
+                    backgroundColor: Color.primary,
                     width: '100%',
                 },
                 swipeEnabled: (!!global.students && !!user.email)

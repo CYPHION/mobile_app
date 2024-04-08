@@ -70,6 +70,7 @@ const ChangePasswordScreen = () => {
                             label={"New Password"}
                             onChangeText={(text) => onChangeHandler('newPass', text)}
                             error={error.newPass}
+                            labelStyle={{ color: Color.primary }}
                         />
                         <InputField
                             secureTextEntry={true} // if you password Field pass secureTextEntry=true
@@ -77,6 +78,7 @@ const ChangePasswordScreen = () => {
                             label={"Confirm Password"}
                             onChangeText={(text) => onChangeHandler('confPass', text)}
                             error={error.confPass}
+                            labelStyle={{ color: Color.primary }}
                         />
                     </View>
                     <CustomButton
