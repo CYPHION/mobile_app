@@ -117,7 +117,10 @@ const styles = StyleSheet.create({
         borderColor: "black",
         backgroundColor: Color.pureWhite,
         marginTop: 10,
-        marginBottom: 5
+        marginBottom: 5,
+        shadowColor: 'black',
+        shadowOpacity: 0.1,
+        shadowOffset: 2,
     },
     nameFont: {
         fontFamily: FontFamily.interMedium,

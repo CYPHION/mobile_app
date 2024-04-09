@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
-import { Alert, PermissionsAndroid, SafeAreaView, StatusBar } from "react-native";
+import { Alert, PermissionsAndroid, Platform, SafeAreaView, StatusBar } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import IntroSlider from "./src/components/widget/IntroSlider";
 import MyDrawer from "./src/navigation/Drawer";
@@ -41,6 +41,17 @@ const App = () => {
 
 
   const requestPostNotificationsPermission = async () => {
+   if (Platform.OS === 'ios') {
+     const authStatus = await messaging().requestPermission();
+   const enabled =
+     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+ 
+   if (enabled) {
+     console.log('Authorization status:', authStatus);
+   }
+     
+   } else {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
     );
@@ -50,12 +61,14 @@ const App = () => {
     } else {
       console.log("Post notifications permission denied");
     }
+   }
   }
 
 
   const setToken = async () => {
     try {
       const token = await messaging().getToken();
+      console.log(token)
       const FCMtoken = await AsyncStorage.getItem('fcmToken');
       const mbleToken = globaldata?.currentUser?.fcmToken
       if (FCMtoken) {

@@ -12,8 +12,8 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.22.0",
     "@react-native-community/checkbox": "^0.5.17",
-    "@react-native-firebase/app": "^19.1.1",
-    "@react-native-firebase/messaging": "^19.1.1",
+    "@react-native-firebase/app": "^19.1.2",
+    "@react-native-firebase/messaging": "^19.1.2",
     "@react-navigation/bottom-tabs": "^6.5.12",
     "@react-navigation/drawer": "^6.6.7",
     "@react-navigation/native": "^6.1.10",
@@ -44,7 +44,8 @@
     "react-native-toast-message": "^2.2.0",
     "react-native-vector-icons": "^10.0.3",
     "react-redux": "^9.1.0",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "stripe": "^14.24.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

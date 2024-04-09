@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.1, // Set a lower opacity for a subtle shadow
-        shadowRadius: 2, // Set a lower radius for a less spread shadow
+        shadowRadius: 1, // Set a lower radius for a less spread shadow
     },
     notificationContainer: {
         flexDirection: 'row',
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
         backgroundColor: Color.white,
         elevation: 1,
         shadowColor: 'black',
-        shadowOpacity: 2,
+        shadowOpacity: 0.1,
         shadowOffset: 2,
         borderRadius: 5,
         alignItems: 'center'
