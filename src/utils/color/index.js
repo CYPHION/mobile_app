@@ -5,7 +5,7 @@ export const Color = {
     white: '#FDFDFD',
     error: '#FF4C51',
     black: '#000000',
-    text: '#181818',
+    text: '#151515',
     textThree: '#565656',
     borderColor: '#4F4F4F',
     borderColorTwo: '#d6d6d6',
