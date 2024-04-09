@@ -94,8 +94,8 @@ const ViewFess = () => {
                                         </View>
                                     ))}
                                     key={index}
-                                    date={`${item.payType}`}
-                                    studentName={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
+                                    date={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
+                                    studentName={`${item.payType}`}
                                     total={
                                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                             <Text style={[styles.accordionTitleHeading]}>£{item.amountPaid} </Text>

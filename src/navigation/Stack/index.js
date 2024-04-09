@@ -1,7 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { TouchableOpacity } from 'react-native';
-import MenuIcon from 'react-native-vector-icons/Entypo';
 import CustomAppBar from '../../components/base/CustomAppBar';
 import AddTestimonial from '../../screens/AddTestimonial';
 import Compensation from '../../screens/Compensation';
@@ -17,8 +15,6 @@ import ViewSchedule from '../../screens/ViewSchedule';
 import ViewAllStudents from '../../screens/viewAllStudents';
 import ViewAppointments from '../../screens/viewAppointments';
 import ViewProgress from '../../screens/viewProgress';
-import { Color } from '../../utils/color';
-import { FontSizes } from '../../utils/font';
 import TabNavigation from '../Tab';
 const Stack = createNativeStackNavigator();
 
@@ -86,38 +82,21 @@ export function MyStack() {
             <Stack.Screen name="children" component={ChildrenStack} />
             <Stack.Screen name="addTestimonial" component={AddTestimonial} options={{
                 headerShown: true,
-                headerTitle: 'Testimonials',
-
+                header: () => <CustomAppBar title={'Testimonials'} />
             }} />
             <Stack.Screen name="viewAppointment" component={ViewAppointments} options={{
                 headerShown: true,
-                headerTitle: 'View Appointments ',
-                headerRight: () => (
-                    <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
-                        <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.black} />
-                    </TouchableOpacity>
-                ),
-
+                header: () => <CustomAppBar title={'View Appointments'} />
             }} />
             <Stack.Screen name="leaveApplication" component={LeaveApplication} options={{
                 headerShown: true,
-                headerTitle: 'Leave Application ',
-                headerRight: () => (
-                    <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
-                        <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.black} />
-                    </TouchableOpacity>
-                ),
+                header: () => <CustomAppBar title={'Leave Application'} />
 
             }} />
             <Stack.Screen name="compensation" component={Compensation} />
             <Stack.Screen name="testimonials" component={Testimonials} options={{
                 headerShown: true,
-                headerTitle: 'Testimonials',
-                headerRight: () => (
-                    <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
-                        <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.black} />
-                    </TouchableOpacity>
-                ),
+                header: () => <CustomAppBar title={'Testimonials'} />
 
             }} />
             <Stack.Screen name="notifications" component={Notifications}
