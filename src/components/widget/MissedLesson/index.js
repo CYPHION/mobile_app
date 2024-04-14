@@ -33,94 +33,125 @@ const MissedLesson = () => {
     const [studentData, setStudentData] = useState(null);
     const globalData = useSelector(state => state?.global?.data)
 
+    // Function to handle change events of form inputs
     const onChangeHandler = (name, text) => {
+        // Update formData state with the new value
         setFormData(prevFormData => ({
-            ...prevFormData,
-            [name]: text
+            ...prevFormData, // Maintain the previous state
+            [name]: text // Update the specific field with the new value
         }));
-
     };
 
+    // ModalContent component to render modal content
     const ModalContent = () => (
+        // View container for modal content
         <View style={styles.modal}>
+            {/* Message indicating compensation is not available */}
             <Text style={styles.modalText}>Compensation Not Available!</Text>
+            {/* Additional information about why compensation is not available */}
             <Text style={[styles.modalText, { fontFamily: FontFamily.medium, fontSize: FontSizes.md }]}>Fee not paid to avail Compensation</Text>
+            {/* Button to close the modal */}
             <CustomButton
-                title='OK'
+                title='OK' // Button text
                 onPress={() => {
-                    setOpen(false)
-
+                    setOpen(false); // Close the modal when the button is pressed
                 }}
-                textStyle={{ color: Color.textThree }}
-                btnstyle={{ width: screenDimensions.width * 0.2, paddingVertical: 5, backgroundColor: Color.disable }}
+                textStyle={{ color: Color.textThree }} // Text style for button text
+                btnstyle={{ width: screenDimensions.width * 0.2, paddingVertical: 5, backgroundColor: Color.disable }} // Button style
             />
         </View>
-    )
+    );
 
+    // Function to get student data of a parent
     const getStudentOfParent = async () => {
+        // Retrieve student data array from globalData
+        const dataArray = globalData?.students;
 
-        const dataArray = globalData?.students
+        // Variable to store the maximum due fee date
         let maxDueFeeDate = null;
+
+        // Check if dataArray contains data
         if (dataArray?.length > 0) {
+            // Loop through each student in dataArray to find the maximum due fee date
             dataArray?.forEach((element) => {
                 const dueFeeDate = element.dueFeeDate;
+                // Update maxDueFeeDate if the dueFeeDate is greater than the current maxDueFeeDate or maxDueFeeDate is null
                 if (dueFeeDate && (maxDueFeeDate === null || dueFeeDate > maxDueFeeDate)) {
                     maxDueFeeDate = dueFeeDate;
                 }
             });
 
+            // Check if maxDueFeeDate is not null
             if (maxDueFeeDate !== null) {
+                // Convert maxDueFeeDate to a Date object
                 const maxDueFeeDateObject = new Date(maxDueFeeDate);
+                // Calculate the start date for the date range (8 weeks before maxDueFeeDate)
                 const startDateSet = new Date(maxDueFeeDateObject.getTime() - (8 * 7 * 24 * 60 * 60 * 1000));
-                const today = new Date()
+                // Get today's date
+                const today = new Date();
 
+                // Check if maxDueFeeDate is greater than or equal to today's date
                 if (maxDueFeeDateObject.setHours(0, 0, 0, 0) >= today.setHours(0, 0, 0, 0)) {
-                    setStartDate(startDateSet)
-                    setEndDate(new Date(maxDueFeeDate))
-                    getTotalAttendance(startDateSet, maxDueFeeDate)
+                    // Set start date, end date, and other related states
+                    setStartDate(startDateSet);
+                    setEndDate(new Date(maxDueFeeDate));
+                    getTotalAttendance(startDateSet, maxDueFeeDate);
                     setFormData(prev => ({
                         ...prev,
                         dateRange: `${formattedDate(startDateSet, 'dd-MM-yyyy')} - ${formattedDate(maxDueFeeDate, 'dd-MM-yyyy')} `
-                    }))
-                    setPaidUpto(formattedDate(maxDueFeeDate, 'MM-dd-yyyy'))
-                    setDisable(false)
+                    }));
+                    setPaidUpto(formattedDate(maxDueFeeDate, 'MM-dd-yyyy'));
+                    setDisable(false); // Enable form elements
                 } else {
-
-                    setOpen(true)
+                    setOpen(true); // Open the modal indicating that compensation is not available
                 }
-
-
-            }
-            else {
-                setOpen(true)
+            } else {
+                setOpen(true); // Open the modal indicating that compensation is not available
             }
         } else {
-            setOpen(true)
+            setOpen(true); // Open the modal indicating that compensation is not available
         }
-    }
+    };
+
+
+    // Function to retrieve attendance data within a specified date range
 
     const getTotalAttendance = async (startDate, endDate) => {
-        let data = `startDate=${formattedDate(startDate, 'yyyy-MM-dd')}&endDate=${formattedDate(endDate, 'yyyy-MM-dd')}`
-        API.getAttendanceByDateRange(data).then((res) => {
-            setRes(res?.data)
-        }).catch((err => console.log(err)))
-    }
+        // Construct query string with formatted start and end dates
+        let data = `startDate=${formattedDate(startDate, 'yyyy-MM-dd')}&endDate=${formattedDate(endDate, 'yyyy-MM-dd')}`;
 
+        // Call API to get attendance data by date range
+        API.getAttendanceByDateRange(data)
+            .then((res) => {
+                // Set the attendance data received from the API response
+                setRes(res?.data);
+            })
+            .catch((err) => {
+                console.log(err); // Log any errors that occur during the API call
+            });
+    };
+
+    // Function to retrieve all compensation data
     const getAllCompensation = async () => {
-        await API.compensationAll().then(
-            res => {
-                setRows(res?.data)
-            }
-        ).catch(err => toast.error(err?.message))
-    }
+        // Call the API to get all compensation data
+        await API.compensationAll()
+            .then(res => {
+                // Set the rows state with the compensation data received from the API response
+                setRows(res?.data);
+            })
+            .catch(err => {
+                toast.error(err?.message); // Display error message if API call fails
+            });
+    };
 
+    // Function to handle form submission
     const handleSubmit = () => {
-        setIsLoading(false);
+        setIsLoading(false); // Set loading state to false
 
-        // Extract student names from formData
+        // Extract student names from selectedValues
         const stds = (selectedValues || []).map(elem => elem.split("Missed")[0].trim());
 
-        // Filter the data based on student names, attendanceType, and attendanceCategory
+        // Filter the attendance data based on student names, attendanceType, and attendanceCategory
         const filteredData = res.filter(item => {
             const studentName = (item?.Student?.fullName || '').trim();
             const attendanceType = item?.attendanceType || '';
@@ -159,41 +190,45 @@ const MissedLesson = () => {
         // Convert the object values to an array
         const processedData = Object.values(studentAttendance);
 
-        setIsLoading(false);
+        setIsLoading(false); // Set loading state to false
 
-        // Set student data state
+        // Set student data state with processed data, start date, and end date
         setStudentData({
             attendance: processedData,
             startDate,
             endDate
         });
-        setActiveScreen(false)
-    }
+
+        setActiveScreen(false); // Set active screen state to false to navigate away from the form
+    };
+
 
     useEffect(() => {
         getStudentOfParent()
         getAllCompensation()
     }, [globalData?.students])
 
-
     useEffect(() => {
-        const parentStdnt = globalData?.students
-
+        // Retrieve student data from globalData
+        const parentStdnt = globalData?.students;
 
         // Map to store the attendance count for each student
         const absenceCountMap = new Map();
 
-        const ids = rows?.map(elem => elem.missedScheduleAttendanceId)
+        // Extract missedScheduleAttendanceIds from rows
+        const ids = rows?.map(elem => elem.missedScheduleAttendanceId);
 
-        const excludeComp = res?.filter(elem => !ids.includes(elem.id))
+        // Exclude rows with missedScheduleAttendanceIds from res
+        const excludeComp = res?.filter(elem => !ids.includes(elem.id));
 
+        // Initialize absence count for each student
         parentStdnt?.forEach(studentObj => {
             const studentName = studentObj.fullName;
             absenceCountMap.set(studentName, 0);
         });
 
+        // Choose data to process based on whether excluded data is present
         const dataToProcess = excludeComp && excludeComp.length > 0 ? excludeComp : res;
-
 
         // Iterate through the response data to calculate absences
         dataToProcess?.forEach(item => {
@@ -201,10 +236,11 @@ const MissedLesson = () => {
             const studentName = item.Student?.fullName;
             const attendanceType = item.attendanceType;
 
+            // Check if the student is absent or on leave
             const isStudentAbsent = parentStdnt.some(studentObj => studentObj.id === studentId) && (attendanceType === "absent" || attendanceType === "leave");
 
             if (isStudentAbsent) {
-                // If the student is absent, update the count
+                // If the student is absent, update the absence count
                 if (absenceCountMap.has(studentName)) {
                     absenceCountMap.set(studentName, absenceCountMap.get(studentName) + 1);
                 } else {
@@ -213,19 +249,21 @@ const MissedLesson = () => {
                 }
             }
         });
-        // Construct the strings for each student
+
+        // Construct the strings for each student with absence count
         const absenceStrings = Array.from(absenceCountMap.entries()).map(([student, count]) => {
             const obj = {
                 value: `${student} Missed(${count}) (Paid Upto: ${paidUpto})`,
                 name: `${student} Missed(${count}) (Paid Upto: ${paidUpto})`,
-                disabled: count === 0 ? true : false
-            }
-            return obj
+                disabled: count === 0 ? true : false // Disable the option if absence count is 0
+            };
+            return obj;
         });
 
+        // Set options state with absence strings
         setOptions(absenceStrings);
 
-    }, [res])
+    }, [res]);
 
 
     return (

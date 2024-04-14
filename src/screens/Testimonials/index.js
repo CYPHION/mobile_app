@@ -12,33 +12,38 @@ import { formattedDate, screenDimensions } from '../../utils/functions'
 import { GlobalStyles } from '../../utils/globalStyles'
 
 const Testimonials = () => {
-    const [refresh, setRefresh] = useState(false);
-    const [data, setData] = useState([]);
-    const navigation = useNavigation()
-    const user = useSelector(state => state?.user?.data)
-    const global = useSelector(state => state?.global?.data)
-    const dispatch = useDispatch()
+    // Importing necessary hooks and functions
+    const [refresh, setRefresh] = useState(false); // State for refreshing
+    const [data, setData] = useState([]); // State for storing testimonials data
+    const navigation = useNavigation(); // Navigation hook from React Navigation
+    const user = useSelector(state => state?.user?.data); // Selecting user data from Redux store
+    const global = useSelector(state => state?.global?.data); // Selecting global data from Redux store
+    const dispatch = useDispatch(); // Dispatch function for Redux actions
 
+    // Function to fetch testimonials data
     const fetchData = () => {
-        setData(global?.testimonials)
-    }
+        setData(global?.testimonials); // Setting testimonials data from global state
+    };
 
+    // Function to handle refresh
     const handleRefresh = () => {
-        setRefresh(true);
-        dispatch(globalData(user?.id))
+        setRefresh(true); // Setting refresh state to true
+        dispatch(globalData(user?.id)) // Dispatching action to fetch global data
             .then(() => {
-                fetchData()
-                setRefresh(false);
+                fetchData(); // Fetching testimonials data
+                setRefresh(false); // Resetting refresh state to false
             })
             .catch(() => {
-                fetchData()
-                setRefresh(false);
+                fetchData(); // Fetching testimonials data
+                setRefresh(false); // Resetting refresh state to false
             });
     };
 
+    // useEffect to fetch data initially and whenever testimonials data changes
     useEffect(() => {
-        fetchData()
-    }, [global?.testimonials])
+        fetchData(); // Fetching testimonials data initially
+    }, [global?.testimonials]); // Dependency array to run effect when testimonials data changes
+
 
 
 

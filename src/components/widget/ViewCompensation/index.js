@@ -7,7 +7,10 @@ import { FontSizes } from '../../../utils/font'
 import { formattedDate, screenDimensions } from '../../../utils/functions'
 import { GlobalStyles } from '../../../utils/globalStyles'
 import GridTable from '../../base/GridTable'
-
+/*
+in this component we are rendering all compensation data 
+which is only readable 
+*/
 const items = (row) => [
     {
         name: "Student Name",

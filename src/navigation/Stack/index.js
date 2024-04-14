@@ -18,10 +18,13 @@ import ViewProgress from '../../screens/viewProgress';
 import TabNavigation from '../Tab';
 const Stack = createNativeStackNavigator();
 
-let screenOptionss = {
-    headerShown: false, // Hide header for all screens
-}
 
+// Common screen options for all screens
+let screenOptions = {
+    headerShown: false, // Hide header for all screens
+};
+
+// Children stack navigator for nested screens related to children
 
 const StackProfile = createNativeStackNavigator();
 const ChildrenStack = () => {
@@ -69,10 +72,13 @@ const ChildrenStack = () => {
 }
 
 
-
+// Main stack navigator for the entire app
 export function MyStack() {
-    const route = useRoute()
-    const navigation = useNavigation()
+    // Get route and navigation objects from React Navigation hooks
+    const route = useRoute();
+    const navigation = useNavigation();
+
+    // Return the stack navigator with all the screens
     return (
         <Stack.Navigator
             screenOptions={screenOptionss}

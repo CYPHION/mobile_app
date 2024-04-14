@@ -17,47 +17,54 @@ import ProfileSkeleton from './ProfileSkeleton';
 
 
 const Profile = ({ navigation }) => {
-    const [open, setOpen] = useState(false)
-    const [loading, setLoading] = useState(false)
-    const [formData, setFormData] = useState({
+    // State variables
+    const [open, setOpen] = useState(false); // State to manage the open/close state of a modal or dropdown
+    const [loading, setLoading] = useState(false); // State to manage loading state during data submission or fetching
+    const [formData, setFormData] = useState({ // State to manage form data (e.g., username, email, number)
         username: '',
         email: '',
         number: ''
-    })
-    const dipatch = useDispatch()
-    const user = useSelector(state => state.user.data)
-    const globaldata = useSelector(state => state?.global?.data)
-    const src = user?.dp ? { uri: getImage(user?.dp) } : require("../../images/profile.png");
+    });
+    const dispatch = useDispatch(); // Access the dispatch function from Redux
+    const user = useSelector(state => state.user.data); // Access user data from Redux store
+    const globalData = useSelector(state => state?.global?.data); // Access global data from Redux store
+    const src = user?.dp ? { uri: getImage(user?.dp) } : require("../../images/profile.png"); // Define source for user profile picture
 
+    // Function to handle logout
     const logoutHandler = async () => {
-        const token = await AsyncStorage.getItem('fcmToken')
-        const fcmToken = globaldata?.currentUser?.fcmToken
-        const sendTokens = fcmToken?.filter(item => item !== token)
+        const token = await AsyncStorage.getItem('fcmToken'); // Retrieve FCM token from AsyncStorage
+        const fcmToken = globalData?.currentUser?.fcmToken; // Access FCM token from global data
+        const sendTokens = fcmToken?.filter(item => item !== token); // Filter out the current FCM token from the list of tokens
 
-        const uptObj = {
-            ...globaldata?.currentUser,
+        const uptObj = { // Define update object with modified FCM tokens
+            ...globalData?.currentUser,
             fcmToken: sendTokens
-        }
+        };
+
+        // Call API to update user data (e.g., remove FCM token)
         API.updateUser(uptObj)
             .then(async (res) => {
-                await AsyncStorage.removeItem('fcmToken');
-                dipatch(handleLogout())
-                dipatch(handleResetData())
-            }).catch(err => console.log(err))
-        setOpen(!open)
-    }
+                await AsyncStorage.removeItem('fcmToken'); // Remove FCM token from AsyncStorage
+                dispatch(handleLogout()); // Dispatch action to handle user logout
+                dispatch(handleResetData()); // Dispatch action to reset data (if needed)
+            })
+            .catch(err => console.log(err)); // Log any errors
+        setOpen(!open); // Toggle the open state of the modal or dropdown
+    };
 
+    // Function to handle profile updates
     const handleUpdate = (type) => {
-        console.log(type)
-    }
+        console.log(type); // Placeholder function to handle different types of updates
+    };
 
+    // Function to handle changes in form input fields
     const onChangeHandler = (name, text) => {
         setFormData(prevFormData => ({
             ...prevFormData,
             [name]: text
         }));
-
     };
+
 
 
     return (

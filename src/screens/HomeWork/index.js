@@ -14,42 +14,51 @@ import { customToast, formattedDate, getImage, screenDimensions } from '../../ut
 import { GlobalStyles } from '../../utils/globalStyles'
 
 const HomeWork = () => {
-    const [refresh, setRefresh] = useState(false);
-    const [data, setData] = useState(false);
-    const router = useRoute()
-    const globaldata = useSelector(state => state?.global?.data)
-    const user = useSelector(state => state?.user?.data)
-    const dispatch = useDispatch()
+    // State variables
+    const [refresh, setRefresh] = useState(false); // State to control refreshing indicator
+    const [data, setData] = useState(false); // State to store filtered homework data
+    const router = useRoute(); // Access route parameters
+    const globalData = useSelector(state => state?.global?.data); // Global data from Redux store
+    const user = useSelector(state => state?.user?.data); // User data from Redux store
+    const dispatch = useDispatch(); // Redux dispatch function
 
-    const filterHomework = globaldata?.homeworks?.filter((item, index) => {
+    // Function to filter homework data based on the selected student
+    const filterHomework = globalData?.homeworks?.filter((item, index) => {
         const studentIds = item?.studentId?.length > 0 ? item.studentId : [];
         return studentIds.length > 0 ? studentIds?.some(id => id === router?.params?.student?.id) : false;
     });
 
+    // Function to fetch data
     const fetchData = () => {
-        setData(filterHomework)
+        setData(filterHomework); // Set filtered homework data
     }
 
+    // Function to handle pull-to-refresh action
     const handleRefresh = () => {
-        setRefresh(true);
+        setRefresh(true); // Set refreshing state to true
+        // Dispatch action to fetch updated global data
         dispatch(globalData(user?.id))
             .then(() => {
-                fetchData()
-                setRefresh(false);
+                fetchData(); // Fetch filtered homework data
+                setRefresh(false); // Set refreshing state to false
             })
             .catch(() => {
-                fetchData()
-                setRefresh(false);
+                fetchData(); // Fetch filtered homework data
+                setRefresh(false); // Set refreshing state to false
             });
     };
 
+    // Function to open a link
     const openLink = (url) => {
         Linking.openURL(url).catch((err) => customToast('error', 'Something went wrong!'));
     }
 
+    // Fetch data initially and when homework data changes
     useEffect(() => {
-        fetchData()
-    }, [globaldata?.homeworks])
+        fetchData(); // Fetch filtered homework data
+    }, [globalData?.homeworks]);
+
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>

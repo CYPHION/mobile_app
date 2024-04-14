@@ -11,28 +11,35 @@ import { FontFamily, FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
 
 const Compensation = () => {
-    const [active, setActive] = useState(true)
-    const globalData = useSelector(state => state?.global?.data)
-    const [rows, setRows] = useState([])
-    const [refreshing, setRefreshing] = useState(false);
+    // State variables for managing component state
+    const [active, setActive] = useState(true); // State for managing active status
+    const globalData = useSelector(state => state?.global?.data); // Selector for accessing global data from Redux store
+    const [rows, setRows] = useState([]); // State for managing compensation rows
+    const [refreshing, setRefreshing] = useState(false); // State for managing refresh indicator
 
-
+    // Function to fetch all compensation data
     const getALLCompensation = async () => {
-        const studentIds = globalData?.students?.map(elem => elem?.id)
-        await API.compensationByParent(JSON.stringify(studentIds)).then(res => {
-            const data = res?.data
-            setRows(data)
-        }).catch(err => customToast("error", err?.message)).finally(() => setRefreshing(false))
-    }
+        const studentIds = globalData?.students?.map(elem => elem?.id); // Extracting student IDs from global data
+        await API.compensationByParent(JSON.stringify(studentIds)) // API call to fetch compensation data
+            .then(res => {
+                const data = res?.data; // Extracting data from response
+                setRows(data); // Updating rows state with fetched data
+            })
+            .catch(err => customToast("error", err?.message)) // Handling error with toast message
+            .finally(() => setRefreshing(false)); // Resetting refreshing state
+    };
 
+    // Callback function for handling refresh action
     const onRefresh = useCallback(() => {
-        setRefreshing(true);
-        getALLCompensation()
+        setRefreshing(true); // Setting refreshing state to true
+        getALLCompensation(); // Fetching compensation data
     }, []);
 
+    // Effect hook to fetch compensation data on component mount and whenever globalData.students changes
     useEffect(() => {
-        getALLCompensation()
-    }, [globalData?.students])
+        getALLCompensation();
+    }, [globalData?.students]);
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>

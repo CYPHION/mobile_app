@@ -16,15 +16,18 @@ import { GlobalStyles } from '../../utils/globalStyles';
 
 
 const LeaveApplication = () => {
-    const [refresh, setRefresh] = useState(false);
-    const [active, setActive] = useState(false)
-    const [open, setOpen] = useState(false)
-    const [selectData, setselectData] = useState([])
-    const [selectedDate, setselectedDate] = useState('')
-    const [reason, setReason] = useState('')
-    const [nextScreen, setNextScreen] = useState(false)
-    const dispatch = useDispatch()
-    const user = useSelector(state => state?.user?.data)
+    // State variables for managing component state
+    const [refresh, setRefresh] = useState(false); // State for managing refresh indicator
+    const [active, setActive] = useState(false); // State for managing active status
+    const [open, setOpen] = useState(false); // State for managing modal open status
+    const [selectData, setselectData] = useState([]); // State for managing selected data
+    const [selectedDate, setselectedDate] = useState(''); // State for managing selected date
+    const [reason, setReason] = useState(''); // State for managing leave reason
+    const [nextScreen, setNextScreen] = useState(false); // State for managing next screen navigation
+    const dispatch = useDispatch(); // Redux dispatch function
+    const user = useSelector(state => state?.user?.data); // Selector for accessing user data from Redux store
+
+    // Function to generate item data for rendering
     const item = (item) => [
         {
             name: "Main ID",
@@ -54,8 +57,9 @@ const LeaveApplication = () => {
             name: "Day",
             value: formattedDate(selectedDate, 'EEEE'),
         },
-    ]
+    ];
 
+    // Function to render screen content
     const renderScreen = () => (
         <View >
             <View style={GlobalStyles.p_10}>
@@ -70,9 +74,9 @@ const LeaveApplication = () => {
                 }
             </View>
         </View>
-    )
+    );
 
-
+    // Modal content component
     const ModalContent = () => (
         <View style={styles.modal}>
             <View style={styles.iconView}>
@@ -83,39 +87,37 @@ const LeaveApplication = () => {
                 title='OK'
                 variant='fill'
                 onPress={() => {
-                    setOpen(false)
-                    setNextScreen(false)
-                    setActive(prev => !prev)
-                    dispatch(globalData(user?.id))
+                    setOpen(false);
+                    setNextScreen(false);
+                    setActive(prev => !prev);
+                    dispatch(globalData(user?.id));
                 }}
                 btnstyle={{ width: screenDimensions.width * 0.2, paddingVertical: 5 }}
             />
         </View>
-    )
+    );
 
+    // Function to handle processing leave request
     const handleProcessRequest = async () => {
-
         const payload = selectData?.map(elem => ({
             applicationDate: formattedDate(selectedDate, 'yyyy-MM-dd'),
             scheduleId: elem.id,
             studentId: elem.studentId,
             reason: reason
-
-        }))
+        }));
 
         let formValues = {
             data: payload
-        }
+        };
 
         await API.createLeave(formValues).then(res => {
-            // customToast("success", res?.message)
-            setOpen(prev => !prev)
+            setOpen(prev => !prev);
         }).catch(err => {
-            customToast("error", err?.message)
-        })
+            customToast("error", err?.message);
+        });
+    };
 
-    }
-
+    // Function to handle refresh action
     const handleRefresh = () => {
         setRefresh(true);
         dispatch(globalData(user?.id))
@@ -126,6 +128,7 @@ const LeaveApplication = () => {
                 setRefresh(false);
             });
     };
+
 
 
     return (

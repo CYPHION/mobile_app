@@ -1,11 +1,12 @@
-import { store } from "../store"
-
-
+import { store } from "../store"; // Importing the Redux store
 
 export class UserService {
+    // Method to get the authentication token from the Redux store
     static GetToken() {
-        const state = store.getState()
+        // Accessing the current Redux store state
+        const state = store.getState();
 
-        return state?.user?.data?.token
+        // Returning the authentication token if it exists in the user data
+        return state?.user?.data?.token;
     }
 }

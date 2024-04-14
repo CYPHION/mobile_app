@@ -15,41 +15,51 @@ import { customToast, screenDimensions } from '../../utils/functions'
 import { GlobalStyles } from '../../utils/globalStyles'
 
 const AddTestimonial = () => {
-    const user = useSelector(state => state?.user?.data)
-    const [review, setReview] = useState('')
-    const [open, setOpen] = useState(false)
-    const [isloading, setIsloading] = useState(false)
-    const navigation = useNavigation()
-    const dispatch = useDispatch()
+    // Redux state and dispatch
+    const user = useSelector(state => state?.user?.data);
+    const dispatch = useDispatch();
+
+    // Local component state
+    const [review, setReview] = useState('');
+    const [open, setOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    // Navigation
+    const navigation = useNavigation();
+
+    // Function to render the modal content
     const renderItem = () => (
         <View style={styles.modal}>
             <View style={styles.iconView}>
                 <Icon name='check' color={Color.white} size={screenDimensions.width * 0.1} />
             </View>
             <Text style={styles.modalText}>Review Submitted Successfully</Text>
+            {/* Navigate to the 'testimonials' screen with 'added' parameter */}
             <CustomButton
                 title='OK'
                 variant='fill'
                 onPress={() => {
-                    navigation.navigate('testimonials', { added: true })
+                    navigation.navigate('testimonials', { added: true });
                 }}
                 btnstyle={{ width: screenDimensions.width * 0.2, paddingVertical: 5 }}
             />
         </View>
-    )
+    );
 
+    // Function to handle form submission
     const handleSubmit = () => {
-        setIsloading(true)
+        setIsLoading(true);
+        // Call API to create testimonial
         API.createTestimonial({ review: review, userId: user.id })
             .then(() => {
-                setOpen(true)
-                dispatch(globalData(user?.id))
+                setOpen(true); // Open modal on successful submission
+                dispatch(globalData(user?.id)); // Dispatch action to update global data
             })
             .catch((err) => {
-                customToast('error', 'You have already add a review!')
+                customToast('error', 'You have already added a review!'); // Display error message if review already exists
             })
-            .finally(() => setIsloading(false))
-    }
+            .finally(() => setIsLoading(false)); // Set loading state to false after API call
+    };
 
     return (
         <SafeAreaView style={{ flex: 1 }}>

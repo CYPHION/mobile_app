@@ -58,8 +58,9 @@ const SelectedStudents = (props) => {
     const [selectedDates, setSelectedDates] = useState({});
     const [selectedData, setSelectedData] = useState([])
 
+    // Function to handle input change
     const handleInputChange = (field, value, stdIndex) => {
-
+        // Make a copy of the current form values
         const updatedFormValues = { ...formValues };
 
         // Check if the index exists in the formValues object
@@ -78,11 +79,15 @@ const SelectedStudents = (props) => {
                 [stdIndex]: removeError(error[stdIndex], field)
             }));
         } else {
+            // If the index doesn't exist, create a new entry for it
             updatedFormValues[stdIndex] = {
                 ...updatedFormValues[stdIndex],
                 [field]: value,
             };
+            // Set the updated state
             setFormValues(updatedFormValues);
+
+            // Remove error for the specific field
             setError(prev => ({
                 ...prev,
                 [stdIndex]: removeError(error[stdIndex], field)
@@ -90,20 +95,26 @@ const SelectedStudents = (props) => {
         }
     };
 
+    // Function to get available schedule
     const getAvailable = async (date, studentIndex, stdYear) => {
-
+        // Get the year name
         const getYearName = stdYear;
+
+        // Call the API to get available schedule
         const res = await API.getAvailableSchedule({
             date: formattedDate(date, 'yyyy-MM-dd'),
             yearName: getYearName,
         });
 
+        // Update selected dates based on whether student index exists or not
         if (!selectedDates.hasOwnProperty(studentIndex)) {
+            // If student index does not exist, add new entry
             setSelectedDates(prevSelectedDates => ({
                 ...prevSelectedDates,
                 [studentIndex]: res?.data,
             }));
         } else {
+            // If student index exists, update existing entry
             setSelectedDates(prevSelectedDates => ({
                 ...prevSelectedDates,
                 [studentIndex]: res?.data,
@@ -112,13 +123,17 @@ const SelectedStudents = (props) => {
     };
 
 
+    // Function to handle checkbox toggle
     const handleCheckbox = (rowId) => {
+        // Find the index of the schedule item with the given ID
         const index = rows?.findIndex(item => item.id === Number(rowId));
+
+        // If the schedule item is not found, handle error or return
         if (index === -1) {
-            return; // Schedule item not found, handle error or return
+            return;
         }
 
-        // Create a new array of checked items to toggle the checkbox for the specific schedule
+        // Create a new object to hold the checked items
         const newCheckedItems = { ...checkedItems };
 
         // Toggle the checkbox for the specific schedule ID
@@ -130,6 +145,7 @@ const SelectedStudents = (props) => {
         // Get the data associated with the clicked schedule
         const newData = rows[index];
 
+        // Update the selected data based on checkbox state
         setSelectedData(prev => {
             // If the checkbox is checked, add the schedule data to the selected data
             if (newCheckedItems[rowId]) {
@@ -141,27 +157,34 @@ const SelectedStudents = (props) => {
         });
     };
 
+    // Function to handle deletion
     const handleDelete = (rowId, type) => {
+        // Check if the deletion type is 'single' or 'all'
         type === "single" ? Alert.alert(
+            // If 'single', show confirmation for deleting a single item
             'Delete',
             'Are you sure you want to delete?',
             [
                 { text: 'Cancel', style: 'cancel' },
                 {
                     text: 'OK', onPress: () => {
+                        // If confirmed, filter out the row with the given ID and update state
                         setrows(rows?.filter(elem => elem?.id !== rowId))
                     }
                 }
             ],
             { cancelable: false }
         ) : Alert.alert(
+            // If 'all', show confirmation for deleting all items associated with a student
             'Delete',
             'Are you sure you want to delete all?',
             [
                 { text: 'Cancel', style: 'cancel' },
                 {
                     text: 'OK', onPress: () => {
+                        // If confirmed, filter out all rows associated with the student ID and update state
                         setrows(rows?.filter(elem => elem?.studentId !== rowId))
+                        // Clear the selected data since all associated items are deleted
                         setSelectedData([])
                     }
                 }
@@ -170,6 +193,8 @@ const SelectedStudents = (props) => {
         )
     }
 
+
+    // Function to render checkbox and delete icon for a row
     const CheckBoxRender = (rowId) => {
         return (
             <View style={{ zIndex: 10, flexDirection: 'row', justifyContent: 'space-between', }}>
@@ -179,35 +204,39 @@ const SelectedStudents = (props) => {
         )
     }
 
+    // Function to handle form submission for a student
     const studentformHandler = (studentIndex, studentId) => {
-
+        // Check if any required field is empty
         if (!formValues[studentIndex]?.newDate || !formValues[studentIndex]?.missedSchedule || !formValues[studentIndex]?.availableSchedule) {
+            // If any required field is empty
             if (!error.hasOwnProperty(studentIndex)) {
-                setError(prevSelectedDates => ({
-                    ...prevSelectedDates,
+                // If error object doesn't have entry for this student index
+                setError(prevErrors => ({
+                    ...prevErrors,
                     [studentIndex]: {
-                        missedSchedule: !formValues[studentIndex]?.missedSchedule ? 'Missed Attendance feild is required' : '',
-                        newDate: !formValues[studentIndex]?.newDate ? 'Start Date feild is required' : '',
-                        availableSchedule: !formValues[studentIndex]?.availableSchedule ? 'Available Schedule feild is required' : ''
+                        missedSchedule: !formValues[studentIndex]?.missedSchedule ? 'Missed Attendance field is required' : '',
+                        newDate: !formValues[studentIndex]?.newDate ? 'Start Date field is required' : '',
+                        availableSchedule: !formValues[studentIndex]?.availableSchedule ? 'Available Schedule field is required' : ''
                     },
                 }));
-                customToast("error", "Please fill all details")
+                customToast("error", "Please fill all details"); // Show error message
             } else {
-                setError(prevSelectedDates => ({
-                    ...prevSelectedDates,
+                // If error object already has entry for this student index
+                setError(prevErrors => ({
+                    ...prevErrors,
                     [studentIndex]: {
-                        missedSchedule: !formValues[studentIndex]?.missedSchedule ? 'Missed Attendance feild is required' : '',
-                        newDate: !formValues[studentIndex]?.newDate ? 'Start Date feild is required' : '',
-                        availableSchedule: !formValues[studentIndex]?.availableSchedule ? 'Available Schedule feild is required' : ''
+                        missedSchedule: !formValues[studentIndex]?.missedSchedule ? 'Missed Attendance field is required' : '',
+                        newDate: !formValues[studentIndex]?.newDate ? 'Start Date field is required' : '',
+                        availableSchedule: !formValues[studentIndex]?.availableSchedule ? 'Available Schedule field is required' : ''
                     },
                 }));
-                customToast("error", "Please fill all details")
-
+                customToast("error", "Please fill all details"); // Show error message
             }
-        }
-        else {
-            const randomNumber = Math.floor(Math.random() * 1000000) + 1;
+        } else {
+            // If all required fields are filled
+            const randomNumber = Math.floor(Math.random() * 1000000) + 1; // Generate a random ID for the new data
 
+            // Create data object with form values and other necessary details
             const data = {
                 id: randomNumber,
                 studentId: studentId,
@@ -223,10 +252,12 @@ const SelectedStudents = (props) => {
                 remarks: formValues[studentIndex]?.remarks
             };
 
+            // Add the new data to the rows state
             setrows((prevRows) => [...prevRows, data]);
 
-            setFormValues((prev) => {
-                const updatedFormValues = { ...prev };
+            // Clear the form values for the current student
+            setFormValues((prevFormValues) => {
+                const updatedFormValues = { ...prevFormValues };
                 updatedFormValues[studentIndex] = {
                     remarks: '',
                     newDate: '',
@@ -234,7 +265,9 @@ const SelectedStudents = (props) => {
                     availableSchedule: ''
                 };
                 return updatedFormValues;
-            })
+            });
+
+            // Clear the selected dates for the current student
             if (!selectedDates.hasOwnProperty(studentIndex)) {
                 setSelectedDates(prevSelectedDates => ({
                     ...prevSelectedDates,
@@ -246,22 +279,24 @@ const SelectedStudents = (props) => {
                     [studentIndex]: [],
                 }));
             }
-
-
         }
-
-
     };
 
+    // Effect to run when studentData changes
     useEffect(() => {
+        // Check if studentData is not null
         if (studentData !== null) {
-            setStudent(studentData?.attendance)
+            // Set the student state with attendance data from studentData
+            setStudent(studentData?.attendance);
 
+            // Create a copy of initialData
             const updatedInitialData = { ...initialData };
 
+            // Loop through each student in studentData
             studentData?.attendance.forEach((student, index) => {
-                // Only update if the index is not already in initialData
+                // Only update if the index is not already in updatedInitialData
                 if (!updatedInitialData.hasOwnProperty(index)) {
+                    // Initialize form values for the student at the index
                     updatedInitialData[index] = {
                         missedSchedule: '',
                         newDate: '',
@@ -271,9 +306,11 @@ const SelectedStudents = (props) => {
                 }
             });
 
+            // Set the formValues state with updatedInitialData
             setFormValues(updatedInitialData);
         }
     }, [studentData]);
+
 
 
 

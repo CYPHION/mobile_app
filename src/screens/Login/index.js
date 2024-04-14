@@ -13,45 +13,44 @@ import { removeError, screenDimensions } from '../../utils/functions'
 
 
 const LoginScreen = (prop) => {
-    const navigation = useNavigation()
-    const [formData, setFormData] = useState({
+    const navigation = useNavigation(); // Access the navigation object
+    const [formData, setFormData] = useState({ // State to manage form data (email and password)
         email: '',
         password: ''
-    })
+    });
 
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false); // State to manage loading state during login
 
-    const [error, setError] = useState({
+    const [error, setError] = useState({ // State to manage form errors (currently not used)
         // username: '',
         // password: '',
-    })
+    });
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch(); // Access the dispatch function from Redux store
 
-    const saveDataToredux = (data) => {
-        dispatch(handleLogin(data))
-    }
+    const saveDataToredux = (data) => { // Function to dispatch action to save login data to Redux store
+        dispatch(handleLogin(data));
+    };
 
-    const onChangeHandler = (name, text) => {
+    const onChangeHandler = (name, text) => { // Handler function to update form data when input changes
         setFormData(prevFormData => ({
             ...prevFormData,
             [name]: text
         }));
 
-        setError(removeError(name, error))
-
+        setError(removeError(name, error)); // Remove any previous error related to the input
     };
 
-    const handleSubmit = () => {
-        setIsLoading(true)
-        const { email, password } = formData
+    const handleSubmit = () => { // Handler function for form submission
+        setIsLoading(true); // Set loading state to true
 
+        const { email, password } = formData; // Destructure email and password from form data
+
+        // Call the login API with email and password
         API.login(email.toLowerCase(), password)
-            .then((res) => saveDataToredux(res?.data))
-            .catch(err => console.log('errrr', err))
-            .finally(() => setIsLoading(false))
-
-
+            .then((res) => saveDataToredux(res?.data)) // Dispatch action to save login data on successful login
+            .catch(err => console.log('errrr', err)) // Log any errors during login
+            .finally(() => setIsLoading(false)); // Set loading state to false after login attempt completes
     };
 
 

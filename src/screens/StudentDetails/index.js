@@ -12,12 +12,15 @@ import { GlobalStyles } from '../../utils/globalStyles'
 
 
 const StudentDetails = ({ navigation }) => {
-    const router = useRoute()
-    const { student } = router.params
-    const userData = useSelector(state => state?.user?.data)
-    const globalData = useSelector(state => state?.global?.data)
+    // Importing necessary hooks and functions
+    const router = useRoute(); // Router hook from React Navigation
+    const { student } = router.params; // Destructuring student parameter from route
+    const userData = useSelector(state => state?.user?.data); // Selecting user data from Redux store
+    const globalData = useSelector(state => state?.global?.data); // Selecting global data from Redux store
 
-    const isMonthly = student?.feeChargedBy === "Monthly" ? true : false
+    // Determining whether fee is charged monthly or not
+    const isMonthly = student?.feeChargedBy === "Monthly" ? true : false;
+
 
     const Data = [
         // {

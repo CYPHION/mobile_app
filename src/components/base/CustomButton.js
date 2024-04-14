@@ -10,34 +10,37 @@ import { Color } from "../../utils/color";
 import { FontFamily, FontSizes } from "../../utils/font";
 import { GlobalStyles } from "../../utils/globalStyles";
 
+// Custom button component
 const CustomButton = (props) => {
+    // Destructuring props to access necessary variables and functions
     const {
-        onPress,
-        title = "",
-        disabled,
-        variant,
-        btnstyle,
-        textStyle,
-        leftIcon,
-        isLoading,
-        rightIcon
+        onPress,         // Function to handle button press
+        title = "",      // Button title, default empty string
+        disabled,        // Flag to disable button
+        variant,         // Button variant (e.g., 'fill' or 'outline')
+        btnstyle,        // Additional button styles
+        textStyle,       // Additional text styles
+        leftIcon,        // Icon to be displayed on the left side of the button text
+        isLoading,       // Flag indicating loading state
+        rightIcon        // Icon to be displayed on the right side of the button text
     } = props;
 
+    // Render the button component
     return (
         <TouchableOpacity
             {...props}
-            disabled={disabled ? disabled : false}
-            activeOpacity={0.7}
-            style={[styles.buttonContainer, GlobalStyles.p_10, variant === 'fill' ? { backgroundColor: disabled ? Color.primaryLight : Color.primary } : { backgroundColor: Color.white }, { ...btnstyle }]}
-            onPress={onPress}
+            disabled={disabled ? disabled : false}    // Disable button if 'disabled' flag is true
+            activeOpacity={0.7}                       // Set opacity on press
+            style={[styles.buttonContainer, GlobalStyles.p_10, variant === 'fill' ? { backgroundColor: disabled ? Color.primaryLight : Color.primary } : { backgroundColor: Color.white }, { ...btnstyle }]} // Button styles based on variant and additional styles
+            onPress={onPress}                         // Handle press event
         >
-            {isLoading ? <ActivityIndicator size="small" color={variant === 'fill' ? Color.white : Color.primary} /> : ""}
-            {leftIcon}
+            {isLoading ? <ActivityIndicator size="small" color={variant === 'fill' ? Color.white : Color.primary} /> : ""}  // Display loading indicator if isLoading flag is true
+            {leftIcon}                                  // Display left icon if provided
             <Text style={[styles.buttonText, variant === 'fill' ? { color: Color.white } : { color: Color.primary }, { ...textStyle }]}>
                 {" "}
-                {title}
+                {title}                                 // Button title
             </Text>
-            {rightIcon}
+            {rightIcon}                                 // Display right icon if provided
         </TouchableOpacity>
     );
 };

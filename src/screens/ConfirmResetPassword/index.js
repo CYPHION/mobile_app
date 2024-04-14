@@ -13,83 +13,83 @@ import { customToast, removeError, screenDimensions } from '../../utils/function
 
 
 const ConfirmResetPassword = (prop) => {
+    const router = useRoute(); // Accessing route parameters
+    let email = router.params.email; // Extracting email from route parameters
 
-    const router = useRoute()
-    let email = router.params.email
-
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState({ // State to manage form data
         code: '',
         Newpassword: '',
         Confirmpassword: ''
-    })
+    });
 
-    const [isLoading, setIsLoading] = useState(false)
-    const [isResend, setIsResend] = useState(false)
-    const [isLoadingResend, setIsLoadingResend] = useState(false)
+    const [isLoading, setIsLoading] = useState(false); // State to manage loading state
+    const [isResend, setIsResend] = useState(false); // State to manage resend email state
+    const [isLoadingResend, setIsLoadingResend] = useState(false); // State to manage loading state for resend email
 
-    const [error, setError] = useState({
+    const [error, setError] = useState({ // State to manage form errors
         // username: '',
         // password: '',
-    })
+    });
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch(); // Redux dispatch function
 
-    const saveDataToredux = (data) => {
-        dispatch(handleLogin(data))
-    }
+    const saveDataToredux = (data) => { // Function to dispatch login action
+        dispatch(handleLogin(data));
+    };
 
-    const onChangeHandler = (name, text) => {
+    const onChangeHandler = (name, text) => { // Function to handle form input changes
         setFormData(prevFormData => ({
             ...prevFormData,
             [name]: text
         }));
 
-        setError(removeError(name, error))
-
+        setError(removeError(name, error)); // Remove error when input changes
     };
 
-    const handleSubmit = async () => {
-        setIsLoading(true)
+    const handleSubmit = async () => { // Function to handle form submission
+        setIsLoading(true); // Set loading state to true
 
-        if (!formData.code || !formData.Confirmpassword || !formData.Newpassword) {
-            !formData.code && customToast("error", "Otp COde is required")
-            !formData.Confirmpassword && customToast("error", "confirm Password is required")
-            !formData.Newpassword && customToast("error", "Password is required")
-            setIsLoading(false)
+        if (!formData.code || !formData.Confirmpassword || !formData.Newpassword) { // Check if any field is empty
+            !formData.code && customToast("error", "Otp COde is required"); // Show error message if code is empty
+            !formData.Confirmpassword && customToast("error", "confirm Password is required"); // Show error message if confirm password is empty
+            !formData.Newpassword && customToast("error", "Password is required"); // Show error message if password is empty
+            setIsLoading(false); // Set loading state to false
 
         } else {
-            if (formData.Confirmpassword.trim() === formData.Newpassword.trim()) {
+            if (formData.Confirmpassword.trim() === formData.Newpassword.trim()) { // Check if passwords match
 
-                let data = {
-                    otp: formData.code, email, updateObj: {
+                let data = { // Prepare data object for API call
+                    otp: formData.code,
+                    email,
+                    updateObj: {
                         password: formData.Newpassword
                     }
-                }
-                await API.checkOtp({
+                };
+                await API.checkOtp({ // Call API to check OTP
                     data: data
-                }).then(res => customToast("success", res?.message)).catch(err => {
-                    customToast("error", err?.message)
-                    setIsResend(true)
-
-                }).finally(() => setIsLoading(false))
+                }).then(res => customToast("success", res?.message)) // Show success message
+                    .catch(err => { // Catch errors
+                        customToast("error", err?.message); // Show error message
+                        setIsResend(true); // Set resend email state to true
+                    })
+                    .finally(() => setIsLoading(false)); // Set loading state to false
             } else {
-                customToast("error", "Password & Confirm Password is not match")
-                setIsLoading(false)
+                customToast("error", "Password & Confirm Password is not match"); // Show error message if passwords don't match
+                setIsLoading(false); // Set loading state to false
             }
         }
-
     };
 
-    const resendEmail = async () => {
-        setIsLoadingResend(true)
-        await API.generateOtp({ email: email, resend: true }).then(res => {
-            customToast("success", "Resend Email Successfully")
-            setIsResend(false)
-        }).catch(err => customToast("error", err?.message)).finally(() => setIsLoadingResend(false))
-    }
-
-
-
+    const resendEmail = async () => { // Function to resend email
+        setIsLoadingResend(true); // Set loading state for resend email to true
+        await API.generateOtp({ email: email, resend: true }) // Call API to generate OTP
+            .then(res => {
+                customToast("success", "Resend Email Successfully"); // Show success message
+                setIsResend(false); // Set resend email state to false
+            })
+            .catch(err => customToast("error", err?.message)) // Show error message if API call fails
+            .finally(() => setIsLoadingResend(false)); // Set loading state for resend email to false
+    };
 
     return (
         <SafeAreaView style={{ flex: 1 }}>

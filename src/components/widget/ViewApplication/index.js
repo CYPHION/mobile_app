@@ -10,6 +10,7 @@ import { GlobalStyles } from '../../../utils/globalStyles'
 import CustomDatePicker from '../../base/CustomDatePicker'
 import Table from '../../base/Table'
 
+/* in this componenet we are showing Leave applications */
 
 const list = (item) => [
     { name: 'Main ID', value: item?.Student?.mainId },
@@ -26,11 +27,12 @@ const ViewApplication = () => {
 
     const [refresh, setRefresh] = useState(false);
     const [open, setOpen] = useState(false)
-    const [data, setData] = useState([])
+    const [data, setData] = useState([]) // in this state data is saving
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
     const dispatch = useDispatch()
 
+    // its function to filter data according to  date
     const filterByDate = (startDate, endDate) => {
         let filterData;
         if (!!startDate && !!endDate) {
@@ -45,7 +47,7 @@ const ViewApplication = () => {
         setData(filterData)
     };
 
-
+    // its component when data not available
     const returnItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.7 }}>
             <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textThree} />
@@ -67,6 +69,8 @@ const ViewApplication = () => {
     //         });
     // };
 
+
+    // its for changing data from api to desired 
     const statusBackround = {
         processed: 'Accepted',
         unprocessed: 'Rejected',

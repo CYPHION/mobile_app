@@ -14,43 +14,50 @@ import { screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
 
 const Notifications = () => {
-    const { width } = useWindowDimensions();
-    const [data, setData] = useState([])
-    const [activeItem, setActiveItem] = useState(null);
-    const [active, setActive] = useState(true)
-    const [refreshing, setRefreshing] = useState(false)
-    const user = useSelector(state => state?.user?.data)
-    const [expanded, setExpanded] = useState(false);
-    const dispatch = useDispatch()
+    const { width } = useWindowDimensions(); // Get the width of the window
 
+    const [data, setData] = useState([]); // State to store notification data
+    const [activeItem, setActiveItem] = useState(null); // State to keep track of the active item (expanded notification)
+    const [active, setActive] = useState(true); // State to indicate if data is actively being fetched
+    const [refreshing, setRefreshing] = useState(false); // State to manage refreshing state
+    const user = useSelector(state => state?.user?.data); // Access user data from the Redux store
+    const [expanded, setExpanded] = useState(false); // State to manage expanded/collapsed state of notifications
+    const dispatch = useDispatch(); // Access the dispatch function from the Redux store
 
+    // Function to toggle the active item (expand/collapse notification)
     const toggleItem = (index) => {
-        setActiveItem(activeItem === index ? null : index); // Toggle state based on click
+        setActiveItem(activeItem === index ? null : index);
     };
 
+    // Function to fetch notification data
     const getNotification = () => {
-        API.getAllNotification(user?.id)
-            .then((res) => setData(res?.data))
-            .catch((err) => console.log(err))
-            .finally(() => setActive(false))
-    }
+        API.getAllNotification(user?.id) // Call API to fetch notifications for the current user
+            .then((res) => setData(res?.data)) // Set fetched data to the state
+            .catch((err) => console.log(err)) // Log any errors
+            .finally(() => setActive(false)); // Set active state to false once data fetching is completed
+    };
 
+    // Function to handle refreshing of notification data
     const onRefresh = useCallback(() => {
-        setRefreshing(true);
+        setRefreshing(true); // Set refreshing state to true
+
+        // Fetch global data for the current user from the server
         dispatch(globalData(user?.id))
             .then(() => {
-                getNotification()
-                setRefreshing(false); // Set refreshing to false after data fetching is completed
+                getNotification(); // Fetch notification data
+                setRefreshing(false); // Set refreshing state to false after data fetching is completed
             })
             .catch(() => {
-                getNotification()
-                setRefreshing(false); // Ensure refreshing is set to false even if there's an error
+                getNotification(); // Fetch notification data
+                setRefreshing(false); // Set refreshing state to false even if there's an error
             });
-    }, [])
+    }, []);
 
+    // Effect to fetch notification data when the component mounts
     useEffect(() => {
-        getNotification()
-    }, [])
+        getNotification();
+    }, []);
+
 
     return (
         <>

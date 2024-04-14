@@ -19,6 +19,7 @@ import TabNavigation from '../Tab';
 
 const Drawer = createDrawerNavigator();
 
+// List of items in the drawer menu
 const DrawerList = [
     { label: 'Home', navigateTo: 'home', icon: 'right', mainRoute: 'tabs' },
     { label: 'My Profile', navigateTo: 'profiles', icon: 'right', mainRoute: 'tabs' },
@@ -31,6 +32,7 @@ const DrawerList = [
     { label: 'Logout', navigateTo: '', icon: 'right' },
 ];
 
+// Individual item in the drawer menu
 const DrawerLayout = ({ icon, label, navigateTo, setOpen, mainRoute }) => {
     const navigation = useNavigation();
     const routeName = navigation.getCurrentRoute()?.name; // Get current route name
@@ -60,30 +62,34 @@ const DrawerLayout = ({ icon, label, navigateTo, setOpen, mainRoute }) => {
     )
 };
 
-
+// Custom drawer content component
 function CustomDrawerContent(props) {
-    const [open, setOpen] = useState(false)
-    const dipatch = useDispatch()
-    const user = useSelector(state => state?.user?.data)
-    const globaldata = useSelector(state => state?.global?.data)
-    const src = user?.picture ? { uri: getImage(user?.picture) } : require("../../images/profileAvatar.png");
+    const [open, setOpen] = useState(false); // State for modal visibility
+    const dispatch = useDispatch(); // Redux dispatch function
+    const user = useSelector(state => state?.user?.data); // User data from Redux store
+    const globalData = useSelector(state => state?.global?.data); // Global data from Redux store
+    const src = user?.picture ? { uri: getImage(user?.picture) } : require("../../images/profileAvatar.png"); // Profile image source
 
+    // Function to handle logout
     const logoutHandler = async () => {
-        const token = await AsyncStorage.getItem('fcmToken')
-        const fcmToken = globaldata?.currentUser?.fcmToken
-        const sendTokens = fcmToken?.filter(item => item !== token)
+        const token = await AsyncStorage.getItem('fcmToken'); // Get FCM token from AsyncStorage
+        const fcmToken = globalData?.currentUser?.fcmToken; // Current user's FCM token
+        const sendTokens = fcmToken?.filter(item => item !== token); // Remove current token from list
 
         const uptObj = {
             ...globaldata?.currentUser,
             fcmToken: sendTokens
         }
+
+        // Update user's FCM token
         API.updateUser(uptObj)
             .then(async (res) => {
-                await AsyncStorage.removeItem('fcmToken');
-                dipatch(handleLogout())
-                dipatch(handleResetData())
-            }).catch(err => console.log(err))
-        setOpen(!open)
+                await AsyncStorage.removeItem('fcmToken'); // Remove FCM token from AsyncStorage
+                dispatch(handleLogout()); // Dispatch action to logout user
+                dispatch(handleResetData()); // Dispatch action to reset global data
+            })
+            .catch(err => console.log(err)); // Log any errors
+        setOpen(!open); // Toggle modal visibility
     }
 
     return (
@@ -146,7 +152,7 @@ function CustomDrawerContent(props) {
                                 variant={'fill'}
                                 btnstyle={{ paddingVertical: 4 }}
                                 onPress={() => {
-                                    logoutHandler()
+                                    logoutHandler()  // Call logout handler function
                                 }}
                             />
                         </View>
@@ -161,18 +167,22 @@ function CustomDrawerContent(props) {
 
 
 function MyDrawer({ old }) {
+    // Retrieve navigation object
     const navigation = useNavigation();
-
+    // Get user and global data from Redux store
     const user = useSelector(state => state?.user?.data)
     const global = useSelector(state => state?.global?.data)
+    // Execute effect when the component mounts or 'old' dependency changes
     useEffect(() => {
+        // Dispatch a navigation action to reset the navigation state
         navigation.dispatch(
             CommonActions.reset({
+                // Set the index to 0 and navigate to the specified route
                 index: 0,
                 routes: [{ name: 'root', params: { screen: 'home' } }],
             }),
         );
-    }, [old]);
+    }, [old]); // Depend on 'old' variable for re-execution when it changes
 
 
 

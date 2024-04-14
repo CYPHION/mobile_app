@@ -16,66 +16,73 @@ import AnalyticsSkeleton from './AnalyticSkeleton'
 
 const Analytics = ({ navigation }) => {
 
-    const [open, setOpen] = useState(false);
-    const [refresh, setRefresh] = useState(false);
+    // Local state
+    const [open, setOpen] = useState(false); // State for controlling modal visibility
+    const [refresh, setRefresh] = useState(false); // State for triggering component refresh
 
+    // Date calculations
     const currentDate = new Date();
-    const startOfMonth = new Date(currentDate);
+    const startOfMonth = new Date(currentDate); // Start date of the current month
     startOfMonth.setMonth(currentDate.getMonth() - 1);
     startOfMonth.setHours(0, 0, 0, 0);
 
-    const endDate = new Date(currentDate);
+    const endDate = new Date(currentDate); // End date of the current month
     endDate.setHours(23, 59, 59, 999);
 
-    const [date, setDate] = useState({
+    const [date, setDate] = useState({ // State for date range selection
         startDate: startOfMonth,
         endDate: endDate,
     });
 
-    const [appointment, setAppointment] = useState([])
-    const [totalAttendance, setTotalAttendance] = useState([])
-    const [boosterFees, setBoosterFees] = useState([])
-    const [totalFee, setTotalFee] = useState([])
-    const [outStangingFee, setOutStangingFee] = useState([])
-    const [totalDepositFee, setTotalDepositFee] = useState([])
+    // State for storing data
+    const [appointment, setAppointment] = useState([]); // State for appointment data
+    const [totalAttendance, setTotalAttendance] = useState([]); // State for total attendance data
+    const [boosterFees, setBoosterFees] = useState([]); // State for booster fees data
+    const [totalFee, setTotalFee] = useState([]); // State for total fee data
+    const [outStangingFee, setOutStangingFee] = useState([]); // State for outstanding fee data
+    const [totalDepositFee, setTotalDepositFee] = useState([]); // State for total deposit fee data
 
-    const user = useSelector(state => state?.user?.data);
-    const global = useSelector(state => state?.global?.data);
+    // Redux state
+    const user = useSelector(state => state?.user?.data); // Get user data from Redux store
+    const global = useSelector(state => state?.global?.data); // Get global data from Redux store
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch(); // Redux dispatch function
+
+    // Function to filter data by date range
     const filterByDate = (data, startDate, endDate) => {
         return data?.filter(item => {
-            const itemDate = new Date(item?.createdAt);
+            const itemDate = new Date(item?.createdAt); // Assuming createdAt field represents the date of the item
             return itemDate >= startDate && itemDate <= endDate;
         });
     };
 
-
     const handelFilter = (startDate, endDate) => {
+        // Filter appointments, attendances, fees, students, and deposit fees based on the date range
         setAppointment(filterByDate(global?.appointments, startDate, endDate));
         setTotalAttendance(filterByDate(global?.attendances, startDate, endDate));
         const filteredFees = filterByDate(global?.fees, startDate, endDate);
 
+        // Calculate booster fees and total fee based on filtered fees
         setBoosterFees(filteredFees?.reduce((acc, elem) => {
             if (elem?.isBooster) {
                 return acc + elem?.boosterPaid;
             }
             return acc;
         }, 0));
-
         setTotalFee(filteredFees?.reduce((acc, elem) => acc + elem?.amountPaid, 0));
 
+        // Calculate outstanding fee based on filtered students and total deposit fee based on filtered deposit fees
         const filteredStudents = filterByDate(global?.students, startDate, endDate);
         const filteredDepositFees = filterByDate(global?.depositFee, startDate, endDate);
-
         setOutStangingFee(filteredStudents?.reduce((acc, elem) => acc + elem.totalDues, 0));
         setTotalDepositFee(filteredDepositFees?.reduce((acc, elem) => acc + elem.amountPaid, 0));
-    }
-
+    };
 
     const handleRefresh = () => {
+        // Set refreshing to true to indicate data fetching
         setRefresh(true);
 
+        // Set start and end dates for the refreshed date range
         const refreshedStartDate = new Date();
         refreshedStartDate.setMonth(refreshedStartDate.getMonth() - 1);
         refreshedStartDate.setHours(0, 0, 0, 0);
@@ -83,23 +90,30 @@ const Analytics = ({ navigation }) => {
         const refreshedEndDate = new Date();
         refreshedEndDate.setHours(23, 59, 59, 999);
 
+        // Set the date state to the refreshed date range
         setDate({
             startDate: refreshedStartDate,
             endDate: refreshedEndDate,
         });
+
+        // Dispatch action to fetch updated global data
         dispatch(globalData(user?.id))
             .then(() => {
-                handelFilter(refreshedStartDate, refreshedEndDate)
-                setRefresh(false); // Set refreshing to false after data fetching is completed
+                // Filter data based on the refreshed date range
+                handelFilter(refreshedStartDate, refreshedEndDate);
+                // Set refreshing to false after data fetching is completed
+                setRefresh(false);
             })
             .catch(() => {
-                setRefresh(false); // Ensure refreshing is set to false even if there's an error
-            })
+                // Ensure refreshing is set to false even if there's an error
+                setRefresh(false);
+            });
     };
 
+    // Fetch data initially when the component mounts
     useEffect(() => {
-        handelFilter(date.startDate, date.endDate)
-    }, [])
+        handelFilter(date.startDate, date.endDate);
+    }, []);
 
 
     return (

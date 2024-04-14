@@ -24,57 +24,56 @@ import { GlobalStyles } from '../../utils/globalStyles'
 
 const ViewAttendance = () => {
     const [refresh, setRefresh] = useState(false);
-    const [open, setOpen] = useState(false)
-    const [data, setData] = useState([])
-    const router = useRoute()
-    const globaldata = useSelector(state => state?.global?.data)
-    const user = useSelector(state => state?.user?.data)
-    const filterAttendance = globaldata?.attendances?.filter(elem => elem.studentId === router?.params?.student?.id)
-    const dispatch = useDispatch()
+    const [open, setOpen] = useState(false);
+    const [data, setData] = useState([]);
+    const router = useRoute();
+    const globaldata = useSelector(state => state?.global?.data);
+    const user = useSelector(state => state?.user?.data);
+    const filterAttendance = globaldata?.attendances?.filter(elem => elem.studentId === router?.params?.student?.id);
+    const dispatch = useDispatch();
 
-
+    // Function to filter attendance data by date range
     const filterByDate = (startDate, endDate) => {
         if (startDate && endDate) {
-            const filteer = filterAttendance?.filter(item => {
+            const filteredData = filterAttendance?.filter(item => {
                 const itemDate = new Date(item?.attendanceDate);
                 return itemDate >= startDate && itemDate <= endDate;
             });
-            setData(filteer)
+            setData(filteredData);
         } else {
-            setData(filterAttendance)
+            setData(filterAttendance);
         }
     };
 
+    // Function to handle date change
     const handleDateChange = (date) => {
-        filterByDate(date.startDate, date.endDate)
-    }
+        filterByDate(date.startDate, date.endDate);
+    };
 
-
+    // Function to generate list items for attendance details
     const list = (attendance) => [
-        // { name: ' Department Name', value: attendance?.Department?.name, icon: <CardIcon color={Color.primary} name='idcard' size={FontSizes.lg} /> },
         { name: ' Subject', value: attendance?.Subject?.name, icon: <BookIcon color={Color.primary} name='book' size={FontSizes.lg} /> },
         { name: ' Type', value: `${attendance.attendanceType.charAt(0).toUpperCase()}${attendance.attendanceType.slice(1)}`, icon: <GridIcon color={Color.primary} name='grid' size={FontSizes.lg} /> },
-        { name: ' Category', value: `${attendance.attendanceCategory.charAt(0).toUpperCase()}${attendance.attendanceCategory.slice(1)} Lesson`, icon: <CapIcon color={Color.primary} name='graduation-cap' size={FontSizes.lg} /> },
-        // { name: ' Teacher Name', value: `${attendance.teacherId ? globaldata?.teachers.find(teacher => teacher.id === attendance.teacherId)?.name : 'N/A'}`, icon: <Icon color={Color.primary} name='home' size={FontSizes.lg} /> },
+        { name: ' Category', value: `${attendance.attendanceCategory.charAt(0).toUpperCase()}${attendance.attendanceCategory.slice(1)} Lesson`, icon: <CapIcon color={Color.primary} name='graduation-cap' size={FontSizes.lg} /> },
         { name: ' Day', value: `${attendance.attendanceDate ? formattedDate(attendance?.attendanceDate, 'EEE dd, MMM-yyyy') : ''}`, icon: <BookIcon color={Color.primary} name='book' size={FontSizes.lg} /> },
         { name: ' Time', value: attendance?.Schedule?.LessonTiming?.time, icon: <TimeIcon color={Color.primary} name='timelapse' size={FontSizes.lg} /> },
-        // { name: ' Marked At', value: `${attendance.attendanceDate ? formattedDate(attendance.createdAt, 'MMM dd ,yyyy hh:mm:ss a') : ''}`, icon: <CardIcon color={Color.primary} name='idcard' size={FontSizes.lg} /> },
+    ];
 
-    ]
-
+    // Function to handle refreshing data
     const handleRefresh = () => {
         setRefresh(true);
         dispatch(globalData(user?.id))
             .then(() => {
-                filterByDate()
+                filterByDate();
                 setRefresh(false);
             })
             .catch(() => {
-                filterByDate()
+                filterByDate();
                 setRefresh(false);
             });
     };
 
+    // Function to render item when no attendance is found
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>
@@ -82,12 +81,11 @@ const ViewAttendance = () => {
                 <Text style={styles.inactivetext}>No Attendance found</Text>
             </View>
         </View>
-    )
+    );
 
     useEffect(() => {
-        filterByDate()
-    }, [])
-
+        filterByDate();
+    }, []);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>

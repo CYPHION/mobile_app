@@ -17,58 +17,60 @@ import ReceiptSkelton from './ReceiptSkeleton';
 
 
 const Receipt = () => {
-    const [years, setYears] = useState([]);
-    const [activeItem, setActiveItem] = useState(null);
-    const [isLoading, setIsloading] = useState(true);
-    const [option, setOption] = useState(new Date().getFullYear());
-    const [data, setData] = useState([])
-    const [refreshing, setRefreshing] = useState(false)
-    const dispatch = useDispatch()
-    const globaldata = useSelector(state => state?.global?.data)
-    const user = useSelector(state => state?.user?.data)
+    // State variables
+    const [years, setYears] = useState([]); // Array of years for selection
+    const [activeItem, setActiveItem] = useState(null); // Currently active item
+    const [isLoading, setIsloading] = useState(true); // Loading state
+    const [option, setOption] = useState(new Date().getFullYear()); // Selected year
+    const [data, setData] = useState([]); // Filtered fee data based on the selected year
+    const [refreshing, setRefreshing] = useState(false); // Refreshing state
+    const dispatch = useDispatch(); // Redux dispatch function
+    const globaldata = useSelector(state => state?.global?.data); // Global data from Redux store
+    const user = useSelector(state => state?.user?.data); // User data from Redux store
 
-
+    // Function to format the inner list data
     const ineerList = (item) => [
         { name: "Previous Dues", value: `£${item?.totalDues}` },
         { name: "Book dues", value: `£${item?.bookDues}` },
         { name: "Paid Amount", value: `£${item?.amountPaid}` },
-    ]
+    ];
 
-
+    // Function to toggle the active item
     const toggleItem = (index) => {
-        setActiveItem(activeItem === index ? null : index); // Toggle state based on click
+        setActiveItem(activeItem === index ? null : index);
     };
 
-
+    // Function to handle downloading a file
     const handleDownload = (fileName) => {
         const url = getImage(fileName); // Replace with your download URL
         Linking.openURL(url).catch((err) => customToast('error', 'Something went wrong!'));
-
     };
 
+    // Function to fetch and filter fee data based on the selected year
     const fetchData = () => {
         const filteredData = globaldata?.fees?.filter((item) => {
             const itemYear = new Date(item.createdAt).getFullYear(); // Replace 'invoiceDate' with your actual date property
             return itemYear === parseInt(option);
         });
-        setIsloading(false)
+        setIsloading(false);
         setData(filteredData);
-    }
+    };
 
+    // Function to handle refreshing the fee data
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         dispatch(globalData(user?.id))
             .then(() => {
-                fetchData()
+                fetchData();
                 setRefreshing(false); // Set refreshing to false after data fetching is completed
             })
             .catch(() => {
-                fetchData()
+                fetchData();
                 setRefreshing(false); // Ensure refreshing is set to false even if there's an error
-            })
-    }, [])
+            });
+    }, []);
 
-
+    // Initialize the 'years' array with the last 7 years
     useEffect(() => {
         const currentYear = new Date().getFullYear();
         const yearArray = Array.from({ length: 7 }, (_, index) => ({
@@ -78,9 +80,11 @@ const Receipt = () => {
         setYears(yearArray);
     }, []);
 
+    // Fetch data initially and whenever the selected year or fee data changes
     useEffect(() => {
-        fetchData()
+        fetchData();
     }, [option, globaldata?.fees]);
+
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>

@@ -3,6 +3,13 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Color } from '../../../utils/color'
 import { FontFamily, FontSizes } from '../../../utils/font'
+
+/*
+in this component we are showinf student name and its year, fee (monthly or weekly), (booster or not)
+
+this component ios used in children stack screens as a secondary header
+*/
+
 const TopbarWithGraph = ({ student, isGraph = true }) => {
     const navigation = useNavigation()
 

@@ -18,35 +18,37 @@ import ReceiptSkelton from '../Receipt/ReceiptSkeleton';
 const ViewFess = () => {
     const [activeItem, setActiveItem] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
-    const [data, setData] = useState([])
-    const globaldata = useSelector(state => state?.global?.data)
-    const user = useSelector(state => state?.user?.data)
-    const dispatch = useDispatch()
-    const router = useRoute()
+    const [data, setData] = useState([]);
+    const globaldata = useSelector(state => state?.global?.data);
+    const user = useSelector(state => state?.user?.data);
+    const dispatch = useDispatch();
+    const router = useRoute();
+
+    // Function to format fee details
     const ineerList = (item) => [
         { name: "Previous Dues", value: `£${item?.totalDues}` },
         { name: "Book dues", value: `£${item?.bookDues}` },
         { name: "Paid Amount", value: `£${item?.amountPaid}` },
-    ]
+    ];
 
-
+    // Function to toggle item selection
     const toggleItem = (index) => {
         setActiveItem(activeItem === index ? null : index); // Toggle state based on click
     };
 
-
+    // Function to handle file download
     const handleDownload = (fileName) => {
         const url = getImage(fileName); // Replace with your download URL
         Linking.openURL(url).catch((err) => customToast('error', 'Something went wrong!'));
-
     };
 
+    // Function to fetch data
     const fetchData = () => {
-        const filter = globaldata?.fees?.filter((item) => item.studentId === router?.params?.student?.id)
-        setData(filter)
-    }
+        const filter = globaldata?.fees?.filter((item) => item.studentId === router?.params?.student?.id);
+        setData(filter);
+    };
 
-
+    // Function to render item
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>
@@ -54,25 +56,26 @@ const ViewFess = () => {
                 <Text style={styles.inactivetext}>No Record found</Text>
             </View>
         </View>
-    )
+    );
 
+    // Callback function for refreshing data
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         dispatch(globalData(user?.id))
             .then(() => {
-                fetchData()
+                fetchData();
                 setRefreshing(false); // Set refreshing to false after data fetching is completed
             })
             .catch(() => {
-                fetchData()
+                fetchData();
                 setRefreshing(false); // Ensure refreshing is set to false even if there's an error
             });
-    }, [])
+    }, []);
 
-
+    // Effect to fetch data initially and when global data fees change
     useEffect(() => {
-        fetchData()
-    }, [globaldata?.fees])
+        fetchData();
+    }, [globaldata?.fees]);
 
     return (
         <ScrollView

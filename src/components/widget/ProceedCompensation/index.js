@@ -45,33 +45,41 @@ const ProceedCompensation = (props) => {
         },
     ]
 
+    // Function to handle form submission
     const handleSubmit = async () => {
-        setIsLoading(true)
-        let payload = []
+        setIsLoading(true); // Set loading state to true
 
+        let payload = []; // Initialize payload array
+
+        // Loop through each item in data array and construct payload
         data?.filter(elem => {
             return payload.push({
                 studentId: elem.studentId,
                 missedSchedule: elem.missedSchedule,
                 availableSchedule: elem.availableSchedule,
-                newDate: elem.date ? formattedDate(elem?.date, 'yyyy-MM-dd') : '',
+                newDate: elem.date ? formattedDate(elem?.date, 'yyyy-MM-dd') : '', // Format date if available
                 missedDate: elem.attendanceDate,
                 remarks: elem.remarks
-            })
-        })
+            });
+        });
 
+        // Call API to create compensation
         await API.createCompensation({
             data: payload
-        }).then(res => {
-            customToast("success", res?.message)
-            setProcess(false)
-            setActiveStudent(true);
-        }).catch(err => {
-            customToast("error", err?.message)
         })
-            .finally(() => setIsLoading(false))
+            .then(res => {
+                // Show success message
+                customToast("success", res?.message);
+                setProcess(false); // Set process state to false
+                setActiveStudent(true); // Set active student state to true
+            })
+            .catch(err => {
+                // Show error message
+                customToast("error", err?.message);
+            })
+            .finally(() => setIsLoading(false)); // Set loading state to false
+    };
 
-    }
 
 
     return (

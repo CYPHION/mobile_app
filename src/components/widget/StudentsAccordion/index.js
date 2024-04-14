@@ -28,7 +28,9 @@ const item = (item) => [
     },
 ]
 
-
+/*
+this component is use in create compensation as a student accordion 
+*/
 
 
 const StudentsAccordion = (props) => {
@@ -43,6 +45,7 @@ const StudentsAccordion = (props) => {
     const globalData = useSelector(state => state?.global?.data)
 
 
+    // its function to checked items in an array
     const handleCheckbox = (scheduleId) => {
         const index = globalData?.schedules.findIndex(item => item.id === Number(scheduleId));
         if (index === -1) {
@@ -73,12 +76,12 @@ const StudentsAccordion = (props) => {
     };
 
 
-
+    // its for modal toggle 
     const toggleModal = () => {
         setOpen(!open);
     };
 
-
+    // this function take student id and return table of student schedule
     const getSelectedStudentSchedule = (studentId) => {
 
         const day = formattedDate(date, 'EEEE')

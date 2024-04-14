@@ -57,21 +57,20 @@ const nestedArray = (item) => [
 const ViewProgress = () => {
     const [refresh, setRefresh] = useState(false);
     const [progress, setProgress] = useState([]);
-    const router = useRoute()
+    const router = useRoute();
     const [open, setOpen] = useState(false);
     const [option, setOption] = useState("");
+    const globaldata = useSelector(state => state?.global?.data);
+    const user = useSelector(state => state?.user?.data);
+    const filterReport = globaldata?.reports?.filter(elem => elem?.studentId === router?.params?.student?.id);
+    const dispatch = useDispatch();
 
-    const globaldata = useSelector(state => state?.global?.data)
-    const user = useSelector(state => state?.user?.data)
-    const filterReport = globaldata?.reports?.filter(elem => elem?.studentId === router?.params?.student?.id)
-    const dispatch = useDispatch()
-
-
+    // Function to filter progress reports by date and department option
     const filterByDate = (startDate, endDate) => {
         let filterDate;
         if (option === '' && startDate && endDate) {
             filterDate = filterReport?.filter(item => {
-                const itemDate = new Date(item?.createdAt)
+                const itemDate = new Date(item?.createdAt);
                 return itemDate >= startDate && itemDate <= endDate;
             });
         } else if (startDate && endDate && !!option) {
@@ -82,21 +81,17 @@ const ViewProgress = () => {
         } else {
             filterDate = filterReport?.filter(item => true);
         }
-        setProgress(filterDate)
-        setOption('')
-    }
+        setProgress(filterDate);
+        setOption('');
+    };
 
-
-
-
-
-
-
+    // Function to handle download click
     const onDownloadClick = () => {
-        //when user click on download button
-        console.log('first')
-    }
+        // When user clicks on download button
+        console.log('first');
+    };
 
+    // Function to render item when no progress reports found
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>
@@ -104,25 +99,27 @@ const ViewProgress = () => {
                 <Text style={styles.inactivetext}>No Progress Report found</Text>
             </View>
         </View>
-    )
+    );
 
+    // Function to handle refresh action
     const handleRefresh = () => {
         setRefresh(true);
         dispatch(globalData(user?.id))
             .then(() => {
-                filterByDate()
+                filterByDate();
                 setRefresh(false);
             })
             .catch(() => {
-                filterByDate()
+                filterByDate();
                 setRefresh(false);
             });
     };
 
+    // Effect to filter progress reports when global data reports change
     useEffect(() => {
-        filterByDate()
-    }, [globaldata?.reports])
-    console.log(progress)
+        filterByDate();
+    }, [globaldata?.reports]);
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView

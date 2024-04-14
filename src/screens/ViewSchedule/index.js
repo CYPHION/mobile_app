@@ -55,33 +55,37 @@ const list = (schedule) => [
 
 const ViewSchedule = () => {
     const [refresh, setRefresh] = useState(false);
-    const [data, setData] = useState([])
-    const router = useRoute()
-    const globaldata = useSelector(state => state?.global?.data)
-    const user = useSelector(state => state?.user?.data)
-    const dispatch = useDispatch()
-    const Schedules = globaldata?.schedules?.filter(elem => elem.studentId === router.params?.student?.id)
-    const fetchData = () => {
-        setData(Schedules)
-    }
+    const [data, setData] = useState([]);
+    const router = useRoute();
+    const globaldata = useSelector(state => state?.global?.data);
+    const user = useSelector(state => state?.user?.data);
+    const dispatch = useDispatch();
+    const schedules = globaldata?.schedules?.filter(elem => elem.studentId === router.params?.student?.id);
 
+    // Function to fetch data
+    const fetchData = () => {
+        setData(schedules);
+    };
+
+    // Function to handle refresh action
     const handleRefresh = () => {
         setRefresh(true);
         dispatch(globalData(user?.id))
             .then(() => {
-                fetchData()
+                fetchData();
                 setRefresh(false);
             })
             .catch(() => {
-                fetchData()
+                fetchData();
                 setRefresh(false);
             });
     };
 
-
+    // Effect to fetch data when schedules change
     useEffect(() => {
-        fetchData()
-    }, [globaldata?.schedules])
+        fetchData();
+    }, [globaldata?.schedules]);
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>

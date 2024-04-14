@@ -13,48 +13,41 @@ import { customToast, removeError, screenDimensions } from '../../utils/function
 
 
 const ResetPassword = (prop) => {
+    // Imports
+    const navigation = useNavigation(); // Navigation hook from React Navigation
+    const [formData, setFormData] = useState({ email: '' }); // Form data state
+    const [isLoading, setIsLoading] = useState(false); // Loading state
+    const [error, setError] = useState({}); // Error state
+    const dispatch = useDispatch(); // Redux dispatch function
 
-    const navigation = useNavigation()
-    const [formData, setFormData] = useState({
-        email: '',
-    })
-
-    const [isLoading, setIsLoading] = useState(false)
-
-    const [error, setError] = useState({
-        // username: '',
-        // password: '',
-    })
-
-    const dispatch = useDispatch()
-
+    // Function to save data to Redux store
     const saveDataToredux = (data) => {
-        dispatch(handleLogin(data))
-    }
+        dispatch(handleLogin(data));
+    };
 
+    // Function to handle changes in form fields
     const onChangeHandler = (name, text) => {
         setFormData(prevFormData => ({
             ...prevFormData,
             [name]: text
         }));
-
-        setError(removeError(name, error))
-
+        setError(removeError(name, error)); // Clear error for the field
     };
 
+    // Function to handle form submission
     const handleSubmit = async () => {
-        setIsLoading(true)
-        if (!formData?.email) {
-            !formData.email && customToast("error", "Email is required")
-            setIsLoading(false)
+        setIsLoading(true); // Set loading state to true
+        if (!formData?.email) { // If email is not provided
+            !formData.email && customToast("error", "Email is required"); // Show error message
+            setIsLoading(false); // Set loading state to false
+        } else { // If email is provided
+            await API.generateOtp({ email: formData.email }) // Call API to generate OTP
+                .then(res => {
+                    navigation.navigate('confirmPassword', { email: formData.email }); // Navigate to confirm password screen
+                })
+                .catch(err => customToast("error", err?.message)) // Show error message if API call fails
+                .finally(() => setIsLoading(false)); // Set loading state to false
         }
-        else {
-
-            await API.generateOtp({ email: formData.email }).then(res => {
-                navigation.navigate('confirmPassword', { email: formData.email })
-            }).catch(err => customToast("error", err?.message)).finally(() => setIsLoading(false))
-        }
-
     };
 
 

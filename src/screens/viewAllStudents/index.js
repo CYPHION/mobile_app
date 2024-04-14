@@ -7,15 +7,17 @@ import { FontFamily, FontSizes } from '../../utils/font'
 import { bgColor, getImage, screenDimensions } from '../../utils/functions'
 
 const ViewAllStudents = ({ navigation }) => {
-    const user = useSelector(state => state?.user?.data)
-    const globalData = useSelector(state => state?.global?.data)
-    const [data, setData] = useState([])
-    const [loading, setLoading] = useState(true)
+    // Importing necessary hooks and functions
+    const user = useSelector(state => state?.user?.data); // Selecting user data from Redux store
+    const globalData = useSelector(state => state?.global?.data); // Selecting global data from Redux store
+    const [data, setData] = useState([]); // State for storing data
+    const [loading, setLoading] = useState(true); // State for loading status
 
-
+    // useEffect to handle loading status when globalData changes
     useEffect(() => {
-        setLoading(false)
-    }, [globalData])
+        setLoading(false); // Setting loading status to false when globalData changes
+    }, [globalData]); // Dependency array to run effect when globalData changes
+
 
     return (
 

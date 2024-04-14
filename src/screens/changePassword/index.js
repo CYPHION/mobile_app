@@ -9,53 +9,51 @@ import { FontFamily, FontSizes } from '../../utils/font'
 import { customToast } from '../../utils/functions'
 
 const ChangePasswordScreen = () => {
-    const [isLoading, setIsloading] = useState(false)
-    const [error, seterror] = useState({
+    const [isLoading, setIsloading] = useState(false); // State to manage loading state
+    const [error, seterror] = useState({ // State to manage form errors
         newPass: '',
         confPass: ''
-    })
-    const user = useSelector(state => state?.user?.data)
+    });
+    const user = useSelector(state => state?.user?.data); // Accessing user data from Redux store
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState({ // State to manage form data
         newPass: '',
         confPass: ''
-    })
+    });
 
-
-    const onChangeHandler = (name, text) => {
+    const onChangeHandler = (name, text) => { // Function to handle form input changes
         setFormData(prevFormData => ({
             ...prevFormData,
             [name]: text
         }));
     };
 
-    const handleSubmit = () => {
-        setIsloading(true)
-        if (formData.confPass.trim() === '' || formData.newPass.trim() === '') {
-            customToast('error', 'Please enter password')
+    const handleSubmit = () => { // Function to handle form submission
+        setIsloading(true); // Set loading state to true
+        if (formData.confPass.trim() === '' || formData.newPass.trim() === '') { // Check if passwords are empty
+            customToast('error', 'Please enter password'); // Show error message
         } else {
-            if (formData.confPass === formData.newPass) {
-
-                API.updateUser({ password: formData.newPass, id: user?.id })
+            if (formData.confPass === formData.newPass) { // Check if passwords match
+                API.updateUser({ password: formData.newPass, id: user?.id }) // Call API to update user password
                     .then((res) => {
-                        customToast('success', res.message)
+                        customToast('success', res.message); // Show success message
                     })
                     .catch((err) => {
-                        customToast('error', err)
+                        customToast('error', err); // Show error message
                     })
                     .finally(() => {
-                        setFormData({
+                        setFormData({ // Clear form data
                             newPass: '',
                             confPass: ''
-                        })
-                        setIsloading(false)
-                    })
+                        });
+                        setIsloading(false); // Set loading state to false
+                    });
             } else {
-                customToast('error', 'Password must be same.')
-                setIsloading(false)
+                customToast('error', 'Password must be same.'); // Show error message if passwords don't match
+                setIsloading(false); // Set loading state to false
             }
         }
-    }
+    };
 
 
     return (
