@@ -30,7 +30,7 @@ const ViewAppointments = () => {
         Pending: Color.freeze,
         Missed: Color.SecondaryText
     }
-
+    // Function to filter appointments by date range
     const filterByDate = (startDate, endDate) => {
         let filterData;
         if (!!startDate && !!endDate) {
@@ -43,7 +43,7 @@ const ViewAppointments = () => {
         }
         setData(filterData)
     };
-
+    // Function to handle refreshing data
     const handleRefresh = () => {
         setRefresh(true);
         dispatch(globalData(user?.id))
@@ -56,6 +56,7 @@ const ViewAppointments = () => {
                 setRefresh(false);
             });
     };
+    // Function to render item when no appointments are found
 
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
@@ -65,7 +66,7 @@ const ViewAppointments = () => {
             </View>
         </View>
     )
-
+    // Function to generate list items for appointment details
     const list = (elem) => [
         {
             name: " Title",

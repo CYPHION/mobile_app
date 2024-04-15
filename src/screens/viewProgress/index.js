@@ -66,7 +66,7 @@ const ViewProgress = () => {
     const filterReport = globaldata?.reports?.filter(elem => elem?.studentId === router?.params?.student?.id)
     const dispatch = useDispatch()
 
-
+    // Function to filter progress reports by date and department option
     const filterByDate = (startDate, endDate) => {
         let filterDate;
         if (option === '' && startDate && endDate) {
@@ -91,12 +91,12 @@ const ViewProgress = () => {
 
 
 
-
+    // Function to handle download click
     const onDownloadClick = () => {
         //when user click on download button
         console.log('first')
     }
-
+    // Function to render item when no progress reports found
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>
@@ -105,7 +105,7 @@ const ViewProgress = () => {
             </View>
         </View>
     )
-
+    // Function to handle refresh action
     const handleRefresh = () => {
         setRefresh(true);
         dispatch(globalData(user?.id))
@@ -118,11 +118,10 @@ const ViewProgress = () => {
                 setRefresh(false);
             });
     };
-
+    // Effect to filter progress reports when global data reports change
     useEffect(() => {
         filterByDate()
     }, [globaldata?.reports])
-    console.log(progress)
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView

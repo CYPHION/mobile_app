@@ -57,9 +57,9 @@ const SelectedStudents = (props) => {
     const [checkedItems, setCheckedItems] = useState([]);
     const [selectedDates, setSelectedDates] = useState({});
     const [selectedData, setSelectedData] = useState([])
-
+    // Function to handle input change
     const handleInputChange = (field, value, stdIndex) => {
-
+        // Make a copy of the current form values
         const updatedFormValues = { ...formValues };
 
         // Check if the index exists in the formValues object
@@ -78,42 +78,42 @@ const SelectedStudents = (props) => {
                 [stdIndex]: removeError(error[stdIndex], field)
             }));
         } else {
-            updatedFormValues[stdIndex] = {
+            updatedFormValues[stdIndex] = {// If the index doesn't exist, create a new entry for it
                 ...updatedFormValues[stdIndex],
                 [field]: value,
             };
-            setFormValues(updatedFormValues);
-            setError(prev => ({
+            setFormValues(updatedFormValues); // Set the updated state
+            setError(prev => ({ // Remove error for the specific field
                 ...prev,
                 [stdIndex]: removeError(error[stdIndex], field)
             }));
         }
     };
-
+    // Function to get available schedule
     const getAvailable = async (date, studentIndex, stdYear) => {
 
-        const getYearName = stdYear;
-        const res = await API.getAvailableSchedule({
+        const getYearName = stdYear;    // Get the year name
+        const res = await API.getAvailableSchedule({ // Call the API to get available schedule
             date: formattedDate(date, 'yyyy-MM-dd'),
             yearName: getYearName,
         });
 
-        if (!selectedDates.hasOwnProperty(studentIndex)) {
-            setSelectedDates(prevSelectedDates => ({
+        if (!selectedDates.hasOwnProperty(studentIndex)) { // Update selected dates based on whether student index exists or not
+            setSelectedDates(prevSelectedDates => ({  // If student index does not exist, add new entry
                 ...prevSelectedDates,
                 [studentIndex]: res?.data,
             }));
         } else {
-            setSelectedDates(prevSelectedDates => ({
+            setSelectedDates(prevSelectedDates => ({   // If student index exists, update existing entry
                 ...prevSelectedDates,
                 [studentIndex]: res?.data,
             }));
         }
     };
 
-
+    // Function to handle checkbox toggle
     const handleCheckbox = (rowId) => {
-        const index = rows?.findIndex(item => item.id === Number(rowId));
+        const index = rows?.findIndex(item => item.id === Number(rowId)); // Find the index of the schedule item with the given ID
         if (index === -1) {
             return; // Schedule item not found, handle error or return
         }
@@ -140,28 +140,34 @@ const SelectedStudents = (props) => {
             }
         });
     };
-
+    // Function to handle deletion
     const handleDelete = (rowId, type) => {
+        // Check if the deletion type is 'single' or 'all'
         type === "single" ? Alert.alert(
+            // If 'single', show confirmation for deleting a single item
             'Delete',
             'Are you sure you want to delete?',
             [
                 { text: 'Cancel', style: 'cancel' },
                 {
                     text: 'OK', onPress: () => {
+                        // If confirmed, filter out the row with the given ID and update state
                         setrows(rows?.filter(elem => elem?.id !== rowId))
                     }
                 }
             ],
             { cancelable: false }
         ) : Alert.alert(
+            // If 'all', show confirmation for deleting all items associated with a student
             'Delete',
             'Are you sure you want to delete all?',
             [
                 { text: 'Cancel', style: 'cancel' },
                 {
                     text: 'OK', onPress: () => {
+                        // If confirmed, filter out all rows associated with the student ID and update state
                         setrows(rows?.filter(elem => elem?.studentId !== rowId))
+                        // Clear the selected data since all associated items are deleted
                         setSelectedData([])
                     }
                 }
@@ -169,7 +175,7 @@ const SelectedStudents = (props) => {
             { cancelable: false }
         )
     }
-
+    // Function to render checkbox and delete icon for a row
     const CheckBoxRender = (rowId) => {
         return (
             <View style={{ zIndex: 10, flexDirection: 'row', justifyContent: 'space-between', }}>
@@ -178,11 +184,13 @@ const SelectedStudents = (props) => {
             </View>
         )
     }
-
+    // Function to handle form submission for a student
     const studentformHandler = (studentIndex, studentId) => {
-
+        // Check if any required field is empty
         if (!formValues[studentIndex]?.newDate || !formValues[studentIndex]?.missedSchedule || !formValues[studentIndex]?.availableSchedule) {
+            // If any required field is empty
             if (!error.hasOwnProperty(studentIndex)) {
+                // If error object doesn't have entry for this student index
                 setError(prevSelectedDates => ({
                     ...prevSelectedDates,
                     [studentIndex]: {
@@ -193,6 +201,7 @@ const SelectedStudents = (props) => {
                 }));
                 customToast("error", "Please fill all details")
             } else {
+                // If error object already has entry for this student index
                 setError(prevSelectedDates => ({
                     ...prevSelectedDates,
                     [studentIndex]: {
@@ -206,8 +215,9 @@ const SelectedStudents = (props) => {
             }
         }
         else {
+            // If all required fields are filled
             const randomNumber = Math.floor(Math.random() * 1000000) + 1;
-
+            // Create data object with form values and other necessary details
             const data = {
                 id: randomNumber,
                 studentId: studentId,
@@ -222,9 +232,10 @@ const SelectedStudents = (props) => {
                 availableSeats: selectedDates[studentIndex]?.find(elem => elem.id === formValues[studentIndex]?.availableSchedule)?.availableSeats,
                 remarks: formValues[studentIndex]?.remarks
             };
-
+            // Add the new data to the rows state
             setrows((prevRows) => [...prevRows, data]);
 
+            // Clear the form values for the current student
             setFormValues((prev) => {
                 const updatedFormValues = { ...prev };
                 updatedFormValues[studentIndex] = {
@@ -235,6 +246,7 @@ const SelectedStudents = (props) => {
                 };
                 return updatedFormValues;
             })
+            // Clear the selected dates for the current student
             if (!selectedDates.hasOwnProperty(studentIndex)) {
                 setSelectedDates(prevSelectedDates => ({
                     ...prevSelectedDates,
@@ -252,16 +264,17 @@ const SelectedStudents = (props) => {
 
 
     };
-
+    // Effect to run when studentData changes
     useEffect(() => {
-        if (studentData !== null) {
-            setStudent(studentData?.attendance)
-
+        if (studentData !== null) {  // Check if studentData is not null
+            setStudent(studentData?.attendance)      // Set the student state with attendance data from studentData
+            // Create a copy of initialData
             const updatedInitialData = { ...initialData };
 
             studentData?.attendance.forEach((student, index) => {
                 // Only update if the index is not already in initialData
                 if (!updatedInitialData.hasOwnProperty(index)) {
+                    // Initialize form values for the student at the index
                     updatedInitialData[index] = {
                         missedSchedule: '',
                         newDate: '',
@@ -270,7 +283,7 @@ const SelectedStudents = (props) => {
                     };
                 }
             });
-
+            // Set the formValues state with updatedInitialData
             setFormValues(updatedInitialData);
         }
     }, [studentData]);

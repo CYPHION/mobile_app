@@ -34,18 +34,18 @@ const Receipt = () => {
         { name: "Paid Amount", value: `£${item?.amountPaid}` },
     ]
 
-
+    // Function to toggle the active item
     const toggleItem = (index) => {
         setActiveItem(activeItem === index ? null : index); // Toggle state based on click
     };
 
-
+    // Function to handle downloading a file
     const handleDownload = (fileName) => {
         const url = getImage(fileName); // Replace with your download URL
         Linking.openURL(url).catch((err) => customToast('error', 'Something went wrong!'));
 
     };
-
+    // Function to fetch and filter fee data based on the selected year
     const fetchData = () => {
         const filteredData = globaldata?.fees?.filter((item) => {
             const itemYear = new Date(item.createdAt).getFullYear(); // Replace 'invoiceDate' with your actual date property
@@ -54,7 +54,7 @@ const Receipt = () => {
         setIsloading(false)
         setData(filteredData);
     }
-
+    // Function to handle refreshing the fee data
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         dispatch(globalData(user?.id))
@@ -68,7 +68,7 @@ const Receipt = () => {
             })
     }, [])
 
-
+    // Initialize the 'years' array with the last 7 years
     useEffect(() => {
         const currentYear = new Date().getFullYear();
         const yearArray = Array.from({ length: 7 }, (_, index) => ({
@@ -77,10 +77,12 @@ const Receipt = () => {
         }));
         setYears(yearArray);
     }, []);
-
+    // Fetch data initially and whenever the selected year or fee data changes
     useEffect(() => {
         fetchData()
     }, [option, globaldata?.fees]);
+
+
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>

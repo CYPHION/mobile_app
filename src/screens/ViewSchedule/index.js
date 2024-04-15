@@ -64,7 +64,7 @@ const ViewSchedule = () => {
     const fetchData = () => {
         setData(Schedules)
     }
-
+    // Function to handle refresh action
     const handleRefresh = () => {
         setRefresh(true);
         dispatch(globalData(user?.id))
@@ -78,7 +78,7 @@ const ViewSchedule = () => {
             });
     };
 
-
+    // Effect to fetch data when schedules change
     useEffect(() => {
         fetchData()
     }, [globaldata?.schedules])

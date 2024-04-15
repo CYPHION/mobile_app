@@ -15,7 +15,7 @@ import { customToast, removeError, screenDimensions } from '../../utils/function
 const ConfirmResetPassword = (prop) => {
 
     const router = useRoute()
-    let email = router.params.email
+    let email = router.params.email // Extracting email from route parameters
 
     const [formData, setFormData] = useState({
         code: '',
@@ -34,11 +34,11 @@ const ConfirmResetPassword = (prop) => {
 
     const dispatch = useDispatch()
 
-    const saveDataToredux = (data) => {
+    const saveDataToredux = (data) => { // Function to dispatch login action
         dispatch(handleLogin(data))
     }
 
-    const onChangeHandler = (name, text) => {
+    const onChangeHandler = (name, text) => { // Function to handle form input changes
         setFormData(prevFormData => ({
             ...prevFormData,
             [name]: text
@@ -48,7 +48,7 @@ const ConfirmResetPassword = (prop) => {
 
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async () => {  // Function to handle form submission
         setIsLoading(true)
 
         if (!formData.code || !formData.Confirmpassword || !formData.Newpassword) {
@@ -80,7 +80,7 @@ const ConfirmResetPassword = (prop) => {
 
     };
 
-    const resendEmail = async () => {
+    const resendEmail = async () => { // Function to resend email
         setIsLoadingResend(true)
         await API.generateOtp({ email: email, resend: true }).then(res => {
             customToast("success", "Resend Email Successfully")

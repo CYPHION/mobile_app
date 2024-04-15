@@ -5,10 +5,10 @@ import { URL } from '../network/httpService'
 import { store } from '../store'
 import { logoutUser } from '../store/thunk'
 import { Color } from './color'
-
+// its give mobile width, height, font and scale // e.x: screenDimension.width
 export const screenDimensions = Dimensions.get('window')
 
-
+// its a function it take date in first parameter and in second parameter it takes formate of date 
 export const formattedDate = (dateString, format) => {
     const date = new Date(dateString)
 
@@ -66,6 +66,7 @@ export const customToast = (type, message) => { //type = error || success || inf
 }
 
 
+// its function for return api errors
 export const CheckForHttpErrors = error => {
     const { response } = error
 
@@ -99,12 +100,12 @@ export const CheckForHttpErrors = error => {
             }
     }
 }
-
+// its function to remove errors of input fileds
 export const removeError = (err, property) => {
     // console.log("-=", { ...err, [property]: "" })
     return { ...err, [property]: "" }
 }
-
+// it takes file name in parameter and convert it into URL 
 export function getImage(file) {
     if (file) {
         const image = `${URL}/upload/${file}`
@@ -113,7 +114,7 @@ export function getImage(file) {
         return null
     }
 }
-
+// its take an Array and convert it into name and value pair
 export const getDepartmentDropdown = list => {
     return (
         list?.map(elem => ({
@@ -122,7 +123,7 @@ export const getDepartmentDropdown = list => {
         })) || []
     )
 }
-
+// its takes an array and convert it into  desired data
 export const getParentDropdown = (list, isDisable) => {
     return isDisable ? list?.map(elem => ({
         value: elem.id,
@@ -138,6 +139,14 @@ export const getParentDropdown = (list, isDisable) => {
     })
 }
 
+/*
+ its function to calculate fees 
+ 1)it take child
+ 2)it take timeperiod
+ 3)it take is that student is monthly and weekly to set fee accordingly
+ 4)it takes start date
+ 5)it takes boolean (is that student is booster or not)
+*/
 export function calculateFee(child, timeperiod, isMonthly, startDate, isBooster) {
     const totalClassCharges = isMonthly ? Math.ceil((child.weeklyFee * 52) / 12) * timeperiod : child.weeklyFee * timeperiod
     const endDate = new Date(startDate)
@@ -167,6 +176,8 @@ export function calculateFee(child, timeperiod, isMonthly, startDate, isBooster)
 
     return obj;
 }
+
+// its used to set color for active, inactive, freeze and pending student
 
 export const bgColor = {
     active: Color.active,

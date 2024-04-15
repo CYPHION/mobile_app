@@ -52,19 +52,19 @@ const ViewChildren = ({ navigation }) => {
 
     const router = useRoute()
     const globalData = useSelector(state => state?.global?.data)
-
+    // Extracting id from route params
     const { id } = router.params
-
+    // Finding student object based on id
     const studentObj = globalData?.students?.find(elem => elem.id === id)
-
+    // Setting selected attributes based on student object
     const selectedAttributes = studentObj ? studentObj
         : null;
-
+    // Extracting student name from student object
     const studentName = studentObj ? studentObj?.fullName : ''
 
 
 
-
+    // Effect to update navigation title when student name changes
     useEffect(() => {
         navigation.setParams({ title: studentName })
     }, [navigation, studentName]);

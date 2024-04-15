@@ -12,11 +12,12 @@ import { GlobalStyles } from '../../utils/globalStyles'
 
 
 const StudentDetails = ({ navigation }) => {
+    // Importing necessary hooks and functions
     const router = useRoute()
     const { student } = router.params
     const userData = useSelector(state => state?.user?.data)
     const globalData = useSelector(state => state?.global?.data)
-
+    // Determining whether fee is charged monthly or not
     const isMonthly = student?.feeChargedBy === "Monthly" ? true : false
 
     const Data = [

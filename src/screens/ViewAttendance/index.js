@@ -32,7 +32,7 @@ const ViewAttendance = () => {
     const filterAttendance = globaldata?.attendances?.filter(elem => elem.studentId === router?.params?.student?.id)
     const dispatch = useDispatch()
 
-
+    // Function to filter attendance data by date range
     const filterByDate = (startDate, endDate) => {
         if (startDate && endDate) {
             const filteer = filterAttendance?.filter(item => {
@@ -44,12 +44,12 @@ const ViewAttendance = () => {
             setData(filterAttendance)
         }
     };
-
+    // Function to handle date change
     const handleDateChange = (date) => {
         filterByDate(date.startDate, date.endDate)
     }
 
-
+    // Function to generate list items for attendance details
     const list = (attendance) => [
         // { name: ' Department Name', value: attendance?.Department?.name, icon: <CardIcon color={Color.primary} name='idcard' size={FontSizes.lg} /> },
         { name: ' Subject', value: attendance?.Subject?.name, icon: <BookIcon color={Color.primary} name='book' size={FontSizes.lg} /> },
@@ -61,7 +61,7 @@ const ViewAttendance = () => {
         // { name: ' Marked At', value: `${attendance.attendanceDate ? formattedDate(attendance.createdAt, 'MMM dd ,yyyy hh:mm:ss a') : ''}`, icon: <CardIcon color={Color.primary} name='idcard' size={FontSizes.lg} /> },
 
     ]
-
+    // Function to handle refreshing data
     const handleRefresh = () => {
         setRefresh(true);
         dispatch(globalData(user?.id))
@@ -74,7 +74,7 @@ const ViewAttendance = () => {
                 setRefresh(false);
             });
     };
-
+    // Function to render item when no attendance is found
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>

@@ -8,15 +8,18 @@ import { GlobalStyles } from "../../utils/globalStyles";
 import CustomButton from "./CustomButton";
 
 const CustomDatePicker = (props) => {
+    // Destructure props to access necessary functions and state variables
     const { isVisible, onToggle, Children, onDone } = props;
+    // Initialize current date
     const currentDate = new Date();
+    // Initialize start of the month for the previous month
     const startOfMonth = new Date(currentDate);
     startOfMonth.setMonth(currentDate.getMonth() - 1);
     startOfMonth.setHours(0, 0, 0, 0);
-
+    // Initialize end of the current date
     const endDate = new Date(currentDate);
     endDate.setHours(23, 59, 59, 999);
-
+    // State for managing start and end date
     const [date, setDate] = useState({
         startDate: startOfMonth,
         endDate: endDate,

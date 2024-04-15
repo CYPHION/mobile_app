@@ -17,7 +17,7 @@ import { calculateFee, customToast, formattedDate, getParentDropdown, screenDime
 import { GlobalStyles } from '../../utils/globalStyles';
 import FeeSkeleton from './FeesSkeleton';
 
-
+// Initial summary data
 const summaryInitial = {
     totalOfChilds: 0,
     bookDues: 0,
@@ -26,7 +26,7 @@ const summaryInitial = {
     totalDues: 0,
     weeklyFee: 0,
 }
-
+// Initial data for payment form
 const initialData = {
     payType: 'Cash',
     noOfWeeks: '1',
@@ -37,7 +37,7 @@ const initialData = {
     remarks: '',
     showOnReceipt: false,
 }
-
+// Data for payment options
 const data = [
     { name: "Pay By Family", value: "Parent" },
     { name: "Pay By Student", value: "Student" },
@@ -47,34 +47,38 @@ const data = [
 ];
 
 const FeeCollection = () => {
-    const [activeItem, setActiveItem] = useState(null);
-    const [option, setOption] = useState("");
-    const [studentId, setStudentId] = useState("")
-    const [error, setError] = useState('')
-    const [dropdownData, setDropdownData] = useState([])
-    const [isLoadingChange, setIsLoadingChange] = useState(false)
-    const [childs, setChilds] = useState([])
-    const [schedule, setSchedule] = useState([])
-    const [dateails, setDateails] = useState([])
-    const [recieptNo, setRecieptNo] = useState(1)
-    const [isOnlyBooster, setIsOnlyBooster] = useState(false)
-    const [summary, setSumamry] = useState(summaryInitial);
-    const [totalChargesOfAllStudents, setTotalChargesOfAllStudents] = useState(0);
-    const [formData, setFormData] = useState(initialData)
-    const [invoiceData, setInvoiceData] = useState({})
-    const [isLoading, setIsLoading] = useState(false)
-    const [sendData, setSendData] = useState({})
-    const globaldata = useSelector(state => state?.global?.data)
-    const user = useSelector(state => state?.user?.data)
-    const dispatch = useDispatch()
-    const { initPaymentSheet, presentPaymentSheet, confirmPaymentSheetPayment } = useStripe()
+    const [activeItem, setActiveItem] = useState(null);  // State for managing active item
+    const [option, setOption] = useState("");  // State for managing selected option
+    const [studentId, setStudentId] = useState("")  // State for managing student ID
+    const [error, setError] = useState('')  // State for managing error messages
+    const [dropdownData, setDropdownData] = useState([])  // State for managing dropdown data
+    const [isLoadingChange, setIsLoadingChange] = useState(false)  // State for managing loading state of changes
+    const [childs, setChilds] = useState([])  // State for managing child data
+    const [schedule, setSchedule] = useState([])  // State for managing schedule data
+    const [dateails, setDateails] = useState([])  // State for managing details data
+    const [recieptNo, setRecieptNo] = useState(1)  // State for managing receipt number
+    const [isOnlyBooster, setIsOnlyBooster] = useState(false)  // State for managing booster status
+    const [summary, setSumamry] = useState(summaryInitial);  // State for managing summary data
+    const [totalChargesOfAllStudents, setTotalChargesOfAllStudents] = useState(0);  // State for managing total charges of all students
+    const [formData, setFormData] = useState(initialData)  // State for managing form data
+    const [invoiceData, setInvoiceData] = useState({})  // State for managing invoice data
+    const [isLoading, setIsLoading] = useState(false)  // State for managing loading state
+    const [sendData, setSendData] = useState({})  // State for managing data to send
+    const globaldata = useSelector(state => state?.global?.data)  // Selector for accessing global data from Redux store
+    const user = useSelector(state => state?.user?.data)  // Selector for accessing user data from Redux store
+    const dispatch = useDispatch()  // Dispatch function for Redux actions
+    const { initPaymentSheet, presentPaymentSheet, confirmPaymentSheetPayment } = useStripe()  // Stripe hooks for payment processing
 
-
+    // Calculating weekly and monthly fees for children
     let weekly = childs?.filter(elem => elem?.feeChargedBy === "Weekly" || elem?.feeChargedBy === "Hourly")?.map(elem => elem)
     let monthly = childs?.filter(elem => elem?.feeChargedBy === "Monthly")?.map(elem => elem)
+    // Calculating total dues
     let total = (Number(summary?.bookDues) + Number(summary?.classDues) + Number(summary?.boosterDues) + totalChargesOfAllStudents) - (Number(summary?.extraPaid + Number(formData?.feeWaived)))
+    // Calculating extra amount
     let extra = (formData?.paidAmount || 0) - total;
+    // Determining whether to fetch data based on summary and option
     let getData = ((summary.totalDues === 0 && option === "Dues") || (summary.bookDues === 0 && option === "bookDues")) ? false : true
+    // Calculating extra dues based on option
     let extrasDues;
     option === "Dues"
         ? (extrasDues =
@@ -87,25 +91,29 @@ const FeeCollection = () => {
                 ? `${formData.duesAmount - summary?.bookDues} Extra`
                 : `${Number(summary?.bookDues) - Number(formData.duesAmount)}`);
 
-
+    // Function to calculate fee type
     const getType = (isMonthly, value, child) => {
         const date = child?.dueFeeDate ? child?.dueFeeDate : child?.startDate
 
         return calculateFee(child, Number(value), isMonthly, date, true)
     }
-
+    // Function to toggle active item
     const toggleItem = (index) => {
         setActiveItem(activeItem === index ? null : index);
     };
-
+    // Function to fetch children data based on parent ID
     const getChilds = async (id) => {
         try {
-            const res = await API.getStudentScheduledByParentId(id);
+            const res = await API.getStudentScheduledByParentId(id); // Fetching scheduled students by parent ID
+            // Checking if no scheduled students or schedules are found
             if (res?.data?.students?.length === 0 || res?.data?.schedules.length === 0) {
+                // Fetching children with active boosters
                 const childs = await API.getStudentWithActiveBooster(`parentId=${id}`)
                 let activeBoosterStudents = []
+                // Filtering children with active boosters
 
                 childs.data.forEach(child => child.BoosterStudents.length > 0 && activeBoosterStudents.push(child))
+                // Checking if active booster students are found
 
                 if (activeBoosterStudents.length > 0) {
                     setChilds(activeBoosterStudents)
@@ -115,6 +123,7 @@ const FeeCollection = () => {
                 }
 
             } else {
+                // Filtering students with schedules and without schedules
                 const filteredStudentsforSchedule = res?.data?.students?.filter(student =>
                     !res?.data?.schedules.some(schedule => schedule.studentId === student.id)
                 );
@@ -122,6 +131,7 @@ const FeeCollection = () => {
                 const filteredStudents = res?.data?.students?.filter(student =>
                     res?.data?.schedules.some(schedule => schedule.studentId === student.id)
                 );
+                // Checking if payment type is "Parent" and there are students without schedules
 
                 if (option === "Parent") {
                     // Check if there are students without schedules
@@ -148,63 +158,64 @@ const FeeCollection = () => {
         }
     };
 
+    // Function to fetch student details by ID
     const getStudentDetails = async (id) => {
         const data = await API.getAllStudentScheduleByIdWithBooster(id).then(res => res?.data).catch(err => customToast("error", err.message)).finally(() => setIsLoadingChange(false))
         if (data?.length === 0) {
-            const child = await API.getStudentWithActiveBooster(`id=${id}`)
+            const child = await API.getStudentWithActiveBooster(`id=${id}`) // Fetching child with active booster
 
             if (child?.data && child?.data[0]?.BoosterStudents?.length > 0) {
-                setChilds(child.data)
-                setIsOnlyBooster(true)
+                setChilds(child.data)// Setting child with active booster
+                setIsOnlyBooster(true)// Setting flag indicating only booster is present
             } else {
-                setIsOnlyBooster(false)
-                customToast("error", 'No schedule or booster found for this student')
-                handleReset()
+                setIsOnlyBooster(false)  // Setting flag indicating no booster found
+                customToast("error", 'No schedule or booster found for this student')  // Displaying error toast message
+                handleReset()  // Resetting form data and states
             }
         }
         else {
-            setIsOnlyBooster(false)
-            setChilds([data[0]?.Student])
-            setSchedule(data)
+            setIsOnlyBooster(false) // Setting flag indicating no booster found
+            setChilds([data[0]?.Student])  // Setting student details
+            setSchedule(data) // Setting schedules
         }
     }
-
+    // Function to reset form data and states
     const handleReset = () => {
-        setFormData(initialData)
-        setChilds([])
-        setSchedule([])
-        setError({})
-        setIsLoadingChange(false)
-        setStudentId("")
+        setFormData(initialData)  // Resetting form data
+        setChilds([])  // Resetting child state
+        setSchedule([])  // Resetting schedule state
+        setError({})  // Resetting error state
+        setIsLoadingChange(false)  // Setting loading state to false
+        setStudentId("")  // Resetting student ID state
         return
     }
-
+    // Function to handle actions according to selected tab
     const handlefunctionAccToTab = (id, options) => {
-        setIsLoadingChange(true)
+        setIsLoadingChange(true) // Setting loading state to true
         if (!id) {
-            setChilds([])
-            setSchedule([])
-            setError({})
-            setIsLoadingChange(false)
+            setChilds([]) // Resetting child state
+            setSchedule([])  // Resetting schedule state
+            setError({}) // Resetting error state
+            setIsLoadingChange(false)  // Setting loading state to false
             return
         }
         else {
             if (options === "Student") {
                 const parentId = globaldata?.students?.find(elem => elem.id === id)?.parentId
-                getStudentDetails(id)
-                parentFeeDetail(parentId)
+                getStudentDetails(id)  // Fetching student details
+                parentFeeDetail(parentId) // Fetching parent fee details
             }
             else {
-                getChilds(id)
-                parentFeeDetail(id)
+                getChilds(id) // Fetching children
+                parentFeeDetail(id)  // Fetching parent fee details
             }
         }
 
     }
-
+    // Function to fetch parent fee details
     const parentFeeDetail = async (id) => {
         try {
-            const res = await API.getPrentFeeDetail(id);
+            const res = await API.getPrentFeeDetail(id); // Fetching parent fee details
             const parentDetails = {
                 bookDues: Number(res.data[0]?.bookDues),
                 classDues: Number(res.data[0]?.classDues),
@@ -214,12 +225,12 @@ const FeeCollection = () => {
                 weeklyFee: Number(res.data[0]?.weeklyFee)
             };
 
-            setSumamry(parentDetails);
+            setSumamry(parentDetails); // Setting parent fee summary
         } catch (err) {
-            customToast("error", err?.message);
+            customToast("error", err?.message);  // Handling error with toast message
         }
     };
-
+    // Function to handle form input changes
     const onChangeHandler = (name, text) => {
         setFormData(prevFormData => ({
             ...prevFormData,
@@ -227,16 +238,16 @@ const FeeCollection = () => {
         }));
 
     };
-
-    const getInvoiceData = async () => {
+    // Function to fetch invoice data and update receipt number
+    const getInvoiceData = async () => { // Fetching all invoices
         const data = await API.getAllInvoice().then(res => res?.data).catch(err => customToast("error", err?.message))
         if (data?.length === 0) {
-            setRecieptNo(1)
+            setRecieptNo(1) // Setting receipt number to 1 if no invoice found
         }
         else {
             if (data?.length > 0) {
                 const reverse = data?.length > 0 && data?.reverse && data?.reverse()
-                reverse && setRecieptNo(reverse[0]?.id + 1)
+                reverse && setRecieptNo(reverse[0]?.id + 1) // Setting receipt number based on last invoice ID
             }
             else {
                 null
@@ -244,7 +255,7 @@ const FeeCollection = () => {
 
         }
     }
-
+    // Custom sorting function to sort students with BoosterStudents to the end
     const customSort = (a, b) => {
         const hasBoosterA = a?.BoosterStudents?.length > 0;
         const hasBoosterB = b?.BoosterStudents?.length > 0;
@@ -259,7 +270,7 @@ const FeeCollection = () => {
             return 0;
         }
     };
-
+    // Function to generate subject data for a child
     const subjectsData = (childId) => {
         return schedule
             ?.filter((data) => data.studentId === childId && !data.isComp)
@@ -269,7 +280,7 @@ const FeeCollection = () => {
                 </Text>
             ))
     };
-
+    // Function to get row data for a student
     const getStudentRowData = (child) => {
         const isMonthly = child?.feeChargedBy === "Monthly"
         const timeperiod = isMonthly ? formData.noOfMonths : formData.noOfWeeks
@@ -339,6 +350,7 @@ const FeeCollection = () => {
     }
 
     const getTotalRowData = () => {
+        // Row data for dues option
         const duesArr = [
             { id: 1, "name": "Total Previous dues", "value": `£${summary?.classDues}` },
             {
@@ -349,11 +361,11 @@ const FeeCollection = () => {
             },
 
         ]
-
+        // Row data for bookDues option
         const bookDuesArr = [
             { id: 1, "name": option === "Dues" ? "Total Previous dues" : "Total Book dues", "value": option === "Dues" ? `£${summary?.classDues}` : `£${summary?.bookDues}` }
         ]
-
+        // Row data for parent option
         const parentArr = [
             { id: 1, "name": "Total Charges of all Students", "value": `£${totalChargesOfAllStudents}` },
             { id: 2, "name": "Total Book dues	", "value": `£${summary?.bookDues}` },
@@ -361,7 +373,7 @@ const FeeCollection = () => {
             { id: 4, "name": "Total Previous dues", "value": `£${summary?.classDues}` },
             { id: 5, "name": "Total Extra Paid of all Students", "value": `£${Number(summary?.extraPaid)}` },
         ]
-
+        // Row data for student option
         const studentArr = [
             { id: 1, "name": "Total Charges ", "value": `£${totalChargesOfAllStudents}` },
             { id: 2, "name": "Total Book dues	", "value": `£${summary?.bookDues}` },
@@ -369,7 +381,7 @@ const FeeCollection = () => {
             { id: 4, "name": "Total Previous dues", "value": `£${summary?.classDues}` },
             { id: 5, "name": "Total Extra Paid", "value": `£${Number(summary?.extraPaid)}` },
         ]
-
+        // Returning row data based on the selected option
         switch (option) {
             case "Parent":
                 return parentArr

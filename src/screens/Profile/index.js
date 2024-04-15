@@ -30,34 +30,24 @@ const Profile = ({ navigation }) => {
     const src = user?.dp ? { uri: getImage(user?.dp) } : require("../../images/profile.png");
 
     const logoutHandler = async () => {
-        const token = await AsyncStorage.getItem('fcmToken')
-        const fcmToken = globaldata?.currentUser?.fcmToken
-        const sendTokens = fcmToken?.filter(item => item !== token)
+        const token = await AsyncStorage.getItem('fcmToken') // Retrieve FCM token from AsyncStorage
+        const fcmToken = globaldata?.currentUser?.fcmToken // Access FCM token from global data
+        const sendTokens = fcmToken?.filter(item => item !== token) // Filter out the current FCM token from the list of tokens
 
-        const uptObj = {
+        const uptObj = { // Define update object with modified FCM tokens
             ...globaldata?.currentUser,
             fcmToken: sendTokens
         }
+        // Call API to update user data (e.g., remove FCM token)
         API.updateUser(uptObj)
             .then(async (res) => {
                 await AsyncStorage.removeItem('fcmToken');
                 dipatch(handleLogout())
                 dipatch(handleResetData())
             }).catch(err => console.log(err))
-        setOpen(!open)
+        setOpen(!open)  // Toggle the open state of the modal or dropdown
     }
 
-    const handleUpdate = (type) => {
-        console.log(type)
-    }
-
-    const onChangeHandler = (name, text) => {
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            [name]: text
-        }));
-
-    };
 
 
     return (
