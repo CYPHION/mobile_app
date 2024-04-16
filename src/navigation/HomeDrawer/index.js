@@ -34,23 +34,54 @@ export function HomeStack() {
 
     return (
         <Stack.Navigator
+            initialRouteName='aboutus'
             screenOptions={{
                 headerShown: false
             }}
         >
-            <Stack.Screen name="aboutus" component={AboutUs} />
-            <Stack.Screen name="lessonTiming" component={LessonTiming} />
+            <Stack.Screen name="aboutus" component={AboutUs}
+                options={{
+                    headerShown: true,
+                    header: () => <CustomAppBar title={'About Us'} back={false} />
+                }}
+            />
+            <Stack.Screen name="lessonTiming" component={LessonTiming}
+                options={{
+                    headerShown: true,
+                    header: () => <CustomAppBar title={'Lesson Timings'} back={false} />
+                }}
+            />
             <Stack.Screen name="fees" component={Fees}
                 options={{
                     headerShown: true,
                     header: () => <CustomAppBar title={'Fees'} back={false} />
                 }}
             />
-            <Stack.Screen name="summerpakage" component={SummerPakage} />
-            <Stack.Screen name="ourservices" component={OurServices} />
-            <Stack.Screen name="brightstudent" component={BrightStudent} />
+            <Stack.Screen name="summerpakage" component={SummerPakage}
+                options={{
+                    headerShown: true,
+                    header: () => <CustomAppBar title={'Summer Package'} back={false} />
+                }}
+            />
+            <Stack.Screen name="ourservices" component={OurServices}
+                options={{
+                    headerShown: true,
+                    header: () => <CustomAppBar title={'Our Services'} back={false} />
+                }}
+            />
+            <Stack.Screen name="brightstudent" component={BrightStudent}
+                options={{
+                    headerShown: true,
+                    header: () => <CustomAppBar title={'Bright Students'} back={false} />
+                }}
+            />
             <Stack.Screen name="termsandcondition" component={TermsAndConditions} />
-            <Stack.Screen name="awardingbodies" component={AwardingBodies} />
+            <Stack.Screen name="awardingbodies" component={AwardingBodies}
+                options={{
+                    headerShown: true,
+                    header: () => <CustomAppBar title={'Awarding Bodies'} back={false} />
+                }}
+            />
             <Stack.Screen name="childcare" component={Childcare}
                 options={{
                     headerShown: true,
@@ -65,7 +96,12 @@ export function HomeStack() {
             />
             <Stack.Screen name="career" component={Careers} />
             <Stack.Screen name="joblisting" component={JobListing} />
-            <Stack.Screen name="applyonline" component={ApplyOnline} />
+            <Stack.Screen name="applyonline" component={ApplyOnline}
+                options={{
+                    headerShown: true,
+                    header: () => <CustomAppBar title={'Apply Online'} back={false} />
+                }}
+            />
             <Stack.Screen name="contactus" component={ContactUs}
                 options={{
                     headerShown: true,
@@ -90,7 +126,7 @@ const DrawerList = [
     { label: 'Awarding Bodies', navigateTo: 'awardingbodies', icon: 'right', mainRoute: 'homestack' },
     { label: 'Childcare', navigateTo: 'childcare', icon: 'right', mainRoute: 'homestack' },
     { label: 'Reviews', navigateTo: 'reviews', icon: 'right', mainRoute: 'homestack' },
-    { label: 'Careers', navigateTo: 'careers', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Careers', navigateTo: 'career', icon: 'right', mainRoute: 'homestack' },
     { label: 'Job listing', navigateTo: 'joblisting', icon: 'right', mainRoute: 'homestack' },
     { label: 'Job Apply', navigateTo: 'jobapply', icon: 'right', mainRoute: 'homestack' },
     { label: 'Apply online', navigateTo: 'applyonline', icon: 'right', mainRoute: 'homestack' },
@@ -162,7 +198,7 @@ function CustomDrawerContent(props) {
 const HomeDrawar = () => {
     return (
         <Drawer.Navigator
-            initialRouteName='root'
+            initialRouteName='homestack'
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={{
                 headerShown: false, // Hide header for all screens

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign'
+import WebView from 'react-native-webview'
 import CustomButton from '../../components/base/CustomButton'
 import DropdownComponent from '../../components/base/CustomDropDown'
 import InputField from '../../components/base/InputField'
@@ -134,9 +135,35 @@ const ContactUs = () => {
                             onPress={handleSubmit}
                         />
                     </View>
+                    <Text style={[styles.name, { fontFamily: FontFamily.bold }]} >
+                        Navigation MAPS of our Tuition {'\n'} Centers
+                    </Text>
+                    <View style={styles.mapcont} >
+                        <Text style={styles.text}>Prime Tuition: Brixton</Text>
+                        <Text style={styles.text}>Welcome to our Brixton campus.</Text>
+                        <WebView
+                            style={styles.iframe}
+                            source={{ html: '<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d9943.361134892824!2d-0.1168041!3d51.4610888!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x809fbd3826db5de4!2sPrime%20Tuition!5e0!3m2!1sen!2s!4v1577877518597!5m2!1sen!2s" style="width:100%;" height="100%" frameborder="0" allowfullscreen=""></iframe>' }}
+                        />
+
+                        <Text style={styles.text}>Prime Tuition : Hounslow
+                        </Text>
+                        <Text style={styles.text}>Welcome to our Hounslow campus.</Text>
+                        <WebView
+                            style={styles.iframe}
+                            source={{ html: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d39766.77775385602!2d-0.3673189099381096!3d51.46873830505056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48760daf2b0dbdcb%3A0xf605a2c28f3a1ca1!2sPrime%20Tuition%20Hounslow%20campus!5e0!3m2!1sen!2s!4v1578566605157!5m2!1sen!2s" style="width:100%;" height="100%" frameborder="0" allowfullscreen=""></iframe>' }}
+                        />
+
+                        <Text style={styles.text}>Prime Tuition : Woolwich</Text>
+                        <Text style={styles.text}>Welcome to our Woolwich campus.</Text>
+                        <WebView
+                            style={styles.iframe}
+                            source={{ html: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2484.1032803753037!2d0.06433911576944353!3d51.49297217963282!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTHCsDI5JzM0LjciTiAwwrAwMyc1OS41IkU!5e0!3m2!1sen!2s!4v1634314255092!5m2!1sen!2s" style="width:100%;" height="100%" frameborder="0" allowfullscreen=""></iframe>' }}
+                        />
+                    </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
 
@@ -191,4 +218,20 @@ const styles = StyleSheet.create({
         marginVertical: 25,
         textAlign: 'center'
     },
+    text: {
+        fontFamily: FontFamily.interMedium,
+        color: Color.text,
+        fontSize: FontSizes.lg,
+        paddingTop: 10,
+        paddingHorizontal: 20,
+        alignSelf: 'flex-start'
+    },
+    iframe: {
+        width: screenDimensions.width * 0.9,
+        height: 200,
+        marginBottom: 20
+    },
+    mapcont: {
+        alignItems: 'center'
+    }
 })
