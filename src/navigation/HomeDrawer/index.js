@@ -75,7 +75,12 @@ export function HomeStack() {
                     header: () => <CustomAppBar title={'Bright Students'} back={false} />
                 }}
             />
-            <Stack.Screen name="termsandcondition" component={TermsAndConditions} />
+            <Stack.Screen name="termsandcondition" component={TermsAndConditions}
+                options={{
+                    headerShown: true,
+                    header: () => <CustomAppBar title={'Terms & Conditions'} back={false} />
+                }}
+            />
             <Stack.Screen name="awardingbodies" component={AwardingBodies}
                 options={{
                     headerShown: true,
@@ -94,8 +99,18 @@ export function HomeStack() {
                     header: () => <CustomAppBar title={'Reviews'} back={false} />
                 }}
             />
-            <Stack.Screen name="career" component={Careers} />
-            <Stack.Screen name="joblisting" component={JobListing} />
+            <Stack.Screen name="career" component={Careers}
+                options={{
+                    headerShown: true,
+                    header: () => <CustomAppBar title={'Career'} back={false} />
+                }}
+            />
+            <Stack.Screen name="joblisting" component={JobListing}
+                options={{
+                    headerShown: true,
+                    header: () => <CustomAppBar title={'Job Listing'} back={true} />
+                }}
+            />
             <Stack.Screen name="applyonline" component={ApplyOnline}
                 options={{
                     headerShown: true,
@@ -108,7 +123,12 @@ export function HomeStack() {
                     header: () => <CustomAppBar title={'Contact Us'} back={false} />
                 }}
             />
-            <Stack.Screen name="jobapply" component={JobApply} />
+            <Stack.Screen name="jobapply" component={JobApply}
+                options={{
+                    headerShown: true,
+                    header: () => <CustomAppBar title={'Job Apply'} back={true} />
+                }}
+            />
         </Stack.Navigator>
     );
 }
@@ -127,8 +147,8 @@ const DrawerList = [
     { label: 'Childcare', navigateTo: 'childcare', icon: 'right', mainRoute: 'homestack' },
     { label: 'Reviews', navigateTo: 'reviews', icon: 'right', mainRoute: 'homestack' },
     { label: 'Careers', navigateTo: 'career', icon: 'right', mainRoute: 'homestack' },
-    { label: 'Job listing', navigateTo: 'joblisting', icon: 'right', mainRoute: 'homestack' },
-    { label: 'Job Apply', navigateTo: 'jobapply', icon: 'right', mainRoute: 'homestack' },
+    // { label: 'Job listing', navigateTo: 'joblisting', icon: 'right', mainRoute: 'homestack' },
+    // { label: 'Job Apply', navigateTo: 'jobapply', icon: 'right', mainRoute: 'homestack' },
     { label: 'Apply online', navigateTo: 'applyonline', icon: 'right', mainRoute: 'homestack' },
     { label: 'Contact Us', navigateTo: 'contactus', icon: 'right', mainRoute: 'homestack' },
     { label: 'Login', navigateTo: 'login', icon: 'right', mainRoute: 'auth' },
