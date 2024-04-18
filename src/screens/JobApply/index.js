@@ -2,16 +2,17 @@
 import { useRoute } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import DocumentPicker from 'react-native-document-picker'
 import CustomButton from '../../components/base/CustomButton'
 import DropdownComponent from '../../components/base/CustomDropDown'
 import DatePickerSingle from '../../components/base/DatePicker'
 import InputField from '../../components/base/InputField'
+import MultiSelectComponent from '../../components/base/MultiSelect'
 import RadioButton from '../../components/base/RadioButton'
 import { countries } from '../../utils/Constants'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { formattedDate, screenDimensions } from '../../utils/functions'
-
 const genders = [
     { name: 'Male', value: 'male' },
     { name: 'Female', value: 'female' },
@@ -19,53 +20,52 @@ const genders = [
 ];
 
 const educationLevels = [
-    { name: "A-level or equivalent", value: "ALevelOrEquivalent" },
-    { name: "BA with QTS", value: "BAWithQTS" },
-    { name: "BSc with QTS", value: "BScWithQTS" },
+    { name: "A-level or equivalent", value: "A-level or equivalent" },
+    { name: "BA with QTS", value: "BA with QTS" },
+    { name: "BSc with QTS", value: "BSc with QTS" },
     { name: "Degree", value: "Degree" },
-    { name: "GCSE or equivalent", value: "GCSEOrEquivalent" },
+    { name: "GCSE or equivalent", value: "GCSE or equivalent" },
     { name: "Graduate", value: "Graduate" },
-    { name: "Post Graduate", value: "PostGraduate" },
+    { name: "Post Graduate", value: "Post Graduate" },
     { name: "Phd", value: "Phd" },
     { name: "MA", value: "MA" },
     { name: "Mbbs", value: "Mbbs" },
     { name: "MSc", value: "MSc" },
-    { name: "Overseas QTS (OTT)", value: "OverseasQTSOTT" },
-    { name: "PGDE (Further Education)", value: "PGDEFurtherEducation" },
+    { name: "Overseas QTS (OTT)", value: "Overseas QTS (OTT)" },
+    { name: "PGDE (Further Education)", value: "PGDE (Further Education)" },
     { name: "Other", value: "Other" },
 ];
 
 const agegroup = [
-    { name: 'Higher Education', value: 'higherEdu' },
-    { name: 'A-Level (Year 12 & Year 13)', value: 'alevel' },
-    { name: 'GCSE (Year 10 & Year 11)', value: 'gcse' },
-    { name: 'KS3 (Year 7 to & Year 9)', value: 'ks3' },
-    { name: 'KS2 (Year 3 to & Year 6)', value: 'ks2' },
-    { name: 'KS1 (Year 1 & Year 2)', value: 'ks1' },
-    { name: 'Other', value: 'other' },
+    { name: "Higher Education", value: "Higher Education" },
+    { name: "A-Level (Year 12 & Year 13)", value: "A-Level (Year 12 & Year 13)" },
+    { name: "GCSE (Year 10 & Year 11)", value: "GCSE (Year 10 & Year 11)" },
+    { name: "KS3 (Year 7 to Year 9)", value: "KS3 (Year 7 to Year 9)" },
+    { name: "KS2 (Year 3 to Year 6)", value: "KS2 (Year 3 to Year 6)" },
+    { name: "KS1 (Year 1 & Year 2)", value: "KS1 (Year 1 & Year 2)" },
+    { name: "Other", value: "Other" },
 ]
 
 const candidateType = [
-    { value: "UKTrainedTeacher", name: "UK Trained Teacher" },
-    { value: "NewlyQualifiedTeacher", name: "Newly Qualified Teacher" },
-    { value: "OverseasTrainedTeacher", name: "Overseas Trained Teacher" },
-    { value: "FinalYearStudent", name: "Final Year Student" },
-    { value: "TeachingAssistant", name: "Teaching Assistant" },
-    { value: "NurseryNurse", name: "Nursery Nurse" },
-    { value: "FurtherEducation Teacher", name: "Further Education Teacher" },
-    { value: "Instructor", name: "Instructor" },
-    { value: "CoverSupervisor", name: "Cover Supervisor" },
-    { value: "Student", name: "Student" },
-    { value: "Other", name: "Other" }
+    { name: "UK Trained Teacher", value: "UK Trained Teacher" },
+    { name: "Newly Qualified Teacher", value: "Newly Qualified Teacher" },
+    { name: "Overseas Trained Teacher", value: "Overseas Trained Teacher" },
+    { name: "Final Year Student", value: "Final Year Student" },
+    { name: "Teaching Assistant", value: "Teaching Assistant" },
+    { name: "Nursery Nurse", value: "Nursery Nurse" },
+    { name: "Further Education Teacher", value: "Further Education Teacher" },
+    { name: "Instructor", value: "Instructor" },
+    { name: "Cover Supervisor", value: "Cover Supervisor" },
+    { name: "Student", value: "Student" },
+    { name: "Other", value: "Other" },
 ];
 
 
 const data = [
-    { name: "BRIXTON", value: "1" },
-    { name: "HOUNSLOW", value: "2" },
-    { name: "WOOLWICH", value: "3" },
-    { name: "FINSBURY", value: "4" },
-
+    { name: "Brixton", value: "Brixton" },
+    { name: "Hounslow", value: "Hounslow" },
+    { name: "Woolwich", value: "Woolwich" },
+    { name: "Finsbury", value: "Finsbury" },
 ];
 
 const radios = [
@@ -74,9 +74,27 @@ const radios = [
 
 ];
 
+const options = [
+    { name: "English", value: "English" },
+    { name: "Mathematics", value: "Mathematics" },
+    { name: "General Science", value: "GeneralScience" },
+    { name: "Chemistry", value: "Chemistry" },
+    { name: "Statistics", value: "Statistics" },
+    { name: "Economics", value: "Economics" },
+    { name: "IT", value: "IT" },
+    { name: "Business Studies", value: "BusinessStudies" },
+    { name: "Biology", value: "Biology" },
+    { name: "Physics", value: "Physics" },
+    { name: "Verbal Non-verbal Reasoning", value: "VerbalNon-verbalReasoning" },
+    { name: "Phonics", value: "Phonics" },
+    { name: "Other", value: "Other" },
+]
 
 const JobApply = () => {
     const [selectedValues, setSelectedValues] = useState([])
+    const [resume, setResume] = useState({})
+    const [profilePic, setProfilePic] = useState({})
+    const [isLoading, setIsloading] = usestate(false)
     const [openDOB, setOpenDOB] = useState(false)
     const [openRef1StartDate, setOpenRef1StartDate] = useState(false)
     const [openRef1EndDate, setOpenRef1EndDate] = useState(false)
@@ -116,7 +134,7 @@ const JobApply = () => {
         comment: ''
     })
     const router = useRoute()
-    console.log(Number(router.params?.id))
+    // console.log(Number(router.params?.id))
 
     const onChangeHandler = (name, text) => {
         setFormData(prevFormData => ({
@@ -125,10 +143,104 @@ const JobApply = () => {
         }));
 
     };
-    const handleSubmit = () => {
 
-        console.log(formData)
+    const openFile = async (selectedFile) => {
+        try {
+            let allowedTypes = [];
+            if (selectedFile === 'profilepic') {
+                // allowedTypes = [DocumentPicker.types.images, 'image/jpeg'];
+                allowedTypes = [DocumentPicker.types.allFiles];
+            } else if (selectedFile === 'resume') {
+                allowedTypes = [DocumentPicker.types.pdf, 'application/msword'];
+            }
+
+            const [file] = await DocumentPicker.pick({
+                type: allowedTypes,
+            });
+
+            const obje = {
+                path: file.name,
+                name: file.name,
+                type: file.type,
+                size: file.size
+            }
+
+            if (selectedFile === 'profilepic') {
+                const formDatafirst = new FormData();
+                // formDatafirst.append('file', obje);
+                // console.log(formDatafirst)
+                // API.uploadImage(formDatafirst)
+                //     .then(res => console.log(res))
+                //     .catch(err => console.log(err))
+
+
+                setProfilePic(file)
+
+            } else if (selectedFile === 'resume') {
+                setResume(file)
+            }
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                // User cancelled the picker
+                console.log('User cancelled the picker');
+            } else {
+                console.log('Error: ' + err);
+            }
+        }
+    };
+
+    const handleSubmit = () => {
+        //         setIsloading(true)
+        // const data = {
+        //     jobId: 123,
+        //     firstName: formData.firstname,
+        //     lastName: formData.lastname,
+        //     gender: formData.gender,
+        //     email: formData.email,
+        //     phone: formData.phone,
+        //     address: formData.address,
+        //     town: formData.town,
+        //     postalCode: formData.postcode,
+        //     country: formData.country,
+        //     qualifications: formData.qaulification,
+        //     ageGroup: formData.agegroup,
+        //     specialisms: selectedValues,
+        //     candidateType: formData.candidatetype,
+        //     referenceOne: formData.ref1refreename,
+        //     referenceOneEmail: formData.ref1employeremail,
+        //     referenceOneEndDate: formData.ref1enddate,
+        //     referenceOneStartDate: formData.ref1startdate,
+        //     referenceOneJob: formData.ref1jobtitle,
+        //     referenceTwo: formData.ref2refreename,
+        //     referenceTwoEmail: formData.ref2employeremail,
+        //     referenceTwoEndDate: formData.ref2enddate,
+        //     referenceTwoStartDate: formData.ref2startdate,
+        //     referenceTwoJob: formData.ref2jobtitle,
+        //     establishmentName: formData.,
+        //     establishmentType: "Tech",
+        //     establishmentTypeOther: "Other Type",
+        //     applicantPosition: "Software Engineer",
+        //     applicantPositionType: "Type A",
+        //     applicantPositionTime: "Full-time",
+        //     applicantPositionTimeOther: "Other Time",
+        //     photo: "url_to_photo.jpg",
+        //     cv: "url_to_cv.pdf",
+        //     notes: "Additional notes about the applicant.",
+        //     previouslyEmployed: 1,
+        //     salary: 50000,
+        //     locationApplying: "Brixton",
+        //     referenceOneName: "Reference One Name",
+        //     referenceTwoName: "Reference Two Name",
+        //     dateOfBirth: formData.dob
+        // }
+
+        //         API.createJobApplication()
+        //             .then(res => console.log(res))
+        //             .catch(err => console.log(err))
+        //             .finally(() => setIsloading(false))
+        //         console.log(formData)
     }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
@@ -240,19 +352,12 @@ const JobApply = () => {
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.text}>Subject Specialism:</Text>
-                    {/* <MultiSelectComponent
+                    <MultiSelectComponent
                         label='(Further subject specialisms can be provided at Interview.)'
-                        list={getParentDropdown(globalData?.students)}
-                        values={ }
+                        list={options}
+                        values={selectedValues}
                         setValues={setSelectedValues}
-                        required
-                        placeHolderText={selectedValues ? `Selected Student (${selectedValues?.length})` : 'Select Students'}
-                    /> */}
-                    <InputField
-                        label={"(Further subject specialisms can be provided at Interview.)"}
-                        inputMode={"text"}
-                        value={formData.specialism}
-                        onChangeText={(text) => onChangeHandler('specialism', text)}
+                        placeHolderText={''}
                     />
                     <DropdownComponent
                         label={'Age Group Specialism'}
@@ -391,7 +496,7 @@ const JobApply = () => {
                     <RadioButton options={radios} onToggle={(value) => onChangeHandler('isEmployed', value)} />
                     <View style={{ padding: 5 }}>
                         <Text style={{ color: Color.text, marginBottom: 10 }}>Upload your profile pic (JPEG format Only)</Text>
-                        <TouchableOpacity activeOpacity={0.7} style={{
+                        <TouchableOpacity onPress={() => openFile('profilepic')} activeOpacity={0.7} style={{
                             borderWidth: 1,
                             borderRadius: 4,
                             height: 40,
@@ -399,13 +504,13 @@ const JobApply = () => {
                             padding: 5
                         }}>
                             <View>
-                                <Text style={{ color: Color.textThree }}>{formData?.profilepic ? formData?.profilepic : 'Choose File'}</Text>
+                                <Text style={{ color: Color.textThree }}>{profilePic?.name ? profilePic?.name : 'Choose File'}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
                     <View style={{ padding: 5 }}>
                         <Text style={{ color: Color.text, marginBottom: 10 }}>Upload your Resume (Ms Word & Pdf format Only)</Text>
-                        <TouchableOpacity activeOpacity={0.7} style={{
+                        <TouchableOpacity onPress={() => openFile('resume')} activeOpacity={0.7} style={{
                             borderWidth: 1,
                             borderRadius: 4,
                             height: 40,
@@ -413,7 +518,7 @@ const JobApply = () => {
                             padding: 5
                         }}>
                             <View>
-                                <Text style={{ color: Color.textThree }}>{formData?.resume ? formData?.resume : 'Choose File'}</Text>
+                                <Text style={{ color: Color.textThree }}>{resume?.name ? resume?.name : 'Choose File'}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -432,6 +537,8 @@ const JobApply = () => {
                         title={"Apply "}
                         onPress={() => handleSubmit()}
                         btnstyle={{ width: 120 }}
+                        isLoading={isLoading}
+                        disable={isLoading}
                     />
                 </View>
             </ScrollView>

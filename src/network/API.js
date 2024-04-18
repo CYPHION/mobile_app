@@ -105,4 +105,19 @@ export class API {
         return HttpService.GET(`/notification-alert/parent?parentId=${Number(parentId)}`)
     }
 
+    static async createJobApplication(formData) {
+        return HttpService.POST('/jobapplication/create', formData)
+    }
+
+    static async uploadImage(file) {
+        return HttpService.POST(`/upload/single`, file)
+    }
+
+    static async createReview(formData) {
+        return HttpService.POST(`/review/create`, formData)
+    }
+
+    static async getAllReview() {
+        return HttpService.GET(`/review/all`)
+    }
 }

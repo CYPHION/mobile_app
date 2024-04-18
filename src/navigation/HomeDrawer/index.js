@@ -6,6 +6,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import { AuthSTack } from '../../../App';
 import CustomAppBar from '../../components/base/CustomAppBar';
+import ALevel from '../../screens/ALevelResult';
 import AboutUs from '../../screens/About-us';
 import ApplyOnline from '../../screens/ApplyOnline';
 import AwardingBodies from '../../screens/AwardingBodies';
@@ -14,6 +15,7 @@ import Careers from '../../screens/Careers';
 import Childcare from '../../screens/Childcare';
 import ContactUs from '../../screens/ContactUs';
 import Fees from '../../screens/Fees';
+import GCSEResult from '../../screens/GCSEResult';
 import JobApply from '../../screens/JobApply';
 import JobListing from '../../screens/JobListing';
 import LessonTiming from '../../screens/LessonTiming';
@@ -129,6 +131,18 @@ export function HomeStack() {
                     header: () => <CustomAppBar title={'Job Apply'} back={true} />
                 }}
             />
+            <Stack.Screen name="Alevel" component={ALevel}
+                options={{
+                    headerShown: true,
+                    header: () => <CustomAppBar title={'A-Level Results'} back={true} />
+                }}
+            />
+            <Stack.Screen name="gcse" component={GCSEResult}
+                options={{
+                    headerShown: true,
+                    header: () => <CustomAppBar title={'GCSE Results'} back={true} />
+                }}
+            />
         </Stack.Navigator>
     );
 }
@@ -144,11 +158,11 @@ const DrawerList = [
     { label: 'Bright Student', navigateTo: 'brightstudent', icon: 'right', mainRoute: 'homestack' },
     { label: 'Terms and conditions', navigateTo: 'termsandcondition', icon: 'right', mainRoute: 'homestack' },
     { label: 'Awarding Bodies', navigateTo: 'awardingbodies', icon: 'right', mainRoute: 'homestack' },
+    { label: 'A-Level Results', navigateTo: 'Alevel', icon: 'right', mainRoute: 'homestack' },
+    { label: 'GCSE Results', navigateTo: 'gcse', icon: 'right', mainRoute: 'homestack' },
     { label: 'Childcare', navigateTo: 'childcare', icon: 'right', mainRoute: 'homestack' },
     { label: 'Reviews', navigateTo: 'reviews', icon: 'right', mainRoute: 'homestack' },
     { label: 'Careers', navigateTo: 'career', icon: 'right', mainRoute: 'homestack' },
-    // { label: 'Job listing', navigateTo: 'joblisting', icon: 'right', mainRoute: 'homestack' },
-    // { label: 'Job Apply', navigateTo: 'jobapply', icon: 'right', mainRoute: 'homestack' },
     { label: 'Apply online', navigateTo: 'applyonline', icon: 'right', mainRoute: 'homestack' },
     { label: 'Contact Us', navigateTo: 'contactus', icon: 'right', mainRoute: 'homestack' },
     { label: 'Login', navigateTo: 'login', icon: 'right', mainRoute: 'auth' },

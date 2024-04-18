@@ -32,9 +32,9 @@ const MultiSelectComponent = (prop) => {
                 style={[
                     styles.dropdown,
                     { ...dropdownStyle },
-                    isFocus || values?.length > 0
-                        ? { borderColor: Color.primary }
-                        : { borderColor: Color.borderColor },
+                    // isFocus || values?.length > 0
+                    //     ? { borderColor: Color.primary }
+                    //     : { borderColor: Color.borderColor },
                 ]}
                 // visibleSelectedItem={false}
                 maxSelect={maxSelect}
