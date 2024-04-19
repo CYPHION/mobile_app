@@ -10,7 +10,7 @@ const OurServices = () => {
             <ScrollView>
                 <View>
                     <View style={[{ paddingHorizontal: 20 }, GlobalStyles.headerStyles]}>
-                        <Text style={GlobalStyles.headerTextStyle}>Lesson Timings for Brixton</Text>
+                        <Text style={GlobalStyles.headerTextStyle}>Preparations</Text>
                     </View>
                     <View style={styles.list}>
                         <View style={styles.listItem}>

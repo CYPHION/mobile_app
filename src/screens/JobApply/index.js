@@ -1,7 +1,8 @@
 
 import { useRoute } from '@react-navigation/native'
+import axios from 'axios'
 import React, { useState } from 'react'
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Alert, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import DocumentPicker from 'react-native-document-picker'
 import CustomButton from '../../components/base/CustomButton'
 import DropdownComponent from '../../components/base/CustomDropDown'
@@ -9,10 +10,12 @@ import DatePickerSingle from '../../components/base/DatePicker'
 import InputField from '../../components/base/InputField'
 import MultiSelectComponent from '../../components/base/MultiSelect'
 import RadioButton from '../../components/base/RadioButton'
+import { API } from '../../network/API'
+import { URL } from '../../network/httpService'
 import { countries } from '../../utils/Constants'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { formattedDate, screenDimensions } from '../../utils/functions'
+import { customToast, formattedDate, screenDimensions } from '../../utils/functions'
 const genders = [
     { name: 'Male', value: 'male' },
     { name: 'Female', value: 'female' },
@@ -90,51 +93,56 @@ const options = [
     { name: "Other", value: "Other" },
 ]
 
+const initialData = {
+    firstname: "",
+    lastname: '',
+    gender: '',
+    email: "",
+    phone: '',
+    address: '',
+    town: '',
+    postcode: '',
+    country: '',
+    qaulification: '',
+    dob: '',
+    specialism: [],
+    agegroup: '',
+    candidatetype: '',
+    location: '',
+    ref1refreename: '',
+    ref1institute: '',
+    ref1employeremail: '',
+    ref1jobtitle: '',
+    ref1startdate: '',
+    ref1enddate: '',
+    ref2refreename: '',
+    ref2institute: '',
+    ref2employeremail: '',
+    ref2jobtitle: '',
+    ref2startdate: '',
+    ref2enddate: '',
+    isEmployed: '',
+    profilepic: '',
+    resume: '',
+    comment: ''
+}
+
 const JobApply = () => {
     const [selectedValues, setSelectedValues] = useState([])
-    const [resume, setResume] = useState({})
-    const [profilePic, setProfilePic] = useState({})
-    const [isLoading, setIsloading] = usestate(false)
+    const [resume, setResume] = useState('')
+    const [profilePic, setProfilePic] = useState('')
+    const [isLoading, setIsloading] = useState(false)
+    const [uploadLoading, setUploadLoading] = useState(false)
+    const [uploadRLoading, setUploadRLoading] = useState(false)
     const [openDOB, setOpenDOB] = useState(false)
     const [openRef1StartDate, setOpenRef1StartDate] = useState(false)
     const [openRef1EndDate, setOpenRef1EndDate] = useState(false)
     const [openRef2EndDate, setOpenRef2EndDate] = useState(false)
     const [openRef2StartDate, setOpenRef2StartDate] = useState(false)
-    const [formData, setFormData] = useState({
-        firstname: "",
-        lastname: '',
-        gender: '',
-        email: "",
-        phone: '',
-        address: '',
-        town: '',
-        postcode: '',
-        country: '',
-        qaulification: '',
-        dob: '',
-        specialism: [],
-        agegroup: '',
-        candidatetype: '',
-        location: '',
-        ref1refreename: '',
-        ref1institute: '',
-        ref1employeremail: '',
-        ref1jobtitle: '',
-        ref1startdate: '',
-        ref1enddate: '',
-        ref2refreename: '',
-        ref2institute: '',
-        ref2employeremail: '',
-        ref2jobtitle: '',
-        ref2startdate: '',
-        ref2enddate: '',
-        isEmployed: '',
-        profilepic: '',
-        resume: '',
-        comment: ''
-    })
+    const [formData, setFormData] = useState(initialData)
     const router = useRoute()
-    // console.log(Number(router.params?.id))
+
+    const jobId = Number(router?.params?.id)
 
     const onChangeHandler = (name, text) => {
         setFormData(prevFormData => ({
@@ -144,12 +152,35 @@ const JobApply = () => {
 
     };
 
+    const uploadFile = async (file) => {
+        try {
+
+            const formData = new FormData();
+            formData.append('file', {
+                uri: file.uri,
+                type: file.type,
+                name: file.name || 'file', // Some file pickers don't provide a name
+            });
+
+            const response = await axios.post(`${URL}/upload/single`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            // Handle response
+            return response?.data?.data
+        } catch (error) {
+            Alert.alert('Something went wrong');
+        }
+    };
+
+
     const openFile = async (selectedFile) => {
         try {
             let allowedTypes = [];
             if (selectedFile === 'profilepic') {
-                // allowedTypes = [DocumentPicker.types.images, 'image/jpeg'];
-                allowedTypes = [DocumentPicker.types.allFiles];
+                allowedTypes = [DocumentPicker.types.images, 'image/jpeg'];
             } else if (selectedFile === 'resume') {
                 allowedTypes = [DocumentPicker.types.pdf, 'application/msword'];
             }
@@ -158,26 +189,18 @@ const JobApply = () => {
                 type: allowedTypes,
             });
 
-            const obje = {
-                path: file.name,
-                name: file.name,
-                type: file.type,
-                size: file.size
-            }
 
             if (selectedFile === 'profilepic') {
-                const formDatafirst = new FormData();
-                // formDatafirst.append('file', obje);
-                // console.log(formDatafirst)
-                // API.uploadImage(formDatafirst)
-                //     .then(res => console.log(res))
-                //     .catch(err => console.log(err))
-
-
-                setProfilePic(file)
+                setUploadLoading(true)
+                const profile = await uploadFile(file);
+                setUploadLoading(false)
+                setProfilePic(profile)
 
             } else if (selectedFile === 'resume') {
-                setResume(file)
+                setUploadRLoading(true)
+                const res = await uploadFile(file);
+                setUploadRLoading(false)
+                setResume(res)
             }
         } catch (err) {
             if (DocumentPicker.isCancel(err)) {
@@ -190,55 +213,67 @@ const JobApply = () => {
     };
 
     const handleSubmit = () => {
-        //         setIsloading(true)
-        // const data = {
-        //     jobId: 123,
-        //     firstName: formData.firstname,
-        //     lastName: formData.lastname,
-        //     gender: formData.gender,
-        //     email: formData.email,
-        //     phone: formData.phone,
-        //     address: formData.address,
-        //     town: formData.town,
-        //     postalCode: formData.postcode,
-        //     country: formData.country,
-        //     qualifications: formData.qaulification,
-        //     ageGroup: formData.agegroup,
-        //     specialisms: selectedValues,
-        //     candidateType: formData.candidatetype,
-        //     referenceOne: formData.ref1refreename,
-        //     referenceOneEmail: formData.ref1employeremail,
-        //     referenceOneEndDate: formData.ref1enddate,
-        //     referenceOneStartDate: formData.ref1startdate,
-        //     referenceOneJob: formData.ref1jobtitle,
-        //     referenceTwo: formData.ref2refreename,
-        //     referenceTwoEmail: formData.ref2employeremail,
-        //     referenceTwoEndDate: formData.ref2enddate,
-        //     referenceTwoStartDate: formData.ref2startdate,
-        //     referenceTwoJob: formData.ref2jobtitle,
-        //     establishmentName: formData.,
-        //     establishmentType: "Tech",
-        //     establishmentTypeOther: "Other Type",
-        //     applicantPosition: "Software Engineer",
-        //     applicantPositionType: "Type A",
-        //     applicantPositionTime: "Full-time",
-        //     applicantPositionTimeOther: "Other Time",
-        //     photo: "url_to_photo.jpg",
-        //     cv: "url_to_cv.pdf",
-        //     notes: "Additional notes about the applicant.",
-        //     previouslyEmployed: 1,
-        //     salary: 50000,
-        //     locationApplying: "Brixton",
-        //     referenceOneName: "Reference One Name",
-        //     referenceTwoName: "Reference Two Name",
-        //     dateOfBirth: formData.dob
-        // }
-
-        //         API.createJobApplication()
-        //             .then(res => console.log(res))
-        //             .catch(err => console.log(err))
-        //             .finally(() => setIsloading(false))
-        //         console.log(formData)
+        setIsloading(true)
+        const data = {
+            jobId: jobId,//3
+            firstName: formData.firstname,//
+            lastName: formData.lastname,//
+            gender: formData.gender,//
+            email: formData.email,//33
+            phone: formData.phone,//
+            address: formData.address,//
+            town: formData.town,//
+            postalCode: formData.postcode,//
+            country: formData.country,//3
+            qualifications: formData.qaulification,//3
+            dateOfBirth: formData.dob,//
+            specialisms: selectedValues,//
+            ageGroup: formData.agegroup,//
+            candidateType: formData.candidatetype,//3
+            locationApplying: formData.location,//3
+            referenceOneName: formData.ref1refreename,//
+            referenceOne: formData.ref1institute,
+            referenceOneEmail: formData.ref1employeremail,//
+            referenceOneEndDate: formData.ref1enddate,//
+            referenceOneStartDate: formData.ref1startdate,//
+            referenceOneJob: formData.ref1jobtitle,//
+            referenceTwo: formData.ref2institute,
+            referenceTwoEmail: formData.ref2employeremail,//
+            referenceTwoEndDate: formData.ref2enddate,//
+            referenceTwoStartDate: formData.ref2startdate,//
+            referenceTwoJob: formData.ref2jobtitle,//
+            previouslyEmployed: formData.isEmployed,//
+            photo: profilePic,//
+            cv: resume,//
+            referenceTwoName: formData.ref2refreename,//
+            // establishmentName: '',
+            // establishmentType: "Tech",
+            // establishmentTypeOther: "Other Type",
+            // applicantPosition: "Software Engineer",
+            // applicantPositionType: "Type A",
+            // applicantPositionTime: "Full-time",
+            // applicantPositionTimeOther: "Other Time",
+            // notes: "Additional notes about the applicant.",
+            // salary: '',
+        }
+        if (!formData.email || !formData.country || !formData.qaulification || !formData.candidatetype || !formData.location) {
+            !formData.location ? customToast('error', 'Please add Location') : ""
+            !formData.candidatetype ? customToast('error', 'Please add Candidate Type') : ""
+            !formData.qaulification ? customToast('error', 'Please add Qaulification') : ""
+            !formData.country ? customToast('error', 'Please add Country') : ""
+            !formData.email ? customToast('error', 'Please add valid Email') : ""
+            setIsloading(false)
+        } else {
+            API.createJobApplication(data)
+                .then(res => customToast('success', res?.message))
+                .catch(err => console.log(err))
+                .finally(() => {
+                    setIsloading(false)
+                    setFormData(initialData)
+                    setResume('')
+                    setProfilePic('')
+                })
+        }
     }
 
     return (
@@ -292,6 +327,7 @@ const JobApply = () => {
                         setValue={(text) => onChangeHandler('gender', text)}
                     />
                     <InputField
+                        required
                         label={"Email"}
                         inputMode={"email"}
                         value={formData.email}
@@ -322,7 +358,7 @@ const JobApply = () => {
                         onChangeText={(text) => onChangeHandler('postcode', text)}
                     />
                     <DropdownComponent
-                        label={'Country'}
+                        label={'Country (required)'}
                         disable={false}
                         data={countries}
                         placeHolderText={""}
@@ -330,7 +366,7 @@ const JobApply = () => {
                         setValue={(text) => onChangeHandler('country', text)}
                     />
                     <DropdownComponent
-                        label={'Qaulification'}
+                        label={'Qaulification (required)'}
                         disable={false}
                         data={educationLevels}
                         placeHolderText={""}
@@ -338,7 +374,7 @@ const JobApply = () => {
                         setValue={(text) => onChangeHandler('qaulification', text)}
                     />
                     <View style={{ padding: 5 }}>
-                        <Text style={{ color: Color.text, marginBottom: 10 }}>Date Of Birth (Required)</Text>
+                        <Text style={{ color: Color.text, marginBottom: 10 }}>Date Of Birth</Text>
                         <TouchableOpacity onPress={() => setOpenDOB(true)} activeOpacity={0.7} style={{
                             borderWidth: 1,
                             borderRadius: 4,
@@ -360,7 +396,7 @@ const JobApply = () => {
                         placeHolderText={''}
                     />
                     <DropdownComponent
-                        label={'Age Group Specialism'}
+                        label={'Age Group Specialism (required)'}
                         disable={false}
                         data={agegroup}
                         placeHolderText={""}
@@ -368,7 +404,7 @@ const JobApply = () => {
                         setValue={(text) => onChangeHandler('agegroup', text)}
                     />
                     <DropdownComponent
-                        label={'Candidate Type'}
+                        label={'Candidate Type (required)'}
                         disable={false}
                         data={candidateType}
                         placeHolderText={""}
@@ -376,7 +412,7 @@ const JobApply = () => {
                         setValue={(text) => onChangeHandler('candidatetype', text)}
                     />
                     <DropdownComponent
-                        label={'Location You want to Apply'}
+                        label={'Location You want to Apply (required)'}
                         disable={false}
                         data={data}
                         placeHolderText={""}
@@ -408,7 +444,7 @@ const JobApply = () => {
                         label={"Job Title"}
                         inputMode={"email"}
                         value={formData.ref1jobtitle}
-                        onChangeText={(text) => onChangeHandler('specialism', text)}
+                        onChangeText={(text) => onChangeHandler('ref1jobtitle', text)}
                     />
                     <View style={{ padding: 5 }}>
                         <Text style={{ color: Color.text, marginBottom: 10 }}>Period Start Date</Text>
@@ -461,7 +497,7 @@ const JobApply = () => {
                         label={"Job Title"}
                         inputMode={"email"}
                         value={formData.ref2jobtitle}
-                        onChangeText={(text) => onChangeHandler('specialism', text)}
+                        onChangeText={(text) => onChangeHandler('ref2jobtitle', text)}
                     />
                     <View style={{ padding: 5 }}>
                         <Text style={{ color: Color.text, marginBottom: 10 }}>Period Start Date</Text>
@@ -503,8 +539,9 @@ const JobApply = () => {
                             justifyContent: 'center',
                             padding: 5
                         }}>
-                            <View>
-                                <Text style={{ color: Color.textThree }}>{profilePic?.name ? profilePic?.name : 'Choose File'}</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                                <Text style={{ color: Color.textThree }}>{profilePic ? profilePic : 'Choose File'}</Text>
+                                {uploadLoading && <ActivityIndicator size={'small'} />}
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -517,8 +554,10 @@ const JobApply = () => {
                             justifyContent: 'center',
                             padding: 5
                         }}>
-                            <View>
-                                <Text style={{ color: Color.textThree }}>{resume?.name ? resume?.name : 'Choose File'}</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+
+                                <Text style={{ color: Color.textThree }}>{resume ? resume : 'Choose File'}</Text>
+                                {uploadRLoading && <ActivityIndicator size={'small'} />}
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -538,7 +577,7 @@ const JobApply = () => {
                         onPress={() => handleSubmit()}
                         btnstyle={{ width: 120 }}
                         isLoading={isLoading}
-                        disable={isLoading}
+                        disabled={isLoading}
                     />
                 </View>
             </ScrollView>

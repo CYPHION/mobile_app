@@ -120,4 +120,24 @@ export class API {
     static async getAllReview() {
         return HttpService.GET(`/review/all`)
     }
+
+    static async getAllJobs() {
+        return HttpService.GET(`/jobapplication/alljobs`)
+    }
+
+    static async CreateApplyOnline(formData) {
+        return HttpService.POST(`/application`, formData)
+    }
+
+    static async CreateALevelResult(formData) {
+        return HttpService.POST(`/exam`, formData)
+    }
+
+    static async CreateGCSEResult(formData) {
+        return HttpService.POST(`/gcse-result`, formData)
+    }
+
+    static async CreateContact(formData) {
+        return HttpService.POST(`/contactus/create`, formData)
+    }
 }

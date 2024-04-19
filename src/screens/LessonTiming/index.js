@@ -104,7 +104,7 @@ const LessonTiming = () => {
                     </View>
                     <Text style={styles.heading}>
                         CHRISTMAS, EASTER, SUMMER
-                        HOLIDDAYS
+                        HOLIDAYS
                     </Text>
                     <View style={[{ paddingHorizontal: 20 }, GlobalStyles.headerStyles]}>
                         <Text style={GlobalStyles.headerTextStyle}>Time Table</Text>

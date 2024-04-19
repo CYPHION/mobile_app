@@ -185,3 +185,25 @@ export const bgColor = {
     pending: Color.pending,
     freeze: Color.freeze
 }
+
+export const decodeHtmlEntities = (text) => {
+    const entities = {
+        '&lt;': '<',
+        '&gt;': '>',
+        '&amp;': '&',
+        '&quot;': '"',
+        '&#039;': "'",
+        '&nbsp;': ' ',
+        '&pound;': '£',
+        '&yen;': '¥',
+        '&euro;': '€',
+        '&times;': '×',
+        '&divide;': '÷',
+        // Add more if needed
+    };
+
+
+    return text.replace(/&[a-zA-Z]+;/g, (entity) => {
+        return entities[entity] || entity;
+    });
+};

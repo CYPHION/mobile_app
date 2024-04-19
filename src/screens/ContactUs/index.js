@@ -5,10 +5,12 @@ import WebView from 'react-native-webview'
 import CustomButton from '../../components/base/CustomButton'
 import DropdownComponent from '../../components/base/CustomDropDown'
 import InputField from '../../components/base/InputField'
+import { API } from '../../network/API'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { screenDimensions } from '../../utils/functions'
+import { customToast, screenDimensions } from '../../utils/functions'
 const ContactUs = () => {
+    const [isLoading, setIsLoading] = useState(false)
     const [option, setOption] = useState("");
     const [formData, setFormData] = useState({
         name: '',
@@ -46,11 +48,10 @@ const ContactUs = () => {
     ]
 
     const data = [
-        { name: "BRIXTON", value: "1" },
-        { name: "HOUNSLOW", value: "2" },
-        { name: "WOOLWICH", value: "3" },
-        { name: "FINSBURY", value: "4" },
-
+        { name: "Brixton", value: "Brixton" },
+        { name: "Hounslow", value: "Hounslow" },
+        { name: "Woolwich", value: "Woolwich" },
+        { name: "Finsbury", value: "Finsbury" },
     ];
 
     const onChangeHandler = (name, text) => {
@@ -62,9 +63,42 @@ const ContactUs = () => {
     };
 
     const handleSubmit = () => {
-        console.log(formData)
+        setIsLoading(true);
 
-    }
+        // Basic form validation
+        if (!formData.email || !formData.campus) {
+            !formData.email ? customToast('error', "Please enter an email address") : '';
+            !formData.campus ? customToast('error', "Please enter Campus") : '';
+            setIsLoading(false);
+            return;
+        }
+
+        const payload = {
+            name: formData.name,
+            phone: formData.phone,
+            email: formData.email,
+            message: formData.message,
+            campus: formData.campus
+        };
+
+        API.CreateContact(payload)
+            .then(res => {
+                customToast('success', res.message);
+                setFormData({
+                    name: '',
+                    phone: '',
+                    email: '',
+                    message: '',
+                    campus: ''
+                });
+            })
+            .catch(err => {
+                console.error('Error creating contact:', err);
+                customToast('error', "Failed to create contact. Please try again later.");
+            })
+            .finally(() => setIsLoading(false));
+    };
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
@@ -99,13 +133,13 @@ const ContactUs = () => {
                             onChangeText={(text) => onChangeHandler('name', text)}
                         />
                         <InputField
-                            label={"Email"}
+                            label={"Phone"}
                             inputMode={"numeric"}
                             value={formData.phone}
                             onChangeText={(text) => onChangeHandler('phone', text)}
                         />
                         <InputField
-                            label={"Student ID"}
+                            label={"Email"}
                             inputMode={"email"}
                             value={formData.email}
                             onChangeText={(text) => onChangeHandler('email', text)}
@@ -114,7 +148,7 @@ const ContactUs = () => {
                             multiline
                             onChangeText={(text) => onChangeHandler('message', text)}
                             value={formData.message}
-                            label={"Remarks"}
+                            label={"Message"}
                             inputStyle={{
                                 height: screenDimensions.height * 0.2,
                                 textAlignVertical: "top",
@@ -125,14 +159,16 @@ const ContactUs = () => {
                             disable={false}
                             data={data}
                             placeHolderText={"Campus"}
-                            value={option}
-                            setValue={setOption}
+                            value={formData.campus}
+                            setValue={(text) => onChangeHandler('campus', text)}
                         />
 
                         <CustomButton
                             variant={'fill'}
                             title={"Send Message"}
                             onPress={handleSubmit}
+                            isLoading={isLoading}
+                            disabled={isLoading}
                         />
                     </View>
                     <Text style={[styles.name, { fontFamily: FontFamily.bold }]} >

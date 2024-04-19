@@ -3,8 +3,10 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import CustomButton from '../../components/base/CustomButton'
 import DropdownComponent from '../../components/base/CustomDropDown'
 import InputField from '../../components/base/InputField'
+import { API } from '../../network/API'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
+import { customToast } from '../../utils/functions'
 
 
 const StudentInputForm = ({ index, formData, onChangeHandler, years, courses, onDelete }) => {
@@ -16,7 +18,7 @@ const StudentInputForm = ({ index, formData, onChangeHandler, years, courses, on
         onChangeHandler(index, 'course', value);
     };
     return (
-        <View style={[{ marginBottom: 20, borderBottomColor: Color.text }, { borderBottomWidth: 1 }]}>
+        <View style={[{ marginBottom: 20, borderBottomColor: Color.text, paddingBottom: 20 }, { borderBottomWidth: 1 }]}>
             {index > 0 && <CustomButton
                 variant={'fill'}
                 title={"Delete"}
@@ -62,10 +64,23 @@ const StudentInputForm = ({ index, formData, onChangeHandler, years, courses, on
     );
 };
 
+const initialData = {
+
+    parentname: '',
+    email: "",
+    parentrelation: '',
+    mobilenumber: '',
+    doornumber: '',
+    street: '',
+    area: '',
+    postcode: '',
+    campus: ''
+}
 
 
 
 const ApplyOnline = () => {
+    const [isloading, setIsloading] = useState(false)
     const [students, setStudents] = useState([
         {
             firstname: '',
@@ -75,26 +90,15 @@ const ApplyOnline = () => {
             course: ''
         }
     ]);
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState(initialData)
 
-        parentname: '',
-        email: "",
-        parentrelation: '',
-        mobilenumber: '',
-        doornumber: '',
-        street: '',
-        area: '',
-        postcode: '',
-        campus: ''
-    })
 
 
     const data = [
-        { name: "BRIXTON", value: "1" },
-        { name: "HOUNSLOW", value: "2" },
-        { name: "WOOLWICH", value: "3" },
-        { name: "FINSBURY", value: "4" },
-
+        { name: "Brixton", value: "Brixton" },
+        { name: "Hounslow", value: "Hounslow" },
+        { name: "Woolwich", value: "Woolwich" },
+        { name: "Finsbury", value: "Finsbury" },
     ];
 
     const courses = [
@@ -153,15 +157,53 @@ const ApplyOnline = () => {
     };
 
     const handlesubmit = () => {
-        console.log(formData, students)
+        setIsloading(true)
+        const payload = {
+            campus: formData.campus,
+            studentDetail: students,
+            guardianName: formData.parentname,
+            email: formData.email,
+            guardianRelation: formData.parentrelation,
+            mobileNumber: formData.mobilenumber,
+            doorNumber: formData.doornumber,
+            street: formData.street,
+            area: formData.area,
+            postcode: formData.postcode
+        }
+
+        if (!formData.campus) {
+            !formData.campus ? customToast('error', 'Please add Campus') : ""
+            setIsloading(false)
+        } else {
+
+            API.CreateApplyOnline(payload)
+                .then(res => customToast('success', res?.message))
+                .catch(err => console.log(err))
+                .finally(() => {
+                    setIsloading(false);
+                    setFormData(initialData)
+                    setStudents([
+                        {
+                            firstname: '',
+                            lastname: '',
+                            subject: '',
+                            year: '',
+                            course: ''
+                        }
+                    ])
+                })
+        }
     }
+
+
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
                 <View style={{ padding: 20 }}>
                     <Text style={[styles.name, { fontFamily: FontFamily.bold }]}>Select Campus</Text>
                     <DropdownComponent
-                        label={'Select Capmus'}
+                        label={'Select Capmus (Required)'}
                         disable={false}
                         data={data}
                         placeHolderText={"Campus"}
@@ -238,6 +280,8 @@ const ApplyOnline = () => {
                         variant={'fill'}
                         title={"APPLY"}
                         onPress={handlesubmit}
+                        isloading={isloading}
+                        disabled={isloading}
                     />
                 </View>
             </ScrollView>

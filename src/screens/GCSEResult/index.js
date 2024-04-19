@@ -3,8 +3,10 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import CustomButton from '../../components/base/CustomButton'
 import DropdownComponent from '../../components/base/CustomDropDown'
 import InputField from '../../components/base/InputField'
+import { API } from '../../network/API'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
+import { customToast } from '../../utils/functions'
 
 const grades = [
     { name: "2", value: '2' },
@@ -17,25 +19,26 @@ const grades = [
     { name: "9", value: '9' },
 ]
 
-
+const initialData = {
+    stdId: '',
+    studentname: '',
+    maths: '',
+    physics: '',
+    chemistry: '',
+    biology: '',
+    economics: '',
+    furthermaths: '',
+    englishlanguage: '',
+    englishliterature: '',
+    history: '',
+    french: '',
+    spanish: '',
+    combinedscience: '',
+}
 
 const GCSEResult = () => {
-    const [formData, setFormData] = useState({
-        stdId: '',
-        studentname: '',
-        maths: '',
-        physics: '',
-        chemistry: '',
-        biology: '',
-        economics: '',
-        furthermaths: '',
-        englishlanguage: '',
-        englishliterature: '',
-        history: '',
-        french: '',
-        spanish: '',
-        combinedscience: '',
-    })
+    const [isLoading, setIsloading] = useState(false)
+    const [formData, setFormData] = useState(initialData)
 
     const subjects = [
         { name: 'Maths', value: 'maths' },
@@ -62,7 +65,37 @@ const GCSEResult = () => {
 
 
     const handleSubmit = () => {
-        console.log(formData)
+        setIsloading(true)
+        const payload = {
+            studentId: formData.stdId, // Example student ID
+            studentName: formData.studentname, // Example student name
+            mathGrade: formData.maths, // Example grades
+            physicsGrade: formData.physics,
+            chemistryGrade: formData.chemistry,
+            biologyGrade: formData.biology,
+            combinedScienceGrade: formData.combinedscience,
+            englishGrade: formData.englishlanguage,
+            englishLiterature: formData.englishliterature,
+            economicsGrade: formData.economics,
+            furtherMathGrade: formData.furthermaths,
+            historyGrade: formData.history,
+            frenchGrade: formData.french,
+            spanishGrade: formData.spanish
+        }
+        if (!formData.stdId || !formData.studentname) {
+            !formData.stdId ? customToast('error', "Please add Student Id") : '';
+            !formData.studentname ? customToast('error', "Please add Student Name") : '';
+            setIsloading(false)
+        } else {
+            API.CreateGCSEResult(payload)
+                .then(res => customToast('success', res.message))
+                .catch(err => console.log(err))
+                .finally(() => {
+                    setIsloading(false)
+                    setFormData(initialData)
+                })
+        }
+
     }
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -80,12 +113,14 @@ const GCSEResult = () => {
                     </Text>
 
                     <InputField
+                        required
                         label={"Student ID"}
-                        inputMode={"text"}
+                        inputMode={"numeric"}
                         value={formData.stdId}
                         onChangeText={(text) => onChangeHandler('stdId', text)}
                     />
                     <InputField
+                        required
                         label={"Student Name"}
                         inputMode={"text"}
                         value={formData.studentname}

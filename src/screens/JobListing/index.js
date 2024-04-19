@@ -1,10 +1,12 @@
-import React from 'react'
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import RenderHTML from 'react-native-render-html'
 import CustomButton from '../../components/base/CustomButton'
+import LoadingScreen from '../../components/base/LoadingScreen'
+import { API } from '../../network/API'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { screenDimensions } from '../../utils/functions'
+import { decodeHtmlEntities, screenDimensions } from '../../utils/functions'
 
 const dummyData = [
     {
@@ -72,7 +74,7 @@ const dummyData = [
         location: "BRIXTON",
         validityDate: "2024-04-30T00:00:00.000Z",
         isActive: true,
-        displayOrder: 2,
+        displayOrder: 1,
         createdAt: "2024-03-24T10:37:20.000Z",
         updatedAt: "2024-04-17T11:59:16.000Z"
     },
@@ -141,26 +143,60 @@ const dummyData = [
         location: "dsa",
         validityDate: "2024-05-27T19:00:00.000Z",
         isActive: true,
-        displayOrder: 8,
+        displayOrder: 2,
         createdAt: "2024-04-17T12:05:15.000Z",
         updatedAt: "2024-04-17T12:05:15.000Z"
     }
 ]
 
 const JobListing = ({ navigation }) => {
+    const [loaded, setLoaded] = useState(true)
+    const [refresh, setRefresh] = useState(false);
+    const [jobs, setJobs] = useState([])
     const handleToNavigate = (id) => {
         navigation.navigate('jobapply', { id })
     }
 
+    jobs.sort((a, b) => a.displayOrder - b.displayOrder);
+
+    const getAllJobs = () => {
+        API.getAllJobs()
+            .then(res => setJobs(res?.data))
+            .catch(err => console.log(err))
+            .finally(() => {
+                setRefresh(false)
+                setLoaded(false)
+            })
+
+    }
+
+    // Function to handle refresh action
+    const handleRefresh = () => {
+        setRefresh(true);
+        getAllJobs()
+    };
+
+    useEffect(() => {
+        getAllJobs()
+    }, [])
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        onRefresh={handleRefresh}
+                        refreshing={refresh}
+                    />
+                }
+            >
+                <LoadingScreen loading={loaded} />
                 <View style={{ padding: 20 }}>
-                    {dummyData.map((elem, index) => (
+                    {jobs.map((elem, index) => (
                         <View style={{ marginBottom: 30 }} key={index}>
                             <Text style={styles.title}>{elem.title}</Text>
                             <RenderHTML
-                                source={{ html: elem?.description }}
+                                source={{ html: decodeHtmlEntities(elem?.description) }}
                                 contentWidth={screenDimensions.width}
                                 baseStyle={styles.notificationNameFont}
                                 enableExperimentalMarginCollapsing={true}
