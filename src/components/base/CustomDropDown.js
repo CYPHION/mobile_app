@@ -24,7 +24,7 @@ const DropdownComponent = (props) => {
             {label ? <Text
                 style={[
                     styles.label,
-                    isFocus || value ? { color: Color.primary } : { color: Color.text },
+                    // isFocus || value ? { color: Color.primary } : { color: Color.text },
                 ]}
             >
                 {label}
@@ -37,9 +37,9 @@ const DropdownComponent = (props) => {
                 style={[
                     styles.dropdown,
                     { ...dropdownStyle },
-                    isFocus || value
-                        ? { borderColor: Color.primary }
-                        : { borderColor: Color.borderColor },
+                    // isFocus || value
+                    //     ? { borderColor: Color.primary }
+                    //     : { borderColor: Color.borderColor },
                 ]}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={[styles.selectedTextStyle]}
@@ -94,7 +94,8 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: FontSizes.md,
-        color: Color.text
+        color: Color.text,
+        marginBottom: 10
     },
     placeholderStyle: {
         fontSize: FontSizes.md,

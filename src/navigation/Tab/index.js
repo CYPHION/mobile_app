@@ -19,8 +19,8 @@ import { Color } from '../../utils/color';
 import { FontSizes } from '../../utils/font';
 
 const Tab = createBottomTabNavigator();
-
 const StackProfile = createNativeStackNavigator();
+// its child navigation of profile tab in this tab there are two screens first Profile Page and second one is Change Password Screen 
 const ProfileStack = () => {
     return <StackProfile.Navigator
         initialRouteName='profile'
@@ -40,6 +40,12 @@ const ProfileStack = () => {
     </StackProfile.Navigator>
 }
 
+// its navigation of bottom tabs in this tab there are five screens 
+// 1) Fees Receipt
+// 2) Pay Fees
+// 3) Home
+// 4) Analytics
+// 5) Profile
 
 const TabNavigation = ({ old }) => {
 
@@ -48,6 +54,7 @@ const TabNavigation = ({ old }) => {
     const isFirstRender = useRef(true);
 
     useEffect(() => {
+        //its function when user press back it send user to home screen
         const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
             if (navigation.isFocused() && !isFirstRender.current) {
                 navigation.dispatch(CommonActions.navigate({ name: 'home' }));
@@ -88,16 +95,16 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <ReceiptIcon
                             name="receipt"
-                            color={focused ? Color.SecondaryText : Color.text}
+                            color={focused ? Color.primary : Color.text}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.SecondaryText,
+                    tabBarActiveTintColor: Color.primary,
                     tabBarInactiveTintColor: Color.text,
                     headerShown: true,
                     headerTitle: 'View Fee Receipt',
                     headerRight: () => (
                         <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
-                            <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.black} />
+                            <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.text} />
                         </TouchableOpacity>
                     ),
                 }}
@@ -108,16 +115,16 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <CardIcon
                             name="card"
-                            color={focused ? Color.SecondaryText : Color.text}
+                            color={focused ? Color.primary : Color.text}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.SecondaryText,
+                    tabBarActiveTintColor: Color.primary,
                     tabBarInactiveTintColor: Color.text,
                     headerShown: true,
                     headerTitle: 'Pay Fees',
                     headerRight: () => (
                         <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
-                            <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.black} />
+                            <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.text} />
                         </TouchableOpacity>
                     ),
 
@@ -129,10 +136,10 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <Icon
                             name="home"
-                            color={focused ? Color.SecondaryText : Color.text}
+                            color={focused ? Color.primary : Color.text}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.SecondaryText,
+                    tabBarActiveTintColor: Color.primary,
                     tabBarInactiveTintColor: Color.text,
                 }}
             />
@@ -142,17 +149,17 @@ const TabNavigation = ({ old }) => {
                     headerTitle: 'Analytics',
                     headerRight: () => (
                         <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
-                            <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.black} />
+                            <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.text} />
                         </TouchableOpacity>
                     ),
                     tabBarLabel: 'Analytics',
                     tabBarIcon: ({ color, size, focused }) => (
                         <AnalyticsIcon
                             name="signal-cellular-3"
-                            color={focused ? Color.SecondaryText : Color.text}
+                            color={focused ? Color.primary : Color.text}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.SecondaryText,
+                    tabBarActiveTintColor: Color.primary,
                     tabBarInactiveTintColor: Color.text,
 
                 }}
@@ -165,12 +172,12 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <UserIcon
                             name="user-circle"
-                            color={focused ? Color.SecondaryText : Color.text}
+                            color={focused ? Color.primary : Color.text}
                             size={size}
                         />
                     ),
                     tabBarInactiveTintColor: Color.text,
-                    tabBarActiveTintColor: Color.SecondaryText,
+                    tabBarActiveTintColor: Color.primary,
 
                 }}
             />

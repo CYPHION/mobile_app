@@ -6,6 +6,7 @@ import { Alert, PermissionsAndroid, Platform, SafeAreaView, StatusBar } from "re
 import { useDispatch, useSelector } from "react-redux";
 import IntroSlider from "./src/components/widget/IntroSlider";
 import MyDrawer from "./src/navigation/Drawer";
+import HomeDrawar from "./src/navigation/HomeDrawer";
 import { API } from "./src/network/API";
 import ConfirmResetPassword from "./src/screens/ConfirmResetPassword";
 import LoginScreen from "./src/screens/Login";
@@ -16,7 +17,7 @@ import { Color } from "./src/utils/color";
 const Stack = createNativeStackNavigator();
 
 
-function AuthSTack() {
+export function AuthSTack() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -41,27 +42,27 @@ const App = () => {
 
 
   const requestPostNotificationsPermission = async () => {
-   if (Platform.OS === 'ios') {
-     const authStatus = await messaging().requestPermission();
-   const enabled =
-     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
- 
-   if (enabled) {
-     console.log('Authorization status:', authStatus);
-   }
-     
-   } else {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+    if (Platform.OS === 'ios') {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-      console.log("Post notifications permission allowed");
+      if (enabled) {
+        console.log('Authorization status:', authStatus);
+      }
+
     } else {
-      console.log("Post notifications permission denied");
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+
+        console.log("Post notifications permission allowed");
+      } else {
+        console.log("Post notifications permission denied");
+      }
     }
-   }
   }
 
 
@@ -155,7 +156,7 @@ const App = () => {
           : <>
             {isIntro ?
               <>
-                {!!userData.email ? <MyDrawer /> : <AuthSTack />}
+                {!!userData.email ? <MyDrawer /> : <HomeDrawar />}
               </>
               : <IntroSlider setIsIntro={setIsIntro} />}
           </>}

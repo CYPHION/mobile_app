@@ -18,11 +18,11 @@ const Testimonials = () => {
     const user = useSelector(state => state?.user?.data)
     const global = useSelector(state => state?.global?.data)
     const dispatch = useDispatch()
-
+    // Function to fetch testimonials data
     const fetchData = () => {
         setData(global?.testimonials)
     }
-
+    // Function to handle refresh
     const handleRefresh = () => {
         setRefresh(true);
         dispatch(globalData(user?.id))
@@ -35,7 +35,7 @@ const Testimonials = () => {
                 setRefresh(false);
             });
     };
-
+    // useEffect to fetch data initially and whenever testimonials data changes
     useEffect(() => {
         fetchData()
     }, [global?.testimonials])

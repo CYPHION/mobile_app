@@ -30,7 +30,7 @@ const ViewApplication = () => {
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
     const dispatch = useDispatch()
-
+    // its function to filter data according to  date
     const filterByDate = (startDate, endDate) => {
         let filterData;
         if (!!startDate && !!endDate) {
@@ -45,7 +45,7 @@ const ViewApplication = () => {
         setData(filterData)
     };
 
-
+    // its component when data not available
     const returnItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.7 }}>
             <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textThree} />
@@ -67,6 +67,8 @@ const ViewApplication = () => {
     //         });
     // };
 
+
+    // its for changing data from api to desired 
     const statusBackround = {
         processed: 'Accepted',
         unprocessed: 'Rejected',

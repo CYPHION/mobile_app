@@ -9,24 +9,24 @@ import {
 import { Color } from "../../utils/color";
 import { FontFamily, FontSizes } from "../../utils/font";
 import { GlobalStyles } from "../../utils/globalStyles";
-
+// Custom button component
 const CustomButton = (props) => {
     const {
-        onPress,
-        title = "",
-        disabled,
-        variant,
-        btnstyle,
-        textStyle,
-        leftIcon,
-        isLoading,
-        rightIcon
+        onPress, // Function to handle button press
+        title = "", // Button title, default empty string
+        disabled, // Flag to disable button
+        variant, // Button variant (e.g., 'fill' or 'outline')
+        btnstyle, // Additional button styles
+        textStyle, // Additional text styles
+        leftIcon,// Icon to be displayed on the left side of the button text
+        isLoading, // Flag indicating loading state
+        rightIcon // Icon to be displayed on the right side of the button text
     } = props;
 
     return (
         <TouchableOpacity
             {...props}
-            disabled={disabled ? disabled : false}
+            disabled={disabled ? disabled : false}  // Disable button if 'disabled' flag is true
             activeOpacity={0.7}
             style={[styles.buttonContainer, GlobalStyles.p_10, variant === 'fill' ? { backgroundColor: disabled ? Color.primaryLight : Color.primary } : { backgroundColor: Color.white }, { ...btnstyle }]}
             onPress={onPress}

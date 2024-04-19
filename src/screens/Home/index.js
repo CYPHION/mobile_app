@@ -32,15 +32,16 @@ const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept"
 
 
 const Home = ({ navigation }) => {
-    const [studentId, setstudentId] = useState('')
-    const [tab, setTab] = useState({})
-    const [openSelection, setOpenSelection] = useState(false)
-    const [open, setOpen] = useState(false)
-    const [refreshing, setRefreshing] = useState(false)
-    const globaldata = useSelector(state => state?.global?.data)
-    const user = useSelector(state => state?.user?.data)
-    const dispatch = useDispatch()
-
+    // State variables
+    const [studentId, setstudentId] = useState('')// State for student ID
+    const [tab, setTab] = useState({})// State for selected tab
+    const [openSelection, setOpenSelection] = useState(false) // State for selecte student for navigation
+    const [open, setOpen] = useState(false)// State for modal visibility
+    const [refreshing, setRefreshing] = useState(false)// State for refreshing data
+    const globaldata = useSelector(state => state?.global?.data) // Global data from Redux store
+    const user = useSelector(state => state?.user?.data) // User data from Redux store
+    const dispatch = useDispatch() // Redux dispatch function
+    // Card data
     const cards = [
         { title: 'Progress Report', icon: <ProgressReport width={30} height={30} />, screen: 'studentReport', path: 'children' },
         { title: 'View Schedule', icon: <Schedule width={30} height={30} />, screen: 'studentSchedule', path: 'children' },
@@ -54,46 +55,50 @@ const Home = ({ navigation }) => {
 
     ]
 
-
+    // Function to toggle the drawer navigation
     const toggleDrawer = () => {
         navigation.toggleDrawer();
     }
-
+    // Function to handle logout
     const logOutHandler = async () => {
-        const token = await AsyncStorage.getItem('fcmToken')
-        const fcmToken = globaldata?.currentUser?.fcmToken
+        const token = await AsyncStorage.getItem('fcmToken')// Retrieve FCM token from AsyncStorage
+        const fcmToken = globaldata?.currentUser?.fcmToken // Filter out the current FCM token from the global data
         const sendTokens = fcmToken?.filter(item => item !== token)
-
+        // Update the user data with the new FCM token list
         const uptObj = {
             ...globaldata?.currentUser,
             fcmToken: sendTokens
         }
-        API.updateUser(uptObj)
+        API.updateUser(uptObj) // Call the API to update the user data
             .then(async (res) => {
-                await AsyncStorage.removeItem('fcmToken');
+                await AsyncStorage.removeItem('fcmToken');  // Remove FCM token from AsyncStorage
+                // Dispatch actions to handle logout and reset data
                 dispatch(handleLogout())
                 dispatch(handleResetData())
             }).catch(err => console.log(err))
-        setOpen(!open)
+        setOpen(!open)// Toggle the modal visibility
     }
-
+    // Function to handle card press events
     const handleCardPress = (elem) => {
         if (elem.path === 'logout') {
-            setOpen(true);
+            setOpen(true);// Open the logout confirmation modal
         } else if (elem.path === 'children') {
-            setOpenSelection(prev => !prev)
-            setTab(elem)
+            setOpenSelection(prev => !prev)// Toggle the children selection modal
+            setTab(elem)// Set the selected tab
         } else {
             if (elem.screen === 'fee') {
+                // Navigate to the appropriate screen based on the card data
                 navigation.navigate(elem.screen);
             } else {
                 navigation.navigate('root', { screen: elem.screen });
             }
         }
     };
-
+    // Function to handle pull-to-refresh action
     const onRefresh = useCallback(() => {
-        setRefreshing(true);
+        setRefreshing(true);// Set refreshing state to true
+        // Dispatch action to fetch updated global data
+
         dispatch(globalData(user?.id))
             .then(() => {
                 setRefreshing(false); // Set refreshing to false after data fetching is completed

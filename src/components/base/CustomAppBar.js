@@ -5,24 +5,26 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import MenuIcon from 'react-native-vector-icons/Entypo';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
-
+// Custom AppBar component used as a header for all screens
 const CustomAppBar = ({ back = true, title, color }) => {
     const [active, setActive] = useState(false)
     const navigation = useNavigation();
-
+    // Function to handle navigation go back
     const handleGoBack = () => {
-        navigation.goBack();
+        navigation.goBack();// Navigate back to previous screen
     };
 
 
     return (
         <View style={{ flexDirection: 'row', height: 60, alignItems: 'center', justifyContent: 'space-between' }}>
+            {/* Back button (if you pass back true the back button will appear) */}
             <View style={{ flexDirection: 'row', height: 60, alignItems: 'center', }}>
                 {back && <TouchableOpacity onPressIn={() => setActive(!active)} onPressOut={() => setActive(!active)} onPress={handleGoBack} style={[{ padding: 10, borderRadius: 50 }, active && { backgroundColor: '#ffffff50' }]}>
                     <Icon name="arrowleft" size={22} color={color ? color : Color.text} />
                 </TouchableOpacity>}
                 <Text style={{ color: Color.text, fontSize: FontSizes.xl, fontFamily: FontFamily.interMedium, paddingLeft: 18 }}>{title}</Text>
             </View>
+            {/* Menu button to open drawer */}
             <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
                 <MenuIcon name='menu' size={FontSizes.xxxl} color={color ? color : Color.text} />
             </TouchableOpacity>

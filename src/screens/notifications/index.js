@@ -14,7 +14,7 @@ import { screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
 
 const Notifications = () => {
-    const { width } = useWindowDimensions();
+    const { width } = useWindowDimensions(); // Get the width of the window
     const [data, setData] = useState([])
     const [activeItem, setActiveItem] = useState(null);
     const [active, setActive] = useState(true)
@@ -23,20 +23,23 @@ const Notifications = () => {
     const [expanded, setExpanded] = useState(false);
     const dispatch = useDispatch()
 
-
+    // Function to toggle the active item (expand/collapse notification)
     const toggleItem = (index) => {
         setActiveItem(activeItem === index ? null : index); // Toggle state based on click
     };
-
+    // Function to fetch notification data
     const getNotification = () => {
-        API.getAllNotification(user?.id)
-            .then((res) => setData(res?.data))
-            .catch((err) => console.log(err))
-            .finally(() => setActive(false))
+        API.getAllNotification(user?.id) // Call API to fetch notifications for the current user
+            .then((res) => setData(res?.data)) // Set fetched data to the state
+            .catch((err) => console.log(err)) // Log any errors
+            .finally(() => setActive(false)) // Set active state to false once data fetching is completed
     }
-
+    // Function to handle refreshing of notification data
     const onRefresh = useCallback(() => {
-        setRefreshing(true);
+        setRefreshing(true); // Set refreshing state to true
+
+        // Fetch global data for the current user from the server
+
         dispatch(globalData(user?.id))
             .then(() => {
                 getNotification()
@@ -47,7 +50,7 @@ const Notifications = () => {
                 setRefreshing(false); // Ensure refreshing is set to false even if there's an error
             });
     }, [])
-
+    // Effect to fetch notification data when the component mounts
     useEffect(() => {
         getNotification()
     }, [])

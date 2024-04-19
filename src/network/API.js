@@ -105,4 +105,39 @@ export class API {
         return HttpService.GET(`/notification-alert/parent?parentId=${Number(parentId)}`)
     }
 
+    static async createJobApplication(formData) {
+        return HttpService.POST('/jobapplication/create', formData)
+    }
+
+    static async uploadImage(file) {
+        return HttpService.POST(`/upload/single`, file)
+    }
+
+    static async createReview(formData) {
+        return HttpService.POST(`/review/create`, formData)
+    }
+
+    static async getAllReview() {
+        return HttpService.GET(`/review/all`)
+    }
+
+    static async getAllJobs() {
+        return HttpService.GET(`/jobapplication/alljobs`)
+    }
+
+    static async CreateApplyOnline(formData) {
+        return HttpService.POST(`/application`, formData)
+    }
+
+    static async CreateALevelResult(formData) {
+        return HttpService.POST(`/exam`, formData)
+    }
+
+    static async CreateGCSEResult(formData) {
+        return HttpService.POST(`/gcse-result`, formData)
+    }
+
+    static async CreateContact(formData) {
+        return HttpService.POST(`/contactus/create`, formData)
+    }
 }
