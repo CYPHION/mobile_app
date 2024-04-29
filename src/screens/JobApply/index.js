@@ -15,7 +15,7 @@ import { URL } from '../../network/httpService'
 import { countries } from '../../utils/Constants'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { customToast, formattedDate, screenDimensions } from '../../utils/functions'
+import { customToast, formattedDate, getStudentAbility, screenDimensions } from '../../utils/functions'
 const genders = [
     { name: 'Male', value: 'male' },
     { name: 'Female', value: 'female' },
@@ -72,8 +72,8 @@ const data = [
 ];
 
 const radios = [
-    { name: 'Yes', value: true },
     { name: 'No', value: false },
+    { name: 'Yes', value: true },
 
 ];
 
@@ -121,11 +121,25 @@ const initialData = {
     ref2jobtitle: '',
     ref2startdate: '',
     ref2enddate: '',
-    isEmployed: '',
+    isEmployed: false,
     profilepic: '',
     resume: '',
-    comment: ''
+    comment: '',
+    establishmentName: '',
+    establishmentType: '',
+    establishmentTypeOther: '',
+    applicantPosition: '',
+    salary: '',
+    applicantPositionType: '',
+    applicantPositionTime: '',
+    applicantPositionTimeOther: ''
 }
+
+const estType = ["Nursery", "School", "College", "University", "Education", "Other"]
+
+const wasPosition = ["Permanent Position", "Self Employed", "Supply", "Teaching Practice", "Temporary Contract", "Voluntary", "Other", "NA"]
+
+const posType = ["Full Time", "Part Time"]
 
 const JobApply = () => {
     const [selectedValues, setSelectedValues] = useState([])
@@ -145,6 +159,7 @@ const JobApply = () => {
     const jobId = Number(router?.params?.id)
 
     const onChangeHandler = (name, text) => {
+        console.log(name, typeof text)
         setFormData(prevFormData => ({
             ...prevFormData,
             [name]: text
@@ -246,15 +261,14 @@ const JobApply = () => {
             photo: profilePic,//
             cv: resume,//
             referenceTwoName: formData.ref2refreename,//
-            // establishmentName: '',
-            // establishmentType: "Tech",
-            // establishmentTypeOther: "Other Type",
-            // applicantPosition: "Software Engineer",
-            // applicantPositionType: "Type A",
-            // applicantPositionTime: "Full-time",
-            // applicantPositionTimeOther: "Other Time",
-            // notes: "Additional notes about the applicant.",
-            // salary: '',
+            establishmentName: formData.establishmentName,
+            establishmentType: formData.establishmentType,
+            establishmentTypeOther: formData.establishmentTypeOther,
+            applicantPosition: formData.applicantPosition || "",
+            applicantPositionType: formData.applicantPositionType,
+            applicantPositionTime: formData.applicantPositionTime,
+            applicantPositionTimeOther: formData.applicantPositionTimeOther,
+            salary: formData?.salary || "",
         }
         if (!formData.email || !formData.country || !formData.qaulification || !formData.candidatetype || !formData.location) {
             !formData.location ? customToast('error', 'Please add Location') : ""
@@ -265,13 +279,16 @@ const JobApply = () => {
             setIsloading(false)
         } else {
             API.createJobApplication(data)
-                .then(res => customToast('success', res?.message))
-                .catch(err => console.log(err))
-                .finally(() => {
-                    setIsloading(false)
+                .then(res => {
+                    customToast('success', res?.message)
                     setFormData(initialData)
                     setResume('')
                     setProfilePic('')
+                })
+                .catch(err => console.log(err))
+                .finally(() => {
+                    setIsloading(false)
+
                 })
         }
     }
@@ -358,7 +375,7 @@ const JobApply = () => {
                         onChangeText={(text) => onChangeHandler('postcode', text)}
                     />
                     <DropdownComponent
-                        label={'Country (required)'}
+                        label={'Country (Required)'}
                         disable={false}
                         data={countries}
                         placeHolderText={""}
@@ -366,7 +383,7 @@ const JobApply = () => {
                         setValue={(text) => onChangeHandler('country', text)}
                     />
                     <DropdownComponent
-                        label={'Qaulification (required)'}
+                        label={'Qaulification (Required)'}
                         disable={false}
                         data={educationLevels}
                         placeHolderText={""}
@@ -396,7 +413,7 @@ const JobApply = () => {
                         placeHolderText={''}
                     />
                     <DropdownComponent
-                        label={'Age Group Specialism (required)'}
+                        label={'Age Group Specialism (Required)'}
                         disable={false}
                         data={agegroup}
                         placeHolderText={""}
@@ -404,7 +421,7 @@ const JobApply = () => {
                         setValue={(text) => onChangeHandler('agegroup', text)}
                     />
                     <DropdownComponent
-                        label={'Candidate Type (required)'}
+                        label={'Candidate Type (Required)'}
                         disable={false}
                         data={candidateType}
                         placeHolderText={""}
@@ -412,7 +429,7 @@ const JobApply = () => {
                         setValue={(text) => onChangeHandler('candidatetype', text)}
                     />
                     <DropdownComponent
-                        label={'Location You want to Apply (required)'}
+                        label={'Location You want to Apply (Required)'}
                         disable={false}
                         data={data}
                         placeHolderText={""}
@@ -530,6 +547,63 @@ const JobApply = () => {
                     <Text style={styles.title}>Addional Information</Text>
                     <Text style={styles.text}>Have you been previously Employed or have current Employment?</Text>
                     <RadioButton options={radios} onToggle={(value) => onChangeHandler('isEmployed', value)} />
+
+                    {formData?.isEmployed &&
+                        <>
+                            <InputField
+                                label={`Name of establishment employed at`}
+                                value={formData.establishmentName}
+                                onChangeText={(text) => onChangeHandler('establishmentName', text)}
+                            />
+                            <DropdownComponent
+                                label={'[Please Identify your] Establishment Type'}
+                                disable={false}
+                                data={getStudentAbility(estType)}
+                                placeHolderText={""}
+                                value={formData.establishmentType}
+                                setValue={(text) => onChangeHandler('establishmentType', text)}
+                            />
+                            <InputField
+                                label={`If other please state your establishment type`}
+                                value={formData.establishmentTypeOther}
+                                onChangeText={(text) => onChangeHandler('establishmentTypeOther', text)}
+                            />
+                            <InputField
+                                label={`Position held by applicant`}
+                                value={formData.applicantPosition}
+                                onChangeText={(text) => onChangeHandler('applicantPosition', text)}
+                            />
+                            <DropdownComponent
+                                label={'Was the position'}
+                                disable={false}
+                                data={getStudentAbility(wasPosition)}
+                                placeHolderText={""}
+                                value={formData.applicantPositionTimeOther}
+                                setValue={(text) => onChangeHandler('applicantPositionTimeOther', text)}
+                            />
+                            <DropdownComponent
+                                label={'Position Type'}
+                                disable={false}
+                                data={getStudentAbility(posType)}
+                                placeHolderText={""}
+                                value={formData.applicantPositionType}
+                                setValue={(text) => onChangeHandler('applicantPositionType', text)}
+                            />
+                            <InputField
+                                inputMode='numeric'
+                                label={`If the employment was part time please confirm the hours worked per week (Numbers only please)`}
+                                value={formData.applicantPositionTime}
+                                onChangeText={(text) => onChangeHandler('applicantPositionTime', text)}
+                            />
+                            <InputField
+                                inputMode='numeric'
+                                label={`Yearly Salary or Hourly Salary (£)`}
+                                value={formData.salary}
+                                onChangeText={(text) => onChangeHandler('salary', text)}
+                            />
+                        </>
+                    }
+
                     <View style={{ padding: 5 }}>
                         <Text style={{ color: Color.text, marginBottom: 10 }}>Upload your profile pic (JPEG format Only)</Text>
                         <TouchableOpacity onPress={() => openFile('profilepic')} activeOpacity={0.7} style={{
