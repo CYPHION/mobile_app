@@ -207,3 +207,14 @@ export const decodeHtmlEntities = (text) => {
         return entities[entity] || entity;
     });
 };
+
+
+
+export const getStudentAbility = list => {
+    return (
+        list?.map(elem => ({
+            value: elem,
+            name: elem
+        })) || []
+    )
+}
