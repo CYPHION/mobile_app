@@ -52,7 +52,42 @@ const nestedArray = (item) => [
 
 ]
 
+const nestedArrayBasicDetail = (item) => [
+    {
+        name: 'Student Name',
+        value: item?.Student?.fullName
+    },
+    // {
+    //     name: 'Department',
+    //     value: item?.Department?.name
+    // },
+    {
+        name: 'Subject',
+        value: item?.Subject?.name
+    },
+    // {
+    //     name: 'Book',
+    //     value: item?.Book?.title
+    // },
+    // {
+    //     name: 'Test Start Date',
+    //     value: item?.startDate ? formattedDate(item?.startDate, 'dd-MM-yyyy') : ''
+    // },
+    // {
+    //     name: 'Test End Date',
+    //     value: item?.endDate ? formattedDate(item?.endDate, 'dd-MM-yyyy') : ''
+    // },
+    {
+        name: 'Test Status',
+        // value: `${item?.meanPercentage > 0 ? `${item?.meanPercentage}%` : ''}`
+        value: <Text style={{ color: item?.meanPercentage > 50 ? 'green' : 'red' }}>{item?.meanPercentage ? item?.meanPercentage : 0}%</Text>
+    },
+    {
+        name: 'Date Enrolled',
+        value: item?.Student?.enrollmentDate ? formattedDate(item?.Student?.enrollmentDate, 'dd-MM-yyyy') : 'N/A'
+    },
 
+]
 
 const ViewProgress = () => {
     const [refresh, setRefresh] = useState(false);
@@ -166,9 +201,14 @@ const ViewProgress = () => {
                             <View>
                                 {progress?.length > 0 ? <View>
 
-                                    {progress?.map((elem, index) => (
-                                        <GridTable onDownloadClick={onDownloadClick} header={`Test ${index + 1}`} key={index} data={nestedArray(elem)} />
-                                    ))}
+                                    {progress?.map((elem, index) => {
+                                        if (elem?.isDetailReport) {
+
+                                            return <GridTable onDownloadClick={onDownloadClick} downloadIcon={false} header={`Test ${index + 1} (Detailed Report)`} key={index} data={nestedArray(elem)} />
+                                        } else {
+                                            return <GridTable onDownloadClick={onDownloadClick} downloadIcon={false} header={`Test ${index + 1} (Basic Report)`} key={index} data={nestedArrayBasicDetail(elem)} />
+                                        }
+                                    })}
                                 </View> :
                                     <>
                                         {renderItem()}
