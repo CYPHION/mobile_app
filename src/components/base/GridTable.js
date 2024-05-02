@@ -6,7 +6,7 @@ import { FontFamily, FontSizes } from '../../utils/font'
 import { GlobalStyles } from '../../utils/globalStyles'
 
 const GridTable = (props) => {
-    const { data, heading, CheckboxChild, header, onDownloadClick, ids } = props
+    const { data, heading, CheckboxChild, header, onDownloadClick, ids, downloadIcon } = props
 
 
 
@@ -17,9 +17,9 @@ const GridTable = (props) => {
                 <View style={[styles.innerView]}>
                     {!!header && <View style={[styles.header, styles.headerStyle, GlobalStyles.p_10]}>
                         <Text style={[styles.headingText, { color: Color.white }]}>{header}</Text>
-                        <TouchableOpacity onPress={onDownloadClick} >
+                        {downloadIcon && <TouchableOpacity onPress={onDownloadClick} >
                             <Icon name='download' color={Color.white} size={FontSizes.xxl} />
-                        </TouchableOpacity>
+                        </TouchableOpacity>}
 
                     </View>}
                     <View style={GlobalStyles.p_10}>

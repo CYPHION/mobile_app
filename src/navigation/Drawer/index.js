@@ -11,6 +11,7 @@ import MyModal from '../../components/base/Modal';
 import { API } from '../../network/API';
 import { handleResetData } from '../../store/slice/global';
 import { handleLogout } from '../../store/slice/user';
+import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { getImage, screenDimensions } from '../../utils/functions';
@@ -168,6 +169,7 @@ function MyDrawer({ old }) {
     // Get user and global data from Redux store
     const user = useSelector(state => state?.user?.data)
     const global = useSelector(state => state?.global?.data)
+    const dispatch = useDispatch()
     // Execute effect when the component mounts or 'old' dependency changes
     useEffect(() => {
         // Dispatch a navigation action to reset the navigation state
@@ -180,6 +182,46 @@ function MyDrawer({ old }) {
         );
     }, [old]);// Depend on 'old' variable for re-execution when it changes
 
+    const setToken = async () => {
+        try {
+            const token = await messaging().getToken();
+            console.log(token)
+            const FCMtoken = await AsyncStorage.getItem('fcmToken');
+            const mbleToken = globaldata?.currentUser?.fcmToken
+            if (FCMtoken) {
+                console.log('Token already saved to database ..')
+            } else {
+                let getTokens;
+                if (mbleToken?.length > 0) {
+                    getTokens = [...mbleToken, token];
+                } else {
+                    getTokens = [token ? token : '']
+                }
+                const uptObj = {
+                    ...globaldata?.currentUser,
+                    fcmToken: getTokens
+                }
+                API.updateUser(uptObj)
+                    .then(async (res) => {
+                        await AsyncStorage.setItem('fcmToken', token);
+                        dispatch(globalData(userData?.id))
+                    }).catch(err => console.log(err))
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        setToken()
+    }, [global?.currentUser])
+
+    useEffect(() => {
+        if (user?.email) {
+            dispatch(globalData(user?.id))
+        }
+    }, [user])
 
 
     return (
