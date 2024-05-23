@@ -7,27 +7,10 @@ import { useSelector } from "react-redux";
 import IntroSlider from "./src/components/widget/IntroSlider";
 import MyDrawer from "./src/navigation/Drawer";
 import HomeDrawar from "./src/navigation/HomeDrawer";
-import ConfirmResetPassword from "./src/screens/ConfirmResetPassword";
-import LoginScreen from "./src/screens/Login";
-import ResetPassword from "./src/screens/ResetPassword";
 import SpashScreen from "./src/screens/SplashScreen";
 import { Color } from "./src/utils/color";
 const Stack = createNativeStackNavigator();
 
-
-export function AuthSTack() {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name='login' component={LoginScreen} />
-      <Stack.Screen name='forgetPassword' component={ResetPassword} />
-      <Stack.Screen name='confirmPassword' component={ConfirmResetPassword} />
-    </Stack.Navigator>
-  )
-}
 
 const App = () => {
   const [show, setShow] = useState(true)

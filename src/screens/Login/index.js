@@ -68,6 +68,9 @@ const LoginScreen = (prop) => {
                     />
                     <View style={[styles.absoluteImage, styles.picture]} />
                     <View style={[styles.logoView]}>
+                        {/* <View style={{ width: screenDimensions.width, position: 'absolute', top: 0 }}>
+                            <CustomAppBar customNavigation={() => navigation.navigate('aboutus')} color={Color.white} />
+                        </View> */}
                         {/* <Image
                             resizeMode="contain"
                             style={[styles.logo]}
@@ -149,6 +152,29 @@ const LoginScreen = (prop) => {
                                 onPress={() => handleSubmit()}
                                 isLoading={isLoading}
                             />
+                        </View>
+                        <View
+                            style={{
+                                alignItems: 'center'
+                            }}
+                        >
+
+                            <Text
+                                onPress={() => {
+                                    navigation.navigate('aboutus')
+                                }}
+                                style={{
+                                    color: Color.white,
+                                    width: screenDimensions.width * 0.35,
+                                    fontFamily: FontFamily.interRegular,
+                                    paddingVertical: 5,
+                                    fontSize: FontSizes.md,
+                                    textAlign: "center",
+                                    textDecorationLine: 'underline',
+                                }}
+                            >
+                                Back to Home
+                            </Text>
                         </View>
                     </View>
 

@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AntIcon from 'react-native-vector-icons/AntDesign';
-import { AuthSTack } from '../../../App';
 import CustomAppBar from '../../components/base/CustomAppBar';
 import ALevel from '../../screens/ALevelResult';
 import AboutUs from '../../screens/About-us';
@@ -13,13 +12,16 @@ import AwardingBodies from '../../screens/AwardingBodies';
 import BrightStudent from '../../screens/BrightStudent';
 import Careers from '../../screens/Careers';
 import Childcare from '../../screens/Childcare';
+import ConfirmResetPassword from '../../screens/ConfirmResetPassword';
 import ContactUs from '../../screens/ContactUs';
 import Fees from '../../screens/Fees';
 import GCSEResult from '../../screens/GCSEResult';
 import JobApply from '../../screens/JobApply';
 import JobListing from '../../screens/JobListing';
 import LessonTiming from '../../screens/LessonTiming';
+import LoginScreen from '../../screens/Login';
 import OurServices from '../../screens/OurServices';
+import ResetPassword from '../../screens/ResetPassword';
 import Reviews from '../../screens/Reviews';
 import SummerPakage from '../../screens/SummerPakage';
 import TermsAndConditions from '../../screens/TermsAndConditions';
@@ -44,105 +46,108 @@ export function HomeStack() {
             <Stack.Screen name="aboutus" component={AboutUs}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'About Us'} back={false} />
+                    header: () => <CustomAppBar title={'About Us'} back={false} isLogin={true} />
                 }}
             />
             <Stack.Screen name="lessonTiming" component={LessonTiming}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'Lesson Timings'} back={false} />
+                    header: () => <CustomAppBar title={'Lesson Timings'} back={false} isLogin={true} />
                 }}
             />
             <Stack.Screen name="fees" component={Fees}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'Fees'} back={false} />
+                    header: () => <CustomAppBar title={'Fees'} back={false} isLogin={true} />
                 }}
             />
             <Stack.Screen name="summerpakage" component={SummerPakage}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'Summer Package'} back={false} />
+                    header: () => <CustomAppBar title={'Summer Package'} back={false} isLogin={true} />
                 }}
             />
             <Stack.Screen name="ourservices" component={OurServices}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'Our Services'} back={false} />
+                    header: () => <CustomAppBar title={'Our Services'} back={false} isLogin={true} />
                 }}
             />
             <Stack.Screen name="brightstudent" component={BrightStudent}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'Bright Students'} back={false} />
+                    header: () => <CustomAppBar title={'Bright Students'} back={false} isLogin={true} />
                 }}
             />
             <Stack.Screen name="termsandcondition" component={TermsAndConditions}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'Terms & Conditions'} back={false} />
+                    header: () => <CustomAppBar title={'Terms & Conditions'} back={false} isLogin={true} />
                 }}
             />
             <Stack.Screen name="awardingbodies" component={AwardingBodies}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'Awarding Bodies'} back={false} />
+                    header: () => <CustomAppBar title={'Awarding Bodies'} back={false} isLogin={true} />
                 }}
             />
             <Stack.Screen name="childcare" component={Childcare}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'Childcare'} back={false} />
+                    header: () => <CustomAppBar title={'Childcare'} back={false} isLogin={true} />
                 }}
             />
             <Stack.Screen name="reviews" component={Reviews}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'Reviews'} back={false} />
+                    header: () => <CustomAppBar title={'Reviews'} back={false} isLogin={true} />
                 }}
             />
             <Stack.Screen name="career" component={Careers}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'Career'} back={false} />
+                    header: () => <CustomAppBar title={'Career'} back={false} isLogin={true} />
                 }}
             />
             <Stack.Screen name="joblisting" component={JobListing}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'Job Listing'} back={true} />
+                    header: () => <CustomAppBar title={'Job Listing'} back={true} isLogin={true} />
                 }}
             />
             <Stack.Screen name="applyonline" component={ApplyOnline}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'Apply Online'} back={false} />
+                    header: () => <CustomAppBar title={'Apply Online'} back={false} isLogin={true} />
                 }}
             />
             <Stack.Screen name="contactus" component={ContactUs}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'Contact Us'} back={false} />
+                    header: () => <CustomAppBar title={'Contact Us'} back={false} isLogin={true} />
                 }}
             />
             <Stack.Screen name="jobapply" component={JobApply}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'Job Apply'} back={true} />
+                    header: () => <CustomAppBar title={'Job Apply'} back={true} isLogin={true} />
                 }}
             />
             <Stack.Screen name="Alevel" component={ALevel}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'A-Level Results'} back={true} />
+                    header: () => <CustomAppBar title={'A-Level Results'} back={true} isLogin={true} />
                 }}
             />
             <Stack.Screen name="gcse" component={GCSEResult}
                 options={{
                     headerShown: true,
-                    header: () => <CustomAppBar title={'GCSE Results'} back={true} />
+                    header: () => <CustomAppBar title={'GCSE Results'} back={true} isLogin={true} />
                 }}
             />
+            <Stack.Screen name='login' component={LoginScreen} />
+            <Stack.Screen name='forgetPassword' component={ResetPassword} />
+            <Stack.Screen name='confirmPassword' component={ConfirmResetPassword} />
         </Stack.Navigator>
     );
 }
@@ -165,7 +170,7 @@ const DrawerList = [
     { label: 'Careers', navigateTo: 'career', icon: 'right', mainRoute: 'homestack' },
     { label: 'Apply online', navigateTo: 'applyonline', icon: 'right', mainRoute: 'homestack' },
     { label: 'Contact Us', navigateTo: 'contactus', icon: 'right', mainRoute: 'homestack' },
-    { label: 'Login', navigateTo: 'login', icon: 'right', mainRoute: 'auth' },
+    { label: 'Login', navigateTo: 'login', icon: 'right', mainRoute: 'homestack' },
 ];
 
 
@@ -243,7 +248,6 @@ const HomeDrawar = () => {
             }}
 
         >
-            <Drawer.Screen name="auth" component={AuthSTack} />
             <Drawer.Screen name="homestack" component={HomeStack} />
 
         </Drawer.Navigator>
