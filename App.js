@@ -6,7 +6,6 @@ import { Alert, PermissionsAndroid, Platform, SafeAreaView, StatusBar } from "re
 import { useSelector } from "react-redux";
 import IntroSlider from "./src/components/widget/IntroSlider";
 import MyDrawer from "./src/navigation/Drawer";
-import HomeDrawar from "./src/navigation/HomeDrawer";
 import SpashScreen from "./src/screens/SplashScreen";
 import { Color } from "./src/utils/color";
 const Stack = createNativeStackNavigator();
@@ -82,7 +81,7 @@ const App = () => {
   useEffect(() => {
     // AsyncStorage.removeItem('fcmToken')
     requestPostNotificationsPermission();
-  }, [globaldata?.currentUser]);
+  }, []);
 
 
 
@@ -99,7 +98,8 @@ const App = () => {
           : <>
             {isIntro ?
               <>
-                {!!userData.email ? <MyDrawer /> : <HomeDrawar />}
+                {/* {!!userData.email ? <MyDrawer /> : <HomeDrawar />} */}
+                <MyDrawer />
               </>
               : <IntroSlider setIsIntro={setIsIntro} />}
           </>}

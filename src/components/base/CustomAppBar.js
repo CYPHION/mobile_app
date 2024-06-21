@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import MenuIcon from 'react-native-vector-icons/Entypo';
+import { useSelector } from 'react-redux';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import CustomButton from './CustomButton';
@@ -10,6 +11,7 @@ import CustomButton from './CustomButton';
 const CustomAppBar = ({ back = true, title, color, customNavigation, isLogin }) => {
     const [active, setActive] = useState(false)
     const navigation = useNavigation();
+    const user = useSelector(state => state?.user?.data)
     // Function to handle navigation go back
     const handleGoBack = () => {
         navigation.goBack();// Navigate back to previous screen
@@ -28,7 +30,7 @@ const CustomAppBar = ({ back = true, title, color, customNavigation, isLogin }) 
             {/* Menu button to open drawer */}
             <View style={{ flexDirection: 'row' }}>
 
-                {isLogin && <CustomButton
+                {(isLogin && !(!!user?.email)) && < CustomButton
                     title="Login"
                     variant="fill"
                     btnstyle={{

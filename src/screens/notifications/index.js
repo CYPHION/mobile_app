@@ -1,6 +1,7 @@
+import messaging from '@react-native-firebase/messaging';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
-import { RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import { Alert, Linking, PermissionsAndroid, Platform, RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import RenderHtml from 'react-native-render-html';
 import BellIcon from "react-native-vector-icons/Ionicons";
@@ -51,8 +52,55 @@ const Notifications = () => {
             });
     }, [])
     // Effect to fetch notification data when the component mounts
+
+
+    // function to request for notification permission
+    const requestPostNotificationsPermission = async () => {
+        if (Platform.OS === 'ios') {
+            const authStatus = await messaging().hasPermission();
+            const enabled =
+                authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+                authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+            if (enabled) {
+                console.log('Authorization status:', authStatus);
+            } else {
+                Alert.alert(
+                    "Notifications Permission",
+                    "Please enable notifications in the app settings.",
+                    [
+                        { text: "Cancel", style: "cancel" },
+                        { text: "Open Settings", onPress: () => Linking.openSettings() }
+                    ]
+                );
+            }
+        } else {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+            );
+
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log("Post notifications permission allowed");
+            } else if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+                Alert.alert(
+                    "Notifications Permission",
+                    "You have permanently denied notification permission. Please enable it in the app settings.",
+                    [
+                        { text: "Cancel", style: "cancel" },
+                        { text: "Open Settings", onPress: () => Linking.openSettings() }
+                    ]
+                );
+            } else {
+                console.log("Post notifications permission denied");
+            }
+        }
+    };
+
+
+
     useEffect(() => {
         getNotification()
+        requestPostNotificationsPermission()
     }, [])
 
     return (

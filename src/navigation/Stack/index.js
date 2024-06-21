@@ -92,7 +92,7 @@ export function MyStack() {
             }} />
             <Stack.Screen name="leaveApplication" component={LeaveApplication} options={{
                 headerShown: true,
-                header: () => <CustomAppBar title={'Leave Application'} />
+                header: () => <CustomAppBar title={'Report an Absence'} />
 
             }} />
             <Stack.Screen name="compensation" component={Compensation} />

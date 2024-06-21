@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigationState } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
 import { FlatList, Image, RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -48,7 +49,7 @@ const Home = ({ navigation }) => {
         { title: 'View Attendance', icon: <ViewAttendance width={30} height={30} />, screen: 'studentAttendance', path: 'children' },
         { title: 'Pay Fee', icon: <PayFee width={30} height={30} />, screen: 'fee', path: 'root' },
         { title: 'Book Compensation', icon: <BookCompensation width={30} height={30} />, screen: 'compensation', path: 'root' },
-        { title: 'Report a Leave', icon: <ReportLeave width={30} height={30} />, screen: 'leaveApplication', path: 'root' },
+        { title: 'Report an Absence', icon: <ReportLeave width={30} height={30} />, screen: 'leaveApplication', path: 'root' },
         { title: 'Notifications', icon: <Notifications width={30} height={30} />, screen: 'notifications', path: 'root' },
         { title: 'Testimonials', icon: <Testimonials width={30} height={30} />, screen: 'testimonials', path: 'root' },
         { title: 'Logout', icon: <Logout width={30} height={30} />, screen: '', path: 'logout' },
@@ -108,20 +109,26 @@ const Home = ({ navigation }) => {
             })
     }, [])
 
+    const routeNames = useNavigationState(state => state.routeNames);
+    const index = useNavigationState(state => state.index);
+
+    const currentScreen = routeNames[index];
+
+
     const renderItem = ({ item }) => {
 
         // const navigation = useNavigation()
         const src = item?.picture ? { uri: getImage(item?.picture) } : require("../../images/profileAvatar.png");
 
         return (
-            <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('children', { screen: 'viewStudent', params: { id: item.id } })}>
+            <TouchableOpacity style={{ backgroundColor: ' yellow' }} activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'children', params: { screen: 'viewStudent', params: { id: item.id } } })}>
                 <View style={styles.item} >
                     <View style={[styles.stBadgeContainer]}>
                         <Image resizeMode='contain' source={src} style={styles.image} />
                         <View style={[styles.stBadge, { backgroundColor: bgColor[item?.status] }]}></View>
                     </View>
-                    <Text style={[styles.nameText, { fontFamily: FontFamily.interSemiBold }]} >{item.fullName}</Text>
-                    <Text style={[styles.nameText, { fontFamily: FontFamily.interRegular, fontSize: FontSizes.sm, color: Color.SecondaryText }]} >{item.StudentYear.name} - {item.feeChargedBy}</Text>
+                    <Text numberOfLines={2} style={[styles.nameText, { fontFamily: FontFamily.interSemiBold }]} >{item.fullName}</Text>
+                    <Text style={[styles.nameText, { fontFamily: FontFamily.interRegular, fontSize: FontSizes.sm, color: Color.primary }]} >{item.StudentYear.name} - {item.feeChargedBy}</Text>
                 </View >
             </TouchableOpacity >
         )
@@ -235,7 +242,7 @@ const Home = ({ navigation }) => {
                             <Text style={[styles.CompText]}>Enrolled Children ({globaldata?.students ? globaldata?.students?.length : 0})</Text>
                         </View>
                         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'children' })}>
-                            <Text style={[styles.CompText, { color: Color.SecondaryText }]}>see all</Text>
+                            <Text style={[styles.CompText, { color: Color.primary }]}>see all</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{ padding: 3 }}>
@@ -303,9 +310,9 @@ const styles = StyleSheet.create({
     item: {
         marginHorizontal: 12,
         textAlign: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-
+        width: screenDimensions.width * 0.45,
     },
     nameText: {
         fontSize: FontSizes.md,

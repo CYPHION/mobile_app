@@ -3,7 +3,6 @@ import { default as React, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import AccordionItem from '../../components/base/Accordion';
-import MyCheckBox from '../../components/base/CheckBox';
 import CustomButton from '../../components/base/CustomButton';
 import DropdownComponent from '../../components/base/CustomDropDown';
 import GridTable from '../../components/base/GridTable';
@@ -40,7 +39,7 @@ const initialData = {
 // Data for payment options
 const data = [
     { name: "Pay By Family", value: "Parent" },
-    { name: "Pay By Student", value: "Student" },
+    // { name: "Pay By Student", value: "Student" },
     { name: " Pay Dues", value: "Dues" },
     { name: "Pay Book Dues", value: "bookDues" },
 
@@ -306,15 +305,15 @@ const FeeCollection = () => {
         const regularArr = [
             { id: 1, "name": "Start Date", "value": `${child?.dueFeeDate ? formattedDate(new Date(child?.dueFeeDate).setDate(new Date(child?.dueFeeDate).getDate() + 1), 'dd-MMMM-yyyy') : formattedDate(child?.startDate, 'dd-MMMM-yyyy')}` },
             { id: 2, "name": "End Date:	", "value": `${obj.endDate}` },
-            { id: 3, "name": "Subjects", "value": subjectsData(child?.id) },
-            { id: 4, "name": "Frozen Weeks", "value": `0` },
+            // { id: 3, "name": "Subjects", "value": subjectsData(child?.id) },
+            // { id: 4, "name": "Frozen Weeks", "value": `0` },
             {
                 id: 5, "name": `${child.feeChargedBy === "Monthly" ? 'Total Months' : 'Total Week'}`
                 , "value": `${child.feeChargedBy === "Monthly" ? formData?.noOfMonths : formData?.noOfWeeks}`
             },
-            { id: 6, "name": "Total Lectures", "value": `${obj?.totalLectures}` },
-            { id: 7, "name": "Total Hours", "value": `${obj.totalHours}` },
-            { id: 8, "name": "Price per Hour", "value": `£${child?.isChildcareStd ? child?.StudentYear?.ratePerChildcareHour : child?.StudentYear?.ratePerHour}` },
+            // { id: 6, "name": "Total Lectures", "value": `${obj?.totalLectures}` },
+            // { id: 7, "name": "Total Hours", "value": `${obj.totalHours}` },
+            // { id: 8, "name": "Price per Hour", "value": `£${child?.isChildcareStd ? child?.StudentYear?.ratePerChildcareHour : child?.StudentYear?.ratePerHour}` },
             { id: 10, "name": "Book dues", "value": `£${Number(child?.bookDues)}` },
             { id: 11, "name": "Class Charges", "value": `£${isMonthly ? Number(child.monthlyFee) : Number(obj.classCharges)}` },
             ...(isBooster ? newBoosterarr : []),
@@ -762,8 +761,10 @@ const FeeCollection = () => {
                                     <AccordionItem
                                         children={<GridTable key={child.id} data={getStudentRowData(child)} ids={[13, 14, 15]} />}
                                         key={child.id}
-                                        date={`${child.feeChargedBy === "Monthly" ? "(Monthly)" : "(Weekly)"} ${isBooster ? "Booster Student" : ""}`}
-                                        studentName={child.status}
+                                        // date={`${child.feeChargedBy === "Monthly" ? "(Monthly)" : "(Weekly)"} ${isBooster ? "Booster Student" : ""}`}
+                                        date={``}
+                                        // studentName={child.status}
+                                        studentName={''}
                                         total={`${child?.fullName} `}
                                         expanded={activeItem === index}
                                         onToggle={() => toggleItem(index)} // Pass toggle function to each item
@@ -772,7 +773,17 @@ const FeeCollection = () => {
                             )
                         })
                     }
-
+                    <View style={[GlobalStyles.headerStyles]}>
+                        <Text style={GlobalStyles.headerTextStyle}>Charges</Text>
+                        <Text style={GlobalStyles.headerTextStyle}>Amount</Text>
+                    </View>
+                    <View style={GlobalStyles.p_10}>
+                        <GridTable data={getTotalRowData()} />
+                    </View>
+                    <View style={[GlobalStyles.headerStyles]}>
+                        <Text style={GlobalStyles.headerTextStyle}>Total Amount (Charges + Dues)</Text>
+                        <Text style={GlobalStyles.headerTextStyle}>&pound;{`${(option === "Parent" || option === "Student") ? `${Math.abs(extra)} ${extra > 0 ? 'Extra' : ''}` : option === "Dues" ? extrasDues : extrasDues}`}</Text>
+                    </View>
                     {
                         option === "Student" && <View style={[GlobalStyles.headerStyles]}>
                             <Text style={GlobalStyles.headerTextStyle}>Student Fees</Text>
@@ -818,7 +829,7 @@ const FeeCollection = () => {
                             onChangeText={(text) => onChangeHandler('duesAmount', text)}
                         />}
 
-                        <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                        {/* <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}><MyCheckBox isChecked={formData?.showOnReceipt} onToggle={() => onChangeHandler('showOnReceipt', !formData?.showOnReceipt)} />
                                 <Text style={{ color: Color.text }}>Remarks Show on Receipt?</Text>
                             </View>
@@ -835,19 +846,9 @@ const FeeCollection = () => {
                             inputMode={"text"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
                             value={formData.remarks}
                             onChangeText={(text) => onChangeHandler('remarks', text)}
-                        />
+                        /> */}
                     </View>
-                    <View style={[GlobalStyles.headerStyles]}>
-                        <Text style={GlobalStyles.headerTextStyle}>Charges</Text>
-                        <Text style={GlobalStyles.headerTextStyle}>Amount</Text>
-                    </View>
-                    <View style={GlobalStyles.p_10}>
-                        <GridTable data={getTotalRowData()} />
-                    </View>
-                    <View style={[GlobalStyles.headerStyles]}>
-                        <Text style={GlobalStyles.headerTextStyle}>Total Amount (Charges + Dues)</Text>
-                        <Text style={GlobalStyles.headerTextStyle}>&pound;{`${(option === "Parent" || option === "Student") ? `${Math.abs(extra)} ${extra > 0 ? 'Extra' : ''}` : option === "Dues" ? extrasDues : extrasDues}`}</Text>
-                    </View>
+
                     <View style={[styles.btnView]}>
                         <CustomButton
                             title={'Pay Now'}
