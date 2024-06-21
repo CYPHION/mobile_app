@@ -96,7 +96,7 @@ const CreateAppliction = (props) => {
                         </View>
                     </TouchableOpacity>
                 </View>
-                <View>
+                {selectData?.length > 0 && <View>
                     <InputField
                         multiline
                         onChangeText={(text) => onChangeHandler('remarks', text)}
@@ -104,7 +104,7 @@ const CreateAppliction = (props) => {
                         label={"Reason"}
                         required
                     />
-                </View>
+                </View>}
                 <View>
                     <CustomButton
                         title='Select Lesson'

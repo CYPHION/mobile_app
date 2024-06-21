@@ -30,6 +30,11 @@ const LoginScreen = (prop) => {
 
     const saveDataToredux = (data) => { // Function to dispatch action to save login data to Redux store
         dispatch(handleLogin(data))
+        setFormData({
+            email: '',
+            password: ''
+        })
+        navigation.navigate('tabs', { screen: "home" })
     }
 
     const onChangeHandler = (name, text) => { // Handler function to update form data when input changes

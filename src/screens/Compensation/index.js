@@ -8,7 +8,7 @@ import ViewCompensation from '../../components/widget/ViewCompensation'
 import { API } from '../../network/API'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { screenDimensions } from '../../utils/functions'
+import { customToast, screenDimensions } from '../../utils/functions'
 
 const Compensation = () => {
     const [active, setActive] = useState(true)

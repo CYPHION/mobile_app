@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 import { DrawerContentScrollView, createDrawerNavigator } from '@react-navigation/drawer';
 import { CommonActions, DrawerActions, useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
@@ -15,6 +16,7 @@ import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { getImage, screenDimensions } from '../../utils/functions';
+import { HomeStack } from '../HomeDrawer';
 import { MyStack } from '../Stack';
 import TabNavigation from '../Tab';
 
@@ -26,12 +28,49 @@ const DrawerList = [
     { label: 'My Profile', navigateTo: 'profiles', icon: 'right', mainRoute: 'tabs' },
     { label: 'View Children', navigateTo: 'children', icon: 'right', mainRoute: 'root' },
     { label: 'View Appointment', navigateTo: 'viewAppointment', icon: 'right', mainRoute: 'root' },
-    { label: 'Leave Application', navigateTo: 'leaveApplication', icon: 'right', mainRoute: 'root' },
+    { label: 'Report an Absence', navigateTo: 'leaveApplication', icon: 'right', mainRoute: 'root' },
     { label: 'Pay Fee', navigateTo: 'fee', icon: 'right', mainRoute: 'tabs' },
     { label: 'Compensation', navigateTo: 'compensation', icon: 'right', mainRoute: 'root' },
     { label: 'Testimonials', navigateTo: 'testimonials', icon: 'right', mainRoute: 'root' },
+    { label: 'About us', navigateTo: 'aboutus', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Lesson Timings', navigateTo: 'lessonTiming', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Fee Plan', navigateTo: 'fees', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Summer Pakages', navigateTo: 'summerpakage', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Our Services', navigateTo: 'ourservices', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Bright Student', navigateTo: 'brightstudent', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Terms and conditions', navigateTo: 'termsandcondition', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Awarding Bodies', navigateTo: 'awardingbodies', icon: 'right', mainRoute: 'homestack' },
+    { label: 'A-Level Results', navigateTo: 'Alevel', icon: 'right', mainRoute: 'homestack' },
+    { label: 'GCSE Results', navigateTo: 'gcse', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Childcare', navigateTo: 'childcare', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Reviews', navigateTo: 'reviews', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Careers', navigateTo: 'career', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Apply online', navigateTo: 'applyonline', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Contact Us', navigateTo: 'contactus', icon: 'right', mainRoute: 'homestack' },
     { label: 'Logout', navigateTo: '', icon: 'right' },
 ];
+
+// List of items in the drawer menu
+const DrawerList2 = [
+    { label: 'About us', navigateTo: 'aboutus', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Lesson Timings', navigateTo: 'lessonTiming', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Fees', navigateTo: 'fees', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Summer Pakages', navigateTo: 'summerpakage', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Our Services', navigateTo: 'ourservices', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Bright Student', navigateTo: 'brightstudent', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Terms and conditions', navigateTo: 'termsandcondition', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Awarding Bodies', navigateTo: 'awardingbodies', icon: 'right', mainRoute: 'homestack' },
+    { label: 'A-Level Results', navigateTo: 'Alevel', icon: 'right', mainRoute: 'homestack' },
+    { label: 'GCSE Results', navigateTo: 'gcse', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Childcare', navigateTo: 'childcare', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Reviews', navigateTo: 'reviews', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Careers', navigateTo: 'career', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Apply online', navigateTo: 'applyonline', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Contact Us', navigateTo: 'contactus', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Login', navigateTo: 'login', icon: 'right', mainRoute: 'homestack' },
+];
+
+
 // Individual item in the drawer menu
 const DrawerLayout = ({ icon, label, navigateTo, setOpen, mainRoute }) => {
     const navigation = useNavigation();
@@ -97,13 +136,13 @@ function CustomDrawerContent(props) {
                         <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
                             {/* <Image resizeMode='contain' source={src} style={styles.image} /> */}
                             <View style={{ flexDirection: 'column' }}>
-                                <Text style={styles.title}>{user?.firstName} {user?.lastName}</Text>
+                                <Text style={styles.title}>{user?.email ? `${user?.firstName} ${user?.lastName}` : 'Prime Tuition'}</Text>
                             </View>
                         </View>
                     </View>
                 </TouchableOpacity>
                 <View style={styles.drawerSection}>
-                    {DrawerList.map((el, i) => {
+                    {!!user?.email ? DrawerList.map((el, i) => {
                         return (
                             <DrawerLayout
                                 key={i}
@@ -115,7 +154,20 @@ function CustomDrawerContent(props) {
                                 {...props}
                             />
                         );
-                    })}
+                    }) :
+                        DrawerList2.map((el, i) => {
+                            return (
+                                <DrawerLayout
+                                    key={i}
+                                    label={el.label}
+                                    navigateTo={el.navigateTo}
+                                    icon={el.icon}
+                                    setOpen={setOpen}
+                                    mainRoute={el.mainRoute}
+                                    {...props}
+                                />
+                            );
+                        })}
                 </View>
             </View>
 
@@ -173,7 +225,7 @@ function MyDrawer({ old }) {
     // Execute effect when the component mounts or 'old' dependency changes
     useEffect(() => {
         // Dispatch a navigation action to reset the navigation state
-        navigation.dispatch(
+        user?.email && navigation.dispatch(
             // Set the index to 0 and navigate to the specified route
             CommonActions.reset({
                 index: 0,
@@ -187,7 +239,7 @@ function MyDrawer({ old }) {
             const token = await messaging().getToken();
             console.log(token)
             const FCMtoken = await AsyncStorage.getItem('fcmToken');
-            const mbleToken = globaldata?.currentUser?.fcmToken
+            const mbleToken = global?.currentUser?.fcmToken
             if (FCMtoken) {
                 console.log('Token already saved to database ..')
             } else {
@@ -198,14 +250,15 @@ function MyDrawer({ old }) {
                     getTokens = [token ? token : '']
                 }
                 const uptObj = {
-                    ...globaldata?.currentUser,
+                    ...global?.currentUser,
                     fcmToken: getTokens
                 }
-                API.updateUser(uptObj)
+
+                user?.email && API.updateUser(uptObj)
                     .then(async (res) => {
                         await AsyncStorage.setItem('fcmToken', token);
-                        dispatch(globalData(userData?.id))
-                    }).catch(err => console.log(err))
+                        dispatch(globalData(user?.id))
+                    }).catch(err => console.log("err>>>>", err))
             }
 
         } catch (error) {
@@ -239,8 +292,12 @@ function MyDrawer({ old }) {
             }}
 
         >
-            <Drawer.Screen name="tabs" component={TabNavigation} />
-            <Drawer.Screen name="root" component={MyStack} />
+
+            {user?.email && <>
+                <Drawer.Screen name="tabs" component={TabNavigation} />
+                <Drawer.Screen name="root" component={MyStack} />
+            </>}
+            <Drawer.Screen name="homestack" component={HomeStack} />
 
         </Drawer.Navigator>
 
