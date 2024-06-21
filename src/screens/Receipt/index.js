@@ -21,6 +21,7 @@ const Receipt = () => {
     const [activeItem, setActiveItem] = useState(null);
     const [option, setOption] = useState('');
     const [data, setData] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
     const [refreshing, setRefreshing] = useState(false)
     const dispatch = useDispatch()
     const globaldata = useSelector(state => state?.global?.data)
