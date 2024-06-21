@@ -16,9 +16,9 @@ import ReceiptSkelton from './ReceiptSkeleton';
 
 
 const Receipt = () => {
-    const [years, setYears] = useState([]);
+    const [months, setMonths] = useState([]);
     const [activeItem, setActiveItem] = useState(null);
-    const [option, setOption] = useState(new Date().getFullYear());
+    const [option, setOption] = useState('');
     const [data, setData] = useState([])
     const [refreshing, setRefreshing] = useState(false)
     const dispatch = useDispatch()
@@ -40,17 +40,30 @@ const Receipt = () => {
 
     const handleDownload = (fileName) => {
         const url = getImage(fileName); // Replace with your download URL
-        Linking.openURL(url).catch((err) => customToast('error', 'Something went wrong!'));
+        Linking.openURL(url).catch(() => customToast('error', 'Something went wrong!'));
 
     };
 
     const fetchData = () => {
-        const filteredData = globaldata?.fees?.filter((item) => {
-            const itemYear = new Date(item.createdAt).getFullYear(); // Replace 'invoiceDate' with your actual date property
-            return itemYear === parseInt(option);
+        const currentMonth = parseInt(option); // Current month from state (assuming option is a string representing the month)
+
+        // Filter data based on 'createdAt' field matching current month
+        const filteredData = globaldata?.fees.filter(item => {
+            const createdAtDate = new Date(item.createdAt); // Assuming item.createdAt is a valid date string
+            const createdAtMonth = createdAtDate.getMonth() + 1; // Month of createdAt (1-12)
+
+            return createdAtMonth === currentMonth;
         });
+
         setData(filteredData);
     }
+    // const fetchData = () => {
+    //     const filteredData = globaldata?.fees?.filter((item) => {
+    //         const itemYear = new Date(item.createdAt).getFullYear(); // Replace 'invoiceDate' with your actual date property
+    //         return itemYear === parseInt(option);
+    //     });
+    //     setData(filteredData);
+    // }
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -67,17 +80,45 @@ const Receipt = () => {
 
 
     useEffect(() => {
-        const currentYear = new Date().getFullYear();
-        const yearArray = Array.from({ length: 7 }, (_, index) => ({
-            name: (currentYear - index).toString(),
-            value: (currentYear - index).toString(),
-        }));
-        setYears(yearArray);
+        const currentDate = new Date();
+        const monthArray = Array.from({ length: 12 }, (_, index) => {
+            const date = new Date(currentDate);
+            date.setMonth(currentDate.getMonth() - index);
+            return {
+                name: date.toLocaleString('default', { month: 'long' }),
+                value: (date.getMonth() + 1).toString().padStart(2, '0') // Month value as 'MM'
+            };
+        });
+
+        // Sort monthArray by value (ascending order)
+        monthArray.sort((a, b) => {
+            return a.value.localeCompare(b.value);
+        });
+
+        setMonths(monthArray);
     }, []);
+    // useEffect(() => {
+    //     const currentYear = new Date().getFullYear();
+    //     const yearArray = Array.from({ length: 7 }, (_, index) => ({
+    //         name: (currentYear - index).toString(),
+    //         value: (currentYear - index).toString(),
+    //     }));
+    //     console.log({ yearArray })
+    //     setYears(yearArray);
+    // }, []);
 
     useEffect(() => {
         fetchData()
     }, [option, globaldata?.fees]);
+
+    useEffect(() => {
+        const currentDate = new Date();
+        const monthValue = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Current month as 'MM'
+
+        const initialOption = months.find(month => month.value === monthValue)?.value || '01'; // Default to '01' if not found
+        setOption(initialOption);
+    }, [months]);
+
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>
@@ -99,14 +140,14 @@ const Receipt = () => {
                     {globaldata?.fees.length > 0 ? <>
                         <View style={styles.feesReceiptContainer}>
                             <View>
-                                <Text style={styles.fessYears}>Select Year</Text>
+                                <Text style={styles.fessYears}>Select Month</Text>
                             </View>
                             <View>
                                 <DropdownComponent
-                                    dropdownStyle={{ width: screenDimensions.width * 0.25 }}
+                                    dropdownStyle={{ width: screenDimensions.width * 0.30 }}
                                     disable={false}
-                                    data={years}
-                                    placeHolderText={(new Date()).getFullYear()}
+                                    data={months}
+                                    placeHolderText={option}
                                     value={option}
                                     setValue={setOption}
                                 />
