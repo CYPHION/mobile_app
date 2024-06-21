@@ -29,36 +29,25 @@ const Profile = ({ navigation }) => {
     const globaldata = useSelector(state => state?.global?.data)
     const src = user?.dp ? { uri: getImage(user?.dp) } : require("../../images/profile.png");
 
-
     const logoutHandler = async () => {
-        const token = await AsyncStorage.getItem('fcmToken')
-        const fcmToken = globaldata?.currentUser?.fcmToken
-        const sendTokens = fcmToken?.filter(item => item !== token)
+        const token = await AsyncStorage.getItem('fcmToken') // Retrieve FCM token from AsyncStorage
+        const fcmToken = globaldata?.currentUser?.fcmToken // Access FCM token from global data
+        const sendTokens = fcmToken?.filter(item => item !== token) // Filter out the current FCM token from the list of tokens
 
-        const uptObj = {
+        const uptObj = { // Define update object with modified FCM tokens
             ...globaldata?.currentUser,
             fcmToken: sendTokens
         }
+        // Call API to update user data (e.g., remove FCM token)
         API.updateUser(uptObj)
             .then(async (res) => {
                 await AsyncStorage.removeItem('fcmToken');
                 dipatch(handleLogout())
                 dipatch(handleResetData())
             }).catch(err => console.log(err))
-        setOpen(!open)
+        setOpen(!open)  // Toggle the open state of the modal or dropdown
     }
 
-    const handleUpdate = (type) => {
-        console.log(type)
-    }
-
-    const onChangeHandler = (name, text) => {
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            [name]: text
-        }));
-
-    };
 
 
     return (
@@ -66,130 +55,131 @@ const Profile = ({ navigation }) => {
             <SafeAreaView style={{ flex: 1 }}>
 
                 {
-                    (!!globaldata?.students && !!user?.email) ? <ScrollView>
+                    (!!globaldata?.students && !!user?.email) ?
+                        <ScrollView>
 
-                        <View style={{ backgroundColor: Color.white, overflow: 'scroll' }}>
-                            <View style={[styles.mainContainer]}>
-                                {/* <Image resizeMode='contain' source={src} style={[styles.profileImage]} /> */}
-                                <View>
-                                    <Text style={[styles.text, { color: Color.text, fontSize: FontSizes.xl }]}>{user?.firstName} {user?.lastName}</Text>
-                                    <Text style={[styles.text, { color: Color.textThree, fontSize: FontSizes.md }]}>{user?.email}</Text>
-                                </View>
-                            </View>
-                            <View >
-
-
-                                <View style={[styles.row]}>
-                                    <View style={[styles.sideView]}>
-                                        <View style={styles.bgIconColor}>
-                                            <FontAwsomeIcon name="user-alt" size={FontSizes.xl} color={Color.text} />
-                                        </View>
-                                    </View>
-                                    <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
-                                        <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>User Name</Text>
-
-                                        <Text style={[styles.textTwo, { color: Color.textThree, padding: 10 }]}>
-                                            {user.firstName}
-                                        </Text>
+                            <View style={{ backgroundColor: Color.white, overflow: 'scroll' }}>
+                                <View style={[styles.mainContainer]}>
+                                    {/* <Image resizeMode='contain' source={src} style={[styles.profileImage]} /> */}
+                                    <View>
+                                        <Text style={[styles.text, { color: Color.text, fontSize: FontSizes.xl }]}>{user?.firstName} {user?.lastName}</Text>
+                                        <Text style={[styles.text, { color: Color.primary, fontSize: FontSizes.md }]}>{user?.email}</Text>
                                     </View>
                                 </View>
+                                <View >
 
 
-                                <View style={[styles.row]}>
-                                    <View style={[styles.sideView]}>
-                                        <View style={styles.bgIconColor}>
-                                            <MailIcon name="mail" size={FontSizes.xl} color={Color.text} />
+                                    <View style={[styles.row]}>
+                                        <View style={[styles.sideView]}>
+                                            <View style={styles.bgIconColor}>
+                                                <FontAwsomeIcon name="user-alt" size={FontSizes.xl} color={Color.text} />
+                                            </View>
                                         </View>
-                                    </View>
-                                    <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
-                                        <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>Email</Text>
+                                        <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
+                                            <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>User Name</Text>
 
-                                        <Text style={[styles.textTwo, { color: Color.textThree, padding: 10 }]}>
-                                            {user?.email}
-                                        </Text>
-                                    </View>
-                                </View>
-
-
-
-                                <View style={[styles.row]}>
-                                    <View style={[styles.sideView]}>
-                                        <View style={styles.bgIconColor}>
-                                            <FontAwsomeIcon name="lock" size={FontSizes.xl} color={Color.text} />
-                                        </View>
-                                    </View>
-                                    <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
-                                        <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>Password</Text>
-                                        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('profiles', { screen: 'changePassword' })}>
-                                            <Text style={[styles.textTwo, { color: Color.textThree, padding: 10 }]}>
-                                                Tap to change password
+                                            <Text style={[styles.textTwo, { color: Color.primary, padding: 10 }]}>
+                                                {user.firstName}
                                             </Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-
-                                <View style={[styles.row]}>
-                                    <View style={[styles.sideView]}>
-                                        <View style={styles.bgIconColor}>
-                                            <FontAwsomeIcon name="mobile-alt" size={FontSizes.xl} color={Color.text} />
                                         </View>
                                     </View>
-                                    <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
-                                        <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>Phone Number</Text>
-                                        <Text style={[styles.textTwo, { color: Color.textThree, padding: 10 }]}>
-                                            {user?.phoneNo}
-                                        </Text>
-                                    </View>
-                                </View>
 
-                            </View>
-                            <View style={{ alignItems: 'center', marginTop: 10 }}>
-                                <CustomButton
-                                    onPress={() => setOpen(true)}
-                                    title="Logout"
-                                    variant='fill'
-                                    btnstyle={{ width: screenDimensions.width * 0.85 }}
-                                />
-                            </View>
-                        </View>
-                        <MyModal
-                            modalVisible={open}
-                            setModalVisible={setOpen}
-                            children={
-                                <View style={{ gap: 10 }}>
-                                    <Text
-                                        style={[
-                                            styles.text,
-                                            {
-                                                fontSize: FontSizes.lg,
-                                                color: Color.text,
-                                                fontFamily: FontFamily.medium,
-                                            },
-                                        ]}
-                                    >
-                                        Log Out?
-                                    </Text>
-                                    <Text style={[styles.text]}>Are you sure you want to logout?</Text>
-                                    <View style={styles.btnView}>
-                                        <CustomButton
-                                            title={'Cancel'}
-                                            btnstyle={{ paddingVertical: 4, backgroundColor: "#DDD" }}
-                                            onPress={() => setOpen(false)}
-                                            textStyle={{ color: Color.text }}
-                                        />
-                                        <CustomButton
-                                            title={'Log Out'}
-                                            variant={'fill'}
-                                            btnstyle={{ paddingVertical: 4 }}
-                                            onPress={() => {
-                                                logoutHandler()
-                                            }}
-                                        />
+
+                                    <View style={[styles.row]}>
+                                        <View style={[styles.sideView]}>
+                                            <View style={styles.bgIconColor}>
+                                                <MailIcon name="mail" size={FontSizes.xl} color={Color.text} />
+                                            </View>
+                                        </View>
+                                        <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
+                                            <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>Email</Text>
+
+                                            <Text style={[styles.textTwo, { color: Color.primary, padding: 10 }]}>
+                                                {user?.email}
+                                            </Text>
+                                        </View>
                                     </View>
+
+
+
+                                    <View style={[styles.row]}>
+                                        <View style={[styles.sideView]}>
+                                            <View style={styles.bgIconColor}>
+                                                <FontAwsomeIcon name="lock" size={FontSizes.xl} color={Color.text} />
+                                            </View>
+                                        </View>
+                                        <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
+                                            <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>Password</Text>
+                                            <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('profiles', { screen: 'changePassword' })}>
+                                                <Text style={[styles.textTwo, { color: Color.primary, padding: 10 }]}>
+                                                    Tap to change password
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+
+                                    <View style={[styles.row]}>
+                                        <View style={[styles.sideView]}>
+                                            <View style={styles.bgIconColor}>
+                                                <FontAwsomeIcon name="mobile-alt" size={FontSizes.xl} color={Color.text} />
+                                            </View>
+                                        </View>
+                                        <View style={[styles.middelView, { paddingHorizontal: 10 }]}>
+                                            <Text style={[styles.textTwo, { paddingHorizontal: 10 }]}>Phone Number</Text>
+                                            <Text style={[styles.textTwo, { color: Color.primary, padding: 10 }]}>
+                                                {user?.mobileNo}
+                                            </Text>
+                                        </View>
+                                    </View>
+
                                 </View>
-                            }
-                        />
-                    </ScrollView> : <ProfileSkeleton />
+                                <View style={{ alignItems: 'center', marginTop: 10 }}>
+                                    <CustomButton
+                                        onPress={() => setOpen(true)}
+                                        title="Logout"
+                                        variant='fill'
+                                        btnstyle={{ width: screenDimensions.width * 0.85 }}
+                                    />
+                                </View>
+                            </View>
+                            <MyModal
+                                modalVisible={open}
+                                setModalVisible={setOpen}
+                                children={
+                                    <View style={{ gap: 10 }}>
+                                        <Text
+                                            style={[
+                                                styles.text,
+                                                {
+                                                    fontSize: FontSizes.lg,
+                                                    color: Color.text,
+                                                    fontFamily: FontFamily.medium,
+                                                },
+                                            ]}
+                                        >
+                                            Log Out?
+                                        </Text>
+                                        <Text style={[styles.text]}>Are you sure you want to logout?</Text>
+                                        <View style={styles.btnView}>
+                                            <CustomButton
+                                                title={'Cancel'}
+                                                btnstyle={{ paddingVertical: 4, backgroundColor: "#DDD" }}
+                                                onPress={() => setOpen(false)}
+                                                textStyle={{ color: Color.text }}
+                                            />
+                                            <CustomButton
+                                                title={'Log Out'}
+                                                variant={'fill'}
+                                                btnstyle={{ paddingVertical: 4 }}
+                                                onPress={() => {
+                                                    logoutHandler()
+                                                }}
+                                            />
+                                        </View>
+                                    </View>
+                                }
+                            />
+                        </ScrollView> : <ProfileSkeleton />
                 }
 
             </SafeAreaView>
@@ -203,7 +193,7 @@ export default Profile
 const styles = StyleSheet.create({
     mainContainer: {
         width: screenDimensions.width,
-        height: screenDimensions.height * 0.3,
+        paddingVertical: 60,
         gap: 15,
         alignItems: 'center',
         justifyContent: 'center'

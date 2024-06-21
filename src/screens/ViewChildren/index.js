@@ -17,33 +17,33 @@ import { GlobalStyles } from '../../utils/globalStyles';
 const items = [
     {
         label: 'View Student Details',
-        icon: <DetaiIcon name="insert-chart-outlined" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <DetaiIcon name="insert-chart-outlined" size={FontSizes.xl} color={Color.primary} />,
         path: 'studentDetail'
     },
     {
         label: 'View Shedule ',
-        icon: <CalendarIcon name="calendar-month" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <CalendarIcon name="calendar-month" size={FontSizes.xl} color={Color.primary} />,
         path: 'studentSchedule'
     },
     {
         label: 'View Attendace',
-        icon: <CardIcon name="idcard" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <CardIcon name="idcard" size={FontSizes.xl} color={Color.primary} />,
         path: 'studentAttendance'
     },
     {
         label: 'View Fees',
-        icon: <CreditCardIcon name="credit-card-multiple-outline" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <CreditCardIcon name="credit-card-multiple-outline" size={FontSizes.xl} color={Color.primary} />,
         path: 'fee',
         mainRoute: 'tabs'
     },
     {
         label: 'Homework',
-        icon: <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <BookIcon name="book" size={FontSizes.xl} color={Color.primary} />,
         path: 'studentHomework'
     },
     {
         label: 'Progress Report ',
-        icon: <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />,
+        icon: <BookIcon name="book" size={FontSizes.xl} color={Color.primary} />,
         path: 'studentReport'
     },
 ]
@@ -52,19 +52,19 @@ const ViewChildren = ({ navigation }) => {
 
     const router = useRoute()
     const globalData = useSelector(state => state?.global?.data)
-
+    // Extracting id from route params
     const { id } = router.params
-
+    // Finding student object based on id
     const studentObj = globalData?.students?.find(elem => elem.id === id)
-
+    // Setting selected attributes based on student object
     const selectedAttributes = studentObj ? studentObj
         : null;
-
+    // Extracting student name from student object
     const studentName = studentObj ? studentObj?.fullName : ''
 
 
 
-
+    // Effect to update navigation title when student name changes
     useEffect(() => {
         navigation.setParams({ title: studentName })
     }, [navigation, studentName]);

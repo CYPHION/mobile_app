@@ -42,7 +42,8 @@ const nestedArray = (item) => [
     },
     {
         name: 'Test Status',
-        value: `${item?.meanPercentage > 0 ? `${item?.meanPercentage}%` : ''}`
+        // value: `${item?.meanPercentage > 0 ? `${item?.meanPercentage}%` : ''}`
+        value: <Text style={{ color: item?.meanPercentage > 50 ? 'green' : 'red' }}>{item?.meanPercentage ? item?.meanPercentage : 0}%</Text>
     },
     {
         name: 'Date Enrolled',
@@ -51,7 +52,42 @@ const nestedArray = (item) => [
 
 ]
 
+const nestedArrayBasicDetail = (item) => [
+    {
+        name: 'Student Name',
+        value: item?.Student?.fullName
+    },
+    // {
+    //     name: 'Department',
+    //     value: item?.Department?.name
+    // },
+    {
+        name: 'Subject',
+        value: item?.Subject?.name
+    },
+    // {
+    //     name: 'Book',
+    //     value: item?.Book?.title
+    // },
+    // {
+    //     name: 'Test Start Date',
+    //     value: item?.startDate ? formattedDate(item?.startDate, 'dd-MM-yyyy') : ''
+    // },
+    // {
+    //     name: 'Test End Date',
+    //     value: item?.endDate ? formattedDate(item?.endDate, 'dd-MM-yyyy') : ''
+    // },
+    {
+        name: 'Test Status',
+        // value: `${item?.meanPercentage > 0 ? `${item?.meanPercentage}%` : ''}`
+        value: <Text style={{ color: item?.meanPercentage > 50 ? 'green' : 'red' }}>{item?.meanPercentage ? item?.meanPercentage : 0}%</Text>
+    },
+    {
+        name: 'Date Enrolled',
+        value: item?.Student?.enrollmentDate ? formattedDate(item?.Student?.enrollmentDate, 'dd-MM-yyyy') : 'N/A'
+    },
 
+]
 
 const ViewProgress = () => {
     const [refresh, setRefresh] = useState(false);
@@ -62,10 +98,10 @@ const ViewProgress = () => {
 
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
-    const filterReport = globaldata?.reports?.filter(elem => elem.studentId === router.params.student?.id)
+    const filterReport = globaldata?.reports?.filter(elem => elem?.studentId === router?.params?.student?.id)
     const dispatch = useDispatch()
 
-
+    // Function to filter progress reports by date and department option
     const filterByDate = (startDate, endDate) => {
         let filterDate;
         if (option === '' && startDate && endDate) {
@@ -90,21 +126,21 @@ const ViewProgress = () => {
 
 
 
-
+    // Function to handle download click
     const onDownloadClick = () => {
         //when user click on download button
         console.log('first')
     }
-
+    // Function to render item when no progress reports found
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>
-                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTThree} />
                 <Text style={styles.inactivetext}>No Progress Report found</Text>
             </View>
         </View>
     )
-
+    // Function to handle refresh action
     const handleRefresh = () => {
         setRefresh(true);
         dispatch(globalData(user?.id))
@@ -117,11 +153,10 @@ const ViewProgress = () => {
                 setRefresh(false);
             });
     };
-
+    // Effect to filter progress reports when global data reports change
     useEffect(() => {
         filterByDate()
     }, [globaldata?.reports])
-
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView
@@ -166,9 +201,14 @@ const ViewProgress = () => {
                             <View>
                                 {progress?.length > 0 ? <View>
 
-                                    {progress?.map((elem, index) => (
-                                        <GridTable onDownloadClick={onDownloadClick} header={`Test ${index + 1}`} key={index} data={nestedArray(elem)} />
-                                    ))}
+                                    {progress?.map((elem, index) => {
+                                        if (elem?.isDetailReport) {
+
+                                            return <GridTable onDownloadClick={onDownloadClick} downloadIcon={false} header={`Test ${index + 1} (Detailed Report)`} key={index} data={nestedArray(elem)} />
+                                        } else {
+                                            return <GridTable onDownloadClick={onDownloadClick} downloadIcon={false} header={`Test ${index + 1} (Basic Report)`} key={index} data={nestedArrayBasicDetail(elem)} />
+                                        }
+                                    })}
                                 </View> :
                                     <>
                                         {renderItem()}
@@ -231,7 +271,7 @@ const styles = StyleSheet.create({
     },
     inactivetext: {
         textAlign: 'center',
-        color: Color.textTwo,
+        color: Color.textTThree,
         fontSize: FontSizes.lg
     }
 })

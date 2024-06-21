@@ -1,11 +1,10 @@
 import { useRoute } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import CardIcon from "react-native-vector-icons/AntDesign"
 import FilterIcon from 'react-native-vector-icons/FontAwesome'
 import CapIcon from 'react-native-vector-icons/FontAwesome5'
 import { default as BookIcon } from 'react-native-vector-icons/FontAwesome6'
-import { default as GridIcon, default as Icon } from "react-native-vector-icons/Ionicons"
+import { default as GridIcon } from "react-native-vector-icons/Ionicons"
 import NoHomework from "react-native-vector-icons/MaterialCommunityIcons"
 import TimeIcon from 'react-native-vector-icons/MaterialIcons'
 import { useDispatch, useSelector } from 'react-redux'
@@ -33,7 +32,7 @@ const ViewAttendance = () => {
     const filterAttendance = globaldata?.attendances?.filter(elem => elem.studentId === router?.params?.student?.id)
     const dispatch = useDispatch()
 
-
+    // Function to filter attendance data by date range
     const filterByDate = (startDate, endDate) => {
         if (startDate && endDate) {
             const filteer = filterAttendance?.filter(item => {
@@ -45,24 +44,24 @@ const ViewAttendance = () => {
             setData(filterAttendance)
         }
     };
-
+    // Function to handle date change
     const handleDateChange = (date) => {
         filterByDate(date.startDate, date.endDate)
     }
 
-
+    // Function to generate list items for attendance details
     const list = (attendance) => [
-        { name: ' Department Name', value: attendance?.Department?.name, icon: <CardIcon color={Color.primary} name='idcard' size={FontSizes.lg} /> },
+        // { name: ' Department Name', value: attendance?.Department?.name, icon: <CardIcon color={Color.primary} name='idcard' size={FontSizes.lg} /> },
         { name: ' Subject', value: attendance?.Subject?.name, icon: <BookIcon color={Color.primary} name='book' size={FontSizes.lg} /> },
         { name: ' Type', value: `${attendance.attendanceType.charAt(0).toUpperCase()}${attendance.attendanceType.slice(1)}`, icon: <GridIcon color={Color.primary} name='grid' size={FontSizes.lg} /> },
         { name: ' Category', value: `${attendance.attendanceCategory.charAt(0).toUpperCase()}${attendance.attendanceCategory.slice(1)} Lesson`, icon: <CapIcon color={Color.primary} name='graduation-cap' size={FontSizes.lg} /> },
-        { name: ' Teacher Name', value: `${attendance.teacherId ? globaldata?.teachers.find(teacher => teacher.id === attendance.teacherId)?.name : 'N/A'}`, icon: <Icon color={Color.primary} name='home' size={FontSizes.lg} /> },
+        // { name: ' Teacher Name', value: `${attendance.teacherId ? globaldata?.teachers.find(teacher => teacher.id === attendance.teacherId)?.name : 'N/A'}`, icon: <Icon color={Color.primary} name='home' size={FontSizes.lg} /> },
         { name: ' Day', value: `${attendance.attendanceDate ? formattedDate(attendance?.attendanceDate, 'EEE dd, MMM-yyyy') : ''}`, icon: <BookIcon color={Color.primary} name='book' size={FontSizes.lg} /> },
         { name: ' Time', value: attendance?.Schedule?.LessonTiming?.time, icon: <TimeIcon color={Color.primary} name='timelapse' size={FontSizes.lg} /> },
-        { name: ' Marked At', value: `${attendance.attendanceDate ? formattedDate(attendance.createdAt, 'MMM dd ,yyyy hh:mm:ss a') : ''}`, icon: <CardIcon color={Color.primary} name='idcard' size={FontSizes.lg} /> },
+        // { name: ' Marked At', value: `${attendance.attendanceDate ? formattedDate(attendance.createdAt, 'MMM dd ,yyyy hh:mm:ss a') : ''}`, icon: <CardIcon color={Color.primary} name='idcard' size={FontSizes.lg} /> },
 
     ]
-
+    // Function to handle refreshing data
     const handleRefresh = () => {
         setRefresh(true);
         dispatch(globalData(user?.id))
@@ -75,11 +74,11 @@ const ViewAttendance = () => {
                 setRefresh(false);
             });
     };
-
+    // Function to render item when no attendance is found
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>
-                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTThree} />
                 <Text style={styles.inactivetext}>No Attendance found</Text>
             </View>
         </View>
@@ -184,7 +183,7 @@ const styles = StyleSheet.create({
     },
     inactivetext: {
         textAlign: 'center',
-        color: Color.textTwo,
+        color: Color.textTThree,
         fontSize: FontSizes.lg
     }
 })

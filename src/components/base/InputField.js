@@ -44,7 +44,7 @@ export default function InputField(props) {
                         { ...labelStyle },
                     ]}
                 >
-                    {`${label} ${required ? "(Rquired)" : ""}`}
+                    {`${label} ${required ? "(Required)" : ""}`}
                 </Text> : null}
                 <View style={styles.iconView}>
                     <TextInput

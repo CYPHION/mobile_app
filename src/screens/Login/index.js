@@ -28,28 +28,35 @@ const LoginScreen = (prop) => {
 
     const dispatch = useDispatch()
 
-    const saveDataToredux = (data) => {
+    const saveDataToredux = (data) => { // Function to dispatch action to save login data to Redux store
         dispatch(handleLogin(data))
+        setFormData({
+            email: '',
+            password: ''
+        })
+        navigation.navigate('tabs', { screen: "home" })
     }
 
-    const onChangeHandler = (name, text) => {
+    const onChangeHandler = (name, text) => { // Handler function to update form data when input changes
         setFormData(prevFormData => ({
             ...prevFormData,
             [name]: text
         }));
 
-        setError(removeError(name, error))
+        setError(removeError(name, error)) // Remove any previous error related to the input
 
     };
 
-    const handleSubmit = () => {
-        setIsLoading(true)
-        const { email, password } = formData
+    const handleSubmit = () => { // Handler function for form submission
+        setIsLoading(true) // Set loading state to true
+        const { email, password } = formData // Destructure email and password from form data
+
+        // Call the login API with email and password
 
         API.login(email.toLowerCase(), password)
-            .then((res) => saveDataToredux(res?.data))
-            .catch(err => console.log('errrr', err))
-            .finally(() => setIsLoading(false))
+            .then((res) => saveDataToredux(res?.data)) // Dispatch action to save login data on successful login
+            .catch(err => console.log('errrr', err)) // Log any errors during login
+            .finally(() => setIsLoading(false))  // Set loading state to false after login attempt completes
 
 
     };
@@ -66,6 +73,9 @@ const LoginScreen = (prop) => {
                     />
                     <View style={[styles.absoluteImage, styles.picture]} />
                     <View style={[styles.logoView]}>
+                        {/* <View style={{ width: screenDimensions.width, position: 'absolute', top: 0 }}>
+                            <CustomAppBar customNavigation={() => navigation.navigate('aboutus')} color={Color.white} />
+                        </View> */}
                         {/* <Image
                             resizeMode="contain"
                             style={[styles.logo]}
@@ -147,6 +157,29 @@ const LoginScreen = (prop) => {
                                 onPress={() => handleSubmit()}
                                 isLoading={isLoading}
                             />
+                        </View>
+                        <View
+                            style={{
+                                alignItems: 'center'
+                            }}
+                        >
+
+                            <Text
+                                onPress={() => {
+                                    navigation.navigate('aboutus')
+                                }}
+                                style={{
+                                    color: Color.white,
+                                    width: screenDimensions.width * 0.35,
+                                    fontFamily: FontFamily.interRegular,
+                                    paddingVertical: 5,
+                                    fontSize: FontSizes.md,
+                                    textAlign: "center",
+                                    textDecorationLine: 'underline',
+                                }}
+                            >
+                                Back to Home
+                            </Text>
                         </View>
                     </View>
 

@@ -15,12 +15,14 @@ import { customToast, screenDimensions } from '../../utils/functions'
 import { GlobalStyles } from '../../utils/globalStyles'
 
 const AddTestimonial = () => {
-    const user = useSelector(state => state?.user?.data)
     const [review, setReview] = useState('')
     const [open, setOpen] = useState(false)
     const [isloading, setIsloading] = useState(false)
     const navigation = useNavigation()
+    // Redux state and dispatch
+    const user = useSelector(state => state?.user?.data)
     const dispatch = useDispatch()
+    // Function to render the modal content
     const renderItem = () => (
         <View style={styles.modal}>
             <View style={styles.iconView}>
@@ -37,18 +39,19 @@ const AddTestimonial = () => {
             />
         </View>
     )
-
+    // Function to handle form submission
     const handleSubmit = () => {
         setIsloading(true)
+        // Call API to create testimonial
         API.createTestimonial({ review: review, userId: user.id })
             .then(() => {
-                setOpen(true)
-                dispatch(globalData(user?.id))
+                setOpen(true) // Open modal on successful submission
+                dispatch(globalData(user?.id))  // Dispatch action to update global data
             })
             .catch((err) => {
-                customToast('error', 'You have already add a review!')
+                customToast('error', 'You have already add a review!') // Display error message if review already exists
             })
-            .finally(() => setIsloading(false))
+            .finally(() => setIsloading(false))  // Set loading state to false after API call
     }
 
     return (

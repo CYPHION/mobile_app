@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
     textStyle: {
         fontFamily: FontFamily.interRegular,
         fontSize: FontSizes.md,
-        color: Color.text,
         width: screenDimensions.width * .25,
     },
     headingText: {
@@ -80,7 +79,6 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     headingText: {
-        color: Color.text,
         fontFamily: FontFamily.interMedium,
         fontSize: FontSizes.xl
     },

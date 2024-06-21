@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: FontSizes.md,
-        color: Color.textTwo,
         fontFamily: FontFamily.medium,
     },
     btnView: {

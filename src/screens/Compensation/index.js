@@ -8,7 +8,7 @@ import ViewCompensation from '../../components/widget/ViewCompensation'
 import { API } from '../../network/API'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { screenDimensions } from '../../utils/functions'
+import { customToast, screenDimensions } from '../../utils/functions'
 
 const Compensation = () => {
     const [active, setActive] = useState(true)
@@ -16,20 +16,23 @@ const Compensation = () => {
     const [rows, setRows] = useState([])
     const [refreshing, setRefreshing] = useState(false);
 
-
+    // Function to fetch all compensation data
     const getALLCompensation = async () => {
-        const studentIds = globalData?.students?.map(elem => elem?.id)
-        await API.compensationByParent(JSON.stringify(studentIds)).then(res => {
-            const data = res?.data
-            setRows(data)
-        }).catch(err => customToast("error", err?.message)).finally(() => setRefreshing(false))
+        const studentIds = globalData?.students?.map(elem => elem?.id)  // Extracting student IDs from global data
+        await API.compensationByParent(JSON.stringify(studentIds)).then(res => {// API call to fetch compensation data
+            const data = res?.data// Extracting data from response
+            setRows(data); // Updating rows state with fetched data
+        })
+            .catch(err => customToast("error", err?.message))// Handling error with toast message
+            .finally(() => setRefreshing(false)); // Resetting refreshing state
     }
-
+    // Callback function for handling refresh action
     const onRefresh = useCallback(() => {
-        setRefreshing(true);
-        getALLCompensation()
+        setRefreshing(true);// Setting refreshing state to true
+        getALLCompensation(); // Fetching compensation data
     }, []);
 
+    // Effect hook to fetch compensation data on component mount and whenever globalData.students changes
     useEffect(() => {
         getALLCompensation()
     }, [globalData?.students])

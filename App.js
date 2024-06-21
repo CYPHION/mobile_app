@@ -2,33 +2,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
-import { Alert, PermissionsAndroid, SafeAreaView, StatusBar } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { Alert, PermissionsAndroid, Platform, SafeAreaView, StatusBar } from "react-native";
+import { useSelector } from "react-redux";
 import IntroSlider from "./src/components/widget/IntroSlider";
 import MyDrawer from "./src/navigation/Drawer";
-import { API } from "./src/network/API";
-import ConfirmResetPassword from "./src/screens/ConfirmResetPassword";
-import LoginScreen from "./src/screens/Login";
-import ResetPassword from "./src/screens/ResetPassword";
 import SpashScreen from "./src/screens/SplashScreen";
-import { globalData } from "./src/store/thunk";
 import { Color } from "./src/utils/color";
 const Stack = createNativeStackNavigator();
 
-
-function AuthSTack() {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name='login' component={LoginScreen} />
-      <Stack.Screen name='forgetPassword' component={ResetPassword} />
-      <Stack.Screen name='confirmPassword' component={ConfirmResetPassword} />
-    </Stack.Navigator>
-  )
-}
 
 const App = () => {
   const [show, setShow] = useState(true)
@@ -37,51 +18,34 @@ const App = () => {
   const [splash, setSplash] = useState(true)
   const userData = useSelector(state => state.user.data);
   const globaldata = useSelector(state => state.global.data);
-  const dispatch = useDispatch()
 
 
   const requestPostNotificationsPermission = async () => {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+    if (Platform.OS === 'ios') {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-      console.log("Post notifications permission allowed");
-    } else {
-      console.log("Post notifications permission denied");
-    }
-  }
-
-
-  const setToken = async () => {
-    try {
-      const token = await messaging().getToken();
-      const FCMtoken = await AsyncStorage.getItem('fcmToken');
-      const mbleToken = globaldata?.currentUser?.fcmToken
-      if (FCMtoken) {
-        console.log('Token already saved to database ..')
-      } else {
-        let getTokens;
-        if (mbleToken?.length > 0) {
-          getTokens = [...mbleToken, token];
-        } else {
-          getTokens = [token ? token : '']
-        }
-        const uptObj = {
-          ...globaldata?.currentUser,
-          fcmToken: getTokens
-        }
-        API.updateUser(uptObj)
-          .then(async (res) => {
-            await AsyncStorage.setItem('fcmToken', token);
-            dispatch(globalData(userData?.id))
-          }).catch(err => console.log(err))
+      if (enabled) {
+        console.log('Authorization status:', authStatus);
       }
 
-    } catch (error) {
-      console.log(error)
+    } else {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+
+        console.log("Post notifications permission allowed");
+      } else {
+        console.log("Post notifications permission denied");
+      }
     }
   }
+
+
+
 
   useEffect(() => {
     AsyncStorage.getItem('intro')
@@ -94,17 +58,11 @@ const App = () => {
 
   useEffect(() => {
     if (userData?.email) {
-      dispatch(globalData(userData?.id))
+      setSplash(false)
     }
   }, [userData])
 
 
-  useEffect(() => {
-    if (userData.email) {
-      setSplash(false)
-    }
-
-  }, [userData]);
 
   setTimeout(() => {
     if (splash) {
@@ -123,9 +81,7 @@ const App = () => {
   useEffect(() => {
     // AsyncStorage.removeItem('fcmToken')
     requestPostNotificationsPermission();
-    setToken()
-
-  }, [globaldata?.currentUser]);
+  }, []);
 
 
 
@@ -142,7 +98,8 @@ const App = () => {
           : <>
             {isIntro ?
               <>
-                {!!userData.email ? <MyDrawer /> : <AuthSTack />}
+                {/* {!!userData.email ? <MyDrawer /> : <HomeDrawar />} */}
+                <MyDrawer />
               </>
               : <IntroSlider setIsIntro={setIsIntro} />}
           </>}

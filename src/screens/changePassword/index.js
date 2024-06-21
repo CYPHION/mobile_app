@@ -29,30 +29,30 @@ const ChangePasswordScreen = () => {
         }));
     };
 
-    const handleSubmit = () => {
-        setIsloading(true)
-        if (formData.confPass.trim() === '' || formData.newPass.trim() === '') {
-            customToast('error', 'Please enter password')
+    const handleSubmit = () => { // Function to handle form submission
+        setIsloading(true) // Set loading state to true
+        if (formData.confPass.trim() === '' || formData.newPass.trim() === '') { // Check if passwords are empty
+            customToast('error', 'Please enter password') // Show error message
         } else {
-            if (formData.confPass === formData.newPass) {
+            if (formData.confPass === formData.newPass) { // Check if passwords match
 
-                API.updateUser({ password: formData.newPass, id: user?.id })
+                API.updateUser({ password: formData.newPass, id: user?.id }) // Call API to update user password
                     .then((res) => {
-                        customToast('success', res.message)
+                        customToast('success', res.message) // Show success message
                     })
                     .catch((err) => {
-                        customToast('error', err)
+                        customToast('error', err)  // Show error message
                     })
                     .finally(() => {
-                        setFormData({
+                        setFormData({  // Clear form data
                             newPass: '',
                             confPass: ''
                         })
-                        setIsloading(false)
+                        setIsloading(false) // Set loading state to false
                     })
             } else {
-                customToast('error', 'Password must be same.')
-                setIsloading(false)
+                customToast('error', 'Password must be same.') // Show error message if passwords don't match
+                setIsloading(false)  // Set loading state to false
             }
         }
     }
@@ -70,6 +70,7 @@ const ChangePasswordScreen = () => {
                             label={"New Password"}
                             onChangeText={(text) => onChangeHandler('newPass', text)}
                             error={error.newPass}
+                            labelStyle={{ color: Color.primary }}
                         />
                         <InputField
                             secureTextEntry={true} // if you password Field pass secureTextEntry=true
@@ -77,6 +78,7 @@ const ChangePasswordScreen = () => {
                             label={"Confirm Password"}
                             onChangeText={(text) => onChangeHandler('confPass', text)}
                             error={error.confPass}
+                            labelStyle={{ color: Color.primary }}
                         />
                     </View>
                     <CustomButton

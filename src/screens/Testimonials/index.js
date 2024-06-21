@@ -18,11 +18,11 @@ const Testimonials = () => {
     const user = useSelector(state => state?.user?.data)
     const global = useSelector(state => state?.global?.data)
     const dispatch = useDispatch()
-
+    // Function to fetch testimonials data
     const fetchData = () => {
         setData(global?.testimonials)
     }
-
+    // Function to handle refresh
     const handleRefresh = () => {
         setRefresh(true);
         dispatch(globalData(user?.id))
@@ -35,7 +35,7 @@ const Testimonials = () => {
                 setRefresh(false);
             });
     };
-
+    // useEffect to fetch data initially and whenever testimonials data changes
     useEffect(() => {
         fetchData()
     }, [global?.testimonials])
@@ -84,7 +84,7 @@ const Testimonials = () => {
                             :
                             <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
                                 <View>
-                                    <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                                    <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTThree} />
                                     <Text style={styles.inactivetext}>No Reviews found</Text>
                                 </View>
                             </View>}
@@ -106,13 +106,13 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     nameText: {
-        color: Color.text,
+        color: Color.primary,
         fontFamily: FontFamily.interMedium,
         fontSize: FontSizes.lg
     },
     textTwo: {
         fontSize: FontSizes.md,
-        color: Color.text,
+        color: Color.primary,
         fontFamily: FontFamily.interMedium
     },
     dateText: {
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     },
     inactivetext: {
         textAlign: 'center',
-        color: Color.textTwo,
+        color: Color.textTThree,
         fontSize: FontSizes.lg
     }
 })

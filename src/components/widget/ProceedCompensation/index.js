@@ -44,11 +44,12 @@ const ProceedCompensation = (props) => {
             value: item?.remarks ? item?.remarks : '',
         },
     ]
-
+    // Function to handle form submission
     const handleSubmit = async () => {
-        setIsLoading(true)
-        let payload = []
+        setIsLoading(true)// Set loading state to true
 
+        let payload = []// Initialize payload array
+        // Loop through each item in data array and construct payload
         data?.filter(elem => {
             return payload.push({
                 studentId: elem.studentId,
@@ -59,17 +60,18 @@ const ProceedCompensation = (props) => {
                 remarks: elem.remarks
             })
         })
-
+        // Call API to create compensation
         await API.createCompensation({
             data: payload
         }).then(res => {
+            // Show success message
             customToast("success", res?.message)
-            setProcess(false)
-            setActiveStudent(true);
+            setProcess(false)// Set process state to false
+            setActiveStudent(true);// Set active student state to true
         }).catch(err => {
-            customToast("error", err?.message)
+            customToast("error", err?.message)  // Show error message
         })
-            .finally(() => setIsLoading(false))
+            .finally(() => setIsLoading(false)) // Set loading state to false
 
     }
 

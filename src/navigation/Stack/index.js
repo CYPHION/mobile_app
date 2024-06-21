@@ -1,4 +1,4 @@
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CustomAppBar from '../../components/base/CustomAppBar';
 import AddTestimonial from '../../screens/AddTestimonial';
@@ -17,12 +17,12 @@ import ViewAppointments from '../../screens/viewAppointments';
 import ViewProgress from '../../screens/viewProgress';
 import TabNavigation from '../Tab';
 const Stack = createNativeStackNavigator();
-
+// Common screen options for all screens
 let screenOptionss = {
     headerShown: false, // Hide header for all screens
 }
 
-
+// Children stack navigator for nested screens related to children
 const StackProfile = createNativeStackNavigator();
 const ChildrenStack = () => {
     return <StackProfile.Navigator
@@ -40,42 +40,41 @@ const ChildrenStack = () => {
         })} />
         <Stack.Screen name="studentDetail" component={StudentDetails} options={{
             headerShown: true,
-            headerTitle: 'View Student Detail',
-
+            header: () => <CustomAppBar title={'View Student Detail'} />
         }} />
         <Stack.Screen name="studentSchedule" component={ViewSchedule} options={{
             headerShown: true,
-            headerTitle: 'View Schedule',
-
+            header: () => <CustomAppBar title={'View Schedule'} />
         }} />
         <Stack.Screen name="studentAttendance" component={ViewAttendance} options={{
             headerShown: true,
-            headerTitle: 'View Attendance',
+            header: () => <CustomAppBar title={'View Attendance'} />
 
         }} />
         <Stack.Screen name="fee" component={ViewFess} options={{
             headerShown: true,
-            headerTitle: 'View Fees',
+            header: () => <CustomAppBar title={'View Fees'} />
 
         }} />
         <Stack.Screen name="studentHomework" component={HomeWork} options={{
             headerShown: true,
-            headerTitle: 'Homework',
-
+            header: () => <CustomAppBar title={'Homework'} />
         }} />
         <Stack.Screen name="studentReport" component={ViewProgress} options={{
             headerShown: true,
-            headerTitle: 'View Progress',
+            header: () => <CustomAppBar title={'View Progress'} />
 
         }} />
     </StackProfile.Navigator>
 }
 
 
-
+// Main stack navigator for the entire app
 export function MyStack() {
+    // Get route and navigation objects from React Navigation hooks
     const route = useRoute()
-
+    const navigation = useNavigation()
+    // Return the stack navigator with all the screens
     return (
         <Stack.Navigator
             screenOptions={screenOptionss}
@@ -85,23 +84,21 @@ export function MyStack() {
             <Stack.Screen name="children" component={ChildrenStack} />
             <Stack.Screen name="addTestimonial" component={AddTestimonial} options={{
                 headerShown: true,
-                headerTitle: 'Testimonials',
-
+                header: () => <CustomAppBar title={'Testimonials'} />
             }} />
             <Stack.Screen name="viewAppointment" component={ViewAppointments} options={{
                 headerShown: true,
-                headerTitle: 'View Appointments ',
-
+                header: () => <CustomAppBar title={'View Appointments'} />
             }} />
             <Stack.Screen name="leaveApplication" component={LeaveApplication} options={{
                 headerShown: true,
-                headerTitle: 'Leave Application ',
+                header: () => <CustomAppBar title={'Report an Absence'} />
 
             }} />
             <Stack.Screen name="compensation" component={Compensation} />
             <Stack.Screen name="testimonials" component={Testimonials} options={{
                 headerShown: true,
-                headerTitle: 'Testimonials',
+                header: () => <CustomAppBar title={'Testimonials'} />
 
             }} />
             <Stack.Screen name="notifications" component={Notifications}

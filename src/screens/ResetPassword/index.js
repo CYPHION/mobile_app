@@ -41,9 +41,9 @@ const ResetPassword = (prop) => {
         setError(removeError(name, error))
 
     };
-
+    // Function to handle form submission
     const handleSubmit = async () => {
-        setIsLoading(true)
+        setIsLoading(true) // Set loading state to true
         if (!formData?.email) {
             !formData.email && customToast("error", "Email is required")
             setIsLoading(false)

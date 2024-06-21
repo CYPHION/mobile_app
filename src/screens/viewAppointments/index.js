@@ -24,7 +24,13 @@ const ViewAppointments = () => {
     const user = useSelector(state => state.user.data);
     const dispatch = useDispatch()
 
-
+    const statusColor = {
+        Completed: Color.active,
+        Cancelled: Color.error,
+        Pending: Color.freeze,
+        Missed: Color.SecondaryText
+    }
+    // Function to filter appointments by date range
     const filterByDate = (startDate, endDate) => {
         let filterData;
         if (!!startDate && !!endDate) {
@@ -37,7 +43,7 @@ const ViewAppointments = () => {
         }
         setData(filterData)
     };
-
+    // Function to handle refreshing data
     const handleRefresh = () => {
         setRefresh(true);
         dispatch(globalData(user?.id))
@@ -50,16 +56,17 @@ const ViewAppointments = () => {
                 setRefresh(false);
             });
     };
+    // Function to render item when no appointments are found
 
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>
-                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTThree} />
                 <Text style={styles.inactivetext}>No Appointment found</Text>
             </View>
         </View>
     )
-
+    // Function to generate list items for appointment details
     const list = (elem) => [
         {
             name: " Title",
@@ -90,7 +97,8 @@ const ViewAppointments = () => {
         },
         {
             name: " Status",
-            value: `${elem?.status}`,
+            // value: `${elem?.status}`,
+            value: <Text style={{ color: statusColor[elem?.status] }}>{elem?.status}</Text>,
             icon: (
                 <CapIcon
                     color={Color.primary}
@@ -185,7 +193,7 @@ const styles = StyleSheet.create({
     },
     inactivetext: {
         textAlign: 'center',
-        color: Color.textTwo,
+        color: Color.textTThree,
         fontSize: FontSizes.lg
     }
 

@@ -25,6 +25,8 @@ const LeaveApplication = () => {
     const [nextScreen, setNextScreen] = useState(false)
     const dispatch = useDispatch()
     const user = useSelector(state => state?.user?.data)
+
+    // Function to generate item data for rendering
     const item = (item) => [
         {
             name: "Main ID",
@@ -56,6 +58,8 @@ const LeaveApplication = () => {
         },
     ]
 
+
+    // Function to render screen content
     const renderScreen = () => (
         <View >
             <View style={GlobalStyles.p_10}>
@@ -72,7 +76,7 @@ const LeaveApplication = () => {
         </View>
     )
 
-
+    // Modal content component
     const ModalContent = () => (
         <View style={styles.modal}>
             <View style={styles.iconView}>
@@ -92,7 +96,7 @@ const LeaveApplication = () => {
             />
         </View>
     )
-
+    // Function to handle processing leave request
     const handleProcessRequest = async () => {
 
         const payload = selectData?.map(elem => ({
@@ -116,6 +120,7 @@ const LeaveApplication = () => {
 
     }
 
+    // Function to handle refresh action
     const handleRefresh = () => {
         setRefresh(true);
         dispatch(globalData(user?.id))

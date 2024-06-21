@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 import { DrawerContentScrollView, createDrawerNavigator } from '@react-navigation/drawer';
 import { CommonActions, DrawerActions, useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
@@ -11,26 +12,66 @@ import MyModal from '../../components/base/Modal';
 import { API } from '../../network/API';
 import { handleResetData } from '../../store/slice/global';
 import { handleLogout } from '../../store/slice/user';
+import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { getImage, screenDimensions } from '../../utils/functions';
+import { HomeStack } from '../HomeDrawer';
 import { MyStack } from '../Stack';
 import TabNavigation from '../Tab';
 
 const Drawer = createDrawerNavigator();
 
+// List of items in the drawer menu
 const DrawerList = [
     { label: 'Home', navigateTo: 'home', icon: 'right', mainRoute: 'tabs' },
     { label: 'My Profile', navigateTo: 'profiles', icon: 'right', mainRoute: 'tabs' },
     { label: 'View Children', navigateTo: 'children', icon: 'right', mainRoute: 'root' },
     { label: 'View Appointment', navigateTo: 'viewAppointment', icon: 'right', mainRoute: 'root' },
-    { label: 'Leave Application', navigateTo: 'leaveApplication', icon: 'right', mainRoute: 'root' },
+    { label: 'Report an Absence', navigateTo: 'leaveApplication', icon: 'right', mainRoute: 'root' },
     { label: 'Pay Fee', navigateTo: 'fee', icon: 'right', mainRoute: 'tabs' },
     { label: 'Compensation', navigateTo: 'compensation', icon: 'right', mainRoute: 'root' },
     { label: 'Testimonials', navigateTo: 'testimonials', icon: 'right', mainRoute: 'root' },
+    { label: 'About us', navigateTo: 'aboutus', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Lesson Timings', navigateTo: 'lessonTiming', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Fee Plan', navigateTo: 'fees', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Summer Pakages', navigateTo: 'summerpakage', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Our Services', navigateTo: 'ourservices', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Bright Student', navigateTo: 'brightstudent', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Terms and conditions', navigateTo: 'termsandcondition', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Awarding Bodies', navigateTo: 'awardingbodies', icon: 'right', mainRoute: 'homestack' },
+    { label: 'A-Level Results', navigateTo: 'Alevel', icon: 'right', mainRoute: 'homestack' },
+    { label: 'GCSE Results', navigateTo: 'gcse', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Childcare', navigateTo: 'childcare', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Reviews', navigateTo: 'reviews', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Careers', navigateTo: 'career', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Apply online', navigateTo: 'applyonline', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Contact Us', navigateTo: 'contactus', icon: 'right', mainRoute: 'homestack' },
     { label: 'Logout', navigateTo: '', icon: 'right' },
 ];
 
+// List of items in the drawer menu
+const DrawerList2 = [
+    { label: 'About us', navigateTo: 'aboutus', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Lesson Timings', navigateTo: 'lessonTiming', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Fees', navigateTo: 'fees', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Summer Pakages', navigateTo: 'summerpakage', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Our Services', navigateTo: 'ourservices', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Bright Student', navigateTo: 'brightstudent', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Terms and conditions', navigateTo: 'termsandcondition', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Awarding Bodies', navigateTo: 'awardingbodies', icon: 'right', mainRoute: 'homestack' },
+    { label: 'A-Level Results', navigateTo: 'Alevel', icon: 'right', mainRoute: 'homestack' },
+    { label: 'GCSE Results', navigateTo: 'gcse', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Childcare', navigateTo: 'childcare', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Reviews', navigateTo: 'reviews', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Careers', navigateTo: 'career', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Apply online', navigateTo: 'applyonline', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Contact Us', navigateTo: 'contactus', icon: 'right', mainRoute: 'homestack' },
+    { label: 'Login', navigateTo: 'login', icon: 'right', mainRoute: 'homestack' },
+];
+
+
+// Individual item in the drawer menu
 const DrawerLayout = ({ icon, label, navigateTo, setOpen, mainRoute }) => {
     const navigation = useNavigation();
     const routeName = navigation.getCurrentRoute()?.name; // Get current route name
@@ -60,30 +101,31 @@ const DrawerLayout = ({ icon, label, navigateTo, setOpen, mainRoute }) => {
     )
 };
 
-
+// Custom drawer content component
 function CustomDrawerContent(props) {
-    const [open, setOpen] = useState(false)
-    const dipatch = useDispatch()
-    const user = useSelector(state => state?.user?.data)
-    const globaldata = useSelector(state => state?.global?.data)
-    const src = user?.picture ? { uri: getImage(user?.picture) } : require("../../images/profileAvatar.png");
-
+    const [open, setOpen] = useState(false)// State for modal visibility
+    const dipatch = useDispatch()// Redux dispatch function
+    const user = useSelector(state => state?.user?.data)// User data from Redux store
+    const globaldata = useSelector(state => state?.global?.data)// Global data from Redux store
+    const src = user?.picture ? { uri: getImage(user?.picture) } : require("../../images/profileAvatar.png");// Profile image source
+    // Function to handle logout
     const logoutHandler = async () => {
-        const token = await AsyncStorage.getItem('fcmToken')
-        const fcmToken = globaldata?.currentUser?.fcmToken
-        const sendTokens = fcmToken?.filter(item => item !== token)
+        const token = await AsyncStorage.getItem('fcmToken')// Get FCM token from AsyncStorage
+        const fcmToken = globaldata?.currentUser?.fcmToken // Current user's FCM token
+        const sendTokens = fcmToken?.filter(item => item !== token)// Remove current token from list
 
         const uptObj = {
             ...globaldata?.currentUser,
             fcmToken: sendTokens
         }
+        // Update user's FCM token
         API.updateUser(uptObj)
             .then(async (res) => {
-                await AsyncStorage.removeItem('fcmToken');
-                dipatch(handleLogout())
-                dipatch(handleResetData())
+                await AsyncStorage.removeItem('fcmToken'); // Remove FCM token from AsyncStorage
+                dipatch(handleLogout())// Dispatch action to logout user
+                dipatch(handleResetData())// Dispatch action to reset global data
             }).catch(err => console.log(err))
-        setOpen(!open)
+        setOpen(!open)// Toggle modal visibility
     }
 
     return (
@@ -94,13 +136,13 @@ function CustomDrawerContent(props) {
                         <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
                             {/* <Image resizeMode='contain' source={src} style={styles.image} /> */}
                             <View style={{ flexDirection: 'column' }}>
-                                <Text style={styles.title}>{user?.firstName} {user?.lastName}</Text>
+                                <Text style={styles.title}>{user?.email ? `${user?.firstName} ${user?.lastName}` : 'Prime Tuition'}</Text>
                             </View>
                         </View>
                     </View>
                 </TouchableOpacity>
                 <View style={styles.drawerSection}>
-                    {DrawerList.map((el, i) => {
+                    {!!user?.email ? DrawerList.map((el, i) => {
                         return (
                             <DrawerLayout
                                 key={i}
@@ -112,7 +154,20 @@ function CustomDrawerContent(props) {
                                 {...props}
                             />
                         );
-                    })}
+                    }) :
+                        DrawerList2.map((el, i) => {
+                            return (
+                                <DrawerLayout
+                                    key={i}
+                                    label={el.label}
+                                    navigateTo={el.navigateTo}
+                                    icon={el.icon}
+                                    setOpen={setOpen}
+                                    mainRoute={el.mainRoute}
+                                    {...props}
+                                />
+                            );
+                        })}
                 </View>
             </View>
 
@@ -161,19 +216,65 @@ function CustomDrawerContent(props) {
 
 
 function MyDrawer({ old }) {
+    // Retrieve navigation object
     const navigation = useNavigation();
-
+    // Get user and global data from Redux store
     const user = useSelector(state => state?.user?.data)
     const global = useSelector(state => state?.global?.data)
+    const dispatch = useDispatch()
+    // Execute effect when the component mounts or 'old' dependency changes
     useEffect(() => {
-        navigation.dispatch(
+        // Dispatch a navigation action to reset the navigation state
+        user?.email && navigation.dispatch(
+            // Set the index to 0 and navigate to the specified route
             CommonActions.reset({
                 index: 0,
                 routes: [{ name: 'root', params: { screen: 'home' } }],
             }),
         );
-    }, [old]);
+    }, [old]);// Depend on 'old' variable for re-execution when it changes
 
+    const setToken = async () => {
+        try {
+            const token = await messaging().getToken();
+            console.log(token)
+            const FCMtoken = await AsyncStorage.getItem('fcmToken');
+            const mbleToken = global?.currentUser?.fcmToken
+            if (FCMtoken) {
+                console.log('Token already saved to database ..')
+            } else {
+                let getTokens;
+                if (mbleToken?.length > 0) {
+                    getTokens = [...mbleToken, token];
+                } else {
+                    getTokens = [token ? token : '']
+                }
+                const uptObj = {
+                    ...global?.currentUser,
+                    fcmToken: getTokens
+                }
+
+                user?.email && API.updateUser(uptObj)
+                    .then(async (res) => {
+                        await AsyncStorage.setItem('fcmToken', token);
+                        dispatch(globalData(user?.id))
+                    }).catch(err => console.log("err>>>>", err))
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        setToken()
+    }, [global?.currentUser])
+
+    useEffect(() => {
+        if (user?.email) {
+            dispatch(globalData(user?.id))
+        }
+    }, [user])
 
 
     return (
@@ -184,15 +285,19 @@ function MyDrawer({ old }) {
             screenOptions={{
                 headerShown: false, // Hide header for all screens
                 drawerStyle: {
-                    backgroundColor: '#1F2544',
+                    backgroundColor: Color.primary,
                     width: '100%',
                 },
                 swipeEnabled: (!!global.students && !!user.email)
             }}
 
         >
-            <Drawer.Screen name="tabs" component={TabNavigation} />
-            <Drawer.Screen name="root" component={MyStack} />
+
+            {user?.email && <>
+                <Drawer.Screen name="tabs" component={TabNavigation} />
+                <Drawer.Screen name="root" component={MyStack} />
+            </>}
+            <Drawer.Screen name="homestack" component={HomeStack} />
 
         </Drawer.Navigator>
 

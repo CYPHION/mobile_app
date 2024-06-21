@@ -2,12 +2,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect, useRef } from 'react';
-import { BackHandler } from 'react-native';
-import Icon from 'react-native-vector-icons/Entypo';
+import { BackHandler, TouchableOpacity } from 'react-native';
+import { default as Icon, default as MenuIcon } from 'react-native-vector-icons/Entypo';
 import UserIcon from 'react-native-vector-icons/FontAwesome';
 import ReceiptIcon from 'react-native-vector-icons/FontAwesome6';
 import CardIcon from 'react-native-vector-icons/Ionicons';
 import AnalyticsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import CustomAppBar from '../../components/base/CustomAppBar';
 import Analytics from '../../screens/Analytics';
 import FeeCollection from '../../screens/FeeCollection';
 import Home from '../../screens/Home';
@@ -18,26 +19,33 @@ import { Color } from '../../utils/color';
 import { FontSizes } from '../../utils/font';
 
 const Tab = createBottomTabNavigator();
-
 const StackProfile = createNativeStackNavigator();
+// its child navigation of profile tab in this tab there are two screens first Profile Page and second one is Change Password Screen 
 const ProfileStack = () => {
     return <StackProfile.Navigator
         initialRouteName='profile'
     >
         <StackProfile.Screen name="profile" component={Profile}
             options={{
-                headerShown: false,
+                headerShown: true,
+                header: () => <CustomAppBar back={false} title={'Profile'} />
 
             }} />
         <StackProfile.Screen name="changePassword" component={ChangePasswordScreen}
             options={{
                 headerShown: true,
-                headerTitle: 'Change Password',
+                header: () => <CustomAppBar title={'Change Password'} />
             }}
         />
     </StackProfile.Navigator>
 }
 
+// its navigation of bottom tabs in this tab there are five screens 
+// 1) Fees Receipt
+// 2) Pay Fees
+// 3) Home
+// 4) Analytics
+// 5) Profile
 
 const TabNavigation = ({ old }) => {
 
@@ -46,6 +54,7 @@ const TabNavigation = ({ old }) => {
     const isFirstRender = useRef(true);
 
     useEffect(() => {
+        //its function when user press back it send user to home screen
         const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
             if (navigation.isFocused() && !isFirstRender.current) {
                 navigation.dispatch(CommonActions.navigate({ name: 'home' }));
@@ -86,12 +95,18 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <ReceiptIcon
                             name="receipt"
-                            color={focused ? Color.primary : color}
+                            color={focused ? Color.primary : Color.text}
                             size={size} />
                     ),
                     tabBarActiveTintColor: Color.primary,
+                    tabBarInactiveTintColor: Color.text,
                     headerShown: true,
-                    headerTitle: 'View Fee Receipt'
+                    headerTitle: 'View Fee Receipt',
+                    headerRight: () => (
+                        <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
+                            <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.text} />
+                        </TouchableOpacity>
+                    ),
                 }}
             />
             <Tab.Screen name="fee" component={FeeCollection}
@@ -100,12 +115,18 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <CardIcon
                             name="card"
-                            color={focused ? Color.primary : color}
+                            color={focused ? Color.primary : Color.text}
                             size={size} />
                     ),
                     tabBarActiveTintColor: Color.primary,
+                    tabBarInactiveTintColor: Color.text,
                     headerShown: true,
-                    headerTitle: 'Pay Fees'
+                    headerTitle: 'Pay Fees',
+                    headerRight: () => (
+                        <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
+                            <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.text} />
+                        </TouchableOpacity>
+                    ),
 
                 }}
             />
@@ -115,22 +136,31 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <Icon
                             name="home"
-                            color={focused ? Color.primary : color}
+                            color={focused ? Color.primary : Color.text}
                             size={size} />
                     ),
-                    tabBarActiveTintColor: Color.primary
+                    tabBarActiveTintColor: Color.primary,
+                    tabBarInactiveTintColor: Color.text,
                 }}
             />
             <Tab.Screen name="analytics" component={Analytics}
                 options={{
+                    headerShown: true,
+                    headerTitle: 'Analytics',
+                    headerRight: () => (
+                        <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={[{ padding: 10, borderRadius: 50, marginEnd: 10 }]}>
+                            <MenuIcon name='menu' size={FontSizes.xxxl} color={Color.text} />
+                        </TouchableOpacity>
+                    ),
                     tabBarLabel: 'Analytics',
                     tabBarIcon: ({ color, size, focused }) => (
                         <AnalyticsIcon
                             name="signal-cellular-3"
-                            color={focused ? Color.primary : color}
+                            color={focused ? Color.primary : Color.text}
                             size={size} />
                     ),
                     tabBarActiveTintColor: Color.primary,
+                    tabBarInactiveTintColor: Color.text,
 
                 }}
             />
@@ -142,10 +172,11 @@ const TabNavigation = ({ old }) => {
                     tabBarIcon: ({ color, size, focused }) => (
                         <UserIcon
                             name="user-circle"
-                            color={focused ? Color.primary : color}
+                            color={focused ? Color.primary : Color.text}
                             size={size}
                         />
                     ),
+                    tabBarInactiveTintColor: Color.text,
                     tabBarActiveTintColor: Color.primary,
 
                 }}

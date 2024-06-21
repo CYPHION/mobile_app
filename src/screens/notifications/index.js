@@ -1,9 +1,12 @@
+import messaging from '@react-native-firebase/messaging';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
-import { RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Linking, PermissionsAndroid, Platform, RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import RenderHtml from 'react-native-render-html';
 import BellIcon from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from 'react-redux';
+import LoadingScreen from '../../components/base/LoadingScreen';
 import { API } from '../../network/API';
 import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
@@ -11,91 +14,33 @@ import { FontFamily, FontSizes } from '../../utils/font';
 import { screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
 
-const Data = [
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Hassan Khan",
-        time: "1 min ago",
-    },
-    {
-        notification: "Your Lesson is ",
-        name: "Amir Khan",
-        time: "2 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Amir Khan",
-        time: "4 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Hassan Khan",
-        time: "6 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending! fasffgff agahgds as hshsrh",
-        name: "Hassan Khan",
-        time: "8 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Hassan Khan",
-        time: "10 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Amir Khan",
-        time: "11 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Areeb Khan",
-        time: "12 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Hassan Khan",
-        time: "13 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Hassan Khan",
-        time: "12 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Amir Khan",
-        time: "13 min ago",
-    },
-    {
-        notification: "Your Lesson is Pending!",
-        name: "Hassan Khan",
-        time: "18 min ago",
-    },
-]
-
 const Notifications = () => {
+    const { width } = useWindowDimensions(); // Get the width of the window
     const [data, setData] = useState([])
     const [activeItem, setActiveItem] = useState(null);
-
+    const [active, setActive] = useState(true)
     const [refreshing, setRefreshing] = useState(false)
     const user = useSelector(state => state?.user?.data)
     const [expanded, setExpanded] = useState(false);
     const dispatch = useDispatch()
 
-
+    // Function to toggle the active item (expand/collapse notification)
     const toggleItem = (index) => {
         setActiveItem(activeItem === index ? null : index); // Toggle state based on click
     };
-
+    // Function to fetch notification data
     const getNotification = () => {
-        API.getAllNotification(user?.id)
-            .then((res) => setData(res?.data))
-            .catch((err) => console.log(err))
+        API.getAllNotification(user?.id) // Call API to fetch notifications for the current user
+            .then((res) => setData(res?.data)) // Set fetched data to the state
+            .catch((err) => console.log(err)) // Log any errors
+            .finally(() => setActive(false)) // Set active state to false once data fetching is completed
     }
-
+    // Function to handle refreshing of notification data
     const onRefresh = useCallback(() => {
-        setRefreshing(true);
+        setRefreshing(true); // Set refreshing state to true
+
+        // Fetch global data for the current user from the server
+
         dispatch(globalData(user?.id))
             .then(() => {
                 getNotification()
@@ -106,9 +51,56 @@ const Notifications = () => {
                 setRefreshing(false); // Ensure refreshing is set to false even if there's an error
             });
     }, [])
+    // Effect to fetch notification data when the component mounts
+
+
+    // function to request for notification permission
+    const requestPostNotificationsPermission = async () => {
+        if (Platform.OS === 'ios') {
+            const authStatus = await messaging().hasPermission();
+            const enabled =
+                authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+                authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+            if (enabled) {
+                console.log('Authorization status:', authStatus);
+            } else {
+                Alert.alert(
+                    "Notifications Permission",
+                    "Please enable notifications in the app settings.",
+                    [
+                        { text: "Cancel", style: "cancel" },
+                        { text: "Open Settings", onPress: () => Linking.openSettings() }
+                    ]
+                );
+            }
+        } else {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+            );
+
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log("Post notifications permission allowed");
+            } else if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+                Alert.alert(
+                    "Notifications Permission",
+                    "You have permanently denied notification permission. Please enable it in the app settings.",
+                    [
+                        { text: "Cancel", style: "cancel" },
+                        { text: "Open Settings", onPress: () => Linking.openSettings() }
+                    ]
+                );
+            } else {
+                console.log("Post notifications permission denied");
+            }
+        }
+    };
+
+
 
     useEffect(() => {
         getNotification()
+        requestPostNotificationsPermission()
     }, [])
 
     return (
@@ -120,6 +112,7 @@ const Notifications = () => {
                         refreshing={refreshing}
                     />}
                 >
+                    <LoadingScreen loading={active} />
                     <View style={GlobalStyles.p_10}>
                         {data?.length > 0 ? <>
                             {data?.map((item, index) => (
@@ -131,7 +124,13 @@ const Notifications = () => {
                                             </View>
                                             <View >
                                                 {/* <Text ellipsizeMode="tail" numberOfLines={1} style={styles.notificationFont}>{item?.subType}</Text> */}
-                                                <Text numberOfLines={activeItem === index ? null : 2} style={[styles.notificationNameFont]}>{item?.message}</Text>
+                                                <RenderHtml
+                                                    source={{ html: item?.message }}
+                                                    contentWidth={width}
+                                                    baseStyle={styles.notificationNameFont}
+                                                    enableExperimentalMarginCollapsing={true}
+                                                />
+
                                                 <Text style={[styles.notificationTime, { marginTop: 5 }]}>{moment(item?.createdAt).fromNow()}</Text>
                                             </View>
 
@@ -142,7 +141,7 @@ const Notifications = () => {
                         </> :
                             <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
                                 <View>
-                                    <BellIcon name='notifications-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                                    <BellIcon name='notifications-off-outline' size={screenDimensions.width * 0.5} color={Color.textThree} />
                                     <Text style={styles.inactivetext}>No Notifications found</Text>
                                 </View>
                             </View>
@@ -166,7 +165,7 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.1, // Set a lower opacity for a subtle shadow
-        shadowRadius: 2, // Set a lower radius for a less spread shadow
+        shadowRadius: 1, // Set a lower radius for a less spread shadow
     },
     notificationContainer: {
         flexDirection: 'row',
@@ -174,7 +173,7 @@ const styles = StyleSheet.create({
         backgroundColor: Color.white,
         elevation: 1,
         shadowColor: 'black',
-        shadowOpacity: 2,
+        shadowOpacity: 0.1,
         shadowOffset: 2,
         borderRadius: 5,
         alignItems: 'center'
@@ -203,11 +202,11 @@ const styles = StyleSheet.create({
     notificationTime: {
         fontFamily: FontFamily.interRegular,
         fontSize: FontSizes.sm,
-        color: Color.textThree,
+        color: Color.primary,
     },
     inactivetext: {
         textAlign: 'center',
-        color: Color.textTwo,
+        color: Color.textThree,
         fontSize: FontSizes.lg
     },
 

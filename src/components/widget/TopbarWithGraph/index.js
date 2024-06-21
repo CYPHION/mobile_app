@@ -3,7 +3,13 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Color } from '../../../utils/color'
 import { FontFamily, FontSizes } from '../../../utils/font'
-import Graph from '../../base/GraphComponent'
+
+
+/*
+in this component we are showinf student name and its year, fee (monthly or weekly), (booster or not)
+
+this component ios used in children stack screens as a secondary header
+*/
 const TopbarWithGraph = ({ student, isGraph = true }) => {
     const navigation = useNavigation()
 
@@ -20,10 +26,9 @@ const TopbarWithGraph = ({ student, isGraph = true }) => {
                 </View>
                 {/* <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'notifications' })} style={{ position: 'relative' }}>
                     <View style={styles.badge}></View>
-                    <Icon name="notifications" color={Color.textTwo} size={FontSizes.xxxl} />
+                    <Icon name="notifications" size={FontSizes.xxxl} />
                 </TouchableOpacity> */}
             </View>
-            {isGraph && <Graph labels={labels} dataOne={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9]} dataTwo={[12, 48, 56, 86, 98, 26, 89, 7, 36, 48, 10, 9].reverse()} />}
         </>
     )
 }
@@ -41,7 +46,7 @@ const styles = StyleSheet.create({
     },
     CompText: {
         fontSize: FontSizes.md,
-        color: Color.text,
+        color: Color.primary,
     },
     badge: {
         height: 10,

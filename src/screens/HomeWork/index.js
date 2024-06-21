@@ -21,17 +21,19 @@ const HomeWork = () => {
     const user = useSelector(state => state?.user?.data)
     const dispatch = useDispatch()
 
+    // Function to filter homework data based on the selected student
     const filterHomework = globaldata?.homeworks?.filter((item, index) => {
         const studentIds = item?.studentId?.length > 0 ? item.studentId : [];
         return studentIds.length > 0 ? studentIds?.some(id => id === router?.params?.student?.id) : false;
     });
-
+    // Function to fetch data
     const fetchData = () => {
-        setData(filterHomework)
+        setData(filterHomework) // Set filtered homework data
     }
-
+    // Function to handle pull-to-refresh action
     const handleRefresh = () => {
-        setRefresh(true);
+        setRefresh(true);// Set refreshing state to true
+        // Dispatch action to fetch updated global data
         dispatch(globalData(user?.id))
             .then(() => {
                 fetchData()
@@ -42,11 +44,11 @@ const HomeWork = () => {
                 setRefresh(false);
             });
     };
-
+    // Function to open a link
     const openLink = (url) => {
         Linking.openURL(url).catch((err) => customToast('error', 'Something went wrong!'));
     }
-
+    // Fetch data initially and when homework data changes
     useEffect(() => {
         fetchData()
     }, [globaldata?.homeworks])
@@ -75,16 +77,16 @@ const HomeWork = () => {
                                             <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
                                                 <View style={[styles.allStudentContainers, { gap: 15 }]} >
                                                     <View style={[styles.bgIconColor]}>
-                                                        <Idcard name="idcard" size={FontSizes.xl} color={Color.iconColor} />
+                                                        <Idcard name="idcard" size={FontSizes.xl} color={Color.primary} />
                                                     </View>
                                                     <Text style={styles.nameFont}>Homework Title</Text>
                                                 </View>
-                                                <Text style={styles.nameFont}>{elem.name}</Text>
+                                                <Text numberOfLines={1} style={[styles.nameFont, { width: 150, textAlign: 'right' }]}>{elem.name}</Text>
                                             </View>
                                             <View style={[styles.allStudentContainers, { paddingVertical: 10 }]}>
                                                 <View style={[styles.allStudentContainers, { gap: 15 }]} >
                                                     <View style={[styles.bgIconColor]}>
-                                                        <BookIcon name="book" size={FontSizes.xl} color={Color.iconColor} />
+                                                        <BookIcon name="book" size={FontSizes.xl} color={Color.primary} />
                                                     </View>
                                                     <Text style={styles.nameFont}>Expiry Date</Text>
                                                 </View>
@@ -114,7 +116,7 @@ const HomeWork = () => {
 
                         </> : <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
                             <View>
-                                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textThree} />
                                 <Text style={styles.inactivetext}>No Homework</Text>
                             </View>
                         </View>
@@ -191,7 +193,7 @@ const styles = StyleSheet.create({
     },
     inactivetext: {
         textAlign: 'center',
-        color: Color.textTwo,
+        color: Color.textThree,
         fontSize: FontSizes.lg
     }
 

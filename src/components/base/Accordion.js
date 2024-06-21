@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     accordionTitle: {
-        color: Color.primary,
+        color: Color.text,
         fontFamily: FontFamily.interRegular,
         fontSize: FontSizes.sm,
     },
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         gap: 5,
     },
     accordionTitleHeading: {
-        color: Color.textThree,
+        color: Color.primary,
         fontFamily: FontFamily.interMedium,
         fontSize: FontSizes.xxl,
     },

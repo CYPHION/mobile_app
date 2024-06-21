@@ -4,24 +4,19 @@ import { useSelector } from 'react-redux'
 import LoadingScreen from '../../components/base/LoadingScreen'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { getImage, screenDimensions } from '../../utils/functions'
+import { bgColor, getImage, screenDimensions } from '../../utils/functions'
 
 const ViewAllStudents = ({ navigation }) => {
     const user = useSelector(state => state?.user?.data)
     const globalData = useSelector(state => state?.global?.data)
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
-
-    const bgColor = {
-        active: Color.primary,
-        inactive: Color.error,
-        pending: Color.btnDisable,
-        freeze: Color.warning
-    }
+    // useEffect to handle loading status when globalData changes
 
     useEffect(() => {
-        setLoading(false)
-    }, [globalData])
+        setLoading(false)// Setting loading status to false when globalData changes
+    }, [globalData]); // Dependency array to run effect when globalData changes
+
 
     return (
 
@@ -52,8 +47,9 @@ const ViewAllStudents = ({ navigation }) => {
                                 <TouchableOpacity activeOpacity={0.9} key={index} onPress={() => navigation.navigate('viewStudent', { id: elem.id })}>
                                     <View style={styles.allStudentContainer}>
                                         <View style={styles.allStudentContainers}>
-                                            <View>
+                                            <View style={{ borderWidth: 2, borderColor: Color.primary, borderRadius: screenDimensions.width * 0.18 * 0.5, width: screenDimensions.width * 0.18, height: screenDimensions.width * 0.18, position: 'relative' }}>
                                                 <Image resizeMode='contain' source={elem?.picture ? { uri: getImage(elem?.picture) } : require("../../images/profileAvatar.png")} style={styles.image} />
+                                                <View style={[styles.stBadge, { backgroundColor: bgColor[elem?.status] }]}></View>
                                             </View>
                                             <View>
                                                 <Text style={[styles.nameFont]}>{elem?.fullName}</Text>
@@ -122,12 +118,15 @@ const styles = StyleSheet.create({
         borderColor: "black",
         backgroundColor: Color.pureWhite,
         marginTop: 10,
-        marginBottom: 5
+        marginBottom: 5,
+        shadowColor: 'black',
+        shadowOpacity: 0.1,
+        shadowOffset: 2,
     },
     nameFont: {
         fontFamily: FontFamily.interMedium,
         fontSize: FontSizes.lg,
-        color: Color.text,
+        color: Color.primary,
     },
     yearFont: {
         textAlign: 'left',
@@ -149,14 +148,19 @@ const styles = StyleSheet.create({
     weeklyText: {
         fontFamily: FontFamily.interBold,
         fontSize: FontSizes.md,
-        color: Color.text,
+        color: Color.primary,
     },
     image: {
-        width: screenDimensions.width * 0.18,
-        height: screenDimensions.width * 0.18,
+        width: "100%",
+        height: "100%",
         borderRadius: screenDimensions.width * 0.18 * 0.5,
         backgroundColor: Color.disable,
-        borderColor: Color.borderColor,
-        borderWidth: 0.3,
-    }
+    },
+    stBadge: {
+        position: "absolute",
+        right: 0,
+        width: 20,
+        height: 20,
+        borderRadius: 10
+    },
 })

@@ -12,44 +12,50 @@ import StudentsAccordion from '../StudentsAccordion'
 const { fontScale } = screenDimensions;
 
 const CreateAppliction = (props) => {
+    // Destructure props to access necessary functions and state variables
     const { setNextScreen, setselectData, setselectedDate, selectData, setReason } = props
-    const [open, setOpen] = useState(false)
-    const [openDate, setOpenDate] = useState(false)
-    const globalData = useSelector(state => state?.global?.data)
-    const [isLoading, setIsLoading] = useState(false)
-    const [formData, setFormData] = useState({
-        date: '',
-        remarks: '',
+    // State variables initialization
+    const [open, setOpen] = useState(false)// State for managing modal open/close
+    const [openDate, setOpenDate] = useState(false)  // State for managing date picker modal open/close
+    const globalData = useSelector(state => state?.global?.data) // Access global data from Redux store
+    const [isLoading, setIsLoading] = useState(false) // State for managing loading state
+    const [formData, setFormData] = useState({// State for form data
+        date: '', // Date field
+        remarks: '', // Remarks field
 
     })
-    const [selectedValues, setSelectedValues] = useState([])
-
+    const [selectedValues, setSelectedValues] = useState([]) // State for selected values (possibly for multi-select)
+    // Function to handle changes in form fields
     const onChangeHandler = (name, text) => {
         setFormData(prevFormData => ({
             ...prevFormData,
             [name]: text
         }));
+        // Update selected date state if 'date' field changes
         if (name === 'date') {
             setselectedDate(text)
         }
+        // Update reason state if 'remarks' field changes
         if (name === 'remarks') {
             setReason(text)
         }
     };
 
-
+    // Function to handle form submission
     const handleSubmit = () => {
         setIsLoading(true)
+        // Check if date and remarks are filled
         if (!formData?.date || !formData?.remarks) {
             !formData?.remarks && customToast("error", "Please write valid reason")
             !formData?.date && customToast("error", "Please Select Date First")
             setIsLoading(false)
         } else {
+            // Check if schedule is selected
             if (selectData?.length === 0) {
                 customToast("error", "Please Select Schedule")
                 setIsLoading(false)
             } else {
-
+                // Proceed to next screen if all conditions met
                 setNextScreen(true)
                 setIsLoading(false)
             }
@@ -90,7 +96,7 @@ const CreateAppliction = (props) => {
                         </View>
                     </TouchableOpacity>
                 </View>
-                <View>
+                {selectData?.length > 0 && <View>
                     <InputField
                         multiline
                         onChangeText={(text) => onChangeHandler('remarks', text)}
@@ -98,7 +104,7 @@ const CreateAppliction = (props) => {
                         label={"Reason"}
                         required
                     />
-                </View>
+                </View>}
                 <View>
                     <CustomButton
                         title='Select Lesson'

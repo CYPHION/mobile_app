@@ -73,7 +73,7 @@ const IntroSlider = ({ setIsIntro }) => {
             </SafeAreaView >
         );
     };
-
+    // Function to render 'Next' button
     const renderNextButton = () => (
         <View style={[styles.flexClass, { margin: 5, backgroundColor: Color.primary, borderRadius: 6, padding: 15 }]}>
             <Text style={{ fontFamily: FontFamily.interSemiBold, fontSize: FontSizes.md, color: Color.white }} >
@@ -81,15 +81,15 @@ const IntroSlider = ({ setIsIntro }) => {
             </Text>
         </View >
     )
-
+    // Function to render 'Done' button
     const renderDoneButton = () => (
         <View style={[styles.flexClass, { margin: 5, backgroundColor: Color.primary, borderRadius: 6, padding: 15 }]} >
             <Text style={{ fontFamily: FontFamily.interSemiBold, fontSize: FontSizes.md, color: Color.white }} >
-                Login
+                Finish
             </Text>
         </View >
     )
-
+    // Function to render 'Skip' button
     const renderSkipButton = () => (
 
         <View style={[styles.flexClass, { margin: 5, backgroundColor: Color.white, borderRadius: 6, padding: 15 }]}
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.semiBold,
         color: Color.black
     },
-    progressBar: { position: 'absolute', top: screenDimensions.height * 0.20, backgroundColor: Color.primaryLight, height: 10, width: screenDimensions.width * 0.4, borderRadius: 10 }
+    progressBar: { position: 'absolute', top: screenDimensions.height * 0.20, backgroundColor: Color.primaryBg, height: 10, width: screenDimensions.width * 0.4, borderRadius: 10 }
 
 
 

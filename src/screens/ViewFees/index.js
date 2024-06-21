@@ -23,39 +23,42 @@ const ViewFess = () => {
     const user = useSelector(state => state?.user?.data)
     const dispatch = useDispatch()
     const router = useRoute()
+
+    // Function to format fee details
     const ineerList = (item) => [
         { name: "Previous Dues", value: `£${item?.totalDues}` },
         { name: "Book dues", value: `£${item?.bookDues}` },
         { name: "Paid Amount", value: `£${item?.amountPaid}` },
     ]
 
-
+    // Function to toggle item selection
     const toggleItem = (index) => {
         setActiveItem(activeItem === index ? null : index); // Toggle state based on click
     };
 
-
+    // Function to handle file download
     const handleDownload = (fileName) => {
         const url = getImage(fileName); // Replace with your download URL
         Linking.openURL(url).catch((err) => customToast('error', 'Something went wrong!'));
 
     };
 
+    // Function to fetch data
     const fetchData = () => {
         const filter = globaldata?.fees?.filter((item) => item.studentId === router?.params?.student?.id)
         setData(filter)
     }
 
-
+    // Function to render item
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>
-                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTThree} />
                 <Text style={styles.inactivetext}>No Record found</Text>
             </View>
         </View>
     )
-
+    // Callback function for refreshing data
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         dispatch(globalData(user?.id))
@@ -69,7 +72,7 @@ const ViewFess = () => {
             });
     }, [])
 
-
+    // Effect to fetch data initially and when global data fees change
     useEffect(() => {
         fetchData()
     }, [globaldata?.fees])
@@ -94,8 +97,8 @@ const ViewFess = () => {
                                         </View>
                                     ))}
                                     key={index}
-                                    date={`${item.payType}`}
-                                    studentName={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
+                                    date={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
+                                    studentName={`${item.payType}`}
                                     total={
                                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                             <Text style={[styles.accordionTitleHeading]}>£{item.amountPaid} </Text>
@@ -137,7 +140,7 @@ const styles = StyleSheet.create({
     },
     inactivetext: {
         textAlign: 'center',
-        color: Color.textTwo,
+        color: Color.textTThree,
         fontSize: FontSizes.lg
     },
     accordionTitleHeading: {

@@ -18,44 +18,46 @@ const Analytics = ({ navigation }) => {
 
     const [open, setOpen] = useState(false);
     const [refresh, setRefresh] = useState(false);
-
-    const currentDate = new Date();
-    const startOfMonth = new Date(currentDate);
-    startOfMonth.setMonth(currentDate.getMonth() - 1);
-    startOfMonth.setHours(0, 0, 0, 0);
-
-    const endDate = new Date(currentDate);
-    endDate.setHours(23, 59, 59, 999);
-
-    const [date, setDate] = useState({
-        startDate: startOfMonth,
-        endDate: endDate,
-    });
-
     const [appointment, setAppointment] = useState([])
     const [totalAttendance, setTotalAttendance] = useState([])
     const [boosterFees, setBoosterFees] = useState([])
     const [totalFee, setTotalFee] = useState([])
     const [outStangingFee, setOutStangingFee] = useState([])
     const [totalDepositFee, setTotalDepositFee] = useState([])
+    // Date calculations
+    const currentDate = new Date();
+    const startOfMonth = new Date(currentDate); // Start date of the current month
+    startOfMonth.setMonth(currentDate.getMonth() - 1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    const endDate = new Date(currentDate); // End date of the current month
+    endDate.setHours(23, 59, 59, 999);
+
+    const [date, setDate] = useState({ // State for date range selection
+        startDate: startOfMonth,
+        endDate: endDate,
+    });
+
 
     const user = useSelector(state => state?.user?.data);
     const global = useSelector(state => state?.global?.data);
 
     const dispatch = useDispatch()
+    // Function to filter data by date range
     const filterByDate = (data, startDate, endDate) => {
         return data?.filter(item => {
-            const itemDate = new Date(item?.createdAt);
+            const itemDate = new Date(item?.createdAt); // Assuming createdAt field represents the date of the item
             return itemDate >= startDate && itemDate <= endDate;
         });
     };
 
 
     const handelFilter = (startDate, endDate) => {
+        // Filter appointments, attendances, fees, students, and deposit fees based on the date range
         setAppointment(filterByDate(global?.appointments, startDate, endDate));
         setTotalAttendance(filterByDate(global?.attendances, startDate, endDate));
         const filteredFees = filterByDate(global?.fees, startDate, endDate);
-
+        // Calculate booster fees and total fee based on filtered fees
         setBoosterFees(filteredFees?.reduce((acc, elem) => {
             if (elem?.isBooster) {
                 return acc + elem?.boosterPaid;
@@ -64,7 +66,7 @@ const Analytics = ({ navigation }) => {
         }, 0));
 
         setTotalFee(filteredFees?.reduce((acc, elem) => acc + elem?.amountPaid, 0));
-
+        // Calculate outstanding fee based on filtered students and total deposit fee based on filtered deposit fees
         const filteredStudents = filterByDate(global?.students, startDate, endDate);
         const filteredDepositFees = filterByDate(global?.depositFee, startDate, endDate);
 
@@ -74,29 +76,34 @@ const Analytics = ({ navigation }) => {
 
 
     const handleRefresh = () => {
+        // Set refreshing to true to indicate data fetching
         setRefresh(true);
-
+        // Set start and end dates for the refreshed date range
         const refreshedStartDate = new Date();
         refreshedStartDate.setMonth(refreshedStartDate.getMonth() - 1);
         refreshedStartDate.setHours(0, 0, 0, 0);
 
         const refreshedEndDate = new Date();
         refreshedEndDate.setHours(23, 59, 59, 999);
-
+        // Set the date state to the refreshed date range
         setDate({
             startDate: refreshedStartDate,
             endDate: refreshedEndDate,
         });
+        // Dispatch action to fetch updated global data
         dispatch(globalData(user?.id))
             .then(() => {
+                // Filter data based on the refreshed date range
                 handelFilter(refreshedStartDate, refreshedEndDate)
+                // Set refreshing to false after data fetching is completed
                 setRefresh(false); // Set refreshing to false after data fetching is completed
             })
             .catch(() => {
+                // Ensure refreshing is set to false even if there's an error
                 setRefresh(false); // Ensure refreshing is set to false even if there's an error
             })
     };
-
+    // Fetch data initially when the component mounts
     useEffect(() => {
         handelFilter(date.startDate, date.endDate)
     }, [])
@@ -253,7 +260,7 @@ const styles = StyleSheet.create({
     attendeceFont: {
         fontSize: FontSizes.md,
         color: Color.textThree,
-        fontFamily: FontFamily.medium,
+        fontFamily: FontFamily.bold,
         backgroundColor: Color.grayBackground,
         paddingHorizontal: 10,
         paddingVertical: 5
@@ -261,7 +268,7 @@ const styles = StyleSheet.create({
     totalFont: {
         fontSize: FontSizes.lg,
         fontFamily: FontFamily.interBold,
-        color: Color.text
+        color: Color.primary
     },
     analyticBox: {
         flexDirection: 'row',

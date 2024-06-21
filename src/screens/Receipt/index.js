@@ -5,6 +5,7 @@ import { default as NoHomework } from 'react-native-vector-icons/MaterialCommuni
 import { useDispatch, useSelector } from 'react-redux';
 import AccordionItem from '../../components/base/Accordion';
 import DropdownComponent from '../../components/base/CustomDropDown';
+import LoadingScreen from '../../components/base/LoadingScreen';
 import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
@@ -32,18 +33,18 @@ const Receipt = () => {
         { name: "Paid Amount", value: `£${item?.amountPaid}` },
     ]
 
-
+    // Function to toggle the active item
     const toggleItem = (index) => {
         setActiveItem(activeItem === index ? null : index); // Toggle state based on click
     };
 
-
+    // Function to handle downloading a file
     const handleDownload = (fileName) => {
         const url = getImage(fileName); // Replace with your download URL
         Linking.openURL(url).catch(() => customToast('error', 'Something went wrong!'));
 
     };
-
+    // Function to fetch and filter fee data based on the selected year
     const fetchData = () => {
         const currentMonth = parseInt(option); // Current month from state (assuming option is a string representing the month)
 
@@ -78,7 +79,7 @@ const Receipt = () => {
             })
     }, [])
 
-
+    // Initialize the 'years' array with the last 7 years
     useEffect(() => {
         const currentDate = new Date();
         const monthArray = Array.from({ length: 12 }, (_, index) => {
@@ -122,7 +123,7 @@ const Receipt = () => {
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
             <View>
-                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTwo} />
+                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textThree} />
                 <Text style={styles.inactivetext}>No Record found</Text>
             </View>
         </View>
@@ -135,6 +136,7 @@ const Receipt = () => {
                 refreshing={refreshing}
             />}
         >
+            <LoadingScreen loading={isLoading} />
             {(!!user.email && !!globaldata.students) ?
                 <View style={styles.feesContainers}>
                     {globaldata?.fees.length > 0 ? <>
@@ -165,8 +167,8 @@ const Receipt = () => {
                                                 </View>
                                             ))}
                                             key={index}
-                                            date={`${item.payType}`}
-                                            studentName={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
+                                            date={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
+                                            studentName={`${item.payType}`}
                                             total={
                                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                     <Text style={[styles.accordionTitleHeading]}>£{item.amountPaid} </Text>
@@ -214,11 +216,11 @@ const styles = StyleSheet.create({
     },
     inactivetext: {
         textAlign: 'center',
-        color: Color.textTwo,
+        color: Color.textThree,
         fontSize: FontSizes.lg
     },
     accordionTitleHeading: {
-        color: Color.textThree,
+        color: Color.primary,
         fontFamily: FontFamily.interMedium,
         fontSize: FontSizes.xxl,
     },
