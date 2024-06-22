@@ -10,7 +10,7 @@ import Table from '../../components/base/Table'
 import { globalData } from '../../store/thunk'
 import { Color } from '../../utils/color'
 import { FontSizes } from '../../utils/font'
-import { formattedDate, screenDimensions } from '../../utils/functions'
+import { screenDimensions } from '../../utils/functions'
 
 
 
@@ -26,6 +26,11 @@ const list = (schedule) => [
         icon: <BookIcon name="book" size={FontSizes.xl} color={Color.primary} />,
     },
     {
+        name: "Hours",
+        value: schedule?.LessonTiming?.hours,
+        icon: <CalendarCheckIcon name="calendar-multiple-check" size={FontSizes.xl} color={Color.primary} />,
+    },
+    {
         name: "Schedule Days",
         value: schedule?.days,
         icon: <CalendarIcon name="calendar-days" size={FontSizes.xl} color={Color.primary} />,
@@ -34,11 +39,6 @@ const list = (schedule) => [
         name: "Time",
         value: schedule?.LessonTiming?.time,
         icon: <TimeIcon name="timelapse" size={FontSizes.xl} color={Color.primary} />,
-    },
-    {
-        name: "Start Date",
-        value: (schedule?.startDate && !isNaN(new Date(schedule?.startDate)) && schedule?.startDate !== '0000-00-00') ? formattedDate(schedule?.startDate, 'MMM-dd,yyyy') : '',
-        icon: <CalendarCheckIcon name="calendar-multiple-check" size={FontSizes.xl} color={Color.primary} />,
     },
     // {
     //     name: "End Date",
@@ -109,7 +109,7 @@ const ViewSchedule = () => {
                         </View>
                     </View> : <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
                         <View>
-                            <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textTThree} />
+                            <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textThree} />
                             <Text style={styles.inactivetext}>No Schedule found</Text>
                         </View>
                     </View>
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     },
     inactivetext: {
         textAlign: 'center',
-        color: Color.textTThree,
+        color: Color.textThree,
         fontSize: FontSizes.lg
     }
 

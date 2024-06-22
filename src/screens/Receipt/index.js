@@ -17,11 +17,11 @@ import ReceiptSkelton from './ReceiptSkeleton';
 
 
 const Receipt = () => {
-    const [years, setYears] = useState([]);
+    const [months, setMonths] = useState([]);
     const [activeItem, setActiveItem] = useState(null);
-    const [isLoading, setIsloading] = useState(true);
-    const [option, setOption] = useState(new Date().getFullYear());
+    const [option, setOption] = useState('');
     const [data, setData] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
     const [refreshing, setRefreshing] = useState(false)
     const dispatch = useDispatch()
     const globaldata = useSelector(state => state?.global?.data)
@@ -42,46 +42,97 @@ const Receipt = () => {
     // Function to handle downloading a file
     const handleDownload = (fileName) => {
         const url = getImage(fileName); // Replace with your download URL
-        Linking.openURL(url).catch((err) => customToast('error', 'Something went wrong!'));
+        Linking.openURL(url).catch(() => customToast('error', 'Something went wrong!'));
 
     };
     // Function to fetch and filter fee data based on the selected year
     const fetchData = () => {
-        const filteredData = globaldata?.fees?.filter((item) => {
-            const itemYear = new Date(item.createdAt).getFullYear(); // Replace 'invoiceDate' with your actual date property
-            return itemYear === parseInt(option);
+        const currentMonth = parseInt(option); // Current month from state (assuming option is a string representing the month)
+        // Calculate the date 12 months ago
+        const date12MonthsAgo = new Date();
+        date12MonthsAgo.setHours(0, 0, 0, 0)
+        date12MonthsAgo.setMonth(date12MonthsAgo.getMonth() - 12);
+        // Filter data to include only entries from the last 12 months
+        const dataLast12Months = globaldata?.fees?.filter(item => {
+            const createdAtDate = new Date(item.createdAt); // Assuming item.createdAt is a valid date string
+            return createdAtDate >= date12MonthsAgo;
         });
-        setIsloading(false)
+        // Filter the data further based on the current month
+        const filteredData = dataLast12Months.filter(item => {
+            const createdAtDate = new Date(item.createdAt);
+            const createdAtMonth = createdAtDate.getMonth() + 1; // Month of createdAt (1-12)
+            return createdAtMonth === currentMonth;
+        });
         setData(filteredData);
     }
-    // Function to handle refreshing the fee data
+
+    // const fetchData = () => {
+    //     const filteredData = globaldata?.fees?.filter((item) => {
+    //         const itemYear = new Date(item.createdAt).getFullYear(); // Replace 'invoiceDate' with your actual date property
+    //         return itemYear === parseInt(option);
+    //     });
+    //     setData(filteredData);
+    // }
+    const changeMonth = () => {
+        const currentDate = new Date();
+        const monthValue = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Current month as 'MM'
+
+        const initialOption = months.find(month => month.value === monthValue)?.value || '01'; // Default to '01' if not found
+        setOption(initialOption);
+    }
+
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         dispatch(globalData(user?.id))
             .then(() => {
+                changeMonth()
                 fetchData()
                 setRefreshing(false); // Set refreshing to false after data fetching is completed
             })
             .catch(() => {
+                changeMonth()
                 fetchData()
                 setRefreshing(false); // Ensure refreshing is set to false even if there's an error
             })
     }, [])
 
+
     // Initialize the 'years' array with the last 7 years
     useEffect(() => {
-        const currentYear = new Date().getFullYear();
-        const yearArray = Array.from({ length: 7 }, (_, index) => ({
-            name: (currentYear - index).toString(),
-            value: (currentYear - index).toString(),
-        }));
-        setYears(yearArray);
+        const currentDate = new Date();
+        const monthArray = Array.from({ length: 12 }, (_, index) => {
+            const date = new Date(currentDate);
+            date.setMonth(currentDate.getMonth() - index);
+            return {
+                name: date.toLocaleString('default', { month: 'long' }),
+                value: (date.getMonth() + 1).toString().padStart(2, '0') // Month value as 'MM'
+            };
+        });
+
+        // Sort monthArray by value (ascending order)
+        monthArray.sort((a, b) => {
+            return a.value.localeCompare(b.value);
+        });
+
+        setMonths(monthArray);
     }, []);
-    // Fetch data initially and whenever the selected year or fee data changes
+    // useEffect(() => {
+    //     const currentYear = new Date().getFullYear();
+    //     const yearArray = Array.from({ length: 7 }, (_, index) => ({
+    //         name: (currentYear - index).toString(),
+    //         value: (currentYear - index).toString(),
+    //     }));
+    //     console.log({ yearArray })
+    //     setYears(yearArray);
+    // }, []);
+
     useEffect(() => {
         fetchData()
     }, [option, globaldata?.fees]);
 
+    useEffect(() => {
+        changeMonth()
+    }, [months]);
 
     const renderItem = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
@@ -105,14 +156,14 @@ const Receipt = () => {
                     {globaldata?.fees.length > 0 ? <>
                         <View style={styles.feesReceiptContainer}>
                             <View>
-                                <Text style={styles.fessYears}>Select Year</Text>
+                                <Text style={styles.fessYears}>Select Month</Text>
                             </View>
                             <View>
                                 <DropdownComponent
-                                    dropdownStyle={{ width: screenDimensions.width * 0.25 }}
+                                    dropdownStyle={{ width: screenDimensions.width * 0.30 }}
                                     disable={false}
-                                    data={years}
-                                    placeHolderText={(new Date()).getFullYear()}
+                                    data={months}
+                                    placeHolderText={option}
                                     value={option}
                                     setValue={setOption}
                                 />

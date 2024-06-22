@@ -31,7 +31,7 @@ const DrawerList = [
     { label: 'Report an Absence', navigateTo: 'leaveApplication', icon: 'right', mainRoute: 'root' },
     { label: 'Pay Fee', navigateTo: 'fee', icon: 'right', mainRoute: 'tabs' },
     { label: 'Compensation', navigateTo: 'compensation', icon: 'right', mainRoute: 'root' },
-    { label: 'Testimonials', navigateTo: 'testimonials', icon: 'right', mainRoute: 'root' },
+    { label: 'Testimonials', navigateTo: 'addTestimonial', icon: 'right', mainRoute: 'root' },
     { label: 'About us', navigateTo: 'aboutus', icon: 'right', mainRoute: 'homestack' },
     { label: 'Lesson Timings', navigateTo: 'lessonTiming', icon: 'right', mainRoute: 'homestack' },
     { label: 'Fee Plan', navigateTo: 'fees', icon: 'right', mainRoute: 'homestack' },
@@ -143,8 +143,20 @@ function CustomDrawerContent(props) {
                 </TouchableOpacity>
                 <View style={styles.drawerSection}>
                     {!!user?.email ? DrawerList.map((el, i) => {
-                        return (
-                            <DrawerLayout
+                        if (el.label === "Testimonials") {
+                            return !(globaldata?.testimonials?.some((item) => item?.userId === user?.id)) &&
+                                <DrawerLayout
+                                    key={i}
+                                    label={el.label}
+                                    navigateTo={el.navigateTo}
+                                    icon={el.icon}
+                                    setOpen={setOpen}
+                                    mainRoute={el.mainRoute}
+                                    {...props}
+                                />
+
+                        } else {
+                            return (<DrawerLayout
                                 key={i}
                                 label={el.label}
                                 navigateTo={el.navigateTo}
@@ -152,8 +164,9 @@ function CustomDrawerContent(props) {
                                 setOpen={setOpen}
                                 mainRoute={el.mainRoute}
                                 {...props}
-                            />
-                        );
+                            />)
+
+                        }
                     }) :
                         DrawerList2.map((el, i) => {
                             return (

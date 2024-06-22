@@ -33,7 +33,7 @@ const AddTestimonial = () => {
                 title='OK'
                 variant='fill'
                 onPress={() => {
-                    navigation.navigate('testimonials', { added: true })
+                    navigation.navigate('tabs', { screen: 'home' })
                 }}
                 btnstyle={{ width: screenDimensions.width * 0.2, paddingVertical: 5 }}
             />

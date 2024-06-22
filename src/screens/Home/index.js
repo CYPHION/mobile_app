@@ -51,7 +51,7 @@ const Home = ({ navigation }) => {
         { title: 'Book Compensation', icon: <BookCompensation width={30} height={30} />, screen: 'compensation', path: 'root' },
         { title: 'Report an Absence', icon: <ReportLeave width={30} height={30} />, screen: 'leaveApplication', path: 'root' },
         { title: 'Notifications', icon: <Notifications width={30} height={30} />, screen: 'notifications', path: 'root' },
-        { title: 'Testimonials', icon: <Testimonials width={30} height={30} />, screen: 'testimonials', path: 'root' },
+        { title: 'View Appointments', icon: <Testimonials width={30} height={30} />, screen: 'viewAppointment', path: 'root' },
         { title: 'Logout', icon: <Logout width={30} height={30} />, screen: '', path: 'logout' },
 
     ]
