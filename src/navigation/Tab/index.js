@@ -10,11 +10,11 @@ import CardIcon from 'react-native-vector-icons/Ionicons';
 import AnalyticsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomAppBar from '../../components/base/CustomAppBar';
 import Analytics from '../../screens/Analytics';
+import ChangePasswordScreen from '../../screens/ChangePassword';
 import FeeCollection from '../../screens/FeeCollection';
 import Home from '../../screens/Home';
 import Profile from '../../screens/Profile';
 import Receipt from '../../screens/Receipt';
-import ChangePasswordScreen from '../../screens/changePassword';
 import { Color } from '../../utils/color';
 import { FontSizes } from '../../utils/font';
 

@@ -48,17 +48,24 @@ const Receipt = () => {
     // Function to fetch and filter fee data based on the selected year
     const fetchData = () => {
         const currentMonth = parseInt(option); // Current month from state (assuming option is a string representing the month)
-
-        // Filter data based on 'createdAt' field matching current month
-        const filteredData = globaldata?.fees.filter(item => {
+        // Calculate the date 12 months ago
+        const date12MonthsAgo = new Date();
+        date12MonthsAgo.setHours(0, 0, 0, 0)
+        date12MonthsAgo.setMonth(date12MonthsAgo.getMonth() - 12);
+        // Filter data to include only entries from the last 12 months
+        const dataLast12Months = globaldata?.fees?.filter(item => {
             const createdAtDate = new Date(item.createdAt); // Assuming item.createdAt is a valid date string
+            return createdAtDate >= date12MonthsAgo;
+        });
+        // Filter the data further based on the current month
+        const filteredData = dataLast12Months.filter(item => {
+            const createdAtDate = new Date(item.createdAt);
             const createdAtMonth = createdAtDate.getMonth() + 1; // Month of createdAt (1-12)
-
             return createdAtMonth === currentMonth;
         });
-
         setData(filteredData);
     }
+
     // const fetchData = () => {
     //     const filteredData = globaldata?.fees?.filter((item) => {
     //         const itemYear = new Date(item.createdAt).getFullYear(); // Replace 'invoiceDate' with your actual date property
@@ -66,19 +73,29 @@ const Receipt = () => {
     //     });
     //     setData(filteredData);
     // }
+    const changeMonth = () => {
+        const currentDate = new Date();
+        const monthValue = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Current month as 'MM'
+
+        const initialOption = months.find(month => month.value === monthValue)?.value || '01'; // Default to '01' if not found
+        setOption(initialOption);
+    }
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         dispatch(globalData(user?.id))
             .then(() => {
+                changeMonth()
                 fetchData()
                 setRefreshing(false); // Set refreshing to false after data fetching is completed
             })
             .catch(() => {
+                changeMonth()
                 fetchData()
                 setRefreshing(false); // Ensure refreshing is set to false even if there's an error
             })
     }, [])
+
 
     // Initialize the 'years' array with the last 7 years
     useEffect(() => {
@@ -114,11 +131,7 @@ const Receipt = () => {
     }, [option, globaldata?.fees]);
 
     useEffect(() => {
-        const currentDate = new Date();
-        const monthValue = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Current month as 'MM'
-
-        const initialOption = months.find(month => month.value === monthValue)?.value || '01'; // Default to '01' if not found
-        setOption(initialOption);
+        changeMonth()
     }, [months]);
 
     const renderItem = () => (
