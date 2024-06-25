@@ -25,17 +25,28 @@ const ViewAttendance = () => {
     const [refresh, setRefresh] = useState(false);
     const [open, setOpen] = useState(false)
     const [data, setData] = useState([])
+    const [summaryData, setSummaryData] = useState({
+        totalSchedule: 0,
+        totalHours: 0,
+        totalattendLesson: 0,
+        totalattendLessonHours: 0,
+        totalAbsentLesson: 0,
+        totalLeaveLesson: 0
+    })
     const router = useRoute()
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
     const dispatch = useDispatch()
+    const getAllSchedule = globaldata?.schedules?.filter(item => item?.studentId == router?.params?.student?.id)
 
     let filterAttendance = globaldata?.attendances?.filter(elem => elem.studentId === router?.params?.student?.id)
     const studentDuefeeDate = new Date(router?.params?.student?.dueFeeDate)
     studentDuefeeDate.setHours(0, 0, 0, 0);
+
     let TODAY = new Date()
     TODAY.setHours(0, 0, 0, 0);
     let date13WeeksAgo;
+
     if (studentDuefeeDate.getTime() >= TODAY.getTime()) {
         date13WeeksAgo = new Date();
         date13WeeksAgo.setDate(TODAY.getDate() - 13 * 7);
@@ -52,7 +63,6 @@ const ViewAttendance = () => {
         });
 
     }
-
     // Function to filter attendance data by date range
     const filterByDate = (startDate, endDate) => {
         if (startDate && endDate) {
@@ -69,6 +79,50 @@ const ViewAttendance = () => {
     const handleDateChange = (date) => {
         filterByDate(date.startDate, date.endDate)
     }
+
+    const result = [
+        { id: 1, "key": "Lessons Agreed New", "value": `${summaryData?.totalSchedule} (${summaryData?.totalHours} hours)` },
+        { id: 2, "key": "Total Lessons Attended", "value": `${summaryData?.totalattendLesson} (${summaryData?.totalattendLessonHours} hours)` },
+        { id: 3, "key": "Absent Lesson", "value": summaryData?.totalAbsentLesson },
+        { id: 4, "key": "Leave Lesson", "value": summaryData?.totalLeaveLesson },
+    ]
+
+    // get & set the summary data of each student
+    const getSummaryData = () => {
+        setSummaryData({
+            totalHours: 0,
+            totalattendLessonHours: 0,
+            totalSchedule: 0,
+            totalattendLesson: 0,
+            totalAbsentLesson: 0,
+            totalLeaveLesson: 0,
+        });
+        const stdAtt = globaldata?.attendances?.filter(elem => elem.studentId === router?.params?.student?.id)
+        const validSchedule = getAllSchedule?.filter((item) => !item?.isBooster);
+        const totalHours = validSchedule.reduce((acc, item) => acc + item?.LessonTiming?.hours || 0, 0);
+        setSummaryData((prev) => ({
+            ...prev,
+            totalHours,
+            totalSchedule: validSchedule.length
+        }));
+        const attendance = stdAtt.filter((item) => item.attendanceType === 'present' || item.attendanceType === 'late');
+        const totalattendLessonHours = attendance.reduce((acc, item) => acc + item?.Schedule?.LessonTiming?.hours || 0, 0);
+        setSummaryData((prev) => ({
+            ...prev,
+            totalattendLessonHours,
+            totalattendLesson: attendance.length
+        }));
+        const totalAbsentLesson = stdAtt.filter((item) => item?.attendanceType === 'absent').length;
+        setSummaryData((prev) => ({
+            ...prev,
+            totalAbsentLesson
+        }));
+        const totalLeaveLesson = stdAtt.filter((item) => item?.attendanceType === 'leave').length;
+        setSummaryData((prev) => ({
+            ...prev,
+            totalLeaveLesson
+        }));
+    };
 
     // Function to generate list items for attendance details
     const list = (attendance) => [
@@ -107,6 +161,7 @@ const ViewAttendance = () => {
     )
 
     useEffect(() => {
+        getSummaryData()
         filterByDate()
     }, [])
 
@@ -127,11 +182,11 @@ const ViewAttendance = () => {
                             <TopbarWithGraph student={router.params.student} />
 
                             <View style={GlobalStyles.p_10}>
-                                <Text style={styles.CompText}><Text style={{ fontFamily: FontFamily.interBold }}>Agreed Lessons:</Text> 24 (48 Hours){'\n'}</Text>
-                                <Text style={styles.CompText}><Text style={{ fontFamily: FontFamily.interBold }}>Total Lessons Attended:</Text> 10 (20 Hours){'\n'}</Text>
-                                <Text style={styles.CompText}><Text style={{ fontFamily: FontFamily.interBold }}>Authorised Absence Reported:</Text> 08 (16 Hours){'\n'}</Text>
-                                <Text style={styles.CompText}><Text style={{ fontFamily: FontFamily.interBold }}>Unauthorised Absence:</Text> 06 (12 Hours){'\n'}</Text>
-                                <Text style={styles.CompText}><Text style={{ fontFamily: FontFamily.interBold }}>Fee Paid up to:</Text> {formattedDate(studentDuefeeDate, 'dd-MM-yyyy')} {'\n'}</Text>
+                                {result?.map((elem) => (
+
+                                    <Text key={elem.id} style={styles.CompText}><Text style={{ fontFamily: FontFamily.interBold }}>{elem?.key}</Text> {elem?.value}{'\n'}</Text>
+                                ))}
+
                                 <Text style={styles.CompText}><Text style={{ fontFamily: FontFamily.interBold }}>Note for parent/carer:</Text> Only 1 compensation is allowed during a month of reported absence only. No compensation Hours will be transferred to the next term.{'\n'}</Text>
                             </View>
                             <View style={[GlobalStyles.headerStyles]}>
