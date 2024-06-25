@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import FilterIcon from 'react-native-vector-icons/FontAwesome'
+import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import Pound from "react-native-vector-icons/FontAwesome5"
 import Icon from "react-native-vector-icons/Fontisto"
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,10 +19,11 @@ const Analytics = ({ navigation }) => {
     const [refresh, setRefresh] = useState(false);
     const [appointment, setAppointment] = useState([])
     const [totalAttendance, setTotalAttendance] = useState([])
-    const [boosterFees, setBoosterFees] = useState([])
-    const [totalFee, setTotalFee] = useState([])
+    const [boosterFees, setBoosterFees] = useState(0)
+    const [totalFee, setTotalFee] = useState(0)
     const [outStangingFee, setOutStangingFee] = useState([])
-    const [totalDepositFee, setTotalDepositFee] = useState([])
+    const [totalDepositFee, setTotalDepositFee] = useState(0)
+
     // Date calculations
     const currentDate = new Date();
     const startOfMonth = new Date(currentDate); // Start date of the current month
@@ -54,26 +54,88 @@ const Analytics = ({ navigation }) => {
 
     const handelFilter = (startDate, endDate) => {
         // Filter appointments, attendances, fees, students, and deposit fees based on the date range
-        setAppointment(filterByDate(global?.appointments, startDate, endDate));
-        setTotalAttendance(filterByDate(global?.attendances, startDate, endDate));
-        const filteredFees = filterByDate(global?.fees, startDate, endDate);
-        // Calculate booster fees and total fee based on filtered fees
-        setBoosterFees(filteredFees?.reduce((acc, elem) => {
+        // setAppointment(filterByDate(global?.appointments, startDate, endDate));
+        // setTotalAttendance(filterByDate(global?.attendances, startDate, endDate));
+        // const filteredFees = filterByDate(global?.fees, startDate, endDate);
+        // // Calculate booster fees and total fee based on filtered fees
+        // setBoosterFees(filteredFees?.reduce((acc, elem) => {
+        //     if (elem?.isBooster) {
+        //         return acc + elem?.boosterPaid;
+        //     }
+        //     return acc;
+        // }, 0));
+
+        // setTotalFee(filteredFees?.reduce((acc, elem) => acc + elem?.amountPaid, 0));
+        // // Calculate outstanding fee based on filtered students and total deposit fee based on filtered deposit fees
+        // const filteredDepositFees = filterByDate(global?.depositFee, startDate, endDate);
+        // setTotalDepositFee(filteredDepositFees?.reduce((acc, elem) => acc + elem.amountPaid, 0));
+        const filteredStudents = filterByDate(global?.students, startDate, endDate);
+
+        setOutStangingFee(filteredStudents?.reduce((acc, elem) => acc + elem.totalDues, 0));
+    }
+
+    const getAppointments = () => {
+        const currentDate = new Date();
+        const twelveMonthsAgo = new Date();
+        twelveMonthsAgo.setMonth(currentDate.getMonth() - 12);
+
+        const filteredAppointments = global?.appointments?.filter(appointment => {
+            const appointmentDate = new Date(appointment.createdAt);
+            return appointmentDate >= twelveMonthsAgo && appointmentDate <= currentDate;
+        });
+
+        setAppointment(filteredAppointments);
+    };
+
+    // Fetch attendances of last 13 weeks
+    const getAttendance = () => {
+        const currentDate = new Date();
+        const thirteenWeeksAgo = new Date();
+        thirteenWeeksAgo.setDate(currentDate.getDate() - 13 * 7);
+
+        const filteredAttendances = global?.attendances?.filter(attendance => {
+            const attendanceDate = new Date(attendance.createdAt);
+            return attendanceDate >= thirteenWeeksAgo && attendanceDate <= currentDate;
+        });
+
+        setTotalAttendance(filteredAttendances);
+    };
+
+    // Calculate fees for last 12 months
+    const calculateFeesForLast12Months = () => {
+        const currentDate = new Date();
+        const twelveMonthsAgo = new Date();
+        twelveMonthsAgo.setMonth(currentDate.getMonth() - 12);
+
+        const filteredFees = global?.fees?.filter(fee => {
+            const feeDate = new Date(fee.createdAt);
+            return feeDate >= twelveMonthsAgo && feeDate <= currentDate;
+        });
+
+        // Calculate booster fees
+        const calculatedBoosterFees = filteredFees?.reduce((acc, elem) => {
             if (elem?.isBooster) {
                 return acc + elem?.boosterPaid;
             }
             return acc;
-        }, 0));
+        }, 0);
 
-        setTotalFee(filteredFees?.reduce((acc, elem) => acc + elem?.amountPaid, 0));
-        // Calculate outstanding fee based on filtered students and total deposit fee based on filtered deposit fees
-        const filteredStudents = filterByDate(global?.students, startDate, endDate);
-        const filteredDepositFees = filterByDate(global?.depositFee, startDate, endDate);
+        // Calculate total fees
+        const calculatedTotalFee = filteredFees?.reduce((acc, elem) => acc + elem?.amountPaid, 0);
 
-        setOutStangingFee(filteredStudents?.reduce((acc, elem) => acc + elem.totalDues, 0));
-        setTotalDepositFee(filteredDepositFees?.reduce((acc, elem) => acc + elem.amountPaid, 0));
-    }
+        // Filter deposit fees from the last 12 months
+        const filteredDepositFees = global?.depositFee?.filter(deposit => {
+            const depositDate = new Date(deposit.createdAt);
+            return depositDate >= twelveMonthsAgo && depositDate <= currentDate;
+        });
 
+        // Calculate total deposit fees
+        const calculatedTotalDepositFee = filteredDepositFees?.reduce((acc, elem) => acc + elem.amountPaid, 0);
+
+        setBoosterFees(calculatedBoosterFees);
+        setTotalFee(calculatedTotalFee);
+        setTotalDepositFee(calculatedTotalDepositFee);
+    };
 
     const handleRefresh = () => {
         // Set refreshing to true to indicate data fetching
@@ -105,8 +167,14 @@ const Analytics = ({ navigation }) => {
     };
     // Fetch data initially when the component mounts
     useEffect(() => {
+        getAppointments();
+        getAttendance();
+        calculateFeesForLast12Months();
+    }, [global?.appointments, global?.attendances, global?.fees, global?.depositFee]); // Re-run when global data changes
+
+    useEffect(() => {
         handelFilter(date.startDate, date.endDate)
-    }, [])
+    }, []);
 
 
     return (
@@ -125,12 +193,12 @@ const Analytics = ({ navigation }) => {
 
                         <View style={[GlobalStyles.headerStyles]}>
                             <Text style={GlobalStyles.headerTextStyle}>Analytics</Text>
-                            <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
+                            {/* <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
                                 <View style={[styles.iconView]}>
                                     <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
                                 </View>
                                 <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
 
                         <View style={{ alignItems: 'center', gap: 10, paddingVertical: 10 }}>
@@ -142,11 +210,11 @@ const Analytics = ({ navigation }) => {
                                 <View style={[{ width: '75%' }]} >
                                     <Text style={styles.attendeceFont}>Attendance</Text>
                                     <View style={{ padding: 5, paddingHorizontal: 10 }}>
-                                        <Text style={[styles.totalFont]}>Total : {totalAttendance.length || 0}</Text>
+                                        <Text style={[styles.totalFont]}>Total : {totalAttendance?.length || 0}</Text>
                                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
-                                            <Text style={[styles.detailInnerText]}>Present: {totalAttendance.filter((item) => item?.attendanceType === 'present').length || 0}</Text>
-                                            <Text style={[styles.detailInnerText]}>Absent: {totalAttendance.filter((item) => item?.attendanceType === 'absent').length || 0}</Text>
-                                            <Text style={[styles.detailInnerText]}>Leave: {totalAttendance.filter((item) => item?.attendanceType === 'leave').length || 0}</Text>
+                                            <Text style={[styles.detailInnerText]}>Present: {totalAttendance?.filter((item) => item?.attendanceType === 'present')?.length || 0}</Text>
+                                            <Text style={[styles.detailInnerText]}>Absent: {totalAttendance?.filter((item) => item?.attendanceType === 'absent')?.length || 0}</Text>
+                                            <Text style={[styles.detailInnerText]}>Leave: {totalAttendance?.filter((item) => item?.attendanceType === 'leave')?.length || 0}</Text>
                                         </View>
                                     </View>
                                 </View>
@@ -174,7 +242,18 @@ const Analytics = ({ navigation }) => {
                                     <Pound name='pound-sign' color={Color.white} size={screenDimensions.width * 0.12} />
                                 </View>
                                 <View style={[{ width: '75%' }]} >
-                                    <Text style={styles.attendeceFont}>Outstanding Fees</Text>
+                                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                                        <Text style={[styles.attendeceFont, { paddingRight: 2 }]}>Outstanding Fees</Text>
+                                        {/* <View style={{}}>
+                                            <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
+                                                <View style={[styles.iconView]}>
+                                                    <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
+                                                </View>
+                                                <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
+                                            </TouchableOpacity>
+                                        </View> */}
+                                    </View>
+
                                     <View style={{ padding: 5, paddingHorizontal: 10 }}>
                                         <Text style={[styles.totalFont]}>Total : £{outStangingFee}</Text>
                                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
@@ -191,12 +270,12 @@ const Analytics = ({ navigation }) => {
                                 <View style={[{ width: '75%' }]} >
                                     <Text style={[styles.attendeceFont]}>Appointments</Text>
                                     <View style={{ padding: 5, paddingHorizontal: 10 }}>
-                                        <Text style={[styles.totalFont]}>Total : {appointment.length || 0}</Text>
+                                        <Text style={[styles.totalFont]}>Total : {appointment?.length || 0}</Text>
                                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
-                                            <Text style={[styles.detailInnerText]}>Complete: {appointment.filter((item) => item?.status === 'Completed').length || 0}</Text>
-                                            <Text style={[styles.detailInnerText]}>Pending:  {appointment.filter((item) => item?.status === 'Pending').length || 0}</Text>
-                                            <Text style={[styles.detailInnerText]}>Cancelled:  {appointment.filter((item) => item?.status === 'Cancelled').length || 0}</Text>
-                                            <Text style={[styles.detailInnerText]}>Missed:  {appointment.filter((item) => item?.status === 'Missed').length || 0}</Text>
+                                            <Text style={[styles.detailInnerText]}>Complete: {appointment?.filter((item) => item?.status === 'Completed')?.length || 0}</Text>
+                                            <Text style={[styles.detailInnerText]}>Pending:  {appointment?.filter((item) => item?.status === 'Pending')?.length || 0}</Text>
+                                            <Text style={[styles.detailInnerText]}>Cancelled:  {appointment?.filter((item) => item?.status === 'Cancelled')?.length || 0}</Text>
+                                            <Text style={[styles.detailInnerText]}>Missed:  {appointment?.filter((item) => item?.status === 'Missed')?.length || 0}</Text>
                                         </View>
                                     </View>
                                 </View>
@@ -234,8 +313,9 @@ const styles = StyleSheet.create({
         color: Color.text,
     },
     CompText: {
-        fontSize: FontSizes.md,
+        fontSize: FontSizes.sm,
         color: Color.text,
+        marginRight: 10
     },
     container: {
         flexDirection: 'row',
