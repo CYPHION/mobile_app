@@ -7,6 +7,7 @@ import HomeWork from '../../screens/HomeWork';
 import LeaveApplication from '../../screens/LeaveApplication';
 import Notifications from '../../screens/Notifications';
 import StudentDetails from '../../screens/StudentDetails';
+import TestRecords from '../../screens/TestRecords';
 import Testimonials from '../../screens/Testimonials';
 import ViewAttendance from '../../screens/ViewAttendance';
 import ViewChildren from '../../screens/ViewChildren';
@@ -41,6 +42,10 @@ const ChildrenStack = () => {
         <Stack.Screen name="studentDetail" component={StudentDetails} options={{
             headerShown: true,
             header: () => <CustomAppBar title={'View Student Detail'} />
+        }} />
+        <Stack.Screen name="TestRecords" component={TestRecords} options={{
+            headerShown: true,
+            header: () => <CustomAppBar title={'Student Test Records'} />
         }} />
         <Stack.Screen name="studentSchedule" component={ViewSchedule} options={{
             headerShown: true,

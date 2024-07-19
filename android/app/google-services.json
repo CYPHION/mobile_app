@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "1023256248503",
-    "project_id": "pt-notifications",
-    "storage_bucket": "pt-notifications.appspot.com"
+    "project_number": "469359603730",
+    "project_id": "prime-tuition-d1482",
+    "storage_bucket": "prime-tuition-d1482.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1023256248503:android:fb1668a4ee561574668d32",
+        "mobilesdk_app_id": "1:469359603730:android:ee29a4e0f99ba409cd28cb",
         "android_client_info": {
           "package_name": "com.primetutuitionmobileapp"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBLQs0YwSV7wXFs7NFOKwICm3X-ZmuUMjE"
+          "current_key": "AIzaSyA6te9OmNPcjaz6ZEyfGmnaaOOTagEYkIA"
         }
       ],
       "services": {
