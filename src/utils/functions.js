@@ -147,14 +147,76 @@ export const getParentDropdown = (list, isDisable) => {
  4)it takes start date
  5)it takes boolean (is that student is booster or not)
 */
-export function calculateFee(child, timeperiod, isMonthly, startDate, isBooster) {
-    const totalClassCharges = isMonthly ? Math.ceil((child.weeklyFee * 52) / 12) * timeperiod : child.weeklyFee * timeperiod
+const calculateFeeWeekly = (schedules, startDate, endDateSat, ratePerHour) => {
+
+    let totalFee = 0;
+    let totalHours = 0;
+    let totalLectures = 0;
+
+    // Calculate the end date based on the number of weeks
+    let endDate = endDateSat
+
+    schedules?.length > 0 && schedules.forEach(schedule => {
+        const scheduleStartDate = new Date(schedule.startDate);
+        const scheduleEndDate = schedule.endDate ? new Date(schedule.endDate) : endDate;
+        // Check if the schedule is active during the given period
+        if (scheduleEndDate >= new Date(startDate) && scheduleStartDate <= endDate) {
+            // Determine the effective start and end dates within the given period
+            const effectiveStartDate = scheduleStartDate > startDate ? scheduleStartDate : startDate;
+            const effectiveEndDate = scheduleEndDate < endDate ? scheduleEndDate : endDate;
+
+            // Calculate the number of lessons within the effective period
+            const activeDays = [];
+            let currentDate = new Date(effectiveStartDate);
+
+            while (currentDate <= effectiveEndDate) {
+                const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' });
+                if (schedule.days.includes(dayName)) {
+                    activeDays.push(new Date(currentDate));
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            // Calculate the total lectures (lessons) and hours for the active days
+            const lessonCount = activeDays.length;
+            const totalLessonHours = lessonCount * schedule.LessonTiming.hours;
+            totalLectures += lessonCount;
+            totalHours += totalLessonHours;
+
+            // Calculate the total fee for the active days
+            totalFee += totalLessonHours * ratePerHour;
+        }
+    });
+
+    return { weeklyFee: totalFee, totalHours, totalLectures };
+};
+
+
+export function calculateFee(child, timeperiod, isMonthly, startDate, isBooster, schedules) {
+
+
+    // const isDiscount = Number(child?.discountRatePerHour) ? Number(child?.discountRatePerHour) * child.totalHours * timeperiod : 0
+
     const endDate = new Date(startDate)
     endDate?.setDate(endDate.getDate() + timeperiod * 7)
 
     const nextMonth = new Date(startDate)
     nextMonth.setMonth(nextMonth.getMonth() + timeperiod);
     nextMonth.setDate(nextMonth.getDate());
+
+    let discount = Number(child?.discountRatePerHour) > 0 ? child?.discountRatePerHour : 0
+    const studentRatePerhour = discount !== 0 ? discount : child?.isChildcareStd ? child?.StudentYear?.ratePerChildcareHour : child?.StudentYear?.ratePerHour
+
+
+    const getWeeklyFee = calculateFeeWeekly(schedules, startDate, isMonthly ? nextMonth : endDate, studentRatePerhour)
+    let feeObj = getWeeklyFee
+
+
+
+    // const totalClassCharges = isMonthly ? Math.ceil((feeObj.weeklyFee * 52) / 12) : feeObj.weeklyFee
+    const totalClassCharges = isMonthly ? Math.ceil((child.weeklyFee * 52) / 12) * timeperiod : feeObj.weeklyFee
+
+
 
     let boosterCharges = 0
     if (isBooster && child?.BoosterStudents?.length > 0 && child?.BoosterStudents[0].paidAmount === 0) {
@@ -163,14 +225,14 @@ export function calculateFee(child, timeperiod, isMonthly, startDate, isBooster)
 
 
     const obj = {
-        totalLectures: child.totalLectures * timeperiod,
-        totalHours: child.totalHours * timeperiod,
+        totalLectures: isMonthly ? child.totalLectures * timeperiod : feeObj.totalLectures,
+        totalHours: isMonthly ? child.totalHours * timeperiod : feeObj.totalHours,
         classDues: child.classDues ? child.classDues : 0,
         classCharges: totalClassCharges,
         bookCharges: child?.bookDues,
         boosterCharges,
         boosterDues: child.boosterDues,
-        endDate: formattedDate(isMonthly ? nextMonth : endDate, 'dd-MMMM-yyyy'),
+        endDate: isMonthly ? formattedDate(nextMonth, 'yyyy-MM-dd') : formattedDate(endDate, 'yyyy-MM-dd'),
         totalCharges: totalClassCharges + boosterCharges,
     }
 

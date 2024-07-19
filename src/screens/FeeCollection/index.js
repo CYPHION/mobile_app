@@ -91,10 +91,10 @@ const FeeCollection = () => {
                 : `${Number(summary?.bookDues) - Number(formData.duesAmount)}`);
 
     // Function to calculate fee type
-    const getType = (isMonthly, value, child) => {
+    const getType = (isMonthly, value, child, schedule) => {
         const date = child?.dueFeeDate ? child?.dueFeeDate : child?.startDate
 
-        return calculateFee(child, Number(value), isMonthly, date, true)
+        return calculateFee(child, Number(value), isMonthly, date, true, schedule)
     }
     // Function to toggle active item
     const toggleItem = (index) => {
@@ -669,13 +669,17 @@ const FeeCollection = () => {
 
             const isBooster = child?.BoosterStudents?.length > 0 && child.BoosterStudents[0]?.paidAmount === 0 ? true : false
             const regularScheduleLength = schedule?.filter(elem => elem.studentId === child.id && elem.isBooster === false)?.length > 0 ? true : false
-            const chargesForChild = getType(isMonthly, timePeriod, child);
+            // filter  the student has regular schedule 
+            const regularScheduleOfChild = schedule?.filter(elem =>
+                elem.studentId === child.id && !(elem.isComp || elem.isBooster)
+            );
+            const chargesForChild = getType(isMonthly, timePeriod, child, regularScheduleOfChild);
             const startDate = child.dueFeeDate ? formattedDate(new Date(child?.dueFeeDate).setDate(new Date(child?.dueFeeDate).getDate() + 1), 'dd-MMMM-yyyy') : formattedDate(child.startDate, 'dd-MMMM-yyyy');
             const endDate = chargesForChild.endDate;
 
             // Update childDetails with child name, startDate, and endDate
             childDetails.push({
-                name: `${child.fullName} ${isMonthly ? '(Monthly)' : '(Weekly)'}`,
+                name: child.fullName,
                 feeChargedBy: child.feeChargedBy,
                 startDate,
                 endDate,
@@ -713,7 +717,23 @@ const FeeCollection = () => {
 
         if (childs?.length > 0) {
 
-            if (!weekly.length) {
+            let maxFeePlan = null;
+
+            childs?.forEach((element) => {
+                const feePlan = element.feePlan;
+
+                if (feePlan && (maxFeePlan === null || feePlan > maxFeePlan)) {
+                    maxFeePlan = feePlan;
+                }
+            });
+
+            if (weekly.length > 0 && monthly?.length > 0) {
+                setFormData(prev => ({
+                    ...prev,
+                    noOfWeeks: `${maxFeePlan}`,
+                    noOfMonths: 1
+                }))
+            } else if (!weekly.length) {
                 setFormData(prev => ({
                     ...prev,
                     noOfWeeks: '0',
@@ -725,7 +745,7 @@ const FeeCollection = () => {
                     monthly.length === 0 && setFormData(prev => ({
                         ...prev,
                         noOfMonths: '0',
-                        noOfWeeks: '1'
+                        noOfWeeks: `${maxFeePlan}`
                     }))
                 }
 
@@ -803,6 +823,7 @@ const FeeCollection = () => {
                                     inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
                                     value={formData.noOfWeeks}
                                     onChangeText={(text) => onChangeHandler('noOfWeeks', text)}
+                                    editable={false}
                                 /> : null
                             }
                             {
@@ -811,6 +832,7 @@ const FeeCollection = () => {
                                     inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
                                     value={formData.noOfMonths}
                                     onChangeText={(text) => onChangeHandler('noOfMonths', text)}
+                                    editable={false}
                                 /> : null
                             }
                         </> : null}
