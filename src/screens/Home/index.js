@@ -121,7 +121,7 @@ const Home = ({ navigation }) => {
         const src = item?.picture ? { uri: getImage(item?.picture) } : require("../../images/profileAvatar.png");
 
         return (
-            <TouchableOpacity style={{ backgroundColor: ' yellow' }} activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'children', params: { screen: 'viewStudent', params: { id: item.id } } })}>
+            <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('root', { screen: 'children', params: { screen: 'viewStudent', params: { id: item.id } } })}>
                 <View style={styles.item} >
                     <View style={[styles.stBadgeContainer]}>
                         <Image resizeMode='contain' source={src} style={styles.image} />
@@ -308,11 +308,11 @@ const styles = StyleSheet.create({
         // paddingHorizontal: 16, 
     },
     item: {
-        marginHorizontal: 12,
+        marginHorizontal: 5,
         textAlign: 'center',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        width: screenDimensions.width * 0.45,
+        width: screenDimensions.width * 0.30,
     },
     nameText: {
         fontSize: FontSizes.md,

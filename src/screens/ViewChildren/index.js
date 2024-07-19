@@ -46,6 +46,11 @@ const items = [
         icon: <BookIcon name="book" size={FontSizes.xl} color={Color.primary} />,
         path: 'studentReport'
     },
+    {
+        label: 'Student Test Records',
+        icon: <DetaiIcon name="insert-chart-outlined" size={FontSizes.xl} color={Color.primary} />,
+        path: 'TestRecords'
+    }
 ]
 
 const ViewChildren = ({ navigation }) => {

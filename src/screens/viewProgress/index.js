@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CustomDatePicker from '../../components/base/CustomDatePicker';
 import DropdownComponent from '../../components/base/CustomDropDown';
 import GridTable from '../../components/base/GridTable';
+import LoadingScreen from '../../components/base/LoadingScreen';
 import TopbarWithGraph from '../../components/widget/TopbarWithGraph';
 import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
@@ -167,61 +168,60 @@ const ViewProgress = () => {
                     />
                 }
             >
-                {
-                    filterReport?.length > 0 ?
-                        <View>
-                            <CustomDatePicker
-                                onToggle={() => setOpen(false)}
-                                isVisible={open}
-                                onDone={(date) => {
-                                    filterByDate(date?.startDate, date?.endDate)
-                                }}
-                                Children={<DropdownComponent
-                                    label={'Select Department'}
-                                    disable={false}
-                                    data={getDepartmentDropdown(globaldata?.departments)}
-                                    placeHolderText={"Select Department"}
-                                    value={option}
-                                    setValue={setOption}
-                                />}
-                            />
 
-                            <TopbarWithGraph student={router.params.student} isGraph={false} />
 
-                            <View style={[GlobalStyles.headerStyles]}>
-                                <Text style={GlobalStyles.headerTextStyle}>Report Details</Text>
-                                <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
-                                    <View style={[styles.iconView]}>
-                                        <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
-                                    </View>
-                                    <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
-                                </TouchableOpacity>
+
+                <LoadingScreen loading={progress?.length < 0} />
+                <View>
+                    <CustomDatePicker
+                        onToggle={() => setOpen(false)}
+                        isVisible={open}
+                        onDone={(date) => {
+                            filterByDate(date?.startDate, date?.endDate)
+                        }}
+                        Children={<DropdownComponent
+                            label={'Select Department'}
+                            disable={false}
+                            data={getDepartmentDropdown(globaldata?.departments)}
+                            placeHolderText={"Select Department"}
+                            value={option}
+                            setValue={setOption}
+                        />}
+                    />
+
+                    <TopbarWithGraph student={router.params.student} isGraph={false} />
+
+                    <View style={[GlobalStyles.headerStyles]}>
+                        <Text style={GlobalStyles.headerTextStyle}>Report Details</Text>
+                        <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
+                            <View style={[styles.iconView]}>
+                                <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
                             </View>
+                            <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
+                        </TouchableOpacity>
+                    </View>
 
-                            <View>
-                                {progress?.length > 0 ? <View>
+                    <View>
+                        {progress?.length > 0 ? <View>
 
-                                    {progress?.map((elem, index) => {
-                                        if (elem?.isDetailReport) {
+                            {progress?.map((elem, index) => {
+                                if (elem?.isDetailReport) {
 
-                                            return <GridTable onDownloadClick={onDownloadClick} downloadIcon={false} header={`Test ${index + 1} (Detailed Report)`} key={index} data={nestedArray(elem)} />
-                                        } else {
-                                            return <GridTable onDownloadClick={onDownloadClick} downloadIcon={false} header={`Test ${index + 1} (Basic Report)`} key={index} data={nestedArrayBasicDetail(elem)} />
-                                        }
-                                    })}
-                                </View> :
-                                    <>
-                                        {renderItem()}
-                                    </>
+                                    return <GridTable onDownloadClick={onDownloadClick} downloadIcon={false} header={`Detailed Report`} key={index} data={nestedArray(elem)} />
+                                } else {
+                                    return <GridTable onDownloadClick={onDownloadClick} downloadIcon={false} header={`Basic Report`} key={index} data={nestedArrayBasicDetail(elem)} />
                                 }
-                            </View>
-                        </View>
-                        :
-                        <>
-                            {renderItem()}
-                        </>
+                            })}
+                        </View> :
+                            <>
+                                {renderItem()}
+                            </>
+                        }
+                    </View>
+                </View>
 
-                }
+
+
 
 
             </ScrollView>

@@ -140,4 +140,8 @@ export class API {
     static async CreateContact(formData) {
         return HttpService.POST(`/contactus/create`, formData)
     }
+
+    static async GetTestRecords(querry) {
+        return HttpService.GET(`/book-test/all${querry ? querry : ''}`)
+    }
 }
