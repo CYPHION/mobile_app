@@ -263,7 +263,7 @@ function MyDrawer({ old }) {
                     getTokens = [token ? token : '']
                 }
                 const uptObj = {
-                    ...global?.currentUser,
+                    id: user?.id,
                     fcmToken: getTokens
                 }
 
@@ -288,7 +288,6 @@ function MyDrawer({ old }) {
             dispatch(globalData(user?.id))
         }
     }, [user])
-
 
     return (
 
