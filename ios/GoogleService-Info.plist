@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyCPerRPRYgCPQHarJq-SyBAJnhiXxTXLSE</string>
+	<string>AIzaSyDg5h1jRgG2cN9mFVpx5qK3MkO3JNr9s_k</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1023256248503</string>
+	<string>469359603730</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.example.PrimeTutuitionMobileApp</string>
+	<string>com.PrimeTutuitionMobileApp</string>
 	<key>PROJECT_ID</key>
-	<string>pt-notifications</string>
+	<string>prime-tuition-d1482</string>
 	<key>STORAGE_BUCKET</key>
-	<string>pt-notifications.appspot.com</string>
+	<string>prime-tuition-d1482.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1023256248503:ios:b1edd02630bf1b87668d32</string>
+	<string>1:469359603730:ios:6ebe1d30e4315c05cd28cb</string>
 </dict>
 </plist>
