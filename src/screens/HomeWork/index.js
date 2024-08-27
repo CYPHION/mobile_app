@@ -7,6 +7,7 @@ import BookIcon from "react-native-vector-icons/FontAwesome5"
 import NoHomework from "react-native-vector-icons/MaterialCommunityIcons"
 import { useDispatch, useSelector } from 'react-redux'
 import CustomButton from '../../components/base/CustomButton'
+import LoadingScreen from '../../components/base/LoadingScreen'
 import { globalData } from '../../store/thunk'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
@@ -16,6 +17,7 @@ import { GlobalStyles } from '../../utils/globalStyles'
 const HomeWork = () => {
     const [refresh, setRefresh] = useState(false);
     const [data, setData] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const router = useRoute()
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
@@ -29,6 +31,7 @@ const HomeWork = () => {
     // Function to fetch data
     const fetchData = () => {
         setData(filterHomework) // Set filtered homework data
+        setIsLoading(false)
     }
     // Function to handle pull-to-refresh action
     const handleRefresh = () => {
@@ -63,6 +66,7 @@ const HomeWork = () => {
                     />
                 }
             >
+                <LoadingScreen loading={isLoading} />
                 <View style={{ paddingBottom: 10, backgroundColor: Color.white }}>
                     {
                         data?.length > 0 ? <>

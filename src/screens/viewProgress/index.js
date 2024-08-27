@@ -34,6 +34,30 @@ const nestedArray = (item) => [
         value: item?.Book?.title
     },
     {
+        name: 'Teacher',
+        value: item?.teacherName
+    },
+    {
+        name: 'Performance',
+        value: item?.performance.map((elem, index) => <Text key={index} style={styles.CompText}>{elem}</Text>)
+    },
+    {
+        name: 'Strength',
+        value: item?.strength.map((elem, index) => <Text key={index} style={styles.CompText}>{elem}</Text>)
+    },
+    {
+        name: 'Weakness',
+        value: item?.weakness.map((elem, index) => <Text key={index} style={styles.CompText}>{elem}</Text>)
+    },
+    {
+        name: 'Task Achieved',
+        value: item?.taskAchieved.map((elem, index) => <Text key={index} style={styles.CompText}>{elem}</Text>)
+    },
+    {
+        name: 'Book',
+        value: item?.Book?.title
+    },
+    {
         name: 'Test Start Date',
         value: item?.startDate ? formattedDate(item?.startDate, 'dd-MM-yyyy') : ''
     },
@@ -92,6 +116,7 @@ const nestedArrayBasicDetail = (item) => [
 
 const ViewProgress = () => {
     const [refresh, setRefresh] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [progress, setProgress] = useState([]);
     const router = useRoute()
     const [open, setOpen] = useState(false);
@@ -120,6 +145,7 @@ const ViewProgress = () => {
         }
         setProgress(filterDate)
         setOption('')
+        setIsLoading(false)
     }
 
 
@@ -171,7 +197,7 @@ const ViewProgress = () => {
 
 
 
-                <LoadingScreen loading={progress?.length < 0} />
+                <LoadingScreen loading={isLoading} />
                 <View>
                     <CustomDatePicker
                         onToggle={() => setOpen(false)}

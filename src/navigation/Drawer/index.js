@@ -12,7 +12,7 @@ import {
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import AntIcon from 'react-native-vector-icons/AntDesign';
+import { default as AntIcon, default as Icon } from 'react-native-vector-icons/AntDesign';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../components/base/CustomButton';
 import MyModal from '../../components/base/Modal';
@@ -26,7 +26,6 @@ import { getImage, screenDimensions } from '../../utils/functions';
 import { HomeStack } from '../HomeDrawer';
 import { MyStack } from '../Stack';
 import TabNavigation from '../Tab';
-
 const Drawer = createDrawerNavigator();
 
 // List of items in the drawer menu
@@ -299,6 +298,7 @@ function CustomDrawerContent(props) {
     const [open, setOpen] = useState(false); // State for modal visibility
     const dipatch = useDispatch(); // Redux dispatch function
     const user = useSelector(state => state?.user?.data); // User data from Redux store
+    const navigation = useNavigation()
     const globaldata = useSelector(state => state?.global?.data); // Global data from Redux store
     const src = user?.picture
         ? { uri: getImage(user?.picture) }
@@ -327,24 +327,33 @@ function CustomDrawerContent(props) {
     return (
         <DrawerContentScrollView {...props}>
             <View style={styles.drawerContent}>
-                <TouchableOpacity activeOpacity={0.8}>
-                    <View style={styles.userInfoSection}>
-                        <View
-                            style={{
-                                flexDirection: 'column',
-                                justifyContent: 'space-between',
-                            }}>
-                            {/* <Image resizeMode='contain' source={src} style={styles.image} /> */}
-                            <View style={{ flexDirection: 'column' }}>
-                                <Text style={styles.title}>
-                                    {user?.email
-                                        ? `${user?.firstName} ${user?.lastName}`
-                                        : 'Prime Tuition'}
-                                </Text>
-                            </View>
-                        </View>
+                <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                }}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            if (navigation.canGoBack()) {
+                                navigation.goBack();
+                                navigation.dispatch(DrawerActions.toggleDrawer());
+                            } else {
+                                navigation.dispatch(DrawerActions.toggleDrawer());
+                            }
+                        }}
+                        style={[{ padding: 10, borderRadius: 50 }]}
+                    >
+                        <Icon name="arrowleft" size={22} color={Color.white} />
+                    </TouchableOpacity>
+
+                    <View style={{ paddingBottom: 10 }}>
+                        {/* <Image resizeMode='contain' source={src} style={styles.image} /> */}
+                        <Text style={styles.title}>
+                            {user?.email
+                                ? `${user?.firstName} ${user?.lastName}`
+                                : 'Prime Tuition'}
+                        </Text>
                     </View>
-                </TouchableOpacity>
+                </View>
                 <View style={styles.drawerSection}>
                     {!!user?.email
                         ? DrawerList.map((el, i) => {

@@ -11,6 +11,7 @@ import { globalData } from '../../store/thunk'
 import { Color } from '../../utils/color'
 import { FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
+import { GlobalStyles } from '../../utils/globalStyles'
 
 
 
@@ -77,11 +78,12 @@ const ViewSchedule = () => {
                 setRefresh(false);
             });
     };
-
     // Effect to fetch data when schedules change
     useEffect(() => {
         fetchData()
+
     }, [globaldata?.schedules])
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -100,6 +102,10 @@ const ViewSchedule = () => {
 
 
                         <View>
+                            <View style={[GlobalStyles.headerStyles]}>
+                                <Text style={GlobalStyles.headerTextStyle}>Total Schedule ({Schedules?.length > 0 ? Schedules.length : 0})</Text>
+
+                            </View>
                             {data.map((elem, index) => (
                                 <Table
                                     key={index}

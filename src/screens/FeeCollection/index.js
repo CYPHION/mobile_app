@@ -731,7 +731,7 @@ const FeeCollection = () => {
                 setFormData(prev => ({
                     ...prev,
                     noOfWeeks: `${maxFeePlan}`,
-                    noOfMonths: 1
+                    noOfMonths: '1'
                 }))
             } else if (!weekly.length) {
                 setFormData(prev => ({

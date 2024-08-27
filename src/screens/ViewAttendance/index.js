@@ -8,6 +8,7 @@ import NoHomework from "react-native-vector-icons/MaterialCommunityIcons"
 import TimeIcon from 'react-native-vector-icons/MaterialIcons'
 import { useDispatch, useSelector } from 'react-redux'
 import CustomDatePicker from '../../components/base/CustomDatePicker'
+import LoadingScreen from '../../components/base/LoadingScreen'
 import Table from '../../components/base/Table'
 import TopbarWithGraph from '../../components/widget/TopbarWithGraph'
 import { globalData } from '../../store/thunk'
@@ -24,6 +25,7 @@ import { GlobalStyles } from '../../utils/globalStyles'
 const ViewAttendance = () => {
     const [refresh, setRefresh] = useState(false);
     const [open, setOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const [data, setData] = useState([])
     const [summaryData, setSummaryData] = useState({
         totalSchedule: 0,
@@ -42,12 +44,14 @@ const ViewAttendance = () => {
     let filterAttendance = globaldata?.attendances?.filter(elem => elem.studentId === router?.params?.student?.id)
     const studentDuefeeDate = new Date(router?.params?.student?.dueFeeDate)
     studentDuefeeDate.setHours(0, 0, 0, 0);
-
     let TODAY = new Date()
     TODAY.setHours(0, 0, 0, 0);
     let date13WeeksAgo;
 
-    if (studentDuefeeDate.getTime() >= TODAY.getTime()) {
+
+    if (router?.params?.student?.dueFeeDate === null) {
+        filterAttendance = filterAttendance
+    } else if (studentDuefeeDate.getTime() >= TODAY.getTime()) {
         date13WeeksAgo = new Date();
         date13WeeksAgo.setDate(TODAY.getDate() - 13 * 7);
         filterAttendance = filterAttendance.filter(elem => {
@@ -65,6 +69,7 @@ const ViewAttendance = () => {
     }
     // Function to filter attendance data by date range
     const filterByDate = (startDate, endDate) => {
+        setIsLoading(true)
         if (startDate && endDate) {
             const filteer = filterAttendance?.filter(item => {
                 const itemDate = new Date(item?.attendanceDate);
@@ -74,6 +79,7 @@ const ViewAttendance = () => {
         } else {
             setData(filterAttendance)
         }
+        setIsLoading(false)
     };
     // Function to handle date change
     const handleDateChange = (date) => {
@@ -176,6 +182,7 @@ const ViewAttendance = () => {
                     />
                 }
             >
+                <LoadingScreen loading={isLoading} />
                 {
                     filterAttendance?.length > 0 ? <>
                         <View style={styles.viewChildrenContainer}>
