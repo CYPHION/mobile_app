@@ -76,26 +76,25 @@ const Receipt = () => {
     const changeMonth = () => {
         const currentDate = new Date();
         const monthValue = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Current month as 'MM'
-
-        const initialOption = months.find(month => month.value === monthValue)?.value || '01'; // Default to '01' if not found
-        setOption(initialOption);
+        console.log(monthValue)
+        // const initialOption = months.find(month => month.value === monthValue)?.value; // Default to '01' if not found
+        setOption(monthValue);
     }
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
+        new Date().getMonth() + 1 !== option && changeMonth()
         dispatch(globalData(user?.id))
             .then(() => {
-                changeMonth()
                 fetchData()
                 setRefreshing(false); // Set refreshing to false after data fetching is completed
             })
             .catch(() => {
-                changeMonth()
+                // changeMonth()
                 fetchData()
                 setRefreshing(false); // Ensure refreshing is set to false even if there's an error
             })
     }, [])
-
 
     // Initialize the 'years' array with the last 7 years
     useEffect(() => {
