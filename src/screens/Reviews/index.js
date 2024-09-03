@@ -30,7 +30,6 @@ const Reviews = () => {
     const startIndex = (page - 1) * reviewsPerPage;
     const endIndex = startIndex + reviewsPerPage;
     const paginatedReviews = reviews.slice(startIndex, endIndex);
-
     const totalPages = Math.ceil(reviews.length / reviewsPerPage);
 
     const nextPage = () => {
@@ -58,7 +57,7 @@ const Reviews = () => {
 
     const getAllReview = () => {
         API.getAllReview()
-            .then(res => setReviews(res?.data))
+            .then(res => setReviews(res?.data.reverse()))
             .catch(err => console.log(err.message))
             .finally(() => setPageLoad(false))
     }
@@ -96,8 +95,8 @@ const Reviews = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            <LoadingScreen loading={pageLoad} />
             <ScrollView>
-                <LoadingScreen loading={pageLoad} />
                 <View style={{ padding: 20 }}>
                     {paginatedReviews?.length > 0 ? <>
                         {paginatedReviews?.map((elem, index) => (

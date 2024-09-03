@@ -36,7 +36,7 @@ messaging().getInitialNotification(async remoteMessage => {
 
 
 
-
+console.log(typeof stripePublishKey)
 const ReduxApp = () => (
     <Provider store={store}>
         <StripeProvider publishableKey={stripePublishKey}>

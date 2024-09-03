@@ -8,6 +8,7 @@ import { default as NoHomework } from "react-native-vector-icons/MaterialCommuni
 import TimeIcon from 'react-native-vector-icons/MaterialIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomDatePicker from '../../components/base/CustomDatePicker';
+import LoadingScreen from '../../components/base/LoadingScreen';
 import Table from '../../components/base/Table';
 import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
@@ -19,6 +20,7 @@ import { GlobalStyles } from '../../utils/globalStyles';
 const ViewAppointments = () => {
     const [refresh, setRefresh] = useState(false);
     const [open, setOpen] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [data, setData] = useState([])
     const global = useSelector(state => state.global.data);
     const user = useSelector(state => state.user.data);
@@ -42,6 +44,7 @@ const ViewAppointments = () => {
             filterData = global?.appointments?.filter(item => true);
         }
         setData(filterData)
+        setLoading(false)
     };
     // Function to handle refreshing data
     const handleRefresh = () => {
@@ -125,6 +128,7 @@ const ViewAppointments = () => {
     }, [global?.appointments])
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            <LoadingScreen loading={loading} />
             <ScrollView
                 refreshControl={
                     <RefreshControl

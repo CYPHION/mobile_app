@@ -128,6 +128,7 @@ const TestRecords = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            <LoadingScreen loading={isLoading} />
             <ScrollView
                 refreshControl={
                     <RefreshControl
@@ -137,7 +138,6 @@ const TestRecords = () => {
                 }
             >
 
-                <LoadingScreen loading={isLoading} />
                 <View>
                     <CustomDatePicker
                         onToggle={() => setOpen(false)}

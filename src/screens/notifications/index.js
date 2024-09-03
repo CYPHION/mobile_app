@@ -1,8 +1,7 @@
 import messaging from '@react-native-firebase/messaging';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, Linking, PermissionsAndroid, Platform, RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Alert, Linking, PermissionsAndroid, Platform, RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import BellIcon from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,27 +29,55 @@ const Notifications = () => {
     };
     // Function to fetch notification data
     const getNotification = () => {
-        API.getAllNotification(user?.id) // Call API to fetch notifications for the current user
-            .then((res) => setData(res?.data)) // Set fetched data to the state
-            .catch((err) => console.log(err)) // Log any errors
-            .finally(() => setActive(false)) // Set active state to false once data fetching is completed
+        setActive(true); // Set active state to true before starting data fetching
+
+        const query = `?to=${user?.id}`;
+
+        // Fetch both notifications and handle results regardless of success or failure
+        Promise.allSettled([
+            API.getNotifications(query),
+            API.getAllNotification(user?.id)
+        ])
+            .then((results) => {
+                // Initialize an empty array
+                let arr = [];
+
+                // Iterate through the results of both promises
+                results.forEach(result => {
+                    if (result.status === 'fulfilled' && result.value?.data) {
+                        arr = arr.concat(result.value.data);
+                    }
+                });
+
+                // Sort the array by createdAt property if there's any data
+                if (arr.length > 0) {
+                    arr.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                }
+
+                // Update the state with the sorted data
+                setData(arr);
+            })
+            .catch((err) => {
+                console.log(err); // Log any errors (this will log if there's an error in the .then block)
+            })
+            .finally(() => {
+                setActive(false); // Set active state to false once data fetching is completed
+                setRefreshing(false)
+            });
     }
+
     // Function to handle refreshing of notification data
     const onRefresh = useCallback(() => {
-        setRefreshing(true); // Set refreshing state to true
-
-        // Fetch global data for the current user from the server
-
+        setRefreshing(true);
         dispatch(globalData(user?.id))
             .then(() => {
-                getNotification()
-                setRefreshing(false); // Set refreshing to false after data fetching is completed
+                getNotification();
             })
             .catch(() => {
-                getNotification()
-                setRefreshing(false); // Ensure refreshing is set to false even if there's an error
+                getNotification();
             });
-    }, [])
+    }, [dispatch, user?.id]); // Added dependencies here
+
     // Effect to fetch notification data when the component mounts
 
 
@@ -106,13 +133,13 @@ const Notifications = () => {
     return (
         <>
             <SafeAreaView style={{ flex: 1 }}>
+                <LoadingScreen loading={active} />
                 <ScrollView
                     refreshControl={<RefreshControl
                         onRefresh={onRefresh}
                         refreshing={refreshing}
                     />}
                 >
-                    <LoadingScreen loading={active} />
                     <View style={GlobalStyles.p_10}>
                         {data?.length > 0 ? <>
                             {data?.map((item, index) => (

@@ -182,6 +182,7 @@ const JobListing = ({ navigation }) => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            <LoadingScreen loading={loaded} />
             <ScrollView
                 refreshControl={
                     <RefreshControl
@@ -190,7 +191,6 @@ const JobListing = ({ navigation }) => {
                     />
                 }
             >
-                <LoadingScreen loading={loaded} />
                 <View style={{ padding: 20 }}>
                     {jobs.map((elem, index) => (
                         <View style={{ marginBottom: 30 }} key={index}>

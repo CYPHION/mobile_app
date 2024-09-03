@@ -519,7 +519,6 @@ const FeeCollection = () => {
         setSendData(sendFOrmData)
         handleFormDataForStripe(sendFOrmData, recieptNo, casherName, true)
 
-
     }
 
     const handleFormDataForStripe = async (sendFOrmData, recieptNo, casherName, isStripe = false) => {
@@ -572,7 +571,7 @@ const FeeCollection = () => {
                     byBankAmount: 0,
                 }
                 setInvoiceData(form)
-                await handlePayNwow({ ...sendFOrmData, option }, form)
+                // await handlePayNwow({ ...sendFOrmData, option }, form)
             }
             else {
                 let extras
@@ -614,7 +613,6 @@ const FeeCollection = () => {
     }
 
     const handlePayNwow = async (data, invoiceData) => {
-
         // 1.Create a Payment intent
         let res = await API.stripeIntent({ amount: data?.amountPaid })
         const intent = await API.createIntent({ ...data, category: data?.option === "bookDues" ? "BookDues" : data?.option, intentId: res?.data?.id, noOfMonth: data?.noOfMonths, noOfWeek: data?.noOfWeeks, invoiceData })
@@ -627,6 +625,7 @@ const FeeCollection = () => {
         })
         if (initResponse.error) {
             customToast("error", initResponse.error)
+            console.log("error", initResponse.error)
             return;
         }
 
@@ -635,9 +634,9 @@ const FeeCollection = () => {
         const paymentResult = await presentPaymentSheet({
             clientSecret
         });
-
         if (paymentResult?.error) {
             customToast("error", paymentResult?.error?.message)
+            console.log(paymentResult?.error?.message)
             setIsLoading(false)
             return
         } else {

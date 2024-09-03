@@ -174,6 +174,7 @@ const ViewAttendance = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            <LoadingScreen loading={isLoading} />
             <ScrollView
                 refreshControl={
                     <RefreshControl
@@ -182,7 +183,6 @@ const ViewAttendance = () => {
                     />
                 }
             >
-                <LoadingScreen loading={isLoading} />
                 {
                     filterAttendance?.length > 0 ? <>
                         <View style={styles.viewChildrenContainer}>
