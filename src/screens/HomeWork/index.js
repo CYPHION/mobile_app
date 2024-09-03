@@ -58,6 +58,7 @@ const HomeWork = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            <LoadingScreen loading={isLoading} />
             <ScrollView
                 refreshControl={
                     <RefreshControl
@@ -66,7 +67,6 @@ const HomeWork = () => {
                     />
                 }
             >
-                <LoadingScreen loading={isLoading} />
                 <View style={{ paddingBottom: 10, backgroundColor: Color.white }}>
                     {
                         data?.length > 0 ? <>

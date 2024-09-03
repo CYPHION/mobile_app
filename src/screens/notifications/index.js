@@ -106,13 +106,13 @@ const Notifications = () => {
     return (
         <>
             <SafeAreaView style={{ flex: 1 }}>
+                <LoadingScreen loading={active} />
                 <ScrollView
                     refreshControl={<RefreshControl
                         onRefresh={onRefresh}
                         refreshing={refreshing}
                     />}
                 >
-                    <LoadingScreen loading={active} />
                     <View style={GlobalStyles.p_10}>
                         {data?.length > 0 ? <>
                             {data?.map((item, index) => (

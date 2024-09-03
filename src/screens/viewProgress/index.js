@@ -186,6 +186,7 @@ const ViewProgress = () => {
     }, [globaldata?.reports])
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            <LoadingScreen loading={isLoading} />
             <ScrollView
                 refreshControl={
                     <RefreshControl
@@ -197,7 +198,6 @@ const ViewProgress = () => {
 
 
 
-                <LoadingScreen loading={isLoading} />
                 <View>
                     <CustomDatePicker
                         onToggle={() => setOpen(false)}

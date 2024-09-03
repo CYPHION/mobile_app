@@ -12,7 +12,8 @@ import {
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { default as AntIcon, default as Icon } from 'react-native-vector-icons/AntDesign';
+import AntIcon from 'react-native-vector-icons/AntDesign';
+import Cross from 'react-native-vector-icons/Feather';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../components/base/CustomButton';
 import MyModal from '../../components/base/Modal';
@@ -331,27 +332,21 @@ function CustomDrawerContent(props) {
                     flexDirection: 'row',
                     alignItems: 'center',
                 }}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            if (navigation.canGoBack()) {
-                                navigation.goBack();
-                                navigation.dispatch(DrawerActions.toggleDrawer());
-                            } else {
-                                navigation.dispatch(DrawerActions.toggleDrawer());
-                            }
-                        }}
-                        style={[{ padding: 10, borderRadius: 50 }]}
-                    >
-                        <Icon name="arrowleft" size={22} color={Color.white} />
-                    </TouchableOpacity>
 
-                    <View style={{ paddingBottom: 10 }}>
-                        {/* <Image resizeMode='contain' source={src} style={styles.image} /> */}
+
+                    <View style={{ paddingBottom: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                         <Text style={styles.title}>
                             {user?.email
                                 ? `${user?.firstName} ${user?.lastName}`
                                 : 'Prime Tuition'}
                         </Text>
+                        <TouchableOpacity
+                            activeOpacity={0.8}
+                            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+                            style={[{ padding: 10, borderRadius: 50 }]}
+                        >
+                            <Cross name="x" size={28} color={Color.white} />
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.drawerSection}>
@@ -516,7 +511,7 @@ function MyDrawer({ old }) {
                     backgroundColor: Color.primary,
                     width: '100%',
                 },
-                swipeEnabled: !!global.students && !!user.email,
+                // swipeEnabled: !!global.students && !!user.email,
             }}>
             {user?.email && (
                 <>
@@ -541,6 +536,7 @@ const styles = StyleSheet.create({
         marginTop: 3,
         color: Color.white,
         fontWeight: 'bold',
+        maxWidth: '75%'
     },
 
     drawerSection: {

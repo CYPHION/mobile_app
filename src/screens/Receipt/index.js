@@ -143,70 +143,72 @@ const Receipt = () => {
     )
 
     return (
-        <ScrollView
-            refreshControl={<RefreshControl
-                onRefresh={onRefresh}
-                refreshing={refreshing}
-            />}
-        >
+        <>
             <LoadingScreen loading={isLoading} />
-            {(!!user.email && !!globaldata.students) ?
-                <View style={styles.feesContainers}>
-                    {globaldata?.fees.length > 0 ? <>
-                        <View style={styles.feesReceiptContainer}>
-                            <View>
-                                <Text style={styles.fessYears}>Select Month</Text>
+            <ScrollView
+                refreshControl={<RefreshControl
+                    onRefresh={onRefresh}
+                    refreshing={refreshing}
+                />}
+            >
+                {(!!user.email && !!globaldata.students) ?
+                    <View style={styles.feesContainers}>
+                        {globaldata?.fees.length > 0 ? <>
+                            <View style={styles.feesReceiptContainer}>
+                                <View>
+                                    <Text style={styles.fessYears}>Select Month</Text>
+                                </View>
+                                <View>
+                                    <DropdownComponent
+                                        dropdownStyle={{ width: screenDimensions.width * 0.30 }}
+                                        disable={false}
+                                        data={months}
+                                        placeHolderText={option}
+                                        value={option}
+                                        setValue={setOption}
+                                    />
+                                </View>
                             </View>
                             <View>
-                                <DropdownComponent
-                                    dropdownStyle={{ width: screenDimensions.width * 0.30 }}
-                                    disable={false}
-                                    data={months}
-                                    placeHolderText={option}
-                                    value={option}
-                                    setValue={setOption}
-                                />
+                                {data?.length > 0 ?
+                                    <>
+                                        {data.map((item, index) => (
+                                            <AccordionItem
+                                                children={ineerList(item).map((elem, index) => (
+                                                    <View key={index} style={GlobalStyles.contentView}>
+                                                        <Text style={[GlobalStyles.contentItem]}>{elem.name}</Text>
+                                                        <Text style={[GlobalStyles.contentItem]}>{elem.value}</Text>
+                                                    </View>
+                                                ))}
+                                                key={index}
+                                                date={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
+                                                studentName={`${item.payType}`}
+                                                total={
+                                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                        <Text style={[styles.accordionTitleHeading]}>£{item.amountPaid} </Text>
+                                                        <Download name='download' onPress={() => handleDownload(item?.invoice?.document)} size={FontSizes.xxl} color={Color.text} />
+                                                    </View>
+                                                }
+                                                expanded={activeItem === index}
+                                                onToggle={() => {
+                                                    toggleItem(index)
+                                                }} // Pass toggle function to each item
+                                            />
+                                        ))}
+                                    </> :
+                                    <>
+                                        {renderItem()}
+                                    </>
+                                }
                             </View>
-                        </View>
-                        <View>
-                            {data?.length > 0 ?
-                                <>
-                                    {data.map((item, index) => (
-                                        <AccordionItem
-                                            children={ineerList(item).map((elem, index) => (
-                                                <View key={index} style={GlobalStyles.contentView}>
-                                                    <Text style={[GlobalStyles.contentItem]}>{elem.name}</Text>
-                                                    <Text style={[GlobalStyles.contentItem]}>{elem.value}</Text>
-                                                </View>
-                                            ))}
-                                            key={index}
-                                            date={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
-                                            studentName={`${item.payType}`}
-                                            total={
-                                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                                    <Text style={[styles.accordionTitleHeading]}>£{item.amountPaid} </Text>
-                                                    <Download name='download' onPress={() => handleDownload(item?.invoice?.document)} size={FontSizes.xxl} color={Color.text} />
-                                                </View>
-                                            }
-                                            expanded={activeItem === index}
-                                            onToggle={() => {
-                                                toggleItem(index)
-                                            }} // Pass toggle function to each item
-                                        />
-                                    ))}
-                                </> :
-                                <>
-                                    {renderItem()}
-                                </>
-                            }
-                        </View>
-                    </> :
-                        <>
-                            {renderItem()}
-                        </>
-                    }
-                </View> : <ReceiptSkelton />}
-        </ScrollView>
+                        </> :
+                            <>
+                                {renderItem()}
+                            </>
+                        }
+                    </View> : <ReceiptSkelton />}
+            </ScrollView>
+        </>
     )
 }
 

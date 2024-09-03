@@ -6,6 +6,7 @@ import CalendarIcon from "react-native-vector-icons/FontAwesome6"
 import { default as CalendarCheckIcon, default as NoHomework } from "react-native-vector-icons/MaterialCommunityIcons"
 import TimeIcon from "react-native-vector-icons/MaterialIcons"
 import { useDispatch, useSelector } from 'react-redux'
+import LoadingScreen from '../../components/base/LoadingScreen'
 import Table from '../../components/base/Table'
 import { globalData } from '../../store/thunk'
 import { Color } from '../../utils/color'
@@ -57,6 +58,7 @@ const list = (schedule) => [
 const ViewSchedule = () => {
     const [refresh, setRefresh] = useState(false);
     const [data, setData] = useState([])
+    const [loading, setLoading] = useState(true)
     const router = useRoute()
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
@@ -64,6 +66,7 @@ const ViewSchedule = () => {
     const Schedules = globaldata?.schedules?.filter(elem => elem.studentId === router.params?.student?.id)
     const fetchData = () => {
         setData(Schedules)
+        setLoading(false)
     }
     // Function to handle refresh action
     const handleRefresh = () => {
@@ -87,6 +90,7 @@ const ViewSchedule = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            <LoadingScreen loading={loading} />
             <ScrollView
                 refreshControl={
                     <RefreshControl

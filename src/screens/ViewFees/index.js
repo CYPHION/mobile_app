@@ -5,6 +5,7 @@ import Download from 'react-native-vector-icons/Feather';
 import { default as NoHomework } from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import AccordionItem from '../../components/base/Accordion';
+import LoadingScreen from '../../components/base/LoadingScreen';
 import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
@@ -18,6 +19,7 @@ import ReceiptSkelton from '../Receipt/ReceiptSkeleton';
 const ViewFess = () => {
     const [activeItem, setActiveItem] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [data, setData] = useState([])
     const globaldata = useSelector(state => state?.global?.data)
     const user = useSelector(state => state?.user?.data)
@@ -47,6 +49,7 @@ const ViewFess = () => {
     const fetchData = () => {
         const filter = globaldata?.fees?.filter((item) => item.studentId === router?.params?.student?.id)
         setData(filter)
+        setLoading(false)
     }
 
     // Function to render item
@@ -78,46 +81,49 @@ const ViewFess = () => {
     }, [globaldata?.fees])
 
     return (
-        <ScrollView
-            refreshControl={<RefreshControl
-                onRefresh={onRefresh}
-                refreshing={refreshing}
-            />}
-        >
-            {(!!user.email && !!globaldata?.fees) ?
-                <View style={styles.feesContainers}>
-                    {data?.length > 0 ?
-                        <>
-                            {data.map((item, index) => (
-                                <AccordionItem
-                                    children={ineerList(item).map((elem, index) => (
-                                        <View key={index} style={GlobalStyles.contentView}>
-                                            <Text style={[GlobalStyles.contentItem]}>{elem.name}</Text>
-                                            <Text style={[GlobalStyles.contentItem]}>{elem.value}</Text>
-                                        </View>
-                                    ))}
-                                    key={index}
-                                    date={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
-                                    studentName={`${item.payType}`}
-                                    total={
-                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                            <Text style={[styles.accordionTitleHeading]}>£{item.amountPaid} </Text>
-                                            <Download name='download' onPress={() => handleDownload(item?.invoice?.document)} size={FontSizes.xxl} color={Color.text} />
-                                        </View>
-                                    }
-                                    expanded={activeItem === index}
-                                    onToggle={() => {
-                                        toggleItem(index)
-                                    }} // Pass toggle function to each item
-                                />
-                            ))}
-                        </> :
-                        <>
-                            {renderItem()}
-                        </>
-                    }
-                </View> : <ReceiptSkelton />}
-        </ScrollView>
+        <>
+            <LoadingScreen loading={loading} />
+            <ScrollView
+                refreshControl={<RefreshControl
+                    onRefresh={onRefresh}
+                    refreshing={refreshing}
+                />}
+            >
+                {(!!user.email && !!globaldata?.fees) ?
+                    <View style={styles.feesContainers}>
+                        {data?.length > 0 ?
+                            <>
+                                {data.map((item, index) => (
+                                    <AccordionItem
+                                        children={ineerList(item).map((elem, index) => (
+                                            <View key={index} style={GlobalStyles.contentView}>
+                                                <Text style={[GlobalStyles.contentItem]}>{elem.name}</Text>
+                                                <Text style={[GlobalStyles.contentItem]}>{elem.value}</Text>
+                                            </View>
+                                        ))}
+                                        key={index}
+                                        date={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
+                                        studentName={`${item.payType}`}
+                                        total={
+                                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                <Text style={[styles.accordionTitleHeading]}>£{item.amountPaid} </Text>
+                                                <Download name='download' onPress={() => handleDownload(item?.invoice?.document)} size={FontSizes.xxl} color={Color.text} />
+                                            </View>
+                                        }
+                                        expanded={activeItem === index}
+                                        onToggle={() => {
+                                            toggleItem(index)
+                                        }} // Pass toggle function to each item
+                                    />
+                                ))}
+                            </> :
+                            <>
+                                {renderItem()}
+                            </>
+                        }
+                    </View> : <ReceiptSkelton />}
+            </ScrollView>
+        </>
     )
 }
 

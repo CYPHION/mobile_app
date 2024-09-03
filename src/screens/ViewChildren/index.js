@@ -21,12 +21,12 @@ const items = [
         path: 'studentDetail'
     },
     {
-        label: 'View Shedule ',
+        label: 'View Schedule ',
         icon: <CalendarIcon name="calendar-month" size={FontSizes.xl} color={Color.primary} />,
         path: 'studentSchedule'
     },
     {
-        label: 'View Attendace',
+        label: 'View Attendance',
         icon: <CardIcon name="idcard" size={FontSizes.xl} color={Color.primary} />,
         path: 'studentAttendance'
     },
