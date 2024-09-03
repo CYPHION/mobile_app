@@ -144,4 +144,8 @@ export class API {
     static async GetTestRecords(querry) {
         return HttpService.GET(`/book-test/all${querry ? querry : ''}`)
     }
+
+    static async getNotifications(querry) {
+        return HttpService.GET(`/notification/all${querry ? querry : ''}`)
+    }
 }

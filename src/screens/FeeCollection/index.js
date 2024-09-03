@@ -616,20 +616,13 @@ const FeeCollection = () => {
         // 1.Create a Payment intent
         let res = await API.stripeIntent({ amount: data?.amountPaid })
         const intent = await API.createIntent({ ...data, category: data?.option === "bookDues" ? "BookDues" : data?.option, intentId: res?.data?.id, noOfMonth: data?.noOfMonths, noOfWeek: data?.noOfWeeks, invoiceData })
-        const { client_secret: clientSecret, ephemeralKey, customer } = res?.data
+        const { client_secret: clientSecret } = res?.data
         // 2. Initialize the payment sheet
 
         const initResponse = await initPaymentSheet({
             merchantDisplayName: 'Mr.JD',
             paymentIntentClientSecret: clientSecret,
-            allowsDelayedPaymentMethods: true,
-            customerId: customer,
-            customerEphemeralKeySecret: ephemeralKey,
-            defaultBillingDetails: {
-                name: `${user?.firstName} ${user?.lastName}`,
-            }
         })
-        console.log({ initResponse })
         if (initResponse.error) {
             customToast("error", initResponse.error)
             console.log("error", initResponse.error)
@@ -641,7 +634,6 @@ const FeeCollection = () => {
         const paymentResult = await presentPaymentSheet({
             clientSecret
         });
-        console.log("first", paymentResult)
         if (paymentResult?.error) {
             customToast("error", paymentResult?.error?.message)
             console.log(paymentResult?.error?.message)
