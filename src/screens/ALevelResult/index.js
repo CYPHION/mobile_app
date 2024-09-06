@@ -90,10 +90,10 @@ const ALevel = () => {
                 <View style={{ padding: 20 }}>
 
                     <Text style={[styles.name, { marginBottom: 5 }]}>
-                        Good Luck to everyone{'\n'}receiving their A-Level{'\n'}Results
+                        Good Luck to everyone receiving their A-Level Results
                     </Text>
                     <Text style={[styles.name, { color: Color.text, marginTop: 5 }]}>
-                        Please fill the form below and{'\n'}share your relevant your subjects’{'\n'}results.
+                        Please fill the form below and share your relevant your subjects’ results.
                     </Text>
                     <Text style={[styles.name, { marginBottom: 5 }]}>
                         A-Level Result

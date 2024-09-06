@@ -6,12 +6,12 @@ import {
     Image,
     RefreshControl,
     SafeAreaView,
+    ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
     View,
 } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import MenuIcon from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -227,7 +227,7 @@ const Home = ({ navigation }) => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            {true ? (
+            {!!globaldata.students && !!user.email ? (
                 <ScrollView
                     refreshControl={
                         <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
@@ -264,13 +264,17 @@ const Home = ({ navigation }) => {
                                         variant={'fill'}
                                         btnstyle={{ paddingVertical: 4 }}
                                         onPress={() => {
-                                            navigation.navigate('children', {
-                                                screen: tab.screen,
+
+                                            navigation.navigate('root', {
+                                                screen: 'children',
                                                 params: {
-                                                    student: globaldata?.students.filter(
-                                                        elem => elem?.id == studentId,
-                                                    )[0],
-                                                },
+                                                    screen: tab.screen,
+                                                    params: {
+                                                        student: globaldata?.students.filter(
+                                                            elem => elem?.id == studentId,
+                                                        )[0],
+                                                    },
+                                                }
                                             });
                                             setOpenSelection(prev => !prev);
                                             setstudentId('');
@@ -452,6 +456,7 @@ const styles = StyleSheet.create({
     },
     flatListContainer: {
         // paddingHorizontal: 16,
+        minWidth: '100%'
     },
     item: {
         marginHorizontal: 5,

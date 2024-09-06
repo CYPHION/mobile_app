@@ -66,9 +66,18 @@ const ContactUs = () => {
         setIsLoading(true);
 
         // Basic form validation
-        if (!formData.email || !formData.campus) {
-            !formData.email ? customToast('error', "Please enter an email address") : '';
-            !formData.campus ? customToast('error', "Please enter Campus") : '';
+        if (
+            !formData.campus ||
+            !formData.message ||
+            !formData.phone ||
+            !formData.email ||
+            !formData.name) {
+
+            !formData.email && customToast('error', "Please enter an email address");
+            !formData.campus && customToast('error', "Please enter Campus");
+            !formData.message && customToast('error', "Please enter Message");
+            !formData.phone && customToast('error', "Please enter Phone");
+            !formData.name && customToast('error', "Please enter Name");
             setIsLoading(false);
             return;
         }
@@ -128,17 +137,20 @@ const ContactUs = () => {
                         <Text style={[styles.name, { fontFamily: FontFamily.bold }]}>Get in Touch</Text>
                         <InputField
                             label={"Name"}
+                            required
                             inputMode={"text"}
                             value={formData.name}
                             onChangeText={(text) => onChangeHandler('name', text)}
                         />
                         <InputField
+                            required
                             label={"Phone"}
                             inputMode={"numeric"}
                             value={formData.phone}
                             onChangeText={(text) => onChangeHandler('phone', text)}
                         />
                         <InputField
+                            required
                             label={"Email"}
                             inputMode={"email"}
                             value={formData.email}
@@ -146,6 +158,7 @@ const ContactUs = () => {
                         />
                         <InputField
                             multiline
+                            required
                             onChangeText={(text) => onChangeHandler('message', text)}
                             value={formData.message}
                             label={"Message"}
@@ -155,7 +168,7 @@ const ContactUs = () => {
                             }}
                         />
                         <DropdownComponent
-                            label={'Capmus'}
+                            label={'Capmus (Required)'}
                             disable={false}
                             data={data}
                             placeHolderText={"Campus"}

@@ -270,22 +270,24 @@ const JobApply = () => {
             applicantPositionTimeOther: formData.applicantPositionTimeOther,
             salary: formData?.salary || "",
         }
-        if (!formData.email || !formData.country || !formData.qaulification || !formData.candidatetype || !formData.location) {
+        if (!formData.email || !formData.country || !formData.qaulification || !formData.candidatetype || !formData.location || !formData.agegroup) {
             !formData.location ? customToast('error', 'Please add Location') : ""
             !formData.candidatetype ? customToast('error', 'Please add Candidate Type') : ""
             !formData.qaulification ? customToast('error', 'Please add Qaulification') : ""
             !formData.country ? customToast('error', 'Please add Country') : ""
             !formData.email ? customToast('error', 'Please add valid Email') : ""
+            !formData.agegroup ? customToast('error', 'Please add age group') : ""
             setIsloading(false)
         } else {
             API.createJobApplication(data)
                 .then(res => {
                     customToast('success', res?.message)
                     setFormData(initialData)
+                    setSelectedValues([])
                     setResume('')
                     setProfilePic('')
                 })
-                .catch(err => console.log(err))
+                .catch(err => console.log("err", err))
                 .finally(() => {
                     setIsloading(false)
 
