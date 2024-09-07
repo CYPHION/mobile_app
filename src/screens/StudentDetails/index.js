@@ -39,7 +39,7 @@ const StudentDetails = ({ navigation }) => {
         // },
         {
             name: 'Start Date',
-            value: `${student?.startDate ? formattedDate(student?.startDate, 'dd-MM-yyyy') : ''}`
+            value: `${student?.startDate ? formattedDate(student?.startDate, 'dd/MM/yyyy') : ''}`
         },
         // {
         //     name: 'Mobile No.',

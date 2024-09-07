@@ -34,14 +34,14 @@ const SummerPakage = () => {
         { duration: "16 HOURS (GCSE)", price: "€ 152.00", subjects: "Any 2 Subjects" },
         { duration: "24 HOURS (GCSE)", price: "€ 199.00", subjects: "Any 3 Subjects" },
         { duration: "16 HOURS (KS2 & KS3)", price: "€ 120.00", subjects: "Any" },
-        { duration: "16 HOURS (A-LEVEL)", price: "€ 200.00", subjects: "Any 2. Subjects" },
+        { duration: "16 HOURS (A-LEVEL)", price: "€ 200.00", subjects: "Any 2 Subjects" },
         { duration: "24 HOURS (A-LEVEL)", price: "€ 300.00", subjects: "Any 3 Subjects" }
     ];
     const list4 = [
         { duration: "16 HOURS (GCSE)", price: "€ 92.00", subjects: "Any 2 Subjects" },
         { duration: "24 HOURS (GCSE)", price: "€ 125.00", subjects: "Any 3 Subjects" },
         { duration: "16 HOURS (KS2 & KS3)", price: "€ 90.00", subjects: "Any" },
-        { duration: "16 HOURS (A-LEVEL)", price: "€ 152.00", subjects: "Any 2. Subjects" },
+        { duration: "16 HOURS (A-LEVEL)", price: "€ 152.00", subjects: "Any 2 Subjects" },
         { duration: "24 HOURS (A-LEVEL)", price: "€ 225.00", subjects: "Any 3 Subjects" }
     ];
 

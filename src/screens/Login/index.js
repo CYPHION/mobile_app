@@ -37,7 +37,6 @@ const LoginScreen = prop => {
 
     const saveDataToredux = data => {
         // Function to dispatch action to save login data to Redux store
-        console.log('DATA', data);
         dispatch(handleLogin(data));
         setFormData({
             email: '',

@@ -62,8 +62,8 @@ const Profile = ({ navigation }) => {
                                 <View style={[styles.mainContainer]}>
                                     {/* <Image resizeMode='contain' source={src} style={[styles.profileImage]} /> */}
                                     <View>
-                                        <Text style={[styles.text, { color: Color.text, fontSize: FontSizes.xl }]}>{user?.firstName} {user?.lastName}</Text>
-                                        <Text style={[styles.text, { color: Color.primary, fontSize: FontSizes.md }]}>{user?.email}</Text>
+                                        <Text style={[styles.text, { color: Color.text, fontSize: FontSizes.xxxl }]}>{user?.firstName} {user?.lastName}</Text>
+                                        <Text style={[styles.text, { color: Color.primary, fontSize: FontSizes.md }]}>Main ID : {user?.mainId}</Text>
                                     </View>
                                 </View>
                                 <View >

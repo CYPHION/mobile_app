@@ -94,7 +94,7 @@ const HomeWork = () => {
                                                     </View>
                                                     <Text style={styles.nameFont}>Expiry Date</Text>
                                                 </View>
-                                                <Text style={styles.nameFont}>{elem.expiryDate ? formattedDate(elem.expiryDate, 'dd-MM-yyyy') : ''}</Text>
+                                                <Text style={styles.nameFont}>{elem.expiryDate ? formattedDate(elem.expiryDate, 'dd/MM/yyyy') : ''}</Text>
                                             </View>
                                             <View style={styles.btnStyle}>
                                                 {elem.fileType === "link" ?

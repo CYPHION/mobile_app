@@ -33,10 +33,10 @@ const nestedArray = (item) => [
         name: 'Book',
         value: item?.Book?.title
     },
-    {
-        name: 'Teacher',
-        value: item?.teacherName
-    },
+    // {
+    //     name: 'Teacher',
+    //     value: item?.teacherName
+    // },
     {
         name: 'Performance',
         value: item?.performance.map((elem, index) => <Text key={index} style={styles.CompText}>{elem}</Text>)
@@ -59,11 +59,11 @@ const nestedArray = (item) => [
     },
     {
         name: 'Test Start Date',
-        value: item?.startDate ? formattedDate(item?.startDate, 'dd-MM-yyyy') : ''
+        value: item?.startDate ? formattedDate(item?.startDate, 'dd/MM/yyyy') : ''
     },
     {
         name: 'Test End Date',
-        value: item?.endDate ? formattedDate(item?.endDate, 'dd-MM-yyyy') : ''
+        value: item?.endDate ? formattedDate(item?.endDate, 'dd/MM/yyyy') : ''
     },
     {
         name: 'Test Status',
@@ -72,7 +72,7 @@ const nestedArray = (item) => [
     },
     {
         name: 'Date Enrolled',
-        value: item?.Student?.enrollmentDate ? formattedDate(item?.Student?.enrollmentDate, 'dd-MM-yyyy') : 'N/A'
+        value: item?.Student?.enrollmentDate ? formattedDate(item?.Student?.enrollmentDate, 'dd/MM/yyyy') : 'N/A'
     },
 
 ]
@@ -82,34 +82,33 @@ const nestedArrayBasicDetail = (item) => [
         name: 'Student Name',
         value: item?.Student?.fullName
     },
-    // {
-    //     name: 'Department',
-    //     value: item?.Department?.name
-    // },
+    {
+        name: 'Department',
+        value: item?.Department?.name
+    },
     {
         name: 'Subject',
         value: item?.Subject?.name
     },
-    // {
-    //     name: 'Book',
-    //     value: item?.Book?.title
-    // },
-    // {
-    //     name: 'Test Start Date',
-    //     value: item?.startDate ? formattedDate(item?.startDate, 'dd-MM-yyyy') : ''
-    // },
-    // {
-    //     name: 'Test End Date',
-    //     value: item?.endDate ? formattedDate(item?.endDate, 'dd-MM-yyyy') : ''
-    // },
     {
-        name: 'Test Status',
-        // value: `${item?.meanPercentage > 0 ? `${item?.meanPercentage}%` : ''}`
-        value: <Text style={{ color: item?.meanPercentage > 50 ? 'green' : 'red' }}>{item?.meanPercentage ? item?.meanPercentage : 0}%</Text>
+        name: 'Performance',
+        value: item?.performance.map((elem, index) => <Text key={index} style={styles.CompText}>{elem}</Text>)
+    },
+    {
+        name: 'Strength',
+        value: item?.strength.map((elem, index) => <Text key={index} style={styles.CompText}>{elem}</Text>)
+    },
+    {
+        name: 'Weakness',
+        value: item?.weakness?.map((elem, index) => <Text key={index} style={styles.CompText}>{elem}</Text>)
+    },
+    {
+        name: 'Task To Achieved',
+        value: item?.taskToAchieve?.map((elem, index) => <Text key={index} style={styles.CompText}>{elem}</Text>)
     },
     {
         name: 'Date Enrolled',
-        value: item?.Student?.enrollmentDate ? formattedDate(item?.Student?.enrollmentDate, 'dd-MM-yyyy') : 'N/A'
+        value: item?.Student?.enrollmentDate ? formattedDate(item?.Student?.enrollmentDate, 'dd/MM/yyyy') : 'N/A'
     },
 
 ]

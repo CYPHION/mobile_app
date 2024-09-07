@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     textHeading: {
         color: Color.text,
         fontFamily: FontFamily.interBold,
-        fontSize: FontSizes.xl
+        fontSize: FontSizes.xl - 1
     },
     para: {
         color: Color.textThree,

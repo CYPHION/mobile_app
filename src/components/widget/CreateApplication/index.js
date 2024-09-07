@@ -92,7 +92,7 @@ const CreateAppliction = (props) => {
                         padding: 5
                     }}>
                         <View>
-                            <Text style={{ color: Color.textThree }}>{formData?.date ? formattedDate(formData?.date, 'dd-MM-yyyy') : 'Select Date'}</Text>
+                            <Text style={{ color: Color.textThree }}>{formData?.date ? formattedDate(formData?.date, 'dd/MM/yyyy') : 'Select Date'}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>

@@ -23,15 +23,15 @@ const { fontScale } = screenDimensions;
 const items = (item) => [
     {
         name: "Missed Attendance",
-        value: `${item.attendanceDate} ${'\n'} ${item?.SubjectName} Subject`,
+        value: `${formattedDate(item.attendanceDate, 'dd/MM/yyyy')} ${'\n'} ${item?.SubjectName} Subject`,
     },
     {
         name: "New Schedule",
-        value: item?.date ? formattedDate(item.date, 'yyyy-MM-dd') : '',
+        value: item?.date ? formattedDate(item.date, 'dd/MM/yyyy') : '',
     },
     {
         name: "Available Schedule",
-        value: `${item.availableattendanceDate ? formattedDate(item.availableattendanceDate, 'yyyy-MM-dd') : ''} ${'\n'} ${item?.availableScheduleLessonTime} ${'\n'} ${item.availableSubjectName}`,
+        value: `${item.availableattendanceDate ? formattedDate(item.availableattendanceDate, 'dd/MM/yyyy') : ''} ${'\n'} ${item?.availableScheduleLessonTime} ${'\n'} ${item.availableSubjectName}`,
     },
     {
         name: "Total Available Seats",
@@ -320,10 +320,10 @@ const SelectedStudents = (props) => {
                                                     dropdownStyle={{ height: 50 }}
                                                     disable={false}
                                                     data={excludedIds?.length > 0 ? excludedIds?.map(data => ({
-                                                        name: `${data?.Student?.mainId} - ${data?.Student?.StudentYear?.name} - ${data?.Subject?.name} - ${data?.Department?.name}, ${data?.Schedule?.days} ${data?.Schedule?.LessonTiming?.time} ${formattedDate(data?.attendanceDate, "dd-MM-yyyy")} - ${data?.attendanceType} `,
+                                                        name: `${data?.Student?.mainId} - ${data?.Student?.StudentYear?.name} - ${data?.Subject?.name} - ${data?.Department?.name}, ${data?.Schedule?.days} ${data?.Schedule?.LessonTiming?.time} ${formattedDate(data?.attendanceDate, "dd/MM/yyyy")} - ${data?.attendanceType} `,
                                                         value: data.id
                                                     })) : eachStudentAttendanceData?.map(data => ({
-                                                        name: `${data?.Student?.mainId} - ${data?.Student?.StudentYear?.name} - ${data?.Subject?.name} - ${data?.Department?.name}, ${data?.Schedule?.days} ${data?.Schedule?.LessonTiming?.time} ${formattedDate(data?.attendanceDate, "dd-MM-yyyy")} - ${data?.attendanceType} `,
+                                                        name: `${data?.Student?.mainId} - ${data?.Student?.StudentYear?.name} - ${data?.Subject?.name} - ${data?.Department?.name}, ${data?.Schedule?.days} ${data?.Schedule?.LessonTiming?.time} ${formattedDate(data?.attendanceDate, "dd/MM/yyyy")} - ${data?.attendanceType} `,
                                                         value: data.id
                                                     }))}
                                                     placeHolderText={"Missed Attendance"}

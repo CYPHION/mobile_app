@@ -8,7 +8,6 @@ import { globalData } from '../../store/thunk'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { screenDimensions } from '../../utils/functions'
-import { GlobalStyles } from '../../utils/globalStyles'
 import AnalyticsSkeleton from './AnalyticSkeleton'
 
 
@@ -191,15 +190,7 @@ const Analytics = ({ navigation }) => {
                     <View style={styles.viewChildrenContainer}>
 
 
-                        <View style={[GlobalStyles.headerStyles]}>
-                            <Text style={GlobalStyles.headerTextStyle}>Analytics</Text>
-                            {/* <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
-                                <View style={[styles.iconView]}>
-                                    <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
-                                </View>
-                                <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
-                            </TouchableOpacity> */}
-                        </View>
+
 
                         <View style={{ alignItems: 'center', gap: 10, paddingVertical: 10 }}>
 
@@ -242,9 +233,8 @@ const Analytics = ({ navigation }) => {
                                     <Pound name='pound-sign' color={Color.white} size={screenDimensions.width * 0.12} />
                                 </View>
                                 <View style={[{ width: '75%' }]} >
-                                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-                                        <Text style={[styles.attendeceFont, { paddingRight: 2 }]}>Outstanding Fees</Text>
-                                        {/* <View style={{}}>
+                                    <Text style={[styles.attendeceFont]}>Outstanding Fees</Text>
+                                    {/* <View style={{}}>
                                             <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
                                                 <View style={[styles.iconView]}>
                                                     <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
@@ -252,7 +242,6 @@ const Analytics = ({ navigation }) => {
                                                 <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
                                             </TouchableOpacity>
                                         </View> */}
-                                    </View>
 
                                     <View style={{ padding: 5, paddingHorizontal: 10 }}>
                                         <Text style={[styles.totalFont]}>Total : £{outStangingFee}</Text>

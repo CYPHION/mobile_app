@@ -50,7 +50,7 @@ const LeaveApplication = () => {
         },
         {
             name: "Date",
-            value: formattedDate(selectedDate, 'dd-MM-yyyy'),
+            value: formattedDate(selectedDate, 'dd/MM/yyyy'),
         },
         {
             name: "Day",

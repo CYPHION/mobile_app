@@ -103,10 +103,10 @@ const GCSEResult = () => {
                 <View style={{ padding: 20 }}>
 
                     <Text style={[styles.name, { marginBottom: 5 }]}>
-                        Good Luck to everyone{'\n'}receiving their GCSE{'\n'}Results
+                        Good Luck to everyone receiving their GCSE Results
                     </Text>
                     <Text style={[styles.name, { color: Color.text, marginTop: 5 }]}>
-                        To all of our GCSE Students, Please{'\n'}fill the form below to share your’{'\n'}GCSE results. Thanks!.
+                        To all of our GCSE Students, Please fill the form below to share your GCSE results. Thanks!.
                     </Text>
                     <Text style={[styles.name, { marginBottom: 5 }]}>
                         GCSE Result
