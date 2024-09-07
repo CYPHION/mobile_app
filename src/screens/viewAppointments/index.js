@@ -85,7 +85,7 @@ const ViewAppointments = () => {
         },
         {
             name: " Date",
-            value: `${elem?.appointDate}`,
+            value: `${formattedDate(elem?.appointDate, 'dd/MM/yyyy')}`,
             icon: (
                 <TimeIcon color={Color.primary} name="timelapse" size={FontSizes.lg} />
             ),

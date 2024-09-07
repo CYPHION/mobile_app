@@ -25,15 +25,15 @@ const ProceedCompensation = (props) => {
         },
         {
             name: "Missed Attendance",
-            value: `${item.attendanceDate} ${'\n'} ${item?.SubjectName} Subject`,
+            value: `${formattedDate(item.attendanceDate, 'dd/MM/yyyy')} ${'\n'} ${item?.SubjectName} Subject`,
         },
         {
             name: "New Schedule",
-            value: item?.date ? formattedDate(item.date, 'yyyy-MM-dd') : '',
+            value: item?.date ? formattedDate(item.date, 'dd/MM/yyyy') : '',
         },
         {
             name: "Available Schedule",
-            value: `${item.availableattendanceDate ? formattedDate(item.availableattendanceDate, 'yyyy-MM-dd') : ''} ${'\n'} ${item?.availableScheduleLessonTime} ${'\n'} ${item.availableSubjectName}`,
+            value: `${item.availableattendanceDate ? formattedDate(item.availableattendanceDate, 'dd/MM/yyyy') : ''} ${'\n'} ${item?.availableScheduleLessonTime} ${'\n'} ${item.availableSubjectName}`,
         },
         {
             name: "Total Available Seats",

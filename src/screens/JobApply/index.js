@@ -402,7 +402,7 @@ const JobApply = () => {
                             padding: 5
                         }}>
                             <View>
-                                <Text style={{ color: Color.textThree }}>{formData?.dob ? formattedDate(formData?.dob, 'dd-MM-yyyy') : 'Select Date'}</Text>
+                                <Text style={{ color: Color.textThree }}>{formData?.dob ? formattedDate(formData?.dob, 'dd/MM/yyyy') : 'Select Date'}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -475,7 +475,7 @@ const JobApply = () => {
                             padding: 5
                         }}>
                             <View>
-                                <Text style={{ color: Color.textThree }}>{formData?.ref1startdate ? formattedDate(formData?.ref1startdate, 'dd-MM-yyyy') : 'Select Date'}</Text>
+                                <Text style={{ color: Color.textThree }}>{formData?.ref1startdate ? formattedDate(formData?.ref1startdate, 'dd/MM/yyyy') : 'Select Date'}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -489,7 +489,7 @@ const JobApply = () => {
                             padding: 5
                         }}>
                             <View>
-                                <Text style={{ color: Color.textThree }}>{formData?.ref1enddate ? formattedDate(formData?.ref1enddate, 'dd-MM-yyyy') : 'Select Date'}</Text>
+                                <Text style={{ color: Color.textThree }}>{formData?.ref1enddate ? formattedDate(formData?.ref1enddate, 'dd/MM/yyyy') : 'Select Date'}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -528,7 +528,7 @@ const JobApply = () => {
                             padding: 5
                         }}>
                             <View>
-                                <Text style={{ color: Color.textThree }}>{formData?.ref2startdate ? formattedDate(formData?.ref2startdate, 'dd-MM-yyyy') : 'Select Date'}</Text>
+                                <Text style={{ color: Color.textThree }}>{formData?.ref2startdate ? formattedDate(formData?.ref2startdate, 'dd/MM/yyyy') : 'Select Date'}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -542,7 +542,7 @@ const JobApply = () => {
                             padding: 5
                         }}>
                             <View>
-                                <Text style={{ color: Color.textThree }}>{formData?.ref2enddate ? formattedDate(formData?.ref2enddate, 'dd-MM-yyyy') : 'Select Date'}</Text>
+                                <Text style={{ color: Color.textThree }}>{formData?.ref2enddate ? formattedDate(formData?.ref2enddate, 'dd/MM/yyyy') : 'Select Date'}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

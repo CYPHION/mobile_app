@@ -17,9 +17,9 @@ const list = (item) => [
     { name: 'Lecture', value: item?.Schedule?.Subject?.name },
     { name: 'Lecture Time', value: item?.Schedule?.LessonTiming?.time },
     { name: 'Lecture Day', value: formattedDate(item?.applicationDate, 'EEEE') },
-    { name: 'Leave Date', value: formattedDate(item?.applicationDate, 'dd-MMM-yyyy') },
+    { name: 'Leave Date', value: formattedDate(item?.applicationDate, 'dd/MM/yyyy') },
     { name: 'Reason', value: item?.reason },
-    { name: 'Date Created', value: `${formattedDate(item?.createdAt, 'dd-MMM-yyyy')}\n${formattedDate(item?.createdAt, 'hh:mm:ss a')}` },
+    { name: 'Date Created', value: `${formattedDate(item?.createdAt, 'dd/MM/yyyy')}\n${formattedDate(item?.createdAt, 'hh:mm:ss a')}` },
 ]
 
 const ViewApplication = () => {

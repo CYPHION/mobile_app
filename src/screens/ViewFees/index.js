@@ -102,7 +102,7 @@ const ViewFess = () => {
                                             </View>
                                         ))}
                                         key={index}
-                                        date={formattedDate(item?.createdAt, 'dd-MMM-yyyy')}
+                                        date={formattedDate(item?.createdAt, 'dd/MM/yyyy')}
                                         studentName={`${item.payType}`}
                                         total={
                                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>

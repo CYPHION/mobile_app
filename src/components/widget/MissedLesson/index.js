@@ -88,9 +88,9 @@ const MissedLesson = () => {
                     getTotalAttendance(startDateSet, maxDueFeeDate)
                     setFormData(prev => ({
                         ...prev,
-                        dateRange: `${formattedDate(startDateSet, 'dd-MM-yyyy')} - ${formattedDate(maxDueFeeDate, 'dd-MM-yyyy')} `
+                        dateRange: `${formattedDate(startDateSet, 'dd/MM/yyyy')} - ${formattedDate(maxDueFeeDate, 'dd/MM/yyyy')} `
                     }))
-                    setPaidUpto(formattedDate(maxDueFeeDate, 'MM-dd-yyyy'))
+                    setPaidUpto(formattedDate(maxDueFeeDate, 'dd/MM/yyyy'))
                     setDisable(false) // Enable form elements
                 } else {
 

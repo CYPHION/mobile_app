@@ -74,7 +74,7 @@ const Testimonials = () => {
                                             <Text style={[styles.nameText]}>{elem?.User?.firstName} {elem?.User?.lastName}</Text>
                                             <View style={{ flexDirection: 'row', gap: 6 }}>
                                                 <Text style={styles.textTwo}>({elem?.User?.type && elem.User.type[0].toUpperCase() + elem.User.type.slice(1)})</Text>
-                                                <Text style={styles.dateText}>{formattedDate(elem.createdAt, 'MMM dd,yyyy')}</Text>
+                                                <Text style={styles.dateText}>{formattedDate(elem.createdAt, 'dd/MM/yyyy')}</Text>
                                             </View>
                                             <Text style={styles.para}>{elem.review}</Text>
                                         </View>

@@ -92,9 +92,11 @@ const FeeCollection = () => {
 
     // Function to calculate fee type
     const getType = (isMonthly, value, child, schedule) => {
-        const date = child?.dueFeeDate ? child?.dueFeeDate : child?.startDate
+        const date = child?.dueFeeDate ? child?.dueFeeDate : child?.startDate ? child?.startDate : new Date()
 
-        return calculateFee(child, Number(value), isMonthly, date, true, schedule)
+        const isStartDate = child?.dueFeeDate ? false : true
+
+        return calculateFee(child, Number(value), isMonthly, date, true, schedule, isStartDate)
     }
     // Function to toggle active item
     const toggleItem = (index) => {
@@ -284,17 +286,23 @@ const FeeCollection = () => {
         const isMonthly = child?.feeChargedBy === "Monthly"
         const timeperiod = isMonthly ? formData.noOfMonths : formData.noOfWeeks
 
-        const obj = getType(isMonthly, timeperiod, child)
+        // filter  the student has regular schedule 
+        const regularScheduleOfChild = schedule?.filter(elem =>
+            elem.studentId === child.id && !(elem.isComp || elem.isBooster) && !elem.isBoosterFreeze
+        );
+
+        const obj = getType(isMonthly, timeperiod, child, regularScheduleOfChild)
 
         const isBooster = child?.BoosterStudents?.length > 0 ? true : false
         const booster = child?.BoosterStudents.length > 0 ? child?.BoosterStudents[0] : {}
 
-        const regularScheduleLength = schedule?.filter(elem => elem.studentId === child.id && elem.isBooster === false)?.length > 0 ? true : false
+        const regularScheduleLength = schedule?.filter(elem => elem.studentId === child.id && elem.isBooster === false && !elem.isBoosterFreeze)?.length > 0 ? true : false
 
         const newBoosterarr = [
-            { id: 13, "name": "Total Booster Price", "value": `£${booster?.totalPackagePrice}` },
-            { id: 14, "name": "Booster Dues", "value": `£${booster?.totalPackagePrice - booster?.paidAmount}` },
-            { id: 15, "name": "Total Booster Weeks", "value": `${child?.BoosterStudents[0]?.numOfWeeks} weeks` },
+            { id: 13, "key": `Booster Price Per Hour`, "value": `£${booster?.pricePerHour}` },
+            { id: 14, "name": "Total Booster Price", "value": `£${booster?.totalPackagePrice}` },
+            { id: 15, "name": "Booster Dues", "value": `£${booster?.totalPackagePrice - booster?.paidAmount}` },
+            { id: 16, "name": "Total Booster Weeks", "value": `${child?.BoosterStudents[0]?.numOfWeeks} weeks` },
         ]
 
         const onlyBoosterArr = [
@@ -302,9 +310,10 @@ const FeeCollection = () => {
             ...(isBooster ? newBoosterarr : []),
             { id: 12, "name": "Total Charges", "value": `£${Number(obj.totalCharges) + Number(child?.bookDues) + Number(child?.boosterDues)}` }]
 
+
         const regularArr = [
-            { id: 1, "name": "Start Date", "value": `${child?.dueFeeDate ? formattedDate(new Date(child?.dueFeeDate).setDate(new Date(child?.dueFeeDate).getDate() + 1), 'dd-MMMM-yyyy') : formattedDate(child?.startDate, 'dd-MMMM-yyyy')}` },
-            { id: 2, "name": "End Date:	", "value": `${obj.endDate}` },
+            { id: 1, "name": "Start Date", "value": `${child?.dueFeeDate ? formattedDate(new Date(child?.dueFeeDate).setDate(new Date(child?.dueFeeDate).getDate() + 1), 'dd/MM/yyyy') : formattedDate(child?.startDate ? child?.startDate : new Date(), 'dd/MM/yyyy')}` },
+            { id: 2, "name": "End Date:	", "value": `${formattedDate(obj.endDate, 'dd/MM/yyyy')}` },
             // { id: 3, "name": "Subjects", "value": subjectsData(child?.id) },
             // { id: 4, "name": "Frozen Weeks", "value": `0` },
             {
@@ -667,11 +676,15 @@ const FeeCollection = () => {
             const timePeriod = isMonthly ? formData.noOfMonths : formData.noOfWeeks;
 
             const isBooster = child?.BoosterStudents?.length > 0 && child.BoosterStudents[0]?.paidAmount === 0 ? true : false
-            const regularScheduleLength = schedule?.filter(elem => elem.studentId === child.id && elem.isBooster === false)?.length > 0 ? true : false
+
+            // Check if the child has regular schedule length
+            const regularScheduleLength = schedule?.filter(elem => elem.studentId === child.id && elem.isBooster === false && !elem.isBoosterFreeze)?.length > 0 ? true : false
+
             // filter  the student has regular schedule 
             const regularScheduleOfChild = schedule?.filter(elem =>
-                elem.studentId === child.id && !(elem.isComp || elem.isBooster)
+                elem.studentId === child.id && !(elem.isComp || elem.isBooster) && !elem.isBoosterFreeze
             );
+
             const chargesForChild = getType(isMonthly, timePeriod, child, regularScheduleOfChild);
             const startDate = child.dueFeeDate ? formattedDate(new Date(child?.dueFeeDate).setDate(new Date(child?.dueFeeDate).getDate() + 1), 'dd-MMMM-yyyy') : formattedDate(child.startDate, 'dd-MMMM-yyyy');
             const endDate = chargesForChild.endDate;

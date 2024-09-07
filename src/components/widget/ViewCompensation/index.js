@@ -19,16 +19,16 @@ const items = (row) => [
     },
     {
         name: "Subject",
-        value: `${row?.Attendance?.Subject?.name} -${'\n'} ${row?.Attendance?.Department?.name} `,
+        value: `${row?.Attendance?.Subject?.name}${'\n'}${row?.Attendance?.Department?.name}`,
     },
     {
         name: "Class Missed On",
-        value: `${formattedDate(row.missedScheduleDate, "dd-MM-yyyy")} - ${'\n'} ${formattedDate(row.missedScheduleDate, "EEEE")} ${'\n'}(${row.Attendance?.Schedule?.LessonTiming?.time
+        value: `${formattedDate(row.missedScheduleDate, "dd/MM/yyyy")}${'\n'}${formattedDate(row.missedScheduleDate, "EEEE")}${'\n'}(${row.Attendance?.Schedule?.LessonTiming?.time
             })`,
     },
     {
         name: "For Subject",
-        value: `${row?.Schedule?.Subject?.name} -${'\n'} ${row?.Schedule?.Department?.name}`,
+        value: `${row?.Schedule?.Subject?.name}${'\n'}${row?.Schedule?.Department?.name}`,
     },
     {
         name: "Authorized By",
@@ -36,7 +36,7 @@ const items = (row) => [
     },
     {
         name: "Date",
-        value: formattedDate(row.createdAt, "dd-MM-yyyy hh:mm:ss a"),
+        value: formattedDate(row.createdAt, "dd/MM/yyyy hh:mm:ss a"),
     },
     {
         name: "Remarks",
@@ -73,6 +73,7 @@ const ViewCompensation = ({ rows }) => {
     // }, [globalData?.students])
 
     const inset = useSafeAreaInsets()
+    console.log(rows)
     return (
 
         <View>

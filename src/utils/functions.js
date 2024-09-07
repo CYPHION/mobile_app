@@ -36,7 +36,7 @@ export const formattedDate = (dateString, format) => {
         .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
 
     const formattedTimeWithoutSecond = `${hours % 12 || 12}:${minutes.toString().padStart(2, '0')}`
-    const formattedTimeWithoutSecondWithAMPM = `${hours % 12 || 12}:${minutes.toString().padStart(2, '0')}  ${period}`
+    const formattedTimeWithoutSecondWithAMPM = `${hours % 12 || 12}:${minutes.toString().padStart(2, '0')} ${period}`
 
     return format
         .replace('dd', day.toString().padStart(2, '0'))
@@ -192,17 +192,17 @@ const calculateFeeWeekly = (schedules, startDate, endDateSat, ratePerHour) => {
 };
 
 
-export function calculateFee(child, timeperiod, isMonthly, startDate, isBooster, schedules) {
+export function calculateFee(child, timeperiod, isMonthly, startDate, isBooster, schedules, isStartDate) {
 
 
     // const isDiscount = Number(child?.discountRatePerHour) ? Number(child?.discountRatePerHour) * child.totalHours * timeperiod : 0
 
     const endDate = new Date(startDate)
-    endDate?.setDate(endDate.getDate() + timeperiod * 7)
+    isStartDate ? endDate?.setDate((endDate.getDate() - 1) + timeperiod * 7) : endDate?.setDate(endDate.getDate() + timeperiod * 7)
 
     const nextMonth = new Date(startDate)
     nextMonth.setMonth(nextMonth.getMonth() + timeperiod);
-    nextMonth.setDate(nextMonth.getDate());
+    isStartDate ? nextMonth.setDate(nextMonth.getDate() - 1) : nextMonth.setDate(nextMonth.getDate());
 
     let discount = Number(child?.discountRatePerHour) > 0 ? child?.discountRatePerHour : 0
     const studentRatePerhour = discount !== 0 ? discount : child?.isChildcareStd ? child?.StudentYear?.ratePerChildcareHour : child?.StudentYear?.ratePerHour
