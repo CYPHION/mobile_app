@@ -56,6 +56,7 @@ const Compensation = () => {
                             />
                             <CustomButton
                                 btnstyle={styles.btnStyle}
+                                textStyle={styles.btnText}
                                 title='Compensation Status'
                                 variant={active ? '' : 'fill'}
                                 onPress={() => {
@@ -89,7 +90,10 @@ const styles = StyleSheet.create({
     btnStyle: {
         width: screenDimensions.width * 0.47,
     },
-
+    btnText: {
+        fontSize: FontSizes.md - 1,
+        fontFamily: FontFamily.regular,
+    },
     textHeading: {
         color: Color.text,
         fontFamily: FontFamily.interBold,

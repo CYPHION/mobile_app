@@ -27,7 +27,7 @@ const StudentDetails = ({ navigation }) => {
         // },
         {
             name: 'Fee Plan',
-            value: `${student?.feePlan} weeks`
+            value: `${isMonthly ? 'Monthly' : `${student?.feePlan} weeks`}`
         },
         {
             name: `${isMonthly ? 'Fee Per Month' : 'Fee Per Week'}`,

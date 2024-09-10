@@ -106,8 +106,19 @@ const FeeCollection = () => {
     const getChilds = async (id) => {
         try {
             const res = await API.getStudentScheduledByParentId(id); // Fetching scheduled students by parent ID
+
+
+            // checking for book dues
+            let bookDues = 0
+            let classDues = 0
+            res.data.students.forEach(child => {
+                bookDues += child.bookDues
+                classDues += child.classDues
+            })
+
+
             // Checking if no scheduled students or schedules are found
-            if (res?.data?.students?.length === 0 || res?.data?.schedules.length === 0) {
+            if ((res?.data?.students?.length === 0 || res?.data?.schedules.length === 0) && bookDues === 0 && classDues === 0) {
                 // Fetching children with active boosters
                 const childs = await API.getStudentWithActiveBooster(`parentId=${id}`)
                 let activeBoosterStudents = []
@@ -117,40 +128,26 @@ const FeeCollection = () => {
                 // Checking if active booster students are found
 
                 if (activeBoosterStudents.length > 0) {
-                    setChilds(activeBoosterStudents)
+                    setChilds(activeBoosterStudents?.filter(elem => elem.status == 'active'))
                     setIsOnlyBooster(true)
                 } else {
                     customToast("error", 'No schedule or booster found for the students');
                 }
 
             } else {
-                // Filtering students with schedules and without schedules
-                const filteredStudentsforSchedule = res?.data?.students?.filter(student =>
-                    !res?.data?.schedules.some(schedule => schedule.studentId === student.id)
-                );
 
-                const filteredStudents = res?.data?.students?.filter(student =>
-                    res?.data?.schedules.some(schedule => schedule.studentId === student.id)
-                );
-                // Checking if payment type is "Parent" and there are students without schedules
-
-                if (option === "Parent") {
-                    // Check if there are students without schedules
-                    if (filteredStudentsforSchedule.length > 0) {
-                        customToast("error", 'Some students do not have schedules')
-                    }
-                }
-
-
-                filteredStudents.sort(customSort);
+                // sort the students according to active booster
+                res?.data?.students?.sort(customSort);
 
                 const result = {
-                    students: filteredStudents,
+                    students: res?.data?.students,
                     schedules: res?.data.schedules,
                 };
 
-                setChilds(result?.students);
-                setSchedule(result?.schedules);
+                // update the childs and schedule state
+                const schedulesFilter = result?.schedules?.filter(elem => (!elem.endDate || new Date(elem.endDate).setHours(0, 0, 0, 0) >= new Date(new Date().setHours(0, 0, 0, 0)) && !elem.isBoosterFreeze))
+                setChilds(result?.students?.filter(elem => elem.status == 'active'));
+                setSchedule(schedulesFilter);
             }
         } catch (err) {
             customToast("error", err?.message);

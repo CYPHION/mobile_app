@@ -7,7 +7,7 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { AppRegistry } from 'react-native';
 import 'react-native-gesture-handler';
-import Toast from 'react-native-toast-message';
+import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 import App from './App';
 import { name as appName } from './app.json';
@@ -35,14 +35,37 @@ messaging().getInitialNotification(async remoteMessage => {
 });
 
 
+const toastConfig = {
+    /*
+      Overwrite 'success' type,
+      by modifying the existing `BaseToast` component
+    */
+    success: (props) => (
+        <BaseToast
+            {...props}
+            style={{ borderLeftColor: 'green' }}
+            text1NumberOfLines={3}
+        />
+    ),
+    /*
+      Overwrite 'error' type,
+      by modifying the existing `ErrorToast` component
+    */
+    error: (props) => (
+        <ErrorToast
+            {...props}
+            style={{ borderLeftColor: 'red' }}
+            text1NumberOfLines={3}
+        />
+    ),
+};
 
-console.log(typeof stripePublishKey)
 const ReduxApp = () => (
     <Provider store={store}>
         <StripeProvider publishableKey={stripePublishKey}>
             <NavigationContainer theme={MyTheme}>
                 <App />
-                <Toast />
+                <Toast config={toastConfig} />
             </NavigationContainer>
         </StripeProvider>
     </Provider>

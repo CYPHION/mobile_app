@@ -64,7 +64,7 @@ const LoginScreen = prop => {
 
         API.login(email.toLowerCase(), password)
             .then(res => saveDataToredux(res?.data)) // Dispatch action to save login data on successful login
-            .catch(err => console.log('errrr', err)) // Log any errors during login
+            .catch(err => console.log('errrr', err?.message)) // Log any errors during login
             .finally(() => setIsLoading(false)); // Set loading state to false after login attempt completes
     };
 

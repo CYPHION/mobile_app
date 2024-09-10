@@ -33,10 +33,22 @@ const nestedArray = (item) => [
         name: 'Book',
         value: item?.Book?.title
     },
-    // {
-    //     name: 'Teacher',
-    //     value: item?.teacherName
-    // },
+    {
+        name: 'Classwork',
+        value: item?.Classwork?.name
+    },
+    {
+        name: 'Homework',
+        value: item?.Homework?.name
+    },
+    {
+        name: 'Effort',
+        value: item?.Effort?.name
+    },
+    {
+        name: 'Behavior',
+        value: item?.Behavior?.name
+    },
     {
         name: 'Performance',
         value: item?.performance.map((elem, index) => <Text key={index} style={styles.CompText}>{elem}</Text>)
@@ -54,8 +66,8 @@ const nestedArray = (item) => [
         value: item?.taskAchieved.map((elem, index) => <Text key={index} style={styles.CompText}>{elem}</Text>)
     },
     {
-        name: 'Book',
-        value: item?.Book?.title
+        name: 'Task To Achieved',
+        value: item?.taskToAchieve?.map((elem, index) => <Text key={index} style={styles.CompText}>{elem}</Text>)
     },
     {
         name: 'Test Start Date',
@@ -89,6 +101,14 @@ const nestedArrayBasicDetail = (item) => [
     {
         name: 'Subject',
         value: item?.Subject?.name
+    },
+    {
+        name: 'Classwork',
+        value: item?.Classwork?.name
+    },
+    {
+        name: 'Homework',
+        value: item?.Homework?.name
     },
     {
         name: 'Performance',
