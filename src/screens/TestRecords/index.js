@@ -110,7 +110,7 @@ const TestRecords = () => {
     };
 
     const getData = () => {
-        let querry = `?studentId=${router?.params?.student?.id}`
+        let querry = `?studentId=${router?.params?.student?.id}&isPrint=true`
         API.GetTestRecords(querry)
             .then(res => {
                 setProgress(res?.data)

@@ -1,6 +1,5 @@
 import React from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import NoHomework from "react-native-vector-icons/MaterialCommunityIcons"
 import { Color } from '../../../utils/color'
 import { FontSizes } from '../../../utils/font'
@@ -50,30 +49,6 @@ const items = (row) => [
 
 const ViewCompensation = ({ rows }) => {
 
-    // const globalData = useSelector(state => state?.global?.data)
-    // const [rows, setRows] = useState([])
-    // const [refreshing, setRefreshing] = useState(false);
-
-
-    // const getALLCompensation = async () => {
-    //     const studentIds = globalData?.students?.map(elem => elem?.id)
-    //     await API.compensationByParent(JSON.stringify(studentIds)).then(res => {
-    //         const data = res?.data
-    //         setRows(data)
-    //     }).catch(err => customToast("error", err?.message)).finally(() => setRefreshing(false))
-    // }
-
-    // const onRefresh = useCallback(() => {
-    //     setRefreshing(true);
-    //     getALLCompensation()
-    // }, []);
-
-    // useEffect(() => {
-    // getALLCompensation()
-    // }, [globalData?.students])
-
-    const inset = useSafeAreaInsets()
-    console.log(rows)
     return (
 
         <View>
@@ -86,9 +61,7 @@ const ViewCompensation = ({ rows }) => {
                 </View>
                 :
                 <ScrollView
-                // refreshControl={
-                //     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                // }
+
                 >
                     <View  >
 

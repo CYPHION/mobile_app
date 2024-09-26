@@ -108,8 +108,10 @@ const MissedLesson = () => {
     }
     // Function to retrieve attendance data within a specified date range
     const getTotalAttendance = async (startDate, endDate) => {
+
+        const studentId = globalData?.students?.map(ele => ele.id)
         // Construct query string with formatted start and end dates
-        let data = `startDate=${formattedDate(startDate, 'yyyy-MM-dd')}&endDate=${formattedDate(endDate, 'yyyy-MM-dd')}`
+        let data = `startDate=${formattedDate(startDate, 'yyyy-MM-dd')}&endDate=${formattedDate(endDate, 'yyyy-MM-dd')}&studentId=${JSON.stringify(studentId)}&isPrint=true`
         // Call API to get attendance data by date range
         API.getAttendanceByDateRange(data).then((res) => {
             // Set the attendance data received from the API response
@@ -118,8 +120,16 @@ const MissedLesson = () => {
     }
     // Function to retrieve all compensation data
     const getAllCompensation = async () => {
+
+        const studentId = globalData?.students?.map(ele => ele.id)
+
+        let querysend = `?studentId=${JSON.stringify(studentId)}`
+
+        querysend += `&isPrint=true`
+
+
         // Call the API to get all compensation data
-        await API.compensationAll().then(
+        await API.compensationAll(querysend).then(
             res => {
                 // Set the rows state with the compensation data received from the API response
                 setRows(res?.data)

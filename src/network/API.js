@@ -29,8 +29,8 @@ export class API {
             : HttpService.GET(`/attendance/date-range?${formData}`)
     }
 
-    static async compensationAll() {
-        return HttpService.GET(`/compensation/view`)
+    static async compensationAll(query) {
+        return query ? HttpService.GET(`/compensation/view${query}`) : HttpService.GET(`/compensation/view`)
     }
 
     static async getAvailableSchedule(form) {
