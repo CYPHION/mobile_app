@@ -79,8 +79,8 @@ android {
         applicationId "com.primetutuitionmobileapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "3.4"
+        versionCode 9
+        versionName "3.5"
     }
     signingConfigs {
         debug {
