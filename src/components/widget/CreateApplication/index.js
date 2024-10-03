@@ -71,7 +71,7 @@ const CreateAppliction = (props) => {
                 <View>
                     <MultiSelectComponent
                         label='Add Student'
-                        list={getParentDropdown(globalData?.students)}
+                        list={getParentDropdown(globalData?.students?.filter(elem => elem?.status === 'active'))}
                         values={selectedValues}
                         setValues={setSelectedValues}
                         required

@@ -33,10 +33,10 @@ const items = (item) => [
         name: "Available Schedule",
         value: `${item.availableattendanceDate ? formattedDate(item.availableattendanceDate, 'dd/MM/yyyy') : ''} ${'\n'} ${item?.availableScheduleLessonTime} ${'\n'} ${item.availableSubjectName}`,
     },
-    {
-        name: "Total Available Seats",
-        value: item?.availableSeats,
-    },
+    // {
+    //     name: "Total Available Seats",
+    //     value: item?.availableSeats,
+    // },
     {
         name: "Remarks",
         value: item?.remarks ? item?.remarks : '',
@@ -47,6 +47,7 @@ const items = (item) => [
 const SelectedStudents = (props) => {
     const { setActiveScreen, studentData } = props
     const [activeStudent, setActiveStudent] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
     const [process, setProcess] = useState(false)
     const [student, setStudent] = useState([])
     const [formValues, setFormValues] = useState(initialData)
@@ -184,8 +185,15 @@ const SelectedStudents = (props) => {
             </View>
         )
     }
+
+    // get All Student Schedule
+    const getSchedule = async (id, lessonId, day) => {
+        return await API.getAllStudentScheduleByIdWithBooster(`${id}&lessonId=${lessonId}&days=${day}`).then(res => res?.data).catch(err => customToast('error', err?.message))
+    }
+
     // Function to handle form submission for a student
-    const studentformHandler = (studentIndex, studentId) => {
+    const studentformHandler = async (studentIndex, studentId) => {
+        setIsLoading(true)
         // Check if any required field is empty
         if (!formValues[studentIndex]?.newDate || !formValues[studentIndex]?.missedSchedule || !formValues[studentIndex]?.availableSchedule) {
             // If any required field is empty
@@ -213,8 +221,30 @@ const SelectedStudents = (props) => {
                 customToast("error", "Please fill all details")
 
             }
+            setIsLoading(false)
         }
         else {
+            const lessonId = selectedDates[studentIndex]?.find(elem => elem.id === formValues[studentIndex]?.availableSchedule)?.Schedule?.lessonId
+            const day = selectedDates[studentIndex]?.find(elem => elem.id === formValues[studentIndex]?.availableSchedule)?.Schedule?.days
+
+            const alreadyExistsSchedule = await getSchedule(studentId, lessonId, day)
+
+            const today = new Date(); // Current date
+            let isToday = false
+
+            if (alreadyExistsSchedule[0]?.endDate !== null) {
+                const endDateObj = new Date(alreadyExistsSchedule[0]?.endDate);
+                today.setHours(0, 0, 0, 0);
+                isToday = endDateObj > today
+            }
+
+
+            if (alreadyExistsSchedule?.length > 0 && (alreadyExistsSchedule[0]?.endDate === null || isToday)) {
+                const scheduleData = alreadyExistsSchedule[0]
+                customToast('error', `Schedule already Exists on ${scheduleData?.days} from ${scheduleData?.LessonTiming?.time} of ${scheduleData?.Student?.fullName}`)
+                setIsLoading(false)
+                return
+            }
             // If all required fields are filled
             const randomNumber = Math.floor(Math.random() * 1000000) + 1;
             // Create data object with form values and other necessary details
@@ -258,7 +288,7 @@ const SelectedStudents = (props) => {
                     [studentIndex]: [],
                 }));
             }
-
+            setIsLoading(false)
 
         }
 
@@ -377,6 +407,8 @@ const SelectedStudents = (props) => {
                                                         variant='fill'
                                                         btnstyle={styles.btnStyle}
                                                         onPress={() => studentformHandler(index, studentId)}
+                                                        isLoading={isLoading}
+                                                        disabled={isLoading}
                                                     />
                                                     <CustomButton
                                                         variant='fill'

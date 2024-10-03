@@ -6,6 +6,7 @@ import { FontSizes } from '../../../utils/font'
 import { formattedDate, screenDimensions } from '../../../utils/functions'
 import AccordionItem from '../../base/Accordion'
 import MyCheckBox from '../../base/CheckBox'
+import CustomButton from '../../base/CustomButton'
 import GridTable from '../../base/GridTable'
 
 
@@ -46,7 +47,7 @@ const StudentsAccordion = (props) => {
     const globalData = useSelector(state => state?.global?.data)
 
     // its function to checked items in an array
-    const handleCheckbox = (scheduleId) => {
+    const handleCheckbox = (scheduleId, studentId) => {
         const index = globalData?.schedules.findIndex(item => item.id === Number(scheduleId));
         if (index === -1) {
             return; // Schedule item not found, handle error or return
@@ -82,21 +83,29 @@ const StudentsAccordion = (props) => {
     };
 
     // this function take student id and return table of student schedule
-    const getSelectedStudentSchedule = (studentId) => {
+    const getSelectedStudentSchedule = (studentId, i) => {
 
         const day = formattedDate(date, 'EEEE')
         const getStudentSchedules = globalData?.schedules?.filter(elem => elem?.studentId === studentId && elem.days === day && !elem.isComp && !elem.isBooster)
 
+
         return (
 
             getStudentSchedules?.length > 0 ? <>
+                <CustomButton
+                    title="Done"
+                    onPress={() => toggleItem(i)}
+                    variant="fill"
+                    disabled={![...selectedData].map(elem => elem.studentId).includes(studentId)}
+                />
                 {getStudentSchedules?.map((elem, index) => (
                     <GridTable
                         data={item(elem)}
                         key={index}
-                        CheckboxChild={<MyCheckBox isChecked={checkedItems[elem.id]} onToggle={() => handleCheckbox(elem.id)} />}
+                        CheckboxChild={<MyCheckBox isChecked={checkedItems[elem.id]} onToggle={() => handleCheckbox(elem.id, studentId)} />}
                     />
                 ))}
+
             </> : <View><Text style={{ color: Color.text }}>No Schedule found Please Select Another Date</Text></View>
 
 
@@ -165,9 +174,10 @@ const styles = StyleSheet.create({
     modalContent: {
         paddingVertical: 25,
         width: screenDimensions.width * 0.95,
+        maxHeight: screenDimensions.height * 0.95,
         alignItems: "center",
-        // backgroundColor: Color.pureWhite,
-        borderRadius: 10,
+        // backgroundColor: 'red',
+        // borderRadius: 10,
         zIndex: 1000,
     },
     backdrop: {

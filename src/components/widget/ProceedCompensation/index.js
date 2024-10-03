@@ -35,10 +35,10 @@ const ProceedCompensation = (props) => {
             name: "Available Schedule",
             value: `${item.availableattendanceDate ? formattedDate(item.availableattendanceDate, 'dd/MM/yyyy') : ''} ${'\n'} ${item?.availableScheduleLessonTime} ${'\n'} ${item.availableSubjectName}`,
         },
-        {
-            name: "Total Available Seats",
-            value: item?.availableSeats,
-        },
+        // {
+        //     name: "Total Available Seats",
+        //     value: item?.availableSeats,
+        // },
         {
             name: "Remarks",
             value: item?.remarks ? item?.remarks : '',
@@ -101,6 +101,7 @@ const ProceedCompensation = (props) => {
                         btnstyle={{ width: '90%' }}
                         onPress={handleSubmit}
                         isLoading={isLoading}
+                        disabled={isLoading}
                     />
                 </View>
                 <View style={{ width: screenDimensions.width, alignItems: 'center' }}>

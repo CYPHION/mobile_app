@@ -292,6 +292,7 @@ const FeeCollection = () => {
 
         const isBooster = child?.BoosterStudents?.length > 0 ? true : false
         const booster = child?.BoosterStudents.length > 0 ? child?.BoosterStudents[0] : {}
+        const isBoosterTotalPaid = booster?.totalPackagePrice - booster?.paidAmount === 0 ? true : false
 
         const regularScheduleLength = schedule?.filter(elem => elem.studentId === child.id && elem.isBooster === false && !elem.isBoosterFreeze)?.length > 0 ? true : false
 
@@ -322,7 +323,7 @@ const FeeCollection = () => {
             // { id: 8, "name": "Price per Hour", "value": `£${child?.isChildcareStd ? child?.StudentYear?.ratePerChildcareHour : child?.StudentYear?.ratePerHour}` },
             { id: 10, "name": "Book dues", "value": `£${Number(child?.bookDues)}` },
             { id: 11, "name": "Class Charges", "value": `£${isMonthly ? Number(child.monthlyFee) : Number(obj.classCharges)}` },
-            ...(isBooster ? newBoosterarr : []),
+            ...((isBooster && !isBoosterTotalPaid) ? newBoosterarr : []),
             { id: 12, "name": "Total Charges", "value": `£${Number(obj.totalCharges) + Number(child?.bookDues) + Number(child?.boosterDues)}` }
         ]
 

@@ -69,96 +69,96 @@ const DrawerList = [
         icon: 'right',
         mainRoute: 'root',
     },
-    {
-        label: 'About us',
-        navigateTo: 'aboutus',
-        icon: 'right',
-        mainRoute: 'homestack',
-    },
-    {
-        label: 'Lesson Timings',
-        navigateTo: 'lessonTiming',
-        icon: 'right',
-        mainRoute: 'homestack',
-    },
-    {
-        label: 'Fee Plan',
-        navigateTo: 'fees',
-        icon: 'right',
-        mainRoute: 'homestack',
-    },
-    {
-        label: 'Summer Pakages',
-        navigateTo: 'summerpakage',
-        icon: 'right',
-        mainRoute: 'homestack',
-    },
-    {
-        label: 'Our Services',
-        navigateTo: 'ourservices',
-        icon: 'right',
-        mainRoute: 'homestack',
-    },
-    {
-        label: 'Bright Student',
-        navigateTo: 'brightstudent',
-        icon: 'right',
-        mainRoute: 'homestack',
-    },
-    {
-        label: 'Terms and conditions',
-        navigateTo: 'termsandcondition',
-        icon: 'right',
-        mainRoute: 'homestack',
-    },
-    {
-        label: 'Awarding Bodies',
-        navigateTo: 'awardingbodies',
-        icon: 'right',
-        mainRoute: 'homestack',
-    },
-    {
-        label: 'A-Level Results',
-        navigateTo: 'Alevel',
-        icon: 'right',
-        mainRoute: 'homestack',
-    },
-    {
-        label: 'GCSE Results',
-        navigateTo: 'gcse',
-        icon: 'right',
-        mainRoute: 'homestack',
-    },
-    {
-        label: 'Childcare',
-        navigateTo: 'childcare',
-        icon: 'right',
-        mainRoute: 'homestack',
-    },
-    {
-        label: 'Reviews',
-        navigateTo: 'reviews',
-        icon: 'right',
-        mainRoute: 'homestack',
-    },
-    {
-        label: 'Careers',
-        navigateTo: 'career',
-        icon: 'right',
-        mainRoute: 'homestack',
-    },
-    {
-        label: 'Apply online',
-        navigateTo: 'applyonline',
-        icon: 'right',
-        mainRoute: 'homestack',
-    },
-    {
-        label: 'Contact Us',
-        navigateTo: 'contactus',
-        icon: 'right',
-        mainRoute: 'homestack',
-    },
+    // {
+    //     label: 'About us',
+    //     navigateTo: 'aboutus',
+    //     icon: 'right',
+    //     mainRoute: 'homestack',
+    // },
+    // {
+    //     label: 'Lesson Timings',
+    //     navigateTo: 'lessonTiming',
+    //     icon: 'right',
+    //     mainRoute: 'homestack',
+    // },
+    // {
+    //     label: 'Fee Plan',
+    //     navigateTo: 'fees',
+    //     icon: 'right',
+    //     mainRoute: 'homestack',
+    // },
+    // {
+    //     label: 'Summer Pakages',
+    //     navigateTo: 'summerpakage',
+    //     icon: 'right',
+    //     mainRoute: 'homestack',
+    // },
+    // {
+    //     label: 'Our Services',
+    //     navigateTo: 'ourservices',
+    //     icon: 'right',
+    //     mainRoute: 'homestack',
+    // },
+    // {
+    //     label: 'Bright Student',
+    //     navigateTo: 'brightstudent',
+    //     icon: 'right',
+    //     mainRoute: 'homestack',
+    // },
+    // {
+    //     label: 'Terms and conditions',
+    //     navigateTo: 'termsandcondition',
+    //     icon: 'right',
+    //     mainRoute: 'homestack',
+    // },
+    // {
+    //     label: 'Awarding Bodies',
+    //     navigateTo: 'awardingbodies',
+    //     icon: 'right',
+    //     mainRoute: 'homestack',
+    // },
+    // {
+    //     label: 'A-Level Results',
+    //     navigateTo: 'Alevel',
+    //     icon: 'right',
+    //     mainRoute: 'homestack',
+    // },
+    // {
+    //     label: 'GCSE Results',
+    //     navigateTo: 'gcse',
+    //     icon: 'right',
+    //     mainRoute: 'homestack',
+    // },
+    // {
+    //     label: 'Childcare',
+    //     navigateTo: 'childcare',
+    //     icon: 'right',
+    //     mainRoute: 'homestack',
+    // },
+    // {
+    //     label: 'Reviews',
+    //     navigateTo: 'reviews',
+    //     icon: 'right',
+    //     mainRoute: 'homestack',
+    // },
+    // {
+    //     label: 'Careers',
+    //     navigateTo: 'career',
+    //     icon: 'right',
+    //     mainRoute: 'homestack',
+    // },
+    // {
+    //     label: 'Apply online',
+    //     navigateTo: 'applyonline',
+    //     icon: 'right',
+    //     mainRoute: 'homestack',
+    // },
+    // {
+    //     label: 'Contact Us',
+    //     navigateTo: 'contactus',
+    //     icon: 'right',
+    //     mainRoute: 'homestack',
+    // },
     { label: 'Logout', navigateTo: '', icon: 'right' },
 ];
 
@@ -274,6 +274,10 @@ const DrawerLayout = ({ icon, label, navigateTo, setOpen, mainRoute }) => {
                 if (label === 'Logout') {
                     navigation.dispatch(DrawerActions.closeDrawer());
                     setOpen(true);
+                } else if (label === 'View Children') {
+                    navigation.navigate(`${mainRoute}`, {
+                        screen: 'children', params: { screen: 'childrenView' },
+                    });
                 } else {
                     navigation.navigate(`${mainRoute}`, { screen: navigateTo });
                 }
@@ -513,13 +517,14 @@ function MyDrawer({ old }) {
                 },
                 // swipeEnabled: !!global.students && !!user.email,
             }}>
-            {user?.email && (
+            {user?.email ? (
                 <>
                     <Drawer.Screen name="tabs" component={TabNavigation} />
                     <Drawer.Screen name="root" component={MyStack} />
                 </>
-            )}
-            <Drawer.Screen name="homestack" component={HomeStack} />
+            ) :
+                <Drawer.Screen name="homestack" component={HomeStack} />
+            }
         </Drawer.Navigator>
     );
 }

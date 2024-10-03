@@ -34,8 +34,8 @@ const items = (row) => [
         value: row.User?.fullName,
     },
     {
-        name: "Date",
-        value: formattedDate(row.createdAt, "dd/MM/yyyy hh:mm:ss a"),
+        name: "Authorized Date",
+        value: `${formattedDate(row.availableScheduleDate, "dd/MM/yyyy")} - ${row?.Schedule?.LessonTiming?.time}`,
     },
     {
         name: "Remarks",
