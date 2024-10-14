@@ -189,7 +189,7 @@ const TermsAndConditions = () => {
                         Weeks, Prime Tuition will charge an early cancellation payment of £10 as an admin
                         fee.{'\n'}{'\n'}
                         We reserve the right to cancel an enrolment immediately and allocate the place to another applicant in
-                        cases of non-payment of tuition fees, 2 weeks unauthorized absence, unacceptable misconduct (on
+                        cases of non-payment of tuition fees, 2 weeks unauthorised absence, unacceptable misconduct (on
                         part of the student/parent or representative of the student or parent), if the performance of student is
                         not satisfactory due to lack of effort or due to any material breach of contract by the student or
                         parent.{'\n'}{'\n'}

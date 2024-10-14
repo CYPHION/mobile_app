@@ -30,11 +30,11 @@ const items = (row) => [
         value: `${row?.Schedule?.Subject?.name}${'\n'}${row?.Schedule?.Department?.name}`,
     },
     {
-        name: "Authorized By",
+        name: "Authorised By",
         value: row.User?.fullName,
     },
     {
-        name: "Authorized Date",
+        name: "Authorised Date",
         value: `${formattedDate(row.availableScheduleDate, "dd/MM/yyyy")} - ${row?.Schedule?.LessonTiming?.time}`,
     },
     {
