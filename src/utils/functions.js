@@ -192,17 +192,17 @@ const calculateFeeWeekly = (schedules, startDate, endDateSat, ratePerHour) => {
 };
 
 
-export function calculateFee(child, timeperiod, isMonthly, startDate, isBooster, schedules, isStartDate) {
+export function calculateFee(child, timeperiod, isMonthly, startDate, isBooster, schedules) {
 
 
     // const isDiscount = Number(child?.discountRatePerHour) ? Number(child?.discountRatePerHour) * child.totalHours * timeperiod : 0
 
     const endDate = new Date(startDate)
-    isStartDate ? endDate?.setDate((endDate.getDate() - 1) + timeperiod * 7) : endDate?.setDate(endDate.getDate() + timeperiod * 7)
+    endDate?.setDate((endDate.getDate() - 1) + timeperiod * 7)
 
     const nextMonth = new Date(startDate)
     nextMonth.setMonth(nextMonth.getMonth() + timeperiod);
-    isStartDate ? nextMonth.setDate(nextMonth.getDate() - 1) : nextMonth.setDate(nextMonth.getDate());
+    nextMonth.setDate(nextMonth.getDate() - 1)
 
     let discount = Number(child?.discountRatePerHour) > 0 ? child?.discountRatePerHour : 0
     const studentRatePerhour = discount !== 0 ? discount : child?.isChildcareStd ? child?.StudentYear?.ratePerChildcareHour : child?.StudentYear?.ratePerHour
@@ -229,9 +229,9 @@ export function calculateFee(child, timeperiod, isMonthly, startDate, isBooster,
         totalHours: isMonthly ? child.totalHours * timeperiod : feeObj.totalHours,
         classDues: child.classDues ? child.classDues : 0,
         classCharges: totalClassCharges,
-        bookCharges: child?.bookDues,
+        bookCharges: child?.bookDues || 0,
         boosterCharges,
-        boosterDues: child.boosterDues,
+        boosterDues: child.boosterDues || 0,
         endDate: isMonthly ? formattedDate(nextMonth, 'yyyy-MM-dd') : formattedDate(endDate, 'yyyy-MM-dd'),
         totalCharges: totalClassCharges + boosterCharges,
     }

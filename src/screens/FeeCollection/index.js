@@ -92,11 +92,9 @@ const FeeCollection = () => {
 
     // Function to calculate fee type
     const getType = (isMonthly, value, child, schedule) => {
-        const date = child?.dueFeeDate ? child?.dueFeeDate : child?.startDate ? child?.startDate : new Date()
+        const date = child.dueFeeDate ? new Date(child?.dueFeeDate).setDate(new Date(child?.dueFeeDate).getDate() + 1) : child?.startDate ? child?.startDate : new Date()
 
-        const isStartDate = child?.dueFeeDate ? false : true
-
-        return calculateFee(child, Number(value), isMonthly, date, true, schedule, isStartDate)
+        return calculateFee(child, Number(value), isMonthly, date, true, schedule)
     }
     // Function to toggle active item
     const toggleItem = (index) => {
