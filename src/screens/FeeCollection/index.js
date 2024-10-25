@@ -728,10 +728,12 @@ const FeeCollection = () => {
             let maxFeePlan = null;
 
             childs?.forEach((element) => {
-                const feePlan = element.feePlan;
+                const feePlan = element?.feeChargedBy === "Weekly" && element.feePlan;
 
                 if (feePlan && (maxFeePlan === null || feePlan > maxFeePlan)) {
                     maxFeePlan = feePlan;
+                } else if (feePlan === null) {
+                    maxFeePlan = 1;
                 }
             });
 

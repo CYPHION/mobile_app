@@ -214,7 +214,7 @@ export function calculateFee(child, timeperiod, isMonthly, startDate, isBooster,
 
 
     // const totalClassCharges = isMonthly ? Math.ceil((feeObj.weeklyFee * 52) / 12) : feeObj.weeklyFee
-    const totalClassCharges = isMonthly ? Math.ceil((child.weeklyFee * 52) / 12) * timeperiod : feeObj.weeklyFee
+    const totalClassCharges = isMonthly ? child.monthlyFee * timeperiod : feeObj.weeklyFee
 
 
 
