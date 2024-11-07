@@ -15,7 +15,7 @@ const TopbarWithGraph = ({ student, isGraph = true }) => {
 
     const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
 
-    const isBooster = student?.BoosterStudents?.length > 0 ? true : false
+    const isBooster = (student?.BoosterStudents?.length > 0 && student?.BoosterStudents?.paidAmount !== student?.BoosterStudents?.totalPackagePrice) ? true : false
 
     return (
         <>

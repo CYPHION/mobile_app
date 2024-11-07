@@ -2,7 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import messaging from '@react-native-firebase/messaging';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
-import { Alert, PermissionsAndroid, Platform, SafeAreaView, StatusBar } from "react-native";
+import { Alert, Linking, PermissionsAndroid, Platform, SafeAreaView, StatusBar } from "react-native";
+import { checkVersion } from "react-native-check-version";
 import { useSelector } from "react-redux";
 import IntroSlider from "./src/components/widget/IntroSlider";
 import MyDrawer from "./src/navigation/Drawer";
@@ -44,6 +45,37 @@ const App = () => {
     }
   }
 
+
+  useEffect(() => {
+    const checkAppVersion = async () => {
+      try {
+        const versionInfo = await checkVersion({
+          bundleId: Platform.OS === 'ios' ? 'com.PrimeTutuitionMobileApp' : 'com.primetutuitionmobileapp',
+        });
+        console.log("Got version info:", versionInfo);
+
+        if (versionInfo.needsUpdate) {
+          Alert.alert(
+            'Update Available',
+            `A ${versionInfo.updateType} update is available. Please update to the latest version.`,
+            [
+              // { text: 'Later', style: 'cancel' },
+              {
+                text: 'Update',
+                onPress: () => {
+                  Linking.openURL(versionInfo.url);
+                }
+              }
+            ]
+          );
+        }
+      } catch (error) {
+        console.error('Failed to check app version:', error);
+      }
+    };
+
+    checkAppVersion();
+  }, []);
 
 
 

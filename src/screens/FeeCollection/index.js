@@ -1,6 +1,6 @@
 import { useStripe } from '@stripe/stripe-react-native';
 import { default as React, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import AccordionItem from '../../components/base/Accordion';
 import CustomButton from '../../components/base/CustomButton';
@@ -63,6 +63,7 @@ const FeeCollection = () => {
     const [invoiceData, setInvoiceData] = useState({})  // State for managing invoice data
     const [isLoading, setIsLoading] = useState(false)  // State for managing loading state
     const [sendData, setSendData] = useState({})  // State for managing data to send
+    const [feePlan, setFeePlan] = useState('')
     const globaldata = useSelector(state => state?.global?.data)  // Selector for accessing global data from Redux store
     const user = useSelector(state => state?.user?.data)  // Selector for accessing user data from Redux store
     const dispatch = useDispatch()  // Dispatch function for Redux actions
@@ -761,6 +762,7 @@ const FeeCollection = () => {
 
             }
 
+            setFeePlan(maxFeePlan)
         }
     }, [childs]);
 
@@ -832,8 +834,14 @@ const FeeCollection = () => {
                                     label={"Number of weeks (Required)"}
                                     inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
                                     value={formData.noOfWeeks}
-                                    onChangeText={(text) => onChangeHandler('noOfWeeks', text)}
-                                    editable={false}
+                                    onChangeText={(text) => {
+                                        if (text >= feePlan) {
+                                            onChangeHandler('noOfWeeks', text)
+                                        } else {
+                                            Alert.alert('You are not authorised to perfom this action.')
+                                        }
+                                    }}
+                                    editable={true}
                                 /> : null
                             }
                             {

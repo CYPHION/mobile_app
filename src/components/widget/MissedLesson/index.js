@@ -194,8 +194,10 @@ const MissedLesson = () => {
     }
 
     useEffect(() => {
-        getStudentOfParent()
-        getAllCompensation()
+        if (globalData?.students?.length > 0) {
+            getStudentOfParent()
+            getAllCompensation()
+        }
     }, [globalData?.students])
 
 

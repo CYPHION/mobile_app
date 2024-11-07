@@ -1,6 +1,8 @@
 import { useRoute } from '@react-navigation/native';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import FilterIcon from "react-native-vector-icons/FontAwesome";
 import NoHomework from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch, useSelector } from 'react-redux';
 import CustomDatePicker from '../../components/base/CustomDatePicker';
@@ -13,7 +15,6 @@ import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
 import { customToast, formattedDate, screenDimensions } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
-
 
 const nestedArray = (row) => [
     {
@@ -109,8 +110,20 @@ const TestRecords = () => {
             });
     };
 
-    const getData = () => {
-        let querry = `?studentId=${router?.params?.student?.id}&isPrint=true`
+    const getData = (stDate = null, enDate = null) => {
+        let endDate, startDate;
+
+        if (stDate === null && enDate === null) {
+            endDate = new Date()
+            startDate = moment(endDate).subtract(1, "year")
+
+        } else {
+            endDate = enDate
+            startDate = stDate
+        }
+
+
+        let querry = `?studentId=${router?.params?.student?.id}&isPrint=true&startDate=${startDate}&endDate${endDate}`
         API.GetTestRecords(querry)
             .then(res => {
                 setProgress(res?.data)
@@ -143,7 +156,7 @@ const TestRecords = () => {
                         onToggle={() => setOpen(false)}
                         isVisible={open}
                         onDone={(date) => {
-                            filterByDate(date?.startDate, date?.endDate)
+                            getData(date?.startDate, date?.endDate)
                         }}
                     />
 
@@ -151,12 +164,12 @@ const TestRecords = () => {
 
                     <View style={[GlobalStyles.headerStyles]}>
                         <Text style={GlobalStyles.headerTextStyle}>Test Records</Text>
-                        {/* <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
+                        <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
                             <View style={[styles.iconView]}>
                                 <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
                             </View>
                             <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
-                        </TouchableOpacity> */}
+                        </TouchableOpacity>
                     </View>
 
                     <View>
