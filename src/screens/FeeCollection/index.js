@@ -498,6 +498,13 @@ const FeeCollection = () => {
 
 
         if (option === 'Parent' || option === "Student") {
+
+            if (formData?.noOfWeeks < feePlan) {
+                Alert.alert('You are not authorised to perfom this action.')
+                setFormData(prev => ({ ...prev, noOfWeeks: feePlan }))
+                return
+            }
+
             if (!sendFOrmData.payBy || sendFOrmData.amountPaid === 0) {
                 setError(prev => ({
                     ...prev,
@@ -834,13 +841,7 @@ const FeeCollection = () => {
                                     label={"Number of weeks (Required)"}
                                     inputMode={"numeric"} // from here you can change type of input field ['none','text','decimal','numeric','tel','search','email','url']
                                     value={formData.noOfWeeks}
-                                    onChangeText={(text) => {
-                                        if (text >= feePlan) {
-                                            onChangeHandler('noOfWeeks', text)
-                                        } else {
-                                            Alert.alert('You are not authorised to perfom this action.')
-                                        }
-                                    }}
+                                    onChangeText={(text) => onChangeHandler('noOfWeeks', text)}
                                     editable={true}
                                 /> : null
                             }
