@@ -45,7 +45,7 @@ const DropdownComponent = (props) => {
                 selectedTextStyle={[styles.selectedTextStyle]}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
-                data={data}
+                data={data?.length > 0 ? data : []}
                 search={search}
                 maxHeight={screenDimensions.height * 0.3}
                 labelField="name"

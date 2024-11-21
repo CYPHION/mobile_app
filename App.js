@@ -6,6 +6,7 @@ import { Alert, Linking, PermissionsAndroid, Platform, SafeAreaView, StatusBar }
 import { checkVersion } from "react-native-check-version";
 import { useSelector } from "react-redux";
 import IntroSlider from "./src/components/widget/IntroSlider";
+import { useNotification } from "./src/context/NotificationContext";
 import MyDrawer from "./src/navigation/Drawer";
 import SpashScreen from "./src/screens/SplashScreen";
 import { Color } from "./src/utils/color";
@@ -14,11 +15,13 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [show, setShow] = useState(true)
-  // const [showApp, setShowApp] = useState(false)
+
   const [isIntro, setIsIntro] = useState(true)
   const [splash, setSplash] = useState(true)
   const userData = useSelector(state => state.user.data);
   const globaldata = useSelector(state => state.global.data);
+
+  const { incrementNotificationCount } = useNotification();
 
 
   const requestPostNotificationsPermission = async () => {
@@ -45,14 +48,12 @@ const App = () => {
     }
   }
 
-
   useEffect(() => {
     const checkAppVersion = async () => {
       try {
         const versionInfo = await checkVersion({
           bundleId: Platform.OS === 'ios' ? 'com.PrimeTutuitionMobileApp' : 'com.primetutuitionmobileapp',
         });
-        console.log("Got version info:", versionInfo);
 
         if (versionInfo.needsUpdate) {
           Alert.alert(
@@ -103,18 +104,44 @@ const App = () => {
   }, 4000);
 
 
-  useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert(remoteMessage?.notification?.title, remoteMessage?.notification?.body)
-    });
-    return unsubscribe;
-  }, []);
+
 
   useEffect(() => {
     // AsyncStorage.removeItem('fcmToken')
     requestPostNotificationsPermission();
   }, []);
 
+
+
+  useEffect(() => {
+
+
+    const unsubscribeOnMessage = messaging().onMessage(async remoteMessage => {
+      Alert.alert(remoteMessage?.notification?.title, remoteMessage?.notification?.body)
+      incrementNotificationCount();
+    });
+
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+
+    });
+
+    const unsubscribeOnNotificationOpenedApp = messaging().onNotificationOpenedApp(remoteMessage => {
+      incrementNotificationCount();
+    });
+
+
+    messaging().getInitialNotification(async remoteMessage => {
+      if (remoteMessage) {
+        incrementNotificationCount();
+      }
+    });
+
+    // Cleanup listeners on unmount
+    return () => {
+      unsubscribeOnMessage();
+      unsubscribeOnNotificationOpenedApp();
+    };
+  }, [incrementNotificationCount]);
 
 
   return (

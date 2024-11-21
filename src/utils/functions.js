@@ -1,10 +1,10 @@
 // import toast from 'react-hot-toast'
 import { Dimensions } from 'react-native'
 import Toast from 'react-native-toast-message'
-import { URL } from '../network/httpService'
 import { store } from '../store'
 import { logoutUser } from '../store/thunk'
 import { Color } from './color'
+import Config from './config/branchNameConfig'
 // its give mobile width, height, font and scale // e.x: screenDimension.width
 export const screenDimensions = Dimensions.get('window')
 
@@ -107,6 +107,7 @@ export const removeError = (err, property) => {
 }
 // it takes file name in parameter and convert it into URL 
 export function getImage(file) {
+    const URL = Config.getBranchName()
     if (file) {
         const image = `${URL}/upload/${file}`
         return image
@@ -279,4 +280,16 @@ export const getStudentAbility = list => {
             name: elem
         })) || []
     )
+}
+
+export const columStringifyToJSON = (value) => {
+    if (typeof value === 'string') {
+        try {
+            return JSON.parse(value); // Attempt to parse JSON string to object
+        } catch (error) {
+            return value; // Return original string if parsing fails
+        }
+    }
+    // If the value is not a string, return it as is
+    return value;
 }

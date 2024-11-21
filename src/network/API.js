@@ -148,4 +148,8 @@ export class API {
     static async getNotifications(querry) {
         return HttpService.GET(`/notification/all${querry ? querry : ''}`)
     }
+
+    static async getAllBranches() {
+        return HttpService.GET(`/branches/all`)
+    }
 }

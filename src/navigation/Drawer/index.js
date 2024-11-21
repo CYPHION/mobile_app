@@ -23,7 +23,7 @@ import { handleLogout } from '../../store/slice/user';
 import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontFamily, FontSizes } from '../../utils/font';
-import { getImage, screenDimensions } from '../../utils/functions';
+import { columStringifyToJSON, getImage, screenDimensions } from '../../utils/functions';
 import { HomeStack } from '../HomeDrawer';
 import { MyStack } from '../Stack';
 import TabNavigation from '../Tab';
@@ -465,9 +465,9 @@ function MyDrawer({ old }) {
     const setToken = async () => {
         try {
             const token = await messaging().getToken();
-            console.log({ token });
             const FCMtoken = await AsyncStorage.getItem('fcmToken');
-            const mbleToken = global?.currentUser?.fcmToken;
+            const mbleToken = columStringifyToJSON(global?.currentUser?.fcmToken);
+
             if (FCMtoken) {
                 console.log('Token already saved to database ..');
             } else {
@@ -495,12 +495,15 @@ function MyDrawer({ old }) {
         }
     };
 
+
+
     useEffect(() => {
         setToken();
     }, [global?.currentUser]);
 
     useEffect(() => {
         if (user?.email) {
+
             dispatch(globalData(user?.id));
         }
     }, [user]);

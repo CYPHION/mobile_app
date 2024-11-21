@@ -11,9 +11,9 @@ import InputField from '../../components/base/InputField'
 import MultiSelectComponent from '../../components/base/MultiSelect'
 import RadioButton from '../../components/base/RadioButton'
 import { API } from '../../network/API'
-import { URL } from '../../network/httpService'
 import { countries } from '../../utils/Constants'
 import { Color } from '../../utils/color'
+import Config from '../../utils/config/branchNameConfig'
 import { FontFamily, FontSizes } from '../../utils/font'
 import { customToast, formattedDate, getStudentAbility, screenDimensions } from '../../utils/functions'
 const genders = [
@@ -176,7 +176,7 @@ const JobApply = () => {
                 type: file.type,
                 name: file.name || 'file', // Some file pickers don't provide a name
             });
-
+            const URL = Config.getBranchName()
             const response = await axios.post(`${URL}/upload/single`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',

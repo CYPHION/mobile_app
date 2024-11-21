@@ -1,4 +1,5 @@
 import messaging from '@react-native-firebase/messaging';
+import { useFocusEffect } from '@react-navigation/native';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Linking, PermissionsAndroid, Platform, RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
@@ -6,6 +7,7 @@ import RenderHtml from 'react-native-render-html';
 import BellIcon from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingScreen from '../../components/base/LoadingScreen';
+import { useNotification } from '../../context/NotificationContext';
 import { API } from '../../network/API';
 import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
@@ -22,6 +24,7 @@ const Notifications = () => {
     const user = useSelector(state => state?.user?.data)
     const [expanded, setExpanded] = useState(false);
     const dispatch = useDispatch()
+    const { resetNotificationCount } = useNotification();
 
     // Function to toggle the active item (expand/collapse notification)
     const toggleItem = (index) => {
@@ -124,11 +127,18 @@ const Notifications = () => {
     };
 
 
+    useFocusEffect(
+        useCallback(() => {
+            getNotification();
+            resetNotificationCount()
+        }, [user?.id]) // Fetch notifications when the screen is focused
+    );
 
     useEffect(() => {
-        getNotification()
-        requestPostNotificationsPermission()
-    }, [])
+        getNotification();
+        requestPostNotificationsPermission();
+        resetNotificationCount()
+    }, [user?.id]);
 
     return (
         <>

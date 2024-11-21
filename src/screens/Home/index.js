@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../components/base/CustomButton';
 import DropdownComponent from '../../components/base/CustomDropDown';
 import MyModal from '../../components/base/Modal';
+import { useNotification } from '../../context/NotificationContext';
 import BookCompensation from '../../images/BookCompensation.svg';
 import Logout from '../../images/Logout.svg';
 import Notifications from '../../images/Notifications.svg';
@@ -62,6 +63,8 @@ const Home = ({ navigation }) => {
     const globaldata = useSelector(state => state?.global?.data); // Global data from Redux store
     const user = useSelector(state => state?.user?.data); // User data from Redux store
     const dispatch = useDispatch(); // Redux dispatch function
+    const { notificationCount } = useNotification();
+
     // Card data
     const cards = [
         {
@@ -160,6 +163,7 @@ const Home = ({ navigation }) => {
             }
         }
     };
+
     // Function to handle pull-to-refresh action
     const onRefresh = useCallback(() => {
         setRefreshing(true); // Set refreshing state to true
@@ -356,7 +360,7 @@ const Home = ({ navigation }) => {
                                     navigation.navigate('root', { screen: 'notifications' })
                                 }
                                 style={{ position: 'relative' }}>
-                                <View style={styles.badge}></View>
+                                <View style={notificationCount > 0 ? styles.badge : ''}></View>
                                 <Icon
                                     name="notifications-outline"
                                     size={FontSizes.xxxl}

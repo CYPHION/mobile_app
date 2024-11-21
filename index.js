@@ -2,7 +2,6 @@
  * @format
  */
 import { stripePublishKey } from '@env';
-import messaging from '@react-native-firebase/messaging';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { AppRegistry } from 'react-native';
@@ -11,8 +10,10 @@ import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 import App from './App';
 import { name as appName } from './app.json';
+import { NotificationProvider } from './src/context/NotificationContext';
 import { store } from './src/store';
 import { Color } from './src/utils/color';
+import Config from './src/utils/config/branchNameConfig';
 
 
 
@@ -26,13 +27,6 @@ const MyTheme = {
 };
 
 
-
-messaging().setBackgroundMessageHandler(async remoteMessage => {
-    console.log('Message handled in the background!', remoteMessage);
-});
-messaging().getInitialNotification(async remoteMessage => {
-    console.log('Message handled in the background!', remoteMessage);
-});
 
 
 const toastConfig = {
@@ -60,13 +54,21 @@ const toastConfig = {
     ),
 };
 
+const initializeApp = async () => {
+    await Config.loadBranchName(); // Load branch name from AsyncStorage
+};
+
+initializeApp();
+
 const ReduxApp = () => (
     <Provider store={store}>
         <StripeProvider publishableKey={stripePublishKey}>
-            <NavigationContainer theme={MyTheme}>
-                <App />
-                <Toast config={toastConfig} />
-            </NavigationContainer>
+            <NotificationProvider>
+                <NavigationContainer theme={MyTheme}>
+                    <App />
+                    <Toast config={toastConfig} />
+                </NavigationContainer>
+            </NotificationProvider>
         </StripeProvider>
     </Provider>
 );

@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Image,
     SafeAreaView,
@@ -12,21 +12,26 @@ import {
 import { useDispatch } from 'react-redux';
 import PTWhite from '../../components/SVGS/PT-Logo-White';
 import CustomButton from '../../components/base/CustomButton';
+import DropdownComponent from '../../components/base/CustomDropDown';
 import FlaotingTextInput from '../../components/base/FlaotingTextInput';
 import { API } from '../../network/API';
 import { handleLogin } from '../../store/slice/user';
 import { Color } from '../../utils/color';
+import Config from '../../utils/config/branchNameConfig';
 import { FontFamily, FontSizes } from '../../utils/font';
-import { removeError, screenDimensions } from '../../utils/functions';
+import { customToast, removeError, screenDimensions } from '../../utils/functions';
 
 const LoginScreen = prop => {
     const navigation = useNavigation();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
+        branchName: "",
     });
 
+
     const [isLoading, setIsLoading] = useState(false);
+    const [branches, setBranches] = useState([])
 
     const [error, setError] = useState({
         // username: '',
@@ -56,9 +61,29 @@ const LoginScreen = prop => {
     };
 
     const handleSubmit = () => {
+
+        const branchName = Config.getBranchName()
+        if (branchName === "https://default.url") {
+            customToast("error", "internal server error")
+            return
+        }
+
         // Handler function for form submission
         setIsLoading(true); // Set loading state to true
+
+        if (!formData.branchName) {
+            customToast("error", "Please Select Branch")
+            setIsLoading(false)
+            return
+        }
+
         const { email, password } = formData; // Destructure email and password from form data
+
+        if (!email || !password) {
+            customToast("error", "All fields is required")
+            setIsLoading(false)
+            return
+        }
 
         // Call the login API with email and password
 
@@ -67,6 +92,25 @@ const LoginScreen = prop => {
             .catch(err => console.log('errrr', err?.message)) // Log any errors during login
             .finally(() => setIsLoading(false)); // Set loading state to false after login attempt completes
     };
+
+    const getBranches = async () => {
+        try {
+            const url = "https://api.v2.primeschool.co.uk/branches/all"
+            const response = await fetch(url);
+            const result = await response.json();
+            if (result?.data) {
+                setBranches(result?.data)
+            } else {
+                customToast("error", result?.message)
+            }
+        } catch (error) {
+            customToast("error", error)
+        }
+    }
+
+    useEffect(() => {
+        getBranches()
+    }, [])
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -142,6 +186,21 @@ const LoginScreen = prop => {
                                 value={formData.password}
                                 onChangeText={text => onChangeHandler('password', text)}
                                 label={'Password'}
+                            />
+                            <DropdownComponent
+                                dropdownStyle={{ height: 50 }}
+                                disable={false}
+                                data={branches?.length > 0 ? branches?.map(el => ({
+                                    name: el?.name,
+                                    value: el?.url
+                                })) : []}
+                                placeHolderText={"Select Branch"}
+                                value={formData?.branchName}
+                                setValue={async text => {
+                                    await Config.updateBranchName(text);
+                                    onChangeHandler('branchName', text)
+                                }
+                                }
                             />
                             <TouchableOpacity
                                 onPress={() => navigation.navigate('forgetPassword')}>
