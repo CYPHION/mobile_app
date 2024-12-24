@@ -212,14 +212,22 @@ const FeeCollection = () => {
     // Function to fetch parent fee details
     const parentFeeDetail = async (id) => {
         try {
-            const res = await API.getPrentFeeDetail(id); // Fetching parent fee details
+
+            let isBookDues = 0
+
+            if (alignment === "bookDues") {
+                isBookDues = 1
+            }
+
+            // collect the response from api 
+            const res = await API.getPrentFeeDetail(id, isBookDues);
             const parentDetails = {
-                bookDues: Number(res.data[0]?.bookDues),
-                classDues: Number(res.data[0]?.classDues),
-                extraPaid: Number(res.data[0]?.extraPaid),
-                boosterDues: Number(res.data[0]?.boosterDues),
-                totalDues: Number(res.data[0]?.totalDues),
-                weeklyFee: Number(res.data[0]?.weeklyFee)
+                bookDues: Number(res.data[0]?.bookDues || 0),
+                classDues: Number(res.data[0]?.classDues || 0),
+                extraPaid: Number(res.data[0]?.extraPaid || 0),
+                boosterDues: Number(res.data[0]?.boosterDues || 0),
+                totalDues: Number(res.data[0]?.totalDues || 0),
+                weeklyFee: Number(res.data[0]?.weeklyFee || 0)
             };
 
             setSumamry(parentDetails); // Setting parent fee summary
@@ -293,6 +301,10 @@ const FeeCollection = () => {
         const booster = child?.BoosterStudents.length > 0 ? child?.BoosterStudents[0] : {}
         const isBoosterTotalPaid = booster?.totalPackagePrice - booster?.paidAmount === 0 ? true : false
 
+        // Check is BookDues
+        const isBookDues = child?.isBookDues
+        const childBookDues = !isBookDues ? Number(child?.bookDues) : 0
+
         const regularScheduleLength = schedule?.filter(elem => elem.studentId === child.id && elem.isBooster === false && !elem.isBoosterFreeze)?.length > 0 ? true : false
 
         const newBoosterarr = [
@@ -320,10 +332,10 @@ const FeeCollection = () => {
             // { id: 6, "name": "Total Lectures", "value": `${obj?.totalLectures}` },
             // { id: 7, "name": "Total Hours", "value": `${obj.totalHours}` },
             // { id: 8, "name": "Price per Hour", "value": `£${child?.isChildcareStd ? child?.StudentYear?.ratePerChildcareHour : child?.StudentYear?.ratePerHour}` },
-            { id: 10, "name": "Book dues", "value": `£${Number(child?.bookDues)}` },
+            { id: 10, "name": "Book dues", "value": isBookDues ? `Included` : `£${childBookDues}` },
             { id: 11, "name": "Class Charges", "value": `£${isMonthly ? Number(child.monthlyFee) : Number(obj.classCharges)}` },
             ...((isBooster && !isBoosterTotalPaid) ? newBoosterarr : []),
-            { id: 12, "name": "Total Charges", "value": `£${Number(obj.totalCharges) + Number(child?.bookDues) + Number(child?.boosterDues)}` }
+            { id: 12, "name": "Total Charges", "value": `£${Number(obj.totalCharges) + childBookDues + Number(child?.boosterDues)}` }
         ]
 
 
@@ -649,20 +661,20 @@ const FeeCollection = () => {
         });
         if (paymentResult?.error) {
             customToast("error", paymentResult?.error?.message)
-            console.log(paymentResult?.error?.message)
+
             setIsLoading(false)
             return
         } else {
             await API.IntentSuccessURL(res?.data?.id).then(res => {
 
                 customToast("success", res.message)
-                console.log("successss---->", res)
+
 
             }).catch(err => {
                 customToast("error", err?.message)
-                console.log("error---->", err)
+
             }).finally(() => {
-                console.log("finally---->")
+
                 setIsLoading(false)
                 dispatch(globalData(user?.id))
                 handleReset()

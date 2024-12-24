@@ -65,8 +65,8 @@ export class API {
         return await HttpService.GET(`/schedule/all?userType=student&studentId=${id}`)
     }
 
-    static async getPrentFeeDetail(id) {
-        return HttpService.GET(`/fee/parent/${id}`)
+    static async getPrentFeeDetail(id, isBookDues = 0) {
+        return HttpService.GET(`/fee/parent/${id}?isBookDues=${isBookDues}`)
     }
 
     static async createIntent(formData) {

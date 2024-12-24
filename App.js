@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import messaging from '@react-native-firebase/messaging';
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import { Alert, Linking, PermissionsAndroid, Platform, SafeAreaView, StatusBar } from "react-native";
@@ -22,6 +23,7 @@ const App = () => {
   const globaldata = useSelector(state => state.global.data);
 
   const { incrementNotificationCount } = useNotification();
+  const navigation = useNavigation();
 
 
   const requestPostNotificationsPermission = async () => {
@@ -117,7 +119,6 @@ const App = () => {
 
 
     const unsubscribeOnMessage = messaging().onMessage(async remoteMessage => {
-      Alert.alert(remoteMessage?.notification?.title, remoteMessage?.notification?.body)
       incrementNotificationCount();
     });
 
@@ -126,7 +127,13 @@ const App = () => {
     });
 
     const unsubscribeOnNotificationOpenedApp = messaging().onNotificationOpenedApp(remoteMessage => {
-      incrementNotificationCount();
+      navigation.dispatch(
+        // Set the index to 0 and navigate to the specified route
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'root', params: { screen: 'notifications' } }],
+        }),
+      );
     });
 
 
