@@ -20,6 +20,7 @@ import FeeSkeleton from './FeesSkeleton';
 const summaryInitial = {
     totalOfChilds: 0,
     bookDues: 0,
+    boosterDues: 0,
     classDues: 0,
     extraPaid: 0,
     totalDues: 0,
@@ -213,14 +214,8 @@ const FeeCollection = () => {
     const parentFeeDetail = async (id) => {
         try {
 
-            let isBookDues = 0
-
-            if (alignment === "bookDues") {
-                isBookDues = 1
-            }
-
             // collect the response from api 
-            const res = await API.getPrentFeeDetail(id, isBookDues);
+            const res = await API.getPrentFeeDetail(id, 0);
             const parentDetails = {
                 bookDues: Number(res.data[0]?.bookDues || 0),
                 classDues: Number(res.data[0]?.classDues || 0),

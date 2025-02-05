@@ -123,7 +123,7 @@ const TestRecords = () => {
         }
 
 
-        let querry = `?studentId=${router?.params?.student?.id}&isPrint=true&startDate=${startDate}&endDate${endDate}`
+        let querry = `?studentId=${router?.params?.student?.id}&isPrint=true&startDate=${formattedDate(startDate, 'yyyy-MM-dd')}&endDate=${formattedDate(endDate, 'yyyy-MM-dd')}`
         API.GetTestRecords(querry)
             .then(res => {
                 setProgress(res?.data)
@@ -132,7 +132,6 @@ const TestRecords = () => {
             .catch(err => customToast('error', err?.message))
             .finally(() => setIsLoading(false))
     }
-
 
     useEffect(() => {
         getData()
