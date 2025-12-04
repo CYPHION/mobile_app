@@ -1,14 +1,24 @@
-import { useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+    RefreshControl,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from 'react-native'
 import FilterIcon from 'react-native-vector-icons/FontAwesome'
-import { default as BookIcon } from 'react-native-vector-icons/FontAwesome6'
-import { default as GridIcon } from "react-native-vector-icons/Ionicons"
+import BookIcon from 'react-native-vector-icons/FontAwesome6'
+import GridIcon from "react-native-vector-icons/Ionicons"
 import NoHomework from "react-native-vector-icons/MaterialCommunityIcons"
 import TimeIcon from 'react-native-vector-icons/MaterialIcons'
 import { useDispatch, useSelector } from 'react-redux'
+import CustomButton from '../../components/base/CustomButton'
 import CustomDatePicker from '../../components/base/CustomDatePicker'
 import LoadingScreen from '../../components/base/LoadingScreen'
+import MyModal from '../../components/base/Modal'
 import Table from '../../components/base/Table'
 import TopbarWithGraph from '../../components/widget/TopbarWithGraph'
 import { globalData } from '../../store/thunk'
@@ -17,16 +27,22 @@ import { FontFamily, FontSizes } from '../../utils/font'
 import { formattedDate, screenDimensions } from '../../utils/functions'
 import { GlobalStyles } from '../../utils/globalStyles'
 
-
-
-
-
-
 const ViewAttendance = () => {
-    const [refresh, setRefresh] = useState(false);
-    const [open, setOpen] = useState(false)
+
+    const navigation = useNavigation()
+    const router = useRoute()
+
+    const dispatch = useDispatch()
+    const globaldata = useSelector(state => state?.global?.data)
+    const user = useSelector(state => state?.user?.data)
+    const getAllSchedule = globaldata?.schedules?.filter(item => item?.studentId == router?.params?.student?.id)
+
+    const [refresh, setRefresh] = useState(false)
+    const [openDatePicker, setOpenDatePicker] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
-    const [data, setData] = useState([])
+    const [attendanceData, setAttendanceData] = useState([])
+    const [showFeeModal, setShowFeeModal] = useState(false)
+    const [restrictedMode, setRestrictedMode] = useState(false)
     const [summaryData, setSummaryData] = useState({
         totalSchedule: 0,
         totalHours: 0,
@@ -35,63 +51,46 @@ const ViewAttendance = () => {
         totalAbsentLesson: 0,
         totalLeaveLesson: 0
     })
-    const router = useRoute()
-    const globaldata = useSelector(state => state?.global?.data)
-    const user = useSelector(state => state?.user?.data)
-    const dispatch = useDispatch()
-    const getAllSchedule = globaldata?.schedules?.filter(item => item?.studentId == router?.params?.student?.id)
 
-    let filterAttendance = globaldata?.attendances?.filter(elem => elem.studentId === router?.params?.student?.id)
-    const studentDuefeeDate = new Date(router?.params?.student?.dueFeeDate)
-    studentDuefeeDate.setHours(0, 0, 0, 0);
-    let TODAY = new Date()
-    TODAY.setHours(0, 0, 0, 0);
-    let date13WeeksAgo;
+    const student = router?.params?.student
+    const dueFeeDate = student?.dueFeeDate ? new Date(student.dueFeeDate) : null
 
+    let allAttendance = globaldata?.attendances?.filter(
+        elem => elem.studentId === student?.id
+    ) || []
 
-    if (router?.params?.student?.dueFeeDate === null) {
-        filterAttendance = filterAttendance
-    } else if (studentDuefeeDate.getTime() >= TODAY.getTime()) {
-        date13WeeksAgo = new Date();
-        date13WeeksAgo.setDate(TODAY.getDate() - 13 * 7);
-        filterAttendance = filterAttendance.filter(elem => {
-            const dateCreated = new Date(elem?.attendanceDate);
-            return dateCreated >= date13WeeksAgo;
-        });
-    } else {
-        date13WeeksAgo = new Date(studentDuefeeDate);
-        date13WeeksAgo.setDate(studentDuefeeDate.getDate() - 13 * 7);
-        filterAttendance = filterAttendance.filter(elem => {
-            const dateCreated = new Date(elem?.attendanceDate);
-            return dateCreated >= date13WeeksAgo && dateCreated <= studentDuefeeDate;
-        });
+    // ------------------------------
+    // 1️⃣ FILTER LAST 13 WEEKS
+    // ------------------------------
+    const filterLast13Weeks = () => {
+        if (!dueFeeDate) return allAttendance
 
+        const end = new Date(dueFeeDate)
+        end.setHours(0, 0, 0, 0)
+
+        const start = new Date(end)
+        start.setDate(start.getDate() - 91) // 13 weeks
+
+        return allAttendance.filter(item => {
+            const date = new Date(item.attendanceDate)
+            return date >= start && date <= end
+        })
     }
-    // Function to filter attendance data by date range
-    const filterByDate = (startDate, endDate) => {
-        setIsLoading(true)
-        if (startDate && endDate) {
-            const filteer = filterAttendance?.filter(item => {
-                const itemDate = new Date(item?.attendanceDate);
-                return itemDate >= startDate && itemDate <= endDate;
-            });
-            setData(filteer)
-        } else {
-            setData(filterAttendance)
+
+    // ------------------------------
+    // 2️⃣ FILTER BY DATE RANGE
+    // ------------------------------
+    const filterByDateRange = (start, end) => {
+        if (!start || !end) {
+            setAttendanceData(restrictedMode ? filterLast13Weeks() : allAttendance)
+            return
         }
-        setIsLoading(false)
-    };
-    // Function to handle date change
-    const handleDateChange = (date) => {
-        filterByDate(date.startDate, date.endDate)
+        const result = attendanceData.filter(item => {
+            const d = new Date(item.attendanceDate)
+            return d >= start && d <= end
+        })
+        setAttendanceData(result)
     }
-
-    const result = [
-        { id: 1, "key": "Lessons Agreed New", "value": `${summaryData?.totalSchedule} (${summaryData?.totalHours} hours)` },
-        { id: 2, "key": "Total Lessons Attended", "value": `${summaryData?.totalattendLesson} (${summaryData?.totalattendLessonHours} hours)` },
-        { id: 3, "key": "Absent Lesson", "value": summaryData?.totalAbsentLesson },
-        { id: 4, "key": "Leave Lesson", "value": summaryData?.totalLeaveLesson },
-    ]
 
     // get & set the summary data of each student
     const getSummaryData = () => {
@@ -130,101 +129,174 @@ const ViewAttendance = () => {
         }));
     };
 
-    // Function to generate list items for attendance details
-    const list = (attendance) => [
-        // { name: ' Department Name', value: attendance?.Department?.name, icon: <CardIcon color={Color.primary} name='idcard' size={FontSizes.lg} /> },
-        { name: ' Subject', value: attendance?.Subject?.name, icon: <BookIcon color={Color.primary} name='book' size={FontSizes.lg} /> },
-        { name: ' Type', value: `${attendance.attendanceType.charAt(0).toUpperCase()}${attendance.attendanceType.slice(1)}`, icon: <GridIcon color={Color.primary} name='grid' size={FontSizes.lg} /> },
-        // { name: ' Category', value: `${attendance.attendanceCategory.charAt(0).toUpperCase()}${attendance.attendanceCategory.slice(1)} Lesson`, icon: <CapIcon color={Color.primary} name='graduation-cap' size={FontSizes.lg} /> },
-        // { name: ' Teacher Name', value: `${attendance.teacherId ? globaldata?.teachers.find(teacher => teacher.id === attendance.teacherId)?.name : 'N/A'}`, icon: <Icon color={Color.primary} name='home' size={FontSizes.lg} /> },
-        { name: ' Day/Date', value: `${attendance.attendanceDate ? formattedDate(attendance?.attendanceDate, 'EEE dd/MM/yyyy') : ''}`, icon: <BookIcon color={Color.primary} name='book' size={FontSizes.lg} /> },
-        { name: ' Time', value: attendance?.Schedule?.LessonTiming?.time, icon: <TimeIcon color={Color.primary} name='timelapse' size={FontSizes.lg} /> },
-        { name: ' Status', value: attendance.attendanceType === 'absent' ? "No Further Compensation" : '-', icon: <GridIcon color={Color.primary} name='grid' size={FontSizes.lg} /> },
-        // { name: ' Marked At', value: `${attendance.attendanceDate ? formattedDate(attendance.createdAt, 'MMM dd ,yyyy hh:mm:ss a') : ''}`, icon: <CardIcon color={Color.primary} name='idcard' size={FontSizes.lg} /> },
 
-    ]
-    // Function to handle refreshing data
+    // ------------------------------
+    // 3️⃣ MAIN LOGIC
+    // ------------------------------
+    useEffect(() => {
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+
+        if (dueFeeDate === null) {
+            // CASE 1 → No due date → Full attendance
+            setAttendanceData(allAttendance)
+        }
+        else if (dueFeeDate >= today) {
+            // CASE 2 → Due date in future → Full attendance
+            setAttendanceData(allAttendance)
+        }
+        else {
+            // CASE 3 → Due date in past → show fee modal first
+            setShowFeeModal(true)
+        }
+        getSummaryData();
+        setIsLoading(false)
+    }, [])
+
+    // When clicking OK from modal → Apply restricted data
+    const handleRestrictedAccess = () => {
+        setShowFeeModal(false)
+        setRestrictedMode(true)
+        setAttendanceData(filterLast13Weeks())
+    }
+
+    // ------------------------------
+    // Refresh
+    // ------------------------------
     const handleRefresh = () => {
-        setRefresh(true);
-        dispatch(globalData(user?.id))
-            .then(() => {
-                filterByDate()
-                setRefresh(false);
-            })
-            .catch(() => {
-                filterByDate()
-                setRefresh(false);
-            });
-    };
-    // Function to render item when no attendance is found
-    const renderItem = () => (
+        setRefresh(true)
+        dispatch(globalData(user?.id)).finally(() => {
+            filterByDateRange()
+            setRefresh(false)
+        })
+    }
+
+    // ------------------------------
+    // Render Empty Case
+    // ------------------------------
+    const renderEmpty = () => (
         <View style={{ justifyContent: 'center', alignItems: 'center', height: screenDimensions.height * 0.8 }}>
-            <View>
-                <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textThree} />
-                <Text style={styles.inactivetext}>No Attendance found</Text>
-            </View>
+            <NoHomework name='book-off-outline' size={screenDimensions.width * 0.5} color={Color.textThree} />
+            <Text style={styles.inactivetext}>No Attendance Record found</Text>
         </View>
     )
 
-    useEffect(() => {
-        getSummaryData()
-        filterByDate()
-    }, [])
+    // ------------------------------
+    // TABLE DATA LIST
+    // ------------------------------
+    const list = (attendance) => [
+        { name: 'Subject', value: attendance?.Subject?.name, icon: <BookIcon color={Color.primary} name='book' size={FontSizes.lg} /> },
+        { name: 'Type', value: attendance.attendanceType, icon: <GridIcon color={Color.primary} name='grid' size={FontSizes.lg} /> },
+        { name: 'Day/Date', value: formattedDate(attendance?.attendanceDate, 'EEE dd/MM/yyyy'), icon: <BookIcon color={Color.primary} name='book' size={FontSizes.lg} /> },
+        { name: 'Time', value: attendance?.Schedule?.LessonTiming?.time, icon: <TimeIcon color={Color.primary} name='timelapse' size={FontSizes.lg} /> },
+        { name: 'Status', value: attendance.attendanceType === 'absent' ? "No Further Compensation" : '-', icon: <GridIcon color={Color.primary} name='grid' size={FontSizes.lg} /> },
+    ]
 
+    // ------------------------------
+    // SUMMARY DATA LIST
+    // ------------------------------
+    const result = [
+        { id: 1, "key": "Lessons Agreed New", "value": `${summaryData?.totalSchedule} (${summaryData?.totalHours} hours)` },
+        { id: 2, "key": "Total Lessons Attended", "value": `${summaryData?.totalattendLesson} (${summaryData?.totalattendLessonHours} hours)` },
+        { id: 3, "key": "Absent Lesson", "value": summaryData?.totalAbsentLesson },
+        { id: 4, "key": "Leave Lesson", "value": summaryData?.totalLeaveLesson },
+    ]
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <LoadingScreen loading={isLoading} />
+
+            {/* MODAL FOR FEE NOT PAID */}
+            <MyModal modalVisible={showFeeModal} setModalVisible={setShowFeeModal}>
+                <View style={styles.modal}>
+                    <Text style={styles.modalText}>Fee Not Paid!</Text>
+
+                    <Text style={styles.modalText}>
+                        Last paid fee date: {formattedDate(student?.dueFeeDate, 'dd/MM/yyyy')}
+                    </Text>
+
+                    <Text style={[styles.modalText, { fontSize: FontSizes.md }]}>
+                        Since the fee has not been paid, attendance data will be shown
+                        only from the last paid fee date up to the previous 13 weeks.
+                    </Text>
+
+                    <Text style={[styles.modalText, { fontSize: FontSizes.md }]}>
+                        Please complete your fee payment to unlock the full attendance record.
+                    </Text>
+
+                    <View style={{ flexDirection: 'column-reverse', gap: 5, marginTop: 20, width: '100%' }}>
+                        <CustomButton
+                            title="Cancel"
+                            onPress={() => {
+                                setShowFeeModal(false)
+                                navigation.goBack()
+                            }}
+                            btnstyle={{ backgroundColor: Color.disable }}
+                        />
+
+                        <CustomButton
+                            title="Show Previous Records"
+                            onPress={handleRestrictedAccess}
+                            btnstyle={{ backgroundColor: Color.primary }}
+                            variant='fill'
+                        />
+                    </View>
+                </View>
+            </MyModal>
+
+
             <ScrollView
                 refreshControl={
-                    <RefreshControl
-                        onRefresh={handleRefresh}
-                        refreshing={refresh}
-                    />
+                    <RefreshControl refreshing={refresh} onRefresh={handleRefresh} />
                 }
             >
                 {
-                    filterAttendance?.length > 0 ? <>
-                        <View style={styles.viewChildrenContainer}>
-                            <TopbarWithGraph student={router.params.student} />
+                    attendanceData.length === 0
+                        ? renderEmpty()
+                        : (
+                            <View style={styles.viewChildrenContainer}>
+                                <TopbarWithGraph student={student} />
+                                {/*  Summary Data */}
+                                <View style={GlobalStyles.p_10}>
+                                    {result?.map((elem) => (
 
-                            <View style={GlobalStyles.p_10}>
-                                {result?.map((elem) => (
+                                        <Text key={elem.id} style={styles.CompText}><Text style={{ fontFamily: FontFamily.interBold }}>{elem?.key}</Text> {elem?.value}{'\n'}</Text>
+                                    ))}
 
-                                    <Text key={elem.id} style={styles.CompText}><Text style={{ fontFamily: FontFamily.interBold }}>{elem?.key}</Text> {elem?.value}{'\n'}</Text>
-                                ))}
+                                    <Text style={styles.CompText}><Text style={{ fontFamily: FontFamily.interBold }}>Note for parent/carer:</Text> Only 1 compensation is allowed during a month of reported absence only. No compensation Hours will be transferred to the next term.{'\n'}</Text>
+                                </View>
 
-                                <Text style={styles.CompText}><Text style={{ fontFamily: FontFamily.interBold }}>Note for parent/carer:</Text> Only 1 compensation is allowed during a month of reported absence only. No compensation Hours will be transferred to the next term.{'\n'}</Text>
+                                {/* Header */}
+                                <View style={[GlobalStyles.headerStyles]}>
+                                    <Text style={GlobalStyles.headerTextStyle}>Attendance Details</Text>
+                                    {/* SHOW DATE FILTER ONLY IF NOT RESTRICTED */}
+                                    {!restrictedMode && (
+                                        <TouchableOpacity
+                                            onPress={() => setOpenDatePicker(true)}
+                                            style={[styles.container]}
+                                        >
+                                            <View style={styles.iconView}>
+                                                <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
+                                            </View>
+                                            <Text style={[styles.CompText]}>Select Date</Text>
+                                        </TouchableOpacity>
+                                    )}
+                                </View>
+
+                                <View>
+                                    {attendanceData.map((elem, i) => (
+                                        <Table key={i} list={list(elem)} />
+                                    ))}
+                                </View>
                             </View>
-                            <View style={[GlobalStyles.headerStyles]}>
-                                <Text style={GlobalStyles.headerTextStyle}>Attendace Details</Text>
-                                <TouchableOpacity onPress={() => setOpen(true)} activeOpacity={0.7} style={[styles.container, { gap: 5 }]}>
-                                    <View style={[styles.iconView]}>
-                                        <FilterIcon name='filter' color={Color.white} size={FontSizes.lg} />
-                                    </View>
-                                    <Text style={[styles.CompText, styles.textFontFamily]}>Select Date</Text>
-                                </TouchableOpacity>
-                            </View>
-                            {data?.length > 0 ? <View>
-                                {data?.map((elem, index) => (
-                                    <Table key={index} status={elem.status} list={list(elem)} />
-                                ))}
-                            </View> :
-                                <>
-                                    {renderItem()}
-                                </>
-                            }
-                        </View>
-                        <CustomDatePicker
-                            isVisible={open}
-                            onToggle={() => setOpen(false)}
-                            onDone={(date) => handleDateChange(date)}
-                        />
-                    </> : <>
-                        {renderItem()}
-                    </>
+                        )
                 }
 
+                <CustomDatePicker
+                    isVisible={openDatePicker}
+                    onToggle={() => setOpenDatePicker(false)}
+                    onDone={(date) => filterByDateRange(date.startDate, date.endDate)}
+                />
             </ScrollView>
         </SafeAreaView>
     )
@@ -232,45 +304,39 @@ const ViewAttendance = () => {
 
 export default ViewAttendance
 
+
 const styles = StyleSheet.create({
     viewChildrenContainer: {
-        // paddingHorizontal: 10,
         backgroundColor: Color.white,
         paddingVertical: 10,
     },
-    textFontFamily: {
-        fontFamily: FontFamily.interRegular,
-    },
-    NameText: {
-        fontSize: FontSizes.xxl,
-        color: Color.text,
-    },
-    CompText: {
-        fontSize: FontSizes.md,
-        color: Color.text,
-    },
     container: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    bgColor: {
-        backgroundColor: Color.grayBackground,
-
+        alignItems: 'center',
+        gap: 5
     },
     iconView: {
         backgroundColor: Color.primary,
         padding: 5,
         borderRadius: 4
     },
-    badge: {
-        height: 10,
-        width: 10,
-        backgroundColor: Color.black,
-        borderRadius: 5,
-        position: 'absolute',
-        top: 0,
-        right: 2
+    CompText: {
+        fontSize: FontSizes.md,
+        color: Color.text,
+        fontFamily: FontFamily.interRegular
+    },
+    modal: {
+        padding: 20,
+        backgroundColor: Color.white,
+        borderRadius: 10,
+        width: screenDimensions.width * 0.8,
+        alignItems: 'center'
+    },
+    modalText: {
+        fontSize: FontSizes.lg,
+        fontFamily: FontFamily.interMedium,
+        textAlign: 'center',
+        marginVertical: 8
     },
     inactivetext: {
         textAlign: 'center',
