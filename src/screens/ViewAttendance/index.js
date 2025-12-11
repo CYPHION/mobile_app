@@ -333,6 +333,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     modalText: {
+        color: Color.text,
         fontSize: FontSizes.lg,
         fontFamily: FontFamily.interMedium,
         textAlign: 'center',
