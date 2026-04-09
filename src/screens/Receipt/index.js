@@ -186,7 +186,7 @@ const Receipt = () => {
                                                 total={
                                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                         <Text style={[styles.accordionTitleHeading]}>£{item.amountPaid} </Text>
-                                                        <Download name='download' onPress={() => handleDownload(item?.invoice?.document)} size={FontSizes.xxl} color={Color.text} />
+                                                        {item?.invoice?.document && <Download name='download' onPress={() => handleDownload(item?.invoice?.document)} size={FontSizes.xxl} color={Color.text} />}
                                                     </View>
                                                 }
                                                 expanded={activeItem === index}
