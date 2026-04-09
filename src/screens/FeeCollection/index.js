@@ -12,7 +12,7 @@ import { API } from '../../network/API';
 import { globalData } from '../../store/thunk';
 import { Color } from '../../utils/color';
 import { FontSizes } from '../../utils/font';
-import { calculateFee, customToast, formattedDate, getParentDropdown, screenDimensions } from '../../utils/functions';
+import { calculateFee, customToast, formattedDate, getParentDropdown, screenDimensions, toNumberSafe } from '../../utils/functions';
 import { GlobalStyles } from '../../utils/globalStyles';
 import FeeSkeleton from './FeesSkeleton';
 
@@ -74,23 +74,23 @@ const FeeCollection = () => {
     let weekly = childs?.filter(elem => elem?.feeChargedBy === "Weekly" || elem?.feeChargedBy === "Hourly")?.map(elem => elem)
     let monthly = childs?.filter(elem => elem?.feeChargedBy === "Monthly")?.map(elem => elem)
     // Calculating total dues
-    let total = (Number(summary?.bookDues) + Number(summary?.classDues) + Number(summary?.boosterDues) + totalChargesOfAllStudents) - (Number(summary?.extraPaid + Number(formData?.feeWaived)))
+    let total = (toNumberSafe(summary?.bookDues) + toNumberSafe(summary?.classDues) + toNumberSafe(summary?.boosterDues) + parseFloat(totalChargesOfAllStudents.toFixed(3))) - (toNumberSafe(summary?.extraPaid + toNumberSafe(formData?.feeWaived)))
     // Calculating extra amount
-    let extra = (formData?.paidAmount || 0) - total;
+    let extra = (toNumberSafe(formData?.paidAmount) || 0) - total;
     // Determining whether to fetch data based on summary and option
-    let getData = ((summary.totalDues === 0 && option === "Dues") || (summary.bookDues === 0 && option === "bookDues")) ? false : true
+    let getData = ((toNumberSafe(summary.totalDues) === 0 && option === "Dues") || (toNumberSafe(summary.bookDues) === 0 && option === "bookDues")) ? false : true
     // Calculating extra dues based on option
     let extrasDues;
     option === "Dues"
         ? (extrasDues =
-            formData.duesAmount > summary?.totalDues
-                ? `${formData.duesAmount - summary?.totalDues} Extra`
-                : `${Number(summary?.totalDues) - Number(formData.duesAmount)}`
+            (Number(formData.duesAmount) + Number(formData.feeWaived)) > summary?.totalDues
+                ? `${(Number(formData.duesAmount) + Number(formData.feeWaived)) - Number(summary?.totalDues)} Extra`
+                : `${Number(summary?.totalDues) - (Number(formData.duesAmount) + Number(formData.feeWaived))}`
         )
         : (extrasDues =
-            formData.duesAmount > summary?.bookDues
-                ? `${formData.duesAmount - summary?.bookDues} Extra`
-                : `${Number(summary?.bookDues) - Number(formData.duesAmount)}`);
+            (Number(formData.duesAmount) + Number(formData.feeWaived)) > summary?.bookDues
+                ? `${(Number(formData.duesAmount) + Number(formData.feeWaived)) - Number(summary?.bookDues)} Extra`
+                : `${Number(summary?.bookDues) - (Number(formData.duesAmount) + Number(formData.feeWaived))}`);
 
     // Function to calculate fee type
     const getType = (isMonthly, value, child, schedule) => {
@@ -112,8 +112,8 @@ const FeeCollection = () => {
             let bookDues = 0
             let classDues = 0
             res.data.students.forEach(child => {
-                bookDues += child.bookDues
-                classDues += child.classDues
+                bookDues = toNumberSafe(child.bookDues) + toNumberSafe(bookDues)
+                classDues = toNumberSafe(child.classDues) + toNumberSafe(classDues)
             })
 
 
@@ -217,12 +217,12 @@ const FeeCollection = () => {
             // collect the response from api 
             const res = await API.getPrentFeeDetail(id, 0);
             const parentDetails = {
-                bookDues: Number(res.data[0]?.bookDues || 0),
-                classDues: Number(res.data[0]?.classDues || 0),
-                extraPaid: Number(res.data[0]?.extraPaid || 0),
-                boosterDues: Number(res.data[0]?.boosterDues || 0),
-                totalDues: Number(res.data[0]?.totalDues || 0),
-                weeklyFee: Number(res.data[0]?.weeklyFee || 0)
+                bookDues: toNumberSafe(res.data[0]?.bookDues || 0),
+                classDues: toNumberSafe(res.data[0]?.classDues || 0),
+                extraPaid: toNumberSafe(res.data[0]?.extraPaid || 0),
+                boosterDues: toNumberSafe(res.data[0]?.boosterDues || 0),
+                totalDues: toNumberSafe(res.data[0]?.totalDues || 0),
+                weeklyFee: toNumberSafe(res.data[0]?.weeklyFee || 0)
             };
 
             setSumamry(parentDetails); // Setting parent fee summary
@@ -298,21 +298,21 @@ const FeeCollection = () => {
 
         // Check is BookDues
         const isBookDues = child?.isBookDues
-        const childBookDues = !isBookDues ? Number(child?.bookDues) : 0
+        const childBookDues = !isBookDues ? toNumberSafe(child?.bookDues) : 0
 
         const regularScheduleLength = schedule?.filter(elem => elem.studentId === child.id && elem.isBooster === false && !elem.isBoosterFreeze)?.length > 0 ? true : false
 
         const newBoosterarr = [
             { id: 13, "key": `Booster Price Per Hour`, "value": `£${booster?.pricePerHour}` },
-            { id: 14, "name": "Total Booster Price", "value": `£${booster?.totalPackagePrice}` },
-            { id: 15, "name": "Booster Dues", "value": `£${booster?.totalPackagePrice - booster?.paidAmount}` },
+            { id: 14, "name": "Total Booster Price", "value": `£${toNumberSafe(booster?.totalPackagePrice)}` },
+            { id: 15, "name": "Booster Dues", "value": `£${toNumberSafe(booster?.totalPackagePrice) - toNumberSafe(booster?.paidAmount)}` },
             { id: 16, "name": "Total Booster Weeks", "value": `${child?.BoosterStudents[0]?.numOfWeeks} weeks` },
         ]
 
         const onlyBoosterArr = [
-            { id: 10, "name": "Book dues", "value": `£${Number(child?.bookDues)}` },
+            { id: 10, "name": "Book dues", "value": `£${toNumberSafe(child?.bookDues)}` },
             ...(isBooster ? newBoosterarr : []),
-            { id: 12, "name": "Total Charges", "value": `£${Number(obj.totalCharges) + Number(child?.bookDues) + Number(child?.boosterDues)}` }]
+            { id: 12, "name": "Total Charges", "value": `£${toNumberSafe(obj.totalCharges) + toNumberSafe(child?.bookDues) + toNumberSafe(child?.boosterDues)}` }]
 
 
         const regularArr = [
@@ -328,15 +328,15 @@ const FeeCollection = () => {
             // { id: 7, "name": "Total Hours", "value": `${obj.totalHours}` },
             // { id: 8, "name": "Price per Hour", "value": `£${child?.isChildcareStd ? child?.StudentYear?.ratePerChildcareHour : child?.StudentYear?.ratePerHour}` },
             { id: 10, "name": "Book dues", "value": isBookDues ? `Included` : `£${childBookDues}` },
-            { id: 11, "name": "Class Charges", "value": `£${isMonthly ? Number(child.monthlyFee) : Number(obj.classCharges)}` },
+            { id: 11, "name": "Class Charges", "value": `£${isMonthly ? Number(child.monthlyFee) : toNumberSafe(obj.classCharges)}` },
             ...((isBooster && !isBoosterTotalPaid) ? newBoosterarr : []),
-            { id: 12, "name": "Total Charges", "value": `£${Number(obj.totalCharges) + childBookDues + Number(child?.boosterDues)}` }
+            { id: 12, "name": "Total Charges", "value": `£${toNumberSafe(obj.totalCharges) + childBookDues + toNumberSafe(child?.boosterDues)}` }
         ]
 
 
         const duesArr = [
-            { id: 2, "name": "Book dues", "value": `£${Number(child?.bookDues)}` },
-            { id: 3, "name": "Booster dues", "value": `£${Number(child?.boosterDues)}` },
+            { id: 2, "name": "Book dues", "value": `£${toNumberSafe(child?.bookDues)}` },
+            { id: 3, "name": "Booster dues", "value": `£${toNumberSafe(child?.boosterDues)}` },
         ]
 
         let arr = []
@@ -547,20 +547,20 @@ const FeeCollection = () => {
             let form = {
                 titleHead: option,
                 parentId: parentMainId,
-                amountPaid: formData.paidAmount,
+                amountPaid: toNumberSafe(formData.paidAmount),
                 remarks: formData.remarks,
                 showOnReceipt: formData.showOnReceipt,
-                noOfWeeks: formData.noOfWeeks,
-                noOfMonths: formData.noOfMonths,
+                noOfWeeks: toNumberSafe(formData.noOfWeeks),
+                noOfMonths: toNumberSafe(formData.noOfMonths),
                 totalPayment: totalChargesOfAllStudents,
                 extra: extra,
                 recieptNo: recieptNo,
                 dateails: dateails,
                 cashierName: casherName,
                 summary: summary,
-                feeWaived: formData.feeWaived,
-                duesAmount: formData.duesAmount,
-                byCardAmount: formData.paidAmount,
+                feeWaived: toNumberSafe(formData.feeWaived),
+                duesAmount: toNumberSafe(formData.duesAmount),
+                byCardAmount: toNumberSafe(formData.paidAmount),
                 byCashAmount: 0,
                 byBankAmount: 0,
             }
@@ -573,20 +573,20 @@ const FeeCollection = () => {
                 let form = {
                     titleHead: option,
                     parentId: parentMainId,
-                    amountPaid: formData.paidAmount,
+                    amountPaid: toNumberSafe(formData.paidAmount),
                     remarks: formData.remarks,
                     showOnReceipt: formData.showOnReceipt,
-                    noOfWeeks: formData.noOfWeeks,
-                    noOfMonths: formData.noOfMonths,
+                    noOfWeeks: toNumberSafe(formData.noOfWeeks),
+                    noOfMonths: toNumberSafe(formData.noOfMonths),
                     totalPayment: totalChargesOfAllStudents,
                     extra: extra,
                     recieptNo: recieptNo,
                     dateails: dateails,
                     cashierName: casherName,
                     summary: summary,
-                    feeWaived: formData.feeWaived,
-                    duesAmount: formData.duesAmount,
-                    byCardAmount: formData.paidAmount,
+                    feeWaived: toNumberSafe(formData.feeWaived),
+                    duesAmount: toNumberSafe(formData.duesAmount),
+                    byCardAmount: toNumberSafe(formData.paidAmount),
                     byCashAmount: 0,
                     byBankAmount: 0,
                 }
@@ -596,13 +596,9 @@ const FeeCollection = () => {
             else {
                 let extras
                 option === "Dues" ? (
-                    extras = formData.duesAmount > summary?.totalDues ?
-                        `${formData.duesAmount - summary?.totalDues}` :
-                        `${Number(summary?.totalDues) - Number(formData.duesAmount)}`
+                    extras = `${(Number(formData.duesAmount) + Number(formData.feeWaived)) - summary?.totalDues}`
                 ) : (
-                    extras = formData.duesAmount > summary?.bookDues ?
-                        `${formData.duesAmount - summary?.bookDues}` :
-                        `${Number(summary?.bookDues) - Number(formData.duesAmount)}`
+                    extras = `${(Number(formData.duesAmount) + Number(formData.feeWaived)) - summary?.bookDues}`
                 )
                 const parentMainId = user?.mainId
                 let form = {

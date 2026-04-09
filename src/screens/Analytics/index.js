@@ -7,7 +7,7 @@ import CustomDatePicker from '../../components/base/CustomDatePicker'
 import { globalData } from '../../store/thunk'
 import { Color } from '../../utils/color'
 import { FontFamily, FontSizes } from '../../utils/font'
-import { screenDimensions } from '../../utils/functions'
+import { screenDimensions, toNumberSafe } from '../../utils/functions'
 import AnalyticsSkeleton from './AnalyticSkeleton'
 
 
@@ -70,7 +70,7 @@ const Analytics = ({ navigation }) => {
         // setTotalDepositFee(filteredDepositFees?.reduce((acc, elem) => acc + elem.amountPaid, 0));
         const filteredStudents = filterByDate(global?.students, startDate, endDate);
 
-        setOutStangingFee(filteredStudents?.reduce((acc, elem) => acc + elem.totalDues, 0));
+        setOutStangingFee(filteredStudents?.reduce((acc, elem) => acc + toNumberSafe(elem.totalDues), 0));
     }
 
     const getAppointments = () => {
@@ -114,13 +114,13 @@ const Analytics = ({ navigation }) => {
         // Calculate booster fees
         const calculatedBoosterFees = filteredFees?.reduce((acc, elem) => {
             if (elem?.isBooster) {
-                return acc + elem?.boosterPaid;
+                return acc + toNumberSafe(elem?.boosterPaid);
             }
             return acc;
         }, 0);
 
         // Calculate total fees
-        const calculatedTotalFee = filteredFees?.reduce((acc, elem) => acc + elem?.amountPaid, 0);
+        const calculatedTotalFee = filteredFees?.reduce((acc, elem) => acc + toNumberSafe(elem?.amountPaid), 0);
 
         // Filter deposit fees from the last 12 months
         const filteredDepositFees = global?.depositFee?.filter(deposit => {
@@ -129,11 +129,28 @@ const Analytics = ({ navigation }) => {
         });
 
         // Calculate total deposit fees
-        const calculatedTotalDepositFee = filteredDepositFees?.reduce((acc, elem) => acc + elem.amountPaid, 0);
+        const calculatedTotalDepositFee = filteredDepositFees?.reduce((acc, elem) => acc + toNumberSafe(elem.amountPaid), 0);
 
         setBoosterFees(calculatedBoosterFees);
         setTotalFee(calculatedTotalFee);
         setTotalDepositFee(calculatedTotalDepositFee);
+
+        // Set start and end dates for the outstanding date range
+        const refreshedStartDate = new Date();
+        refreshedStartDate.setMonth(refreshedStartDate.getMonth() - 12);
+        refreshedStartDate.setHours(0, 0, 0, 0);
+
+        const refreshedEndDate = new Date();
+        refreshedEndDate.setHours(23, 59, 59, 999);
+        // Set the date state to the refreshed date range
+        setDate({
+            startDate: refreshedStartDate,
+            endDate: refreshedEndDate,
+        });
+
+        // Filter data based on the refreshed date range
+        handelFilter(refreshedStartDate, refreshedEndDate)
+
     };
 
     const handleRefresh = () => {
@@ -246,7 +263,6 @@ const Analytics = ({ navigation }) => {
                                     <View style={{ padding: 5, paddingHorizontal: 10 }}>
                                         <Text style={[styles.totalFont]}>Total : £{outStangingFee}</Text>
                                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%" }}>
-
                                         </View>
                                     </View>
                                 </View>

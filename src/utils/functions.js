@@ -293,3 +293,8 @@ export const columStringifyToJSON = (value) => {
     // If the value is not a string, return it as is
     return value;
 }
+
+export const toNumberSafe = (val, fallback = 0) => {
+    const num = Number(val);
+    return isNaN(num) ? fallback : num;
+}
