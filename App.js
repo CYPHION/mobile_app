@@ -3,7 +3,7 @@ import messaging from '@react-native-firebase/messaging';
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
-import { Alert, Linking, PermissionsAndroid, Platform, SafeAreaView, StatusBar } from "react-native";
+import { Alert, Linking, PermissionsAndroid, Platform, SafeAreaView, StatusBar, View } from "react-native";
 import { checkVersion } from "react-native-check-version";
 import { useSelector } from "react-redux";
 import IntroSlider from "./src/components/widget/IntroSlider";
@@ -11,6 +11,7 @@ import { useNotification } from "./src/context/NotificationContext";
 import MyDrawer from "./src/navigation/Drawer";
 import SpashScreen from "./src/screens/SplashScreen";
 import { Color } from "./src/utils/color";
+import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
 const Stack = createNativeStackNavigator();
 
 
@@ -24,7 +25,7 @@ const App = () => {
 
   const { incrementNotificationCount } = useNotification();
   const navigation = useNavigation();
-
+  const insets = useSafeAreaInsets();
 
   const requestPostNotificationsPermission = async () => {
     if (Platform.OS === 'ios') {
@@ -152,13 +153,14 @@ const App = () => {
 
 
   return (
-    <>
+    <SafeAreaProvider>
+
       <StatusBar
         animated={true}
         backgroundColor={Color.white}
-        barStyle={'dark-content'}
+        barStyle={'light-content'}
       />
-      <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 1, paddingTop: insets.top }}>
         {splash ?
           <SpashScreen />
           : <>
@@ -169,8 +171,9 @@ const App = () => {
               </>
               : <IntroSlider setIsIntro={setIsIntro} />}
           </>}
-      </SafeAreaView>
-    </>
+      </View>
+
+    </SafeAreaProvider >
   )
 
 };

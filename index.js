@@ -14,6 +14,7 @@ import { NotificationProvider } from './src/context/NotificationContext';
 import { store } from './src/store';
 import { Color } from './src/utils/color';
 import Config from './src/utils/config/branchNameConfig';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 
@@ -61,16 +62,18 @@ const initializeApp = async () => {
 initializeApp();
 
 const ReduxApp = () => (
-    <Provider store={store}>
-        <StripeProvider publishableKey={stripePublishKey}>
-            <NotificationProvider>
-                <NavigationContainer theme={MyTheme}>
-                    <App />
-                    <Toast config={toastConfig} />
-                </NavigationContainer>
-            </NotificationProvider>
-        </StripeProvider>
-    </Provider>
+    <SafeAreaProvider>
+        <Provider store={store}>
+            <StripeProvider publishableKey={stripePublishKey}>
+                <NotificationProvider>
+                    <NavigationContainer theme={MyTheme}>
+                        <App />
+                        <Toast config={toastConfig} />
+                    </NavigationContainer>
+                </NotificationProvider>
+            </StripeProvider>
+        </Provider>
+    </SafeAreaProvider>
 );
 
 AppRegistry.registerComponent(appName, () => ReduxApp);
